@@ -20,7 +20,7 @@ The reward after each mission is completed. Upon the start of a new sprint, each
 ## Season Points
 After the end of each sprint, each the gold tier towns will receive 4 season points, the silver tier 3 points, and the bronze tier 2 points. Any other town that has non-zero NaturePoints will receive 1 season point.
 
-## Resource Collection
+## Resource shop
 - Material Shop
     - Wood plank (from woods)
     - Ancient metal (from iron)

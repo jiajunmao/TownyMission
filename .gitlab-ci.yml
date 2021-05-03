@@ -1,0 +1,56 @@
+image: maven:3.6-jdk-11
+
+before_script:
+  - 'git config --global user.email "jiajun.mao@gatech.edu"'
+  - 'git config --global user.name "Jiajun Mao"'
+  - 'git checkout -B "$CI_BUILD_REF_NAME"'
+
+variables:
+  LINK_ARTIFACT: "true"
+
+stages:
+  - build_snapshop
+  - release
+  - notification
+
+build_snapshop:
+  stage: build_snapshop
+  script:
+    - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml install'
+  artifacts:
+    paths:
+      - target/RPG*
+    expire_in: 1 week
+
+release:
+  stage: release
+  only:
+    - master
+  script:
+    - 'mvn -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s ci_settings.xml release:prepare release:perform'
+  artifacts:
+    paths:
+      - target/RPG*
+    expire_in: 1 week
+
+success_notification:
+  stage: notification
+  dependencies:
+    - build_snapshop
+  script:
+    - chmod +x ./send.sh
+    - bash send.sh success $WEBHOOK_URL
+  when: on_success
+  artifacts:
+    paths:
+      - target/RPG*
+    expire_in: 1 week
+
+fail_notification:
+  stage: notification
+  dependencies:
+    - build_snapshop
+  script:
+    - chmod +x ./send.sh
+    - bash send.sh failure $WEBHOOK_URL
+  when: on_failure
