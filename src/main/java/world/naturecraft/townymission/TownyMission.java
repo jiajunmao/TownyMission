@@ -1,4 +1,8 @@
 package world.naturecraft.townymission;
 
-public class TownyMission {
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class TownyMission extends JavaPlugin {
+
+    
 }

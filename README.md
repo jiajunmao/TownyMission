@@ -17,8 +17,15 @@ Upon completion of a mission, a certain value of NaturePoints will be awarded co
 ## NaturePoints
 The reward after each mission is completed. Upon the start of a new sprint, each town's NaturePoint is cleared. The amoount of NaturePoints determined town's ranking.
 
+The NaturePoint also counts toward seasonal total that unlocks different level of rewards.
+
 ## Season Points
 After the end of each sprint, each the gold tier towns will receive 4 season points, the silver tier 3 points, and the bronze tier 2 points. Any other town that has non-zero NaturePoints will receive 1 season point.
+
+## Monetization
+- Require some premium resources for collection
+- Speed boost for resource shops
+- Premium track for rewards
 
 ## Resource shop
 - Material Shop
@@ -106,3 +113,29 @@ After the end of each sprint, each the gold tier towns will receive 4 season poi
   - Season
   - Season starting date
   
+## Config layout
+- Task config
+  - Basically adhere to the task database format
+  
+- Lang config
+
+## Commands
+Most of the process will be coded into GUI
+### Default player
+- /tm info: shows the current NaturePoint and season point, as well as overview of the current sprint(reward baseline, scaled baseline, etc.)
+- /tm rank <sprint/season>: shows the current ranking
+- /tm list: list the current available missions
+- /tm help: help page
+
+### Default OP
+- /tm addPoint <townName> <season/sprint>
+- /tm rmPoint <townName> <season/sprint>
+- /tm setPoint <season/sprint> 
+- /tm checkPoint <townName> <season/sprint>
+
+## Permissions
+- townymission.player: gives all the default player commands privilege
+- townymission.addpoint/rmpoint/setpoint/checkpoint: gives individual op permission
+- townymission.premium: put the player on the premium track for NaturePoint awards
+- townymission.boost.<num>: gives boosts to the amount of NaturePoint earned
+

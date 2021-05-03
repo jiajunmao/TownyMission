@@ -1,0 +1,47 @@
+name: TownyMission
+author: Barbadosian
+main: world.naturecraft.townymission.TownyMission
+version: 0.0.1
+api-version: 1.16
+
+permissions:
+  townymission.player:
+    description: Default player commands
+    default: not op
+  townymission.addpoint:
+    description: Add point
+    default: op
+  townymission.rmpoint:
+    description: Remove point
+    default: op
+  townymission.setpoint:
+    description: Set point
+    default: op
+  townymission.checkpoint:
+    description: Check the point
+    default: op
+  townymission.premium:
+    description: premium reward track
+    default: op
+  townymission.boost.:
+    description: boost permission
+commands:
+  townymission:
+    description: Root command
+    aliases: tm
+  townymission info:
+    description: overview
+  townymission rank:
+    description: show the current ranking
+  townymission list:
+    description: list the current missions
+  townymission help:
+    description: help page
+  townymission addPoint:
+    description: add point
+  townymission rmPoint:
+    description: remove point
+  townymission setPoint:
+    description: set point
+  townymission checkPoint:
+    description: check point

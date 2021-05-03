@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>world.naturecraft</groupId>
-    <artifactId>TownyMissions</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>OmniHook</artifactId>
+    <version>0.0.5-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:https://git.naturecraft.world/jiajunmao/townymission.git</connection>
-        <developerConnection>scm:git:https://git.naturecraft.world/jiajunmao/townymission.git</developerConnection>
+        <connection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git</connection>
+        <developerConnection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -24,12 +22,12 @@
         <repository>
             <id>gitlab-maven</id>
             <!--suppress UnresolvedMavenProperty -->
-            <url>https://git.naturecraft.world/api/v4/projects/13/packages/maven</url>
+            <url>https://git.naturecraft.world/api/v4/projects/17/packages/maven</url>
         </repository>
         <snapshotRepository>
             <id>gitlab-maven</id>
             <!--suppress UnresolvedMavenProperty -->
-            <url>https://git.naturecraft.world/api/v4/projects/13/packages/maven</url>
+            <url>https://git.naturecraft.world/api/v4/projects/17/packages/maven</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -89,7 +87,7 @@
         <repository>
             <id>gitlab-maven</id>
             <!--suppress UnresolvedMavenProperty -->
-            <url>https://git.naturecraft.world/api/v4/projects/13/packages/maven</url>
+            <url>https://git.naturecraft.world/api/v4/projects/17/packages/maven</url>
         </repository>
 
         <repository>
@@ -104,35 +102,21 @@
         </repository>
 
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io/</url>
-        </repository>
-
-        <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
 
+        <repository>
+            <id>lumine-repo</id>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.16.4-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.TownyAdvanced</groupId>
-            <artifactId>Towny</artifactId>
-            <version>0.96.7.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -143,6 +127,19 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>net.Indyuce</groupId>
+            <artifactId>MMOItems</artifactId>
+            <version>6.5.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>MythicLib</artifactId>
+            <version>1.0.17</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
