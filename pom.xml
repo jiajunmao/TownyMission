@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>world.naturecraft</groupId>
-    <artifactId>OmniHook</artifactId>
+    <artifactId>TownyMission</artifactId>
     <version>0.0.5-SNAPSHOT</version>
 
     <scm>
