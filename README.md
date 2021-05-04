@@ -92,6 +92,7 @@ After the end of each sprint, each the gold tier towns will receive 4 season poi
     - Money Json
       - Money required
       - Money earned
+  - Town ID/UUID
 - Sprint database
   - Town ID/UUID
   - Town Display Name
