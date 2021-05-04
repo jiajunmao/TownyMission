@@ -98,6 +98,7 @@ After the end of each sprint, each the gold tier towns will receive 4 season poi
   - Town Display Name
   - NaturePoint
   - Sprint (which sprint in the season it is)
+  - SEason (which season it is)
 - Season database
   - Town ID/UUID
   - Town Displayname
