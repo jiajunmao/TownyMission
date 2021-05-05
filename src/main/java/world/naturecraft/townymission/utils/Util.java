@@ -9,12 +9,27 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Util.
+ */
 public class Util {
 
+    /**
+     * Gets db name.
+     *
+     * @param dbType the db type
+     * @return the db name
+     */
     public static String getDbName(DbType dbType) {
         return "townymission_" + dbType.name().toLowerCase(Locale.ROOT);
     }
 
+    /**
+     * Send msg.
+     *
+     * @param sender  the sender
+     * @param message the message
+     */
     public static void sendMsg(CommandSender sender, String message) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -25,6 +40,14 @@ public class Util {
 
     }
 
+    /**
+     * Translate hex color string.
+     *
+     * @param startTag the start tag
+     * @param endTag   the end tag
+     * @param message  the message
+     * @return the string
+     */
     public static String translateHexColor(String startTag, String endTag, String message) {
         final Pattern hexPattern = Pattern.compile(startTag + "([A-Fa-f0-9]{6})" + endTag);
         char COLOR_CHAR = ChatColor.COLOR_CHAR;
@@ -41,6 +64,12 @@ public class Util {
         return matcher.appendTail(buffer).toString();
     }
 
+    /**
+     * Translate vanilla color string.
+     *
+     * @param message the message
+     * @return the string
+     */
     public static String translateVanillaColor(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }

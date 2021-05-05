@@ -9,8 +9,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Task history database.
+ */
 public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
 
+    /**
+     * Instantiates a new Task history database.
+     *
+     * @param instance  the instance
+     * @param db        the db
+     * @param tableName the table name
+     */
     public TaskHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }

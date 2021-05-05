@@ -9,8 +9,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Task database.
+ */
 public class TaskDatabase extends Database<TaskEntry> {
 
+    /**
+     * Instantiates a new Task database.
+     *
+     * @param instance  the instance
+     * @param db        the db
+     * @param tableName the table name
+     */
     public TaskDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }

@@ -9,8 +9,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Player database.
+ */
 public class PlayerDatabase extends Database<PlayerEntry> {
 
+    /**
+     * Instantiates a new Player database.
+     *
+     * @param instance  the instance
+     * @param db        the db
+     * @param tableName the table name
+     */
     public PlayerDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }

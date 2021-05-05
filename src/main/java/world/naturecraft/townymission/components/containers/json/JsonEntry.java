@@ -9,8 +9,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * The type Json entry.
+ */
 public abstract class JsonEntry {
 
+    /**
+     * Gets json.
+     *
+     * @return the json
+     * @throws JsonProcessingException the json processing exception
+     */
     public JsonObject getJson() throws JsonProcessingException {
         return new JsonParser().parse(new ObjectMapper().writeValueAsString(this)).getAsJsonObject();
     }

@@ -10,10 +10,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Towny mission root.
+ */
 public class TownyMissionRoot extends TownyMissionCommand {
 
     private final Map<String, TownyMissionCommand> commands;
 
+    /**
+     * Instantiates a new Towny mission root.
+     *
+     * @param instance the instance
+     */
     public TownyMissionRoot(TownyMission instance) {
         super(instance);
         commands = new HashMap<>();
@@ -30,10 +38,22 @@ public class TownyMissionRoot extends TownyMissionCommand {
         return null;
     }
 
+    /**
+     * Register command.
+     *
+     * @param name     the name
+     * @param executor the executor
+     */
     public void registerCommand(String name, TownyMissionCommand executor) {
         commands.put(name, executor);
     }
 
+    /**
+     * Gets executor.
+     *
+     * @param name the name
+     * @return the executor
+     */
     public TownyMissionCommand getExecutor(String name) {
         return commands.getOrDefault(name, null);
     }

@@ -9,8 +9,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Season history database.
+ */
 public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
 
+    /**
+     * Instantiates a new Season history database.
+     *
+     * @param instance  the instance
+     * @param db        the db
+     * @param tableName the table name
+     */
     public SeasonHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }

@@ -9,8 +9,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Sprint history database.
+ */
 public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
 
+    /**
+     * Instantiates a new Sprint history database.
+     *
+     * @param instance  the instance
+     * @param db        the db
+     * @param tableName the table name
+     */
     public SprintHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }

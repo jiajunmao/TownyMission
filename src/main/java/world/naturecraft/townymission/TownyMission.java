@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * The type Towny mission.
+ */
 public class TownyMission extends JavaPlugin {
 
     private final Logger logger = Bukkit.getLogger();
@@ -37,6 +40,9 @@ public class TownyMission extends JavaPlugin {
         close();
     }
 
+    /**
+     * Register databases.
+     */
     public void registerDatabases() {
         register(DbType.PLAYER, new PlayerDatabase(this, db, Util.getDbName(DbType.PLAYER)));
         register(DbType.TASK, new TaskDatabase(this, db, Util.getDbName(DbType.TASK)));
@@ -47,12 +53,18 @@ public class TownyMission extends JavaPlugin {
         register(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(this, db, Util.getDbName(DbType.SEASON_HISTORY)));
     }
 
+    /**
+     * Initialize databases.
+     */
     public void initializeDatabases() {
         for (Database db : dbList.values()) {
             db.createTable();
         }
     }
 
+    /**
+     * Connect.
+     */
     public void connect() {
         String dbAddress = getConfig().getString("database.address");
         String dbPort = getConfig().getString("database.port");
@@ -70,10 +82,19 @@ public class TownyMission extends JavaPlugin {
         db.addDataSourceProperty("password", dbPassword);
     }
 
+    /**
+     * Close.
+     */
     public void close() {
         db.close();
     }
 
+    /**
+     * Register.
+     *
+     * @param dbType   the db type
+     * @param database the database
+     */
     public void register(DbType dbType, Database database) {
         dbList.put(dbType, database);
     }
