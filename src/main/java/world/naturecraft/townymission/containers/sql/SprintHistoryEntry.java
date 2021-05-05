@@ -1,11 +1,11 @@
-package world.naturecraft.townymission.containers;
+package world.naturecraft.townymission.containers.sql;
 
 public class SprintHistoryEntry {
-    private final int id;
-    private final int season;
-    private final int sprint;
-    private final long startedTime;
-    private final String rankJson;
+    private int id;
+    private int season;
+    private int sprint;
+    private long startedTime;
+    private String rankJson;
 
     public SprintHistoryEntry(int id, int season, int sprint, long startedTime, String rankJson) {
         this.id = id;
@@ -33,5 +33,25 @@ public class SprintHistoryEntry {
 
     public String getRankJson() {
         return rankJson;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setSeason(int season) {
+        this.season = season;
+    }
+
+    public void setSprint(int sprint) {
+        this.sprint = sprint;
+    }
+
+    public void setStartedTime(long startedTime) {
+        this.startedTime = startedTime;
+    }
+
+    public void setRankJson(String rankJson) {
+        this.rankJson = rankJson;
     }
 }

@@ -9,19 +9,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public abstract class JsonEntry {
+public class SeasonRank extends JsonEntry {
 
-    public JsonObject getJson() throws JsonProcessingException {
-        return new JsonParser().parse(new ObjectMapper().writeValueAsString(this)).getAsJsonObject();
+    private final String townId;
+    private final String townName;
+    private final int naturepoints;
+
+    public SeasonRank(String townId, String townName, int naturepoints) {
+        this.townId = townId;
+        this.townName = townName;
+        this.naturepoints = naturepoints;
     }
-
-    public String toString() {
-        try {
-            return getJson().toString();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 }

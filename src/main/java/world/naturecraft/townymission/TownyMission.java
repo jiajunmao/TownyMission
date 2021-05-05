@@ -1,16 +1,13 @@
 package world.naturecraft.townymission;
 
-import io.lumine.mythic.utils.storage.sql.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
-import world.naturecraft.townymission.db.*;
+import world.naturecraft.townymission.db.sql.*;
 import world.naturecraft.townymission.enums.DbType;
 import world.naturecraft.townymission.utils.Util;
 
-import javax.xml.crypto.Data;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -24,6 +21,7 @@ public class TownyMission extends JavaPlugin {
     public void onEnable() {
         logger.info("=========   RPG SPAWNER LOADING   =========");
         this.saveDefaultConfig();
+        this.saveResource("missions", false);
         logger.info("=========   CONNECTING TO RPG SPAWNER DATABASE   =========");
         dbList = new HashMap<>();
         connect();

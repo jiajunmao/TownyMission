@@ -1,12 +1,12 @@
-package world.naturecraft.townymission.containers;
+package world.naturecraft.townymission.containers.sql;
 
 public class TaskEntry {
-    private final int id;
-    private final String taskType;
-    private final long startedTime;
-    private final long allowedTime;
-    private final String taskJson;
-    private final String town;
+    private int id;
+    private String taskType;
+    private long startedTime;
+    private long allowedTime;
+    private String taskJson;
+    private String town;
 
     public TaskEntry(int id, String taskType, long startedTime, long allowedTime, String taskJson, String town) {
         this.id = id;
@@ -39,5 +39,9 @@ public class TaskEntry {
 
     public String getTown() {
         return town;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

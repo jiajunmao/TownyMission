@@ -1,8 +1,8 @@
-package world.naturecraft.townymission.db;
+package world.naturecraft.townymission.db.sql;
 
-import io.lumine.mythic.utils.storage.sql.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.containers.SprintHistoryEntry;
+import world.naturecraft.townymission.containers.sql.SprintHistoryEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

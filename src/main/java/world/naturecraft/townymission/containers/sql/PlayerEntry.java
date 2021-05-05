@@ -1,11 +1,13 @@
-package world.naturecraft.townymission.containers;
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
 
-import java.util.UUID;
+package world.naturecraft.townymission.containers.sql;
 
 public class PlayerEntry {
-    private final int id;
-    private final String uuid;
-    private final String displayName;
+    private int id;
+    private String uuid;
+    private String displayName;
 
     public PlayerEntry(int id, String uuid, String displayName) {
         this.id = id;
@@ -23,5 +25,17 @@ public class PlayerEntry {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

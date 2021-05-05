@@ -1,15 +1,16 @@
-package world.naturecraft.townymission.containers;
+package world.naturecraft.townymission.containers.sql;
 
 public class TaskHistoryEntry {
-    private final int id;
-    private final String taskType;
-    private final long startedTime;
-    private final long allowedTime;
-    private final String taskJson;
-    private final String town;
-    private final long completedTime;
-    private final int sprint;
-    private final int season;
+    
+    private int id;
+    private String taskType;
+    private long startedTime;
+    private long allowedTime;
+    private String taskJson;
+    private String town;
+    private long completedTime;
+    private int sprint;
+    private int season;
 
     public TaskHistoryEntry(int id, String taskType, long startedTime, long allowedTime, String taskJson, String town, long completedTime, int sprint, int season) {
         this.id = id;
@@ -57,5 +58,41 @@ public class TaskHistoryEntry {
 
     public int getSeason() {
         return season;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
+    }
+
+    public void setStartedTime(long startedTime) {
+        this.startedTime = startedTime;
+    }
+
+    public void setAllowedTime(long allowedTime) {
+        this.allowedTime = allowedTime;
+    }
+
+    public void setTaskJson(String taskJson) {
+        this.taskJson = taskJson;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public void setCompletedTime(long completedTime) {
+        this.completedTime = completedTime;
+    }
+
+    public void setSprint(int sprint) {
+        this.sprint = sprint;
+    }
+
+    public void setSeason(int season) {
+        this.season = season;
     }
 }

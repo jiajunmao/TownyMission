@@ -1,12 +1,12 @@
-package world.naturecraft.townymission.containers;
+package world.naturecraft.townymission.containers.sql;
 
 public class SprintEntry {
-    private final int id;
-    private final String townID;
-    private final String townName;
-    private final int naturepoints;
-    private final int sprint;
-    private final int season;
+    private int id;
+    private String townID;
+    private String townName;
+    private int naturepoints;
+    private int sprint;
+    private int season;
 
     public SprintEntry(int id, String townID, String townName, int naturepoints, int sprint, int season) {
         this.id = id;
@@ -39,5 +39,29 @@ public class SprintEntry {
 
     public int getSeason() {
         return season;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTownID(String townID) {
+        this.townID = townID;
+    }
+
+    public void setTownName(String townName) {
+        this.townName = townName;
+    }
+
+    public void setNaturepoints(int naturepoints) {
+        this.naturepoints = naturepoints;
+    }
+
+    public void setSprint(int sprint) {
+        this.sprint = sprint;
+    }
+
+    public void setSeason(int season) {
+        this.season = season;
     }
 }
