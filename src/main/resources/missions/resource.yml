@@ -1,0 +1,10 @@
+1:
+  isMi: false
+  type: BAMBOO
+  amount: 100000
+  reward: 500
+2:
+  isMi: false
+  type: DIAMOND
+  amount: 1000
+  reward: 1000

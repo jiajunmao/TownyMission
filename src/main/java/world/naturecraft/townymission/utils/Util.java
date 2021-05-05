@@ -33,9 +33,9 @@ public class Util {
     public static void sendMsg(CommandSender sender, String message) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            player.sendMessage(translateVanillaColor(translateHexColor("{#", "}", message)));
+            player.sendMessage(translateColor(message));
         } else {
-            sender.getServer().getLogger().info(translateVanillaColor(translateHexColor("{#", "}", message)));
+            sender.getServer().getLogger().info(translateColor(message));
         }
 
     }
@@ -72,5 +72,9 @@ public class Util {
      */
     public static String translateVanillaColor(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public static String translateColor(String message) {
+        return translateVanillaColor(translateHexColor("\\{#", "\\}", message));
     }
 }

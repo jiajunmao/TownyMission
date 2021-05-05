@@ -34,4 +34,18 @@ public class Expansion extends MissionJson {
     public static Expansion parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Expansion.class);
     }
+
+    public String getWorld() {
+        return world;
+    }
+
+    /**
+     * Get the formatted display line when needed to be displayed in MC chat
+     *
+     * @return the formatted line
+     */
+    @Override
+    public String getDisplayLine() {
+        return "&f- &eWorld: &f" + getWorld() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
+    }
 }

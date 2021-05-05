@@ -35,4 +35,22 @@ public class Resource extends MissionJson {
     public static Resource parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Resource.class);
     }
+
+    public boolean isMi() {
+        return isMi;
+    }
+
+    public Material getType() {
+        return type;
+    }
+
+    /**
+     * Get the formatted display line when needed to be displayed in MC chat
+     *
+     * @return the formatted line
+     */
+    @Override
+    public String getDisplayLine() {
+        return "&f- &eisMi: &f" + isMi() + "&7; &e Type: &f" + getType().name() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
+    }
 }

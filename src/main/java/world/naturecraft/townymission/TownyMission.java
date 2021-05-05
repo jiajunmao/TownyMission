@@ -4,6 +4,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
+import world.naturecraft.townymission.commands.TownyMissionListAll;
+import world.naturecraft.townymission.commands.TownyMissionRoot;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.db.sql.*;
@@ -19,10 +21,11 @@ import java.util.logging.Logger;
  */
 public class TownyMission extends JavaPlugin {
 
-    private final Logger logger = Bukkit.getLogger();
+    private final Logger logger = getLogger();
     private Map<DbType, Database> dbList;
     private HikariDataSource db;
     private CustomConfigLoader customConfigLoader;
+    private TownyMissionRoot rootCmd;
     private boolean enabled = true;
 
     @Override
@@ -41,11 +44,13 @@ public class TownyMission extends JavaPlugin {
             enabled = false;
         }
 
-        logger.info("=========   CONNECTING TO RPG SPAWNER DATABASE   =========");
+        logger.info("=========   CONNECTING TO TOWNYMISSION DATABASE   =========");
         dbList = new HashMap<>();
         connect();
         registerDatabases();
         initializeDatabases();
+
+        registerCommands();
 
         if (!enabled) {
             Bukkit.getPluginManager().disablePlugin(this);
@@ -69,6 +74,13 @@ public class TownyMission extends JavaPlugin {
         register(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(this, db, Util.getDbName(DbType.SPRINT_HISTORY)));
         register(DbType.SEASON, new SeasonDatabase(this, db, Util.getDbName(DbType.SEASON)));
         register(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(this, db, Util.getDbName(DbType.SEASON_HISTORY)));
+    }
+
+    public void registerCommands() {
+        this.rootCmd = new TownyMissionRoot(this);
+        this.getCommand("townymission").setExecutor(rootCmd);
+
+        rootCmd.registerCommand("listAll", new TownyMissionListAll(this));
     }
 
     /**

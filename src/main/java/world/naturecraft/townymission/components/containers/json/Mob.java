@@ -31,4 +31,19 @@ public class Mob extends MissionJson {
     public static Mob parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Mob.class);
     }
+
+    public EntityType getEntityType() {
+        return entityType;
+    }
+
+
+    /**
+     * Get the formatted display line when needed to be displayed in MC chat
+     *
+     * @return the formatted line
+     */
+    @Override
+    public String getDisplayLine() {
+        return "&f- &eType: &f" + getEntityType().getName() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
+    }
 }

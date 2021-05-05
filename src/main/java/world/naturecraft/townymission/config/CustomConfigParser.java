@@ -21,8 +21,10 @@ public class CustomConfigParser {
 
     public static List<MissionJson> parseExpansion(FileConfiguration expansion) {
         List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getConfigurationSection("").getKeys(true)) {
+        for(String key : expansion.getKeys(false)) {
+            System.out.println("Parsing key: " + key);
             ConfigurationSection section = expansion.getConfigurationSection(key);
+            System.out.println(section.toString());
             String world = section.getString("world");
             int amount = section.getInt("amount");
             int reward = section.getInt("reward");
@@ -35,7 +37,7 @@ public class CustomConfigParser {
 
     public static List<MissionJson> parseMob(FileConfiguration expansion) {
         List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getConfigurationSection("").getKeys(true)) {
+        for(String key : expansion.getKeys(false)) {
             ConfigurationSection section = expansion.getConfigurationSection(key);
             String type = section.getString("type");
             int amount = section.getInt("amount");
@@ -49,7 +51,7 @@ public class CustomConfigParser {
 
     public static List<MissionJson> parseMoney(FileConfiguration expansion) {
         List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getConfigurationSection("").getKeys(true)) {
+        for(String key : expansion.getKeys(false)) {
             ConfigurationSection section = expansion.getConfigurationSection(key);
             int amount = section.getInt("amount");
             int reward = section.getInt("reward");
@@ -62,7 +64,7 @@ public class CustomConfigParser {
 
     public static List<MissionJson> parseResource(FileConfiguration expansion) {
         List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getConfigurationSection("").getKeys(true)) {
+        for(String key : expansion.getKeys(false)) {
             ConfigurationSection section = expansion.getConfigurationSection(key);
             Boolean isMi = section.getBoolean("isMi");
             String type = section.getString("Type");
@@ -77,7 +79,7 @@ public class CustomConfigParser {
 
     public static List<MissionJson> parseVote(FileConfiguration expansion) {
         List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getConfigurationSection("").getKeys(true)) {
+        for(String key : expansion.getKeys(false)) {
             ConfigurationSection section = expansion.getConfigurationSection(key);
             int amount = section.getInt("amount");
             int reward = section.getInt("reward");
@@ -88,17 +90,17 @@ public class CustomConfigParser {
         return list;
     }
 
-    public static List<MissionJson> parse(MissionType missionType, FileConfiguration configuration) {
+    public static List<MissionJson> parse(MissionType missionType, TownyMission instance) {
         if (missionType.equals(MissionType.MOB)) {
-            return parseMob(configuration);
+            return parseMob(instance.getCustomConfig().getMissionConfig(MissionType.MOB));
         } else if (missionType.equals(MissionType.MONEY)) {
-            return parseMoney(configuration);
+            return parseMoney(instance.getCustomConfig().getMissionConfig(MissionType.MONEY));
         } else if (missionType.equals(MissionType.EXPANSION)) {
-            return parseExpansion(configuration);
+            return parseExpansion(instance.getCustomConfig().getMissionConfig(MissionType.EXPANSION));
         } else if (missionType.equals(MissionType.VOTE)) {
-            return parseVote(configuration);
+            return parseVote(instance.getCustomConfig().getMissionConfig(MissionType.VOTE));
         } else if (missionType.equals(MissionType.RESOURCE)) {
-            return parseResource(configuration);
+            return parseResource(instance.getCustomConfig().getMissionConfig(MissionType.RESOURCE));
         } else {
             return null;
         }
@@ -108,7 +110,7 @@ public class CustomConfigParser {
         Collection<MissionJson> all = new HashSet<>();
         for (MissionType missionType : MissionType.values()) {
             FileConfiguration customConfig = instance.getCustomConfig().getMissionConfig(missionType);
-            List<MissionJson> customList = parse(missionType, customConfig);
+            List<MissionJson> customList = parse(missionType, instance);
             all.addAll(customList);
         }
 

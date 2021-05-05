@@ -16,7 +16,7 @@ public abstract class MissionJson {
 
     private final int reward;
     private final int amount;
-    private final int completed;
+    private int completed;
 
     protected MissionJson(int amount, int completed, int reward) {
         this.reward = reward;
@@ -45,5 +45,28 @@ public abstract class MissionJson {
 
     public String toJson() throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(this);
+    }
+
+    /**
+     * Get the formatted display line when needed to be displayed in MC chat
+     *
+     * @return the formatted line
+     */
+    public abstract String getDisplayLine();
+
+    public int getReward() {
+        return reward;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public int getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(int completed) {
+        this.completed = completed;
     }
 }

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +30,11 @@ public class TownyMissionRoot extends TownyMissionCommand {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (commands.containsKey(strings[0])) {
-            getExecutor(strings[0]).onCommand(commandSender, command, s, strings);
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (commands.containsKey(args[0])) {
+            getExecutor(args[0]).onCommand(sender, command, alias, args);
         } else {
-            onUnknown(commandSender);
+            onUnknown(sender);
         }
 
         return true;
@@ -41,8 +42,23 @@ public class TownyMissionRoot extends TownyMissionCommand {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return null;
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (command.getName().equalsIgnoreCase("townymission") || alias.equalsIgnoreCase("tm")) {
+            List<String> arguments = new ArrayList<>(commands.keySet());
+            List<String> tabList;
+
+            if (args.length == 1) {
+                // This is only /townymission
+                tabList = arguments;
+            } else if (args.length == 2 && commands.containsKey(args[0])) {
+                tabList = commands.get(args[0]).onTabComplete(sender, command, alias, args);
+            } else {
+                tabList = null;
+            }
+            return tabList;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -63,9 +79,5 @@ public class TownyMissionRoot extends TownyMissionCommand {
      */
     public TownyMissionCommand getExecutor(String name) {
         return commands.getOrDefault(name, null);
-    }
-
-    public void onUnknown(CommandSender sender) {
-        Util.sendMsg(sender, "&c The command you are looking for does not exist");
     }
 }
