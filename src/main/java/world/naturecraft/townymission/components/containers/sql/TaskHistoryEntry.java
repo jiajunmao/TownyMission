@@ -1,7 +1,7 @@
-package world.naturecraft.townymission.containers.sql;
+package world.naturecraft.townymission.components.containers.sql;
 
 public class TaskHistoryEntry {
-    
+
     private int id;
     private String taskType;
     private long startedTime;
@@ -28,68 +28,68 @@ public class TaskHistoryEntry {
         return id;
     }
 
-    public String getTaskType() {
-        return taskType;
-    }
-
-    public long getStartedTime() {
-        return startedTime;
-    }
-
-    public long getAllowedTime() {
-        return allowedTime;
-    }
-
-    public String getTaskJson() {
-        return taskJson;
-    }
-
-    public String getTown() {
-        return town;
-    }
-
-    public long getCompletedTime() {
-        return completedTime;
-    }
-
-    public int getSprint() {
-        return sprint;
-    }
-
-    public int getSeason() {
-        return season;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTaskType() {
+        return taskType;
     }
 
     public void setTaskType(String taskType) {
         this.taskType = taskType;
     }
 
+    public long getStartedTime() {
+        return startedTime;
+    }
+
     public void setStartedTime(long startedTime) {
         this.startedTime = startedTime;
+    }
+
+    public long getAllowedTime() {
+        return allowedTime;
     }
 
     public void setAllowedTime(long allowedTime) {
         this.allowedTime = allowedTime;
     }
 
+    public String getTaskJson() {
+        return taskJson;
+    }
+
     public void setTaskJson(String taskJson) {
         this.taskJson = taskJson;
+    }
+
+    public String getTown() {
+        return town;
     }
 
     public void setTown(String town) {
         this.town = town;
     }
 
+    public long getCompletedTime() {
+        return completedTime;
+    }
+
     public void setCompletedTime(long completedTime) {
         this.completedTime = completedTime;
     }
 
+    public int getSprint() {
+        return sprint;
+    }
+
     public void setSprint(int sprint) {
         this.sprint = sprint;
+    }
+
+    public int getSeason() {
+        return season;
     }
 
     public void setSeason(int season) {

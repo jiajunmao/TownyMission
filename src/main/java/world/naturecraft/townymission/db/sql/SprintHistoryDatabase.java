@@ -2,7 +2,7 @@ package world.naturecraft.townymission.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.containers.sql.SprintHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintHistoryEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,7 +39,7 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
             PreparedStatement p = conn.prepareStatement(sql);
             ResultSet result = p.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 list.add(new SprintHistoryEntry(result.getInt("id"),
                         result.getInt("season"),
                         result.getInt("sprint"),

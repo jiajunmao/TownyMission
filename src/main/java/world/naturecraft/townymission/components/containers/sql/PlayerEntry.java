@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.containers.sql;
+package world.naturecraft.townymission.components.containers.sql;
 
 public class PlayerEntry {
     private int id;
@@ -19,20 +19,20 @@ public class PlayerEntry {
         return id;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public void setDisplayName(String displayName) {

@@ -1,7 +1,6 @@
-package world.naturecraft.townymission.containers.json;
+package world.naturecraft.townymission.components.containers.json;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializer;
 import org.bukkit.Material;
 
 public class Resource extends JsonEntry {

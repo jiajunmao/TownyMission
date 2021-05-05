@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.containers.sql;
+package world.naturecraft.townymission.components.containers.sql;
 
 public class SeasonEntry {
     private int id;
@@ -19,36 +19,36 @@ public class SeasonEntry {
         return id;
     }
 
-    public String getTownID() {
-        return townID;
-    }
-
-    public String getTownName() {
-        return townName;
-    }
-
-    public int getSeasonPoint() {
-        return seasonPoint;
-    }
-
-    public int getSeason() {
-        return season;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTownID() {
+        return townID;
     }
 
     public void setTownID(String townID) {
         this.townID = townID;
     }
 
+    public String getTownName() {
+        return townName;
+    }
+
     public void setTownName(String townName) {
         this.townName = townName;
     }
 
+    public int getSeasonPoint() {
+        return seasonPoint;
+    }
+
     public void setSeasonPoint(int seasonPoint) {
         this.seasonPoint = seasonPoint;
+    }
+
+    public int getSeason() {
+        return season;
     }
 
     public void setSeason(int season) {

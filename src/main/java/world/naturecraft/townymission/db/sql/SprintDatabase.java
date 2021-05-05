@@ -2,7 +2,7 @@ package world.naturecraft.townymission.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.containers.sql.SprintEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,7 +58,7 @@ public class SprintDatabase extends Database<SprintEntry> {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
                     entry.getTownID() + "', '" +
-                    entry.getTownName()  + "', '" +
+                    entry.getTownName() + "', '" +
                     entry.getNaturepoints() + "', '" +
                     entry.getSprint() + "', '" +
                     entry.getSeason() + "');";

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class TownyMissionRoot extends TownyMissionCommand {
 
-    private Map<String, TownyMissionCommand> commands;
+    private final Map<String, TownyMissionCommand> commands;
 
     public TownyMissionRoot(TownyMission instance) {
         super(instance);

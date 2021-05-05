@@ -2,7 +2,7 @@ package world.naturecraft.townymission.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,7 +40,7 @@ public class TaskDatabase extends Database<TaskEntry> {
             PreparedStatement p = conn.prepareStatement(sql);
             ResultSet result = p.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 list.add(new TaskEntry(result.getInt("id"),
                         result.getString("task_type"),
                         result.getLong("started_time"),

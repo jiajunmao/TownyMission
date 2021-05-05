@@ -2,7 +2,7 @@ package world.naturecraft.townymission.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.containers.sql.PlayerEntry;
+import world.naturecraft.townymission.components.containers.sql.PlayerEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,10 +19,10 @@ public class PlayerDatabase extends Database<PlayerEntry> {
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                "`id` INT NOT NULL AUTO_INCREMENT ," +
-                "`uuid` VARCHAR(255) NOT NULL ," +
-                "`player_name` VARCHAR(255) NOT NULL, " +
-                "PRIMARY KEY (`id`))";
+                    "`id` INT NOT NULL AUTO_INCREMENT ," +
+                    "`uuid` VARCHAR(255) NOT NULL ," +
+                    "`player_name` VARCHAR(255) NOT NULL, " +
+                    "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

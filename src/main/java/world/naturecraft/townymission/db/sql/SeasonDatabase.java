@@ -2,7 +2,7 @@ package world.naturecraft.townymission.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,7 +39,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
             PreparedStatement p = conn.prepareStatement(sql);
             ResultSet result = p.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 list.add(new SeasonEntry(result.getInt("id"),
                         result.getString("town_id"),
                         result.getString("town_name"),

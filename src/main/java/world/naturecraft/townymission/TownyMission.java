@@ -3,8 +3,8 @@ package world.naturecraft.townymission;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.db.sql.*;
-import world.naturecraft.townymission.enums.DbType;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class TownyMission extends JavaPlugin {
 
-    private Logger logger = Bukkit.getLogger();
+    private final Logger logger = Bukkit.getLogger();
     private Map<DbType, Database> dbList;
     private HikariDataSource db;
 
@@ -22,11 +22,14 @@ public class TownyMission extends JavaPlugin {
         logger.info("=========   RPG SPAWNER LOADING   =========");
         this.saveDefaultConfig();
         this.saveResource("missions", false);
+
         logger.info("=========   CONNECTING TO RPG SPAWNER DATABASE   =========");
         dbList = new HashMap<>();
         connect();
         registerDatabases();
         initializeDatabases();
+
+
     }
 
     @Override
@@ -45,7 +48,7 @@ public class TownyMission extends JavaPlugin {
     }
 
     public void initializeDatabases() {
-        for(Database db : dbList.values()) {
+        for (Database db : dbList.values()) {
             db.createTable();
         }
     }

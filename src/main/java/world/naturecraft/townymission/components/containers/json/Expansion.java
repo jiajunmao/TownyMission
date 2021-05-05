@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.containers.json;
+package world.naturecraft.townymission.components.containers.json;
 
 import com.google.gson.JsonObject;
 

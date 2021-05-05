@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.enums;
+package world.naturecraft.townymission.components.enums;
 
 public enum DbType {
     PLAYER,

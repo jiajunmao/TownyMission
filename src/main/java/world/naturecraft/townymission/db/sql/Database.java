@@ -9,9 +9,9 @@ import java.util.List;
 
 public abstract class Database<T> {
 
-    private final TownyMission instance;
-    private HikariDataSource db;
     protected final String tableName;
+    private final TownyMission instance;
+    private final HikariDataSource db;
 
     public Database(TownyMission instance, HikariDataSource db, String tableName) {
         this.instance = instance;
