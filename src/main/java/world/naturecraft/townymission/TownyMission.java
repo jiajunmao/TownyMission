@@ -2,11 +2,14 @@ package world.naturecraft.townymission;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.db.sql.*;
 import world.naturecraft.townymission.utils.Util;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -19,12 +22,24 @@ public class TownyMission extends JavaPlugin {
     private final Logger logger = Bukkit.getLogger();
     private Map<DbType, Database> dbList;
     private HikariDataSource db;
+    private CustomConfigLoader customConfigLoader;
+    private boolean enabled = true;
 
     @Override
     public void onEnable() {
-        logger.info("=========   RPG SPAWNER LOADING   =========");
+        logger.info("=========   TOWNYMISSION LOADING   =========");
         this.saveDefaultConfig();
-        this.saveResource("missions", false);
+        try {
+            customConfigLoader = new CustomConfigLoader(this);
+        } catch (IOException e) {
+            logger.severe("IO operation fault during custom config initialization");
+            e.printStackTrace();
+            enabled = false;
+        } catch (InvalidConfigurationException e) {
+            logger.severe("Invalid configuration during custom config initialization");
+            e.printStackTrace();
+            enabled = false;
+        }
 
         logger.info("=========   CONNECTING TO RPG SPAWNER DATABASE   =========");
         dbList = new HashMap<>();
@@ -32,11 +47,14 @@ public class TownyMission extends JavaPlugin {
         registerDatabases();
         initializeDatabases();
 
-
+        if (!enabled) {
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override
     public void onDisable() {
+        logger.info("=========   TOWNYMISSION DISABLING   =========");
         close();
     }
 
@@ -97,5 +115,9 @@ public class TownyMission extends JavaPlugin {
      */
     public void register(DbType dbType, Database database) {
         dbList.put(dbType, database);
+    }
+
+    public CustomConfigLoader getCustomConfig() {
+        return customConfigLoader;
     }
 }

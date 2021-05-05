@@ -18,13 +18,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class CustomConfig {
+public class CustomConfigLoader {
 
     private TownyMission instance;
     private Map<MissionType, FileConfiguration> customConfigs;
     private FileConfiguration langConfig;
 
-    public CustomConfig(TownyMission instance) throws IOException, InvalidConfigurationException {
+    public CustomConfigLoader(TownyMission instance) throws IOException, InvalidConfigurationException {
         this.instance = instance;
         this.customConfigs = new HashMap<>();
 

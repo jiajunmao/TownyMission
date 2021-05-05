@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,13 @@ public class TownyMissionRoot extends TownyMissionCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return false;
+        if (commands.containsKey(strings[0])) {
+            getExecutor(strings[0]).onCommand(commandSender, command, s, strings);
+        } else {
+            onUnknown(commandSender);
+        }
+
+        return true;
     }
 
     @Nullable
@@ -56,5 +63,9 @@ public class TownyMissionRoot extends TownyMissionCommand {
      */
     public TownyMissionCommand getExecutor(String name) {
         return commands.getOrDefault(name, null);
+    }
+
+    public void onUnknown(CommandSender sender) {
+        Util.sendMsg(sender, "&c The command you are looking for does not exist");
     }
 }
