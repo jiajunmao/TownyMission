@@ -1,23 +1,20 @@
 package world.naturecraft.townymission.components.containers.json;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * The type Money.
  */
-public class Money extends JsonEntry {
-    private final int required;
-    private final int completed;
+public class Money extends MissionJson {
 
     /**
      * Instantiates a new Money.
      *
-     * @param required  the required
      * @param completed the completed
      */
-    public Money(int required, int completed) {
-        this.required = required;
-        this.completed = completed;
+    public Money(int amount, int completed, int reward) {
+        super(amount, completed, reward);
     }
 
     /**
@@ -26,10 +23,7 @@ public class Money extends JsonEntry {
      * @param json the json
      * @return the money
      */
-    public static Money parse(JsonObject json) {
-        return new Money(
-                Integer.parseInt(json.get("required").toString()),
-                Integer.parseInt(json.get("completed").toString())
-        );
+    public static Money parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, Money.class);
     }
 }

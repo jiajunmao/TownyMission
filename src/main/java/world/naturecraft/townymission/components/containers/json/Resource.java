@@ -1,17 +1,16 @@
 package world.naturecraft.townymission.components.containers.json;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.Material;
 
 /**
  * The type Resource.
  */
-public class Resource extends JsonEntry {
+public class Resource extends MissionJson {
 
     private final boolean isMi;
     private final Material type;
-    private final int amount;
-    private final int completed;
 
     /**
      * Instantiates a new Resource.
@@ -21,11 +20,10 @@ public class Resource extends JsonEntry {
      * @param amount    the amount
      * @param completed the completed
      */
-    public Resource(boolean isMi, Material type, int amount, int completed) {
+    public Resource(boolean isMi, Material type, int amount, int completed, int reward) {
+        super(amount, completed, reward);
         this.isMi = isMi;
         this.type = type;
-        this.amount = amount;
-        this.completed = completed;
     }
 
     /**
@@ -34,11 +32,7 @@ public class Resource extends JsonEntry {
      * @param json the json
      * @return the resource
      */
-    public static Resource parse(JsonObject json) {
-        return new Resource(
-                Boolean.parseBoolean(json.get("isMi").toString()),
-                Material.valueOf(json.get("type").toString()),
-                Integer.parseInt(json.get("amount").toString()),
-                Integer.parseInt(json.get("completed").toString()));
+    public static Resource parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, Resource.class);
     }
 }

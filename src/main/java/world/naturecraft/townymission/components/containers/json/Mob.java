@@ -1,15 +1,14 @@
 package world.naturecraft.townymission.components.containers.json;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.entity.EntityType;
 
 /**
  * The type Mob.
  */
-public class Mob extends JsonEntry {
+public class Mob extends MissionJson {
     private final EntityType entityType;
-    private final int amount;
-    private final int completed;
 
     /**
      * Instantiates a new Mob.
@@ -18,10 +17,9 @@ public class Mob extends JsonEntry {
      * @param amount     the amount
      * @param completed  the completed
      */
-    public Mob(EntityType entityType, int amount, int completed) {
+    public Mob(EntityType entityType, int amount, int completed, int reward) {
+        super(reward, amount, completed);
         this.entityType = entityType;
-        this.amount = amount;
-        this.completed = completed;
     }
 
     /**
@@ -30,9 +28,7 @@ public class Mob extends JsonEntry {
      * @param json the json
      * @return the mob
      */
-    public static Mob parse(JsonObject json) {
-        return new Mob(EntityType.valueOf(json.get("entityType").toString()),
-                Integer.parseInt(json.get("amount").toString()),
-                Integer.parseInt(json.get("completed").toString()));
+    public static Mob parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, Mob.class);
     }
 }

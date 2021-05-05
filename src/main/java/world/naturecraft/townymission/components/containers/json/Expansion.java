@@ -4,15 +4,14 @@
 
 package world.naturecraft.townymission.components.containers.json;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * The type Expansion.
  */
-public class Expansion extends JsonEntry {
+public class Expansion extends MissionJson {
     private final String world;
-    private final int amount;
-    private final int completed;
 
     /**
      * Instantiates a new Expansion.
@@ -21,10 +20,9 @@ public class Expansion extends JsonEntry {
      * @param amount    the amount
      * @param completed the completed
      */
-    public Expansion(String world, int amount, int completed) {
+    public Expansion(String world, int amount, int completed, int reward) {
+        super(amount, completed, reward);
         this.world = world;
-        this.amount = amount;
-        this.completed = completed;
     }
 
     /**
@@ -33,9 +31,7 @@ public class Expansion extends JsonEntry {
      * @param json the json
      * @return the expansion
      */
-    public static Expansion parse(JsonObject json) {
-        return new Expansion(json.get("world").toString(),
-                Integer.parseInt(json.get("amount").toString()),
-                Integer.parseInt(json.get("completed").toString()));
+    public static Expansion parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, Expansion.class);
     }
 }

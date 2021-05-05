@@ -1,14 +1,13 @@
 package world.naturecraft.townymission.components.containers.json;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 
 /**
  * The type Vote.
  */
-public class Vote extends JsonEntry {
-
-    private final int amount;
-    private final int completed;
+public class Vote extends MissionJson {
 
     /**
      * Instantiates a new Vote.
@@ -16,9 +15,8 @@ public class Vote extends JsonEntry {
      * @param amount    the amount
      * @param completed the completed
      */
-    public Vote(int amount, int completed) {
-        this.amount = amount;
-        this.completed = completed;
+    public Vote(int amount, int completed, int reward) {
+        super(amount, completed, reward);
     }
 
     /**
@@ -27,9 +25,7 @@ public class Vote extends JsonEntry {
      * @param json the json
      * @return the vote
      */
-    public static Vote parse(JsonObject json) {
-        return new Vote(
-                Integer.parseInt(json.get("amount").toString()),
-                Integer.parseInt(json.get("completed").toString()));
+    public static Vote parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, Vote.class);
     }
 }

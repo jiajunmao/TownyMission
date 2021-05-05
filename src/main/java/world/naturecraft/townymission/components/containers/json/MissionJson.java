@@ -12,7 +12,17 @@ import com.google.gson.JsonParser;
 /**
  * The type Json entry.
  */
-public abstract class JsonEntry {
+public abstract class MissionJson {
+
+    private final int reward;
+    private final int amount;
+    private final int completed;
+
+    protected MissionJson(int amount, int completed, int reward) {
+        this.reward = reward;
+        this.amount = amount;
+        this.completed = completed;
+    }
 
     /**
      * Gets json.
@@ -33,4 +43,7 @@ public abstract class JsonEntry {
         }
     }
 
+    public String toJson() throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(this);
+    }
 }
