@@ -84,6 +84,17 @@
     </build>
 
     <repositories>
+
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <layout>default</layout>
+            <url>https://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
         <repository>
             <id>gitlab-maven</id>
             <!--suppress UnresolvedMavenProperty -->
@@ -113,6 +124,26 @@
     </repositories>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.14.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>3.14.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>3.14.9</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -140,6 +171,7 @@
             <version>1.0.17</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
 </project>

@@ -6,6 +6,11 @@
         <config>
           <option name="distributionMsId" value="Ubuntu" />
         </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="homePath" value="/usr/lib/jvm/java-11-openjdk-amd64" />
+          </config>
+        </ContributedStateBase>
         <ContributedStateBase type="MavenRuntime">
           <config>
             <option name="homePath" value="/usr/share/maven" />

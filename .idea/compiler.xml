@@ -6,8 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="TownyMissions" />
+        <module name="TownyMission" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="TownyMission" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
