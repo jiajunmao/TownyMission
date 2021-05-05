@@ -19,7 +19,7 @@ build_snapshop:
     - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml install'
   artifacts:
     paths:
-      - target/RPG*
+      - target/TownyMission*.jar
     expire_in: 1 week
 
 release:
@@ -30,7 +30,7 @@ release:
     - 'mvn -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s ci_settings.xml release:prepare release:perform'
   artifacts:
     paths:
-      - target/RPG*
+      - target/TownyMission*.jar
     expire_in: 1 week
 
 success_notification:
