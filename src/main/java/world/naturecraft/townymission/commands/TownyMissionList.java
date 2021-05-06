@@ -33,7 +33,6 @@ import java.util.Random;
 
 public class TownyMissionList extends TownyMissionCommand {
 
-    private TaskDao taskDao;
 
     /**
      * Instantiates a new Towny mission command.
@@ -42,7 +41,6 @@ public class TownyMissionList extends TownyMissionCommand {
      */
     public TownyMissionList(TownyMission instance) {
         super(instance);
-        taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
     }
 
     /**
@@ -83,7 +81,6 @@ public class TownyMissionList extends TownyMissionCommand {
                                         Util.hrToMs(mission.getHrAllowed()),
                                         mission.toJson(),
                                         town.getName());
-                                System.out.println("Json added: " + mission.toJson());
                                 taskDao.add(entry);
                             } catch (JsonProcessingException e) {
                                 e.printStackTrace();

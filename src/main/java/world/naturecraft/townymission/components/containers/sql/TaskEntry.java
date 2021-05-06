@@ -10,13 +10,13 @@ import java.util.Locale;
  * The type Task entry.
  */
 public class TaskEntry {
-    private int id;
+    private final int id;
     private final String taskType;
     private final long addedTime;
-    private final long startedTime;
-    private final long allowedTime;
-    private final String taskJson;
     private final String town;
+    private long startedTime;
+    private final long allowedTime;
+    private String taskJson;
 
     /**
      * Instantiates a new Task entry.
@@ -53,15 +53,6 @@ public class TaskEntry {
     }
 
     /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
      * Gets task type.
      *
      * @return the task type
@@ -79,13 +70,8 @@ public class TaskEntry {
         return startedTime;
     }
 
-    /**
-     * Gets allowed time.
-     *
-     * @return the allowed time
-     */
-    public long getAllowedTime() {
-        return allowedTime;
+    public void setStartedTime(long startedTime) {
+        this.startedTime = startedTime;
     }
 
     /**
@@ -95,6 +81,10 @@ public class TaskEntry {
      */
     public String getTaskJson() {
         return taskJson;
+    }
+
+    public void setTaskJson(String taskJson) {
+        this.taskJson = taskJson;
     }
 
     /**
@@ -121,5 +111,9 @@ public class TaskEntry {
         } else {
             return null;
         }
+    }
+
+    public long getAllowedTime() {
+        return allowedTime;
     }
 }

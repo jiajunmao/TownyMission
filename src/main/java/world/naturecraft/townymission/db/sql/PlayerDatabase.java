@@ -88,8 +88,10 @@ public class PlayerDatabase extends Database<PlayerEntry> {
     @Override
     public void update(PlayerEntry entry) {
         execute(conn -> {
-            String sql = "UPDATE " + tableName + " SET uuid='" +
-                    entry.getUuid() + "' AND player_name='" + entry.getDisplayName() + "' WHERE id='" + entry.getId() + "';";
+            String sql = "UPDATE " + tableName +
+                    " SET uuid='" + entry.getUuid() +
+                    "', player_name='" + entry.getDisplayName() +
+                    "' WHERE id='" + entry.getId() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

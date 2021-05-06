@@ -23,7 +23,6 @@ public class TaskDao extends Dao<TaskEntry> {
     public int getNumAdded(Town town) {
         int num = 0;
         for (TaskEntry e : db.getEntries()) {
-            System.out.println("TaskDao processing " + e.getId() + " with Json " + e.getTaskJson());
             if (e.getTown().equalsIgnoreCase(town.getName())) {
                 num++;
             }
@@ -43,6 +42,18 @@ public class TaskDao extends Dao<TaskEntry> {
         return list;
     }
 
+    public boolean hasStartedMission(Town town) {
+        for (TaskEntry e : db.getEntries()) {
+            if (e.getTown().equalsIgnoreCase(town.getName())) {
+                if (e.getStartedTime() != 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void add(TaskEntry entry) {
         db.add(entry);
     }
@@ -51,4 +62,7 @@ public class TaskDao extends Dao<TaskEntry> {
         db.remove(entry);
     }
 
+    public void update(TaskEntry entry) {
+        db.update(entry);
+    }
 }

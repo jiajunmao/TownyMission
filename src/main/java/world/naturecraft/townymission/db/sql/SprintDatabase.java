@@ -99,10 +99,10 @@ public class SprintDatabase extends Database<SprintEntry> {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + entry.getTownID() +
-                    "' AND town_name='" + entry.getTownName() +
-                    "' AND naturepoints='" + entry.getNaturepoints() +
-                    "' AND sprint='" + entry.getSprint() +
-                    "' AND season='" + entry.getSeason() +
+                    "', town_name='" + entry.getTownName() +
+                    "', naturepoints='" + entry.getNaturepoints() +
+                    "', sprint='" + entry.getSprint() +
+                    "', season='" + entry.getSeason() +
                     "' WHERE id='" + entry.getId() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();

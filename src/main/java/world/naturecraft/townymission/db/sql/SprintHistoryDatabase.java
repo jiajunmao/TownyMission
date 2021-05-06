@@ -97,9 +97,9 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + entry.getSeason() +
-                    "' AND sprint='" + entry.getSprint() +
-                    "' AND started_time='" + entry.getStartedTime() +
-                    "' AND rank_json='" + entry.getRankJson() +
+                    "', sprint='" + entry.getSprint() +
+                    "', started_time='" + entry.getStartedTime() +
+                    "', rank_json='" + entry.getRankJson() +
                     "' WHERE id='" + entry.getId() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();

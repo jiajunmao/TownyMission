@@ -111,14 +111,14 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET task_type='" + entry.getTaskType() +
-                    "' AND added_time='" + entry.getAddedTime() +
-                    "' AND started_time='" + entry.getStartedTime() +
-                    "' AND allowed_time='" + entry.getAllowedTime() +
-                    "' AND task_json='" + entry.getTaskJson() +
-                    "' AND town='" + entry.getTown() +
-                    "' AND completed_time='" + entry.getCompletedTime() +
-                    "' AND sprint='" + entry.getSprint() +
-                    "' AND season='" + entry.getSeason() +
+                    "', added_time='" + entry.getAddedTime() +
+                    "', started_time='" + entry.getStartedTime() +
+                    "', allowed_time='" + entry.getAllowedTime() +
+                    "', task_json='" + entry.getTaskJson() +
+                    "', town='" + entry.getTown() +
+                    "', completed_time='" + entry.getCompletedTime() +
+                    "', sprint='" + entry.getSprint() +
+                    "', season='" + entry.getSeason() +
                     "' WHERE id='" + entry.getId() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();

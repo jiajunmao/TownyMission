@@ -10,7 +10,7 @@ depend:
 permissions:
   townymission.player:
     description: Default player commands
-    default: not op
+    default: true
   townymission.admin:
     description: Default admin commands
     default: op
