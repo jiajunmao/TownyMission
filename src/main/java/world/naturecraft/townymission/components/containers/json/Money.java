@@ -1,7 +1,11 @@
 package world.naturecraft.townymission.components.containers.json;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import world.naturecraft.townymission.components.enums.MissionType;
+
+import java.beans.ConstructorProperties;
 
 /**
  * The type Money.
@@ -13,8 +17,9 @@ public class Money extends MissionJson {
      *
      * @param completed the completed
      */
-    public Money(int amount, int completed, int reward) {
-        super(amount, completed, reward);
+    @ConstructorProperties({"amount", "completed", "hrAllowed", "reward"})
+    public Money(int amount, int completed, int hrAllowed, int reward) {
+        super(MissionType.MONEY, amount, completed, hrAllowed, reward);
     }
 
     /**
@@ -33,6 +38,7 @@ public class Money extends MissionJson {
      * @return the formatted line
      */
     @Override
+    @JsonIgnore
     public String getDisplayLine() {
         return "&f- &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
     }

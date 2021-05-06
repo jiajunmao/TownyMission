@@ -31,6 +31,7 @@ public class TaskDatabase extends Database<TaskEntry> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`id` INT NOT NULL AUTO_INCREMENT ," +
                     "`task_type` VARCHAR(255) NOT NULL ," +
+                    "`added_time` BIGINT NOT NULL, " +
                     "`started_time` BIGINT NOT NULL, " +
                     "`allowed_time` BIGINT NOT NULL, " +
                     "`task_json` VARCHAR(255) NOT NULL ," +
@@ -53,6 +54,7 @@ public class TaskDatabase extends Database<TaskEntry> {
             while (result.next()) {
                 list.add(new TaskEntry(result.getInt("id"),
                         result.getString("task_type"),
+                        result.getLong("added_time"),
                         result.getLong("started_time"),
                         result.getLong("allowed_time"),
                         result.getString("task_json"),
@@ -68,6 +70,7 @@ public class TaskDatabase extends Database<TaskEntry> {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
                     entry.getTaskType() + "', '" +
+                    entry.getAddedTime() + "', '" +
                     entry.getStartedTime() + "', '" +
                     entry.getAllowedTime() + "', '" +
                     entry.getTaskJson() + "', '" +
@@ -83,6 +86,28 @@ public class TaskDatabase extends Database<TaskEntry> {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "id='" + entry.getId() + "');";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.executeUpdate();
+            return null;
+        });
+    }
+
+    /**
+     * Update.
+     *
+     * @param entry the entry
+     */
+    @Override
+    public void update(TaskEntry entry) {
+        execute(conn -> {
+            String sql = "UPDATE " + tableName +
+                    " SET task_type='" + entry.getTaskType() +
+                    "' AND added_time='" + entry.getAddedTime() +
+                    "' AND started_time='" + entry.getStartedTime() +
+                    "' AND allowed_time='" + entry.getAllowedTime() +
+                    "' AND task_json='" + entry.getTaskJson() +
+                    "' AND town='" + entry.getTown() +
+                    "' WHERE id='" + entry.getId() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

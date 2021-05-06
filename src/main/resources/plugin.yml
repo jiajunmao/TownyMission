@@ -4,6 +4,9 @@ main: world.naturecraft.townymission.TownyMission
 version: 0.0.1
 api-version: 1.16
 
+depend:
+  - Towny
+
 permissions:
   townymission.player:
     description: Default player commands

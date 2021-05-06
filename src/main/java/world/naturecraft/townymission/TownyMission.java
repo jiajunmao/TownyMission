@@ -4,10 +4,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
+import world.naturecraft.townymission.commands.TownyMissionList;
 import world.naturecraft.townymission.commands.TownyMissionListAll;
 import world.naturecraft.townymission.commands.TownyMissionRoot;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
+import world.naturecraft.townymission.dao.Dao;
 import world.naturecraft.townymission.db.sql.*;
 import world.naturecraft.townymission.utils.Util;
 
@@ -81,6 +83,7 @@ public class TownyMission extends JavaPlugin {
         this.getCommand("townymission").setExecutor(rootCmd);
 
         rootCmd.registerCommand("listAll", new TownyMissionListAll(this));
+        rootCmd.registerCommand("list", new TownyMissionList(this));
     }
 
     /**
@@ -131,5 +134,9 @@ public class TownyMission extends JavaPlugin {
 
     public CustomConfigLoader getCustomConfig() {
         return customConfigLoader;
+    }
+
+    public Database getDb(DbType dbType) {
+        return dbList.get(dbType);
     }
 }

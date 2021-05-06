@@ -21,6 +21,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.26" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:placeholderapi:2.10.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains:annotations:19.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.TownyAdvanced:Towny:0.96.7.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.12.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.12.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.12.3" level="project" />

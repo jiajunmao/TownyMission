@@ -146,6 +146,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.TownyAdvanced</groupId>
+            <artifactId>Towny</artifactId>
+            <version>0.96.7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

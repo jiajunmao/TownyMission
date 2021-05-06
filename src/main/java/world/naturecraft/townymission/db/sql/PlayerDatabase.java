@@ -79,4 +79,20 @@ public class PlayerDatabase extends Database<PlayerEntry> {
             return null;
         });
     }
+
+    /**
+     * Update.
+     *
+     * @param entry the entry
+     */
+    @Override
+    public void update(PlayerEntry entry) {
+        execute(conn -> {
+            String sql = "UPDATE " + tableName + " SET uuid='" +
+                    entry.getUuid() + "' AND player_name='" + entry.getDisplayName() + "' WHERE id='" + entry.getId() + "';";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.executeUpdate();
+            return null;
+        });
+    }
 }

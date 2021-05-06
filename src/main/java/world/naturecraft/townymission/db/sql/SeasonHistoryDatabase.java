@@ -83,4 +83,23 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
             return null;
         });
     }
+
+    /**
+     * Update.
+     *
+     * @param entry the entry
+     */
+    @Override
+    public void update(SeasonHistoryEntry entry) {
+        execute(conn -> {
+            String sql = "UPDATE " + tableName +
+                    " SET season='" + entry.getSeason() +
+                    "' AND started_time='" + entry.getStartTime() +
+                    "' AND rank_json='" + entry.getRankJson() +
+                    "' WHERE id='" + entry.getId() + "';";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.executeUpdate();
+            return null;
+        });
+    }
 }

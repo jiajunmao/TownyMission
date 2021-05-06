@@ -3,9 +3,12 @@ package world.naturecraft.townymission.utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import world.naturecraft.townymission.components.containers.json.MissionJson;
+import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.enums.MissionType;
 
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +51,7 @@ public class Util {
      * @param message  the message
      * @return the string
      */
-    public static String translateHexColor(String startTag, String endTag, String message) {
+    private static String translateHexColor(String startTag, String endTag, String message) {
         final Pattern hexPattern = Pattern.compile(startTag + "([A-Fa-f0-9]{6})" + endTag);
         char COLOR_CHAR = ChatColor.COLOR_CHAR;
         Matcher matcher = hexPattern.matcher(message);
@@ -70,11 +73,33 @@ public class Util {
      * @param message the message
      * @return the string
      */
-    public static String translateVanillaColor(String message) {
+    private static String translateVanillaColor(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     public static String translateColor(String message) {
         return translateVanillaColor(translateHexColor("\\{#", "\\}", message));
+    }
+
+    public static long currentTime() {
+        return System.currentTimeMillis();
+    }
+
+    public static long hrToMs(int hr) {
+        return (long) hr * 60 * 60 * 1000;
+    }
+
+    public static Map<MissionType, List<TaskEntry>> classifyTaskEntry(List<TaskEntry> list) {
+        Map<MissionType, List<TaskEntry>> map = new HashMap<>();
+        for (MissionType missionType : MissionType.values()) {
+            map.put(missionType, new ArrayList<>());
+        }
+
+        for (TaskEntry e : list) {
+            MissionType type = MissionType.valueOf(e.getTaskType().toUpperCase(Locale.ROOT));
+            map.get(type).add(e);
+        }
+
+        return map;
     }
 }

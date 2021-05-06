@@ -61,6 +61,13 @@ public abstract class Database<T> {
     public abstract void remove(T entry);
 
     /**
+     * Update.
+     *
+     * @param entry the entry
+     */
+    public abstract void update(T entry);
+
+    /**
      * Execute t.
      *
      * @param <T>      the type parameter

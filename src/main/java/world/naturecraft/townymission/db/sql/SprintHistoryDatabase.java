@@ -86,4 +86,24 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
             return null;
         });
     }
+
+    /**
+     * Update.
+     *
+     * @param entry the entry
+     */
+    @Override
+    public void update(SprintHistoryEntry entry) {
+        execute(conn -> {
+            String sql = "UPDATE " + tableName +
+                    " SET season='" + entry.getSeason() +
+                    "' AND sprint='" + entry.getSprint() +
+                    "' AND started_time='" + entry.getStartedTime() +
+                    "' AND rank_json='" + entry.getRankJson() +
+                    "' WHERE id='" + entry.getId() + "';";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.executeUpdate();
+            return null;
+        });
+    }
 }

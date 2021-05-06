@@ -7,6 +7,7 @@ public class TaskHistoryEntry {
 
     private int id;
     private String taskType;
+    private long addedTime;
     private long startedTime;
     private long allowedTime;
     private String taskJson;
@@ -28,9 +29,10 @@ public class TaskHistoryEntry {
      * @param sprint        the sprint
      * @param season        the season
      */
-    public TaskHistoryEntry(int id, String taskType, long startedTime, long allowedTime, String taskJson, String town, long completedTime, int sprint, int season) {
+    public TaskHistoryEntry(int id, String taskType, long addedTime, long startedTime, long allowedTime, String taskJson, String town, long completedTime, int sprint, int season) {
         this.id = id;
         this.taskType = taskType;
+        this.addedTime = addedTime;
         this.startedTime = startedTime;
         this.allowedTime = allowedTime;
         this.taskJson = taskJson;
@@ -200,5 +202,13 @@ public class TaskHistoryEntry {
      */
     public void setSeason(int season) {
         this.season = season;
+    }
+
+    public long getAddedTime() {
+        return addedTime;
+    }
+
+    public void setAddedTime(long addedTime) {
+        this.addedTime = addedTime;
     }
 }

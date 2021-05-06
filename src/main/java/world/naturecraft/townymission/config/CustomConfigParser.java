@@ -19,95 +19,40 @@ import java.util.*;
 
 public class CustomConfigParser {
 
-    public static List<MissionJson> parseExpansion(FileConfiguration expansion) {
+    public static List<MissionJson> parse(MissionType type, FileConfiguration fileConfiguration) {
         List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getKeys(false)) {
-            System.out.println("Parsing key: " + key);
-            ConfigurationSection section = expansion.getConfigurationSection(key);
-            System.out.println(section.toString());
-            String world = section.getString("world");
+        for (String key : fileConfiguration.getKeys(false)) {
+            ConfigurationSection section = fileConfiguration.getConfigurationSection(key);
             int amount = section.getInt("amount");
             int reward = section.getInt("reward");
+            int hrAllowed = section.getInt("timeAllowed");
 
-            list.add(new Expansion(world, amount, 0, reward));
-        }
-
-        return list;
-    }
-
-    public static List<MissionJson> parseMob(FileConfiguration expansion) {
-        List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getKeys(false)) {
-            ConfigurationSection section = expansion.getConfigurationSection(key);
-            String type = section.getString("type");
-            int amount = section.getInt("amount");
-            int reward = section.getInt("reward");
-
-            list.add(new Mob(EntityType.valueOf(type), amount, 0, reward));
-        }
-
-        return list;
-    }
-
-    public static List<MissionJson> parseMoney(FileConfiguration expansion) {
-        List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getKeys(false)) {
-            ConfigurationSection section = expansion.getConfigurationSection(key);
-            int amount = section.getInt("amount");
-            int reward = section.getInt("reward");
-
-            list.add(new Money(amount, 0, reward));
-        }
-
-        return list;
-    }
-
-    public static List<MissionJson> parseResource(FileConfiguration expansion) {
-        List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getKeys(false)) {
-            ConfigurationSection section = expansion.getConfigurationSection(key);
-            Boolean isMi = section.getBoolean("isMi");
-            String type = section.getString("Type");
-            int amount = section.getInt("amount");
-            int reward = section.getInt("reward");
-
-            list.add(new Resource(isMi, Material.valueOf(type), amount, 0, reward));
-        }
-
-        return list;
-    }
-
-    public static List<MissionJson> parseVote(FileConfiguration expansion) {
-        List<MissionJson> list = new ArrayList<>();
-        for(String key : expansion.getKeys(false)) {
-            ConfigurationSection section = expansion.getConfigurationSection(key);
-            int amount = section.getInt("amount");
-            int reward = section.getInt("reward");
-
-            list.add(new Vote(amount, 0, reward));
+            if (type.equals(MissionType.EXPANSION)) {
+                String world = section.getString("world");
+                list.add(new Expansion(world, amount, 0, hrAllowed, reward));
+            } else if (type.equals(MissionType.MOB)) {
+                String mobType = section.getString("type");
+                list.add(new Mob(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward));
+            } else if (type.equals(MissionType.MONEY)) {
+                list.add(new Money(amount, 0, hrAllowed, reward));
+            } else if (type.equals(MissionType.RESOURCE)) {
+                boolean isMi = section.getBoolean("isMi");
+                String resourceType = section.getString("type");
+                list.add(new Resource(isMi, Material.valueOf(resourceType), amount, 0, hrAllowed, reward));
+            } else if (type.equals(MissionType.VOTE)) {
+                list.add(new Vote(amount, 0, hrAllowed, reward));
+            }
         }
 
         return list;
     }
 
     public static List<MissionJson> parse(MissionType missionType, TownyMission instance) {
-        if (missionType.equals(MissionType.MOB)) {
-            return parseMob(instance.getCustomConfig().getMissionConfig(MissionType.MOB));
-        } else if (missionType.equals(MissionType.MONEY)) {
-            return parseMoney(instance.getCustomConfig().getMissionConfig(MissionType.MONEY));
-        } else if (missionType.equals(MissionType.EXPANSION)) {
-            return parseExpansion(instance.getCustomConfig().getMissionConfig(MissionType.EXPANSION));
-        } else if (missionType.equals(MissionType.VOTE)) {
-            return parseVote(instance.getCustomConfig().getMissionConfig(MissionType.VOTE));
-        } else if (missionType.equals(MissionType.RESOURCE)) {
-            return parseResource(instance.getCustomConfig().getMissionConfig(MissionType.RESOURCE));
-        } else {
-            return null;
-        }
+        return parse(missionType, instance.getCustomConfig().getMissionConfig(missionType));
     }
 
-    public static Collection<MissionJson> parseAll(TownyMission instance) {
-        Collection<MissionJson> all = new HashSet<>();
+    public static List<MissionJson> parseAll(TownyMission instance) {
+        List<MissionJson> all = new ArrayList<>();
         for (MissionType missionType : MissionType.values()) {
             FileConfiguration customConfig = instance.getCustomConfig().getMissionConfig(missionType);
             List<MissionJson> customList = parse(missionType, instance);

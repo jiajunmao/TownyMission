@@ -85,4 +85,24 @@ public class SeasonDatabase extends Database<SeasonEntry> {
             return null;
         });
     }
+
+    /**
+     * Update.
+     *
+     * @param entry the entry
+     */
+    @Override
+    public void update(SeasonEntry entry) {
+        execute(conn -> {
+            String sql = "UPDATE " + tableName +
+                    " SET town_id='" + entry.getTownID() +
+                    "' AND town_name='" + entry.getTownName() +
+                    "' AND seasonpoints='" + entry.getSeasonPoint() +
+                    "' AND season='" + entry.getSeason() +
+                    "' WHERE id='" + entry.getId() + "';";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.executeUpdate();
+            return null;
+        });
+    }
 }

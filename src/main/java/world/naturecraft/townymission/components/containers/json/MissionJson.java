@@ -4,39 +4,41 @@
 
 package world.naturecraft.townymission.components.containers.json;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import world.naturecraft.townymission.components.enums.MissionType;
+
+import java.beans.ConstructorProperties;
 
 /**
  * The type Json entry.
  */
 public abstract class MissionJson {
 
+    @JsonIgnore
+    private final MissionType missionType;
+    @JsonProperty("reward")
     private final int reward;
+    @JsonProperty("hrAllowed")
+    private final int hrAllowed;
+    @JsonProperty("amount")
     private final int amount;
+    @JsonProperty("completed")
     private int completed;
 
-    protected MissionJson(int amount, int completed, int reward) {
+    protected MissionJson(MissionType missionType, int amount, int completed, int hrAllowed, int reward) {
+        this.missionType = missionType;
         this.reward = reward;
         this.amount = amount;
         this.completed = completed;
-    }
-
-    /**
-     * Gets json.
-     *
-     * @return the json
-     * @throws JsonProcessingException the json processing exception
-     */
-    public JsonObject getJson() throws JsonProcessingException {
-        return new JsonParser().parse(new ObjectMapper().writeValueAsString(this)).getAsJsonObject();
+        this.hrAllowed = hrAllowed;
     }
 
     public String toString() {
         try {
-            return getJson().toString();
+            return toJson();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;
@@ -52,6 +54,7 @@ public abstract class MissionJson {
      *
      * @return the formatted line
      */
+    @JsonIgnore
     public abstract String getDisplayLine();
 
     public int getReward() {
@@ -68,5 +71,14 @@ public abstract class MissionJson {
 
     public void setCompleted(int completed) {
         this.completed = completed;
+    }
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public MissionType getMissionType() {
+        return missionType;
+    }
+
+    public int getHrAllowed() {
+        return hrAllowed;
     }
 }

@@ -88,4 +88,25 @@ public class SprintDatabase extends Database<SprintEntry> {
             return null;
         });
     }
+
+    /**
+     * Update.
+     *
+     * @param entry the entry
+     */
+    @Override
+    public void update(SprintEntry entry) {
+        execute(conn -> {
+            String sql = "UPDATE " + tableName +
+                    " SET town_id='" + entry.getTownID() +
+                    "' AND town_name='" + entry.getTownName() +
+                    "' AND naturepoints='" + entry.getNaturepoints() +
+                    "' AND sprint='" + entry.getSprint() +
+                    "' AND season='" + entry.getSeason() +
+                    "' WHERE id='" + entry.getId() + "';";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.executeUpdate();
+            return null;
+        });
+    }
 }
