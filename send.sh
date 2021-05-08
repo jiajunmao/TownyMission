@@ -51,7 +51,7 @@ TIMESTAMP=$(date --utc +%FT%TZ)
 if [ -z $LINK_ARTIFACT ] || [ $LINK_ARTIFACT = false ] ; then
   WEBHOOK_DATA='{
     "username": "",
-    "avatar_url": "https://gitlab.com/favicon.png",
+    "avatar_url": "https://www.chinaeliteacademy.org/wp-content/uploads/2021/05/gitlab-e1471529374669-571x500-1.png",
     "embeds": [ {
       "color": '$EMBED_COLOR',
       "author": {
