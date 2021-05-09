@@ -57,8 +57,8 @@ fail_notification:
 
 pages:
   stage: notification
-    dependencies:
-      - build_snapshop
+  dependencies:
+    - build_snapshop
   script:
     - mvn javadoc:javadoc
     - mv target/site/apidocs/ public/
