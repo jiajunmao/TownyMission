@@ -22,12 +22,12 @@
         <repository>
             <id>gitlab-maven</id>
             <!--suppress UnresolvedMavenProperty -->
-            <url>https://git.naturecraft.world/api/v4/projects/17/packages/maven</url>
+            <url>https://git.naturecraft.world/api/v4/projects/5/packages/maven</url>
         </repository>
         <snapshotRepository>
             <id>gitlab-maven</id>
             <!--suppress UnresolvedMavenProperty -->
-            <url>https://git.naturecraft.world/api/v4/projects/17/packages/maven</url>
+            <url>https://git.naturecraft.world/api/v4/projects/5/packages/maven</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -80,6 +80,19 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -98,7 +111,7 @@
         <repository>
             <id>gitlab-maven</id>
             <!--suppress UnresolvedMavenProperty -->
-            <url>https://git.naturecraft.world/api/v4/projects/17/packages/maven</url>
+            <url>https://git.naturecraft.world/api/v4/projects/5/packages/maven</url>
         </repository>
 
         <repository>
