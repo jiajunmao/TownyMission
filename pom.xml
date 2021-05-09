@@ -4,7 +4,7 @@
 
     <groupId>world.naturecraft</groupId>
     <artifactId>TownyMission</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.9-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git</connection>
