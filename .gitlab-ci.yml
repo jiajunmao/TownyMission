@@ -10,8 +10,8 @@ variables:
 
 stages:
   - build
-  - release
   - deploy
+  - release
   - notification
 
 build:
