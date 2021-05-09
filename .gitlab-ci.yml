@@ -62,7 +62,7 @@ pages:
     - build
   script:
     - mvn javadoc:javadoc
-    - mv target/site/apidocs/ public/
+    - mv target/site/apidocs/* public/
   artifacts:
     paths:
       - public
