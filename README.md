@@ -92,26 +92,38 @@ After the end of each sprint, each the gold tier towns will receive 4 season poi
     - Money Json
       - Money required
       - Money earned
+  - Town ID/UUID
 - Sprint database
   - Town ID/UUID
   - Town Display Name
   - NaturePoint
+  - Sprint (which sprint in the season it is)
+  - SEason (which season it is)
 - Season database
   - Town ID/UUID
   - Town Displayname
   - Season point
+  - Season (which season it is)
 - Task history database
   - Same layout as task database
-  - Completion datetime
+  - Completed time
+  - Sprint
+  - Season
 - Sprint history database
-  - Same as sprint database
   - Season
   - Sprint
-  - Spring starting date
+  - Started time
+  - Ranking Json
+    - Town ID/UUID
+    - Town Name
+    - NaturePoint
 - Season history database
-  - Same as season database
   - Season
-  - Season starting date
+  - Started time
+  - Ranking Json
+    - Town ID/UUID
+    - Town Name
+    - Season Point
   
 ## Config layout
 - Task config

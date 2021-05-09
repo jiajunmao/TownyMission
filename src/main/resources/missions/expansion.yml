@@ -1,0 +1,10 @@
+1:
+  world: nc-terra-earth
+  amount: 5
+  reward: 1000
+  timeAllowed: 2
+2:
+  world: nc-terra-earth
+  amount: 10
+  reward: 2000
+  timeAllowed: 4
