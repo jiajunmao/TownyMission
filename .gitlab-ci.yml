@@ -1,20 +1,20 @@
 image: maven:3.6-jdk-11
 
 before_script:
-  - 'git config --global user.email "jiajun.mao@gatech.edu"'
-  - 'git config --global user.name "Jiajun Mao"'
+  - 'git config --global user.email "aaronmao.hangzhou@gmail.com"'
+  - 'git config --global user.name "Barbadosian"'
   - 'git checkout -B "$CI_BUILD_REF_NAME"'
 
 variables:
   LINK_ARTIFACT: "true"
 
 stages:
-  - build_snapshop
+  - build
   - release
   - notification
 
-build_snapshop:
-  stage: build_snapshop
+build:
+  stage: build
   script:
     - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml install'
   artifacts:
@@ -36,7 +36,7 @@ release:
 success_notification:
   stage: notification
   dependencies:
-    - build_snapshop
+    - build
   script:
     - chmod +x ./send.sh
     - bash send.sh success $WEBHOOK_URL
@@ -49,8 +49,20 @@ success_notification:
 fail_notification:
   stage: notification
   dependencies:
-    - build_snapshop
+    - build
   script:
     - chmod +x ./send.sh
     - bash send.sh failure $WEBHOOK_URL
   when: on_failure
+
+pages:
+  stage: notification
+  dependencies:
+    - build
+  script:
+    - mvn javadoc:javadoc
+    - mv target/site/apidocs/ public/
+  artifacts:
+    paths:
+      - public
+  when: on_success
