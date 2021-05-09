@@ -54,3 +54,15 @@ fail_notification:
     - chmod +x ./send.sh
     - bash send.sh failure $WEBHOOK_URL
   when: on_failure
+
+pages:
+  stage: notification
+    dependencies:
+      - build_snapshop
+  script:
+    - mvn javadoc:javadoc
+    - mv target/site/apidocs/ public/
+  artifacts:
+    paths:
+      - public
+  when: on_success
