@@ -36,6 +36,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
                     "`allowed_time` BIGINT NOT NULL, " +
                     "`task_json` VARCHAR(255) NOT NULL ," +
                     "`town` VARCHAR(255) NOT NULL ," +
+                    "`started_player` VARCHAR(255) NOT NULL ," +
                     "`completed_time` BIGINT NOT NULL, " +
                     "`sprint` INT NOT NULL, " +
                     "`season` INT NOT NULL, " +
@@ -62,6 +63,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
                         result.getLong("allowed_time"),
                         result.getString("task_json"),
                         result.getString("town"),
+                        result.getString("started_player"),
                         result.getLong("completed_time"),
                         result.getInt("sprint"),
                         result.getInt("season")));
@@ -81,6 +83,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
                     entry.getAllowedTime() + "', '" +
                     entry.getTaskJson() + "', '" +
                     entry.getTown() + "', '" +
+                    entry.getStartedPlayer() + "', '" +
                     entry.getCompletedTime() + "', '" +
                     entry.getSprint() + "', '" +
                     entry.getSeason() + "');";

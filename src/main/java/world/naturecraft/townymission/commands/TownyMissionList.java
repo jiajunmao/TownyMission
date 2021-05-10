@@ -75,7 +75,8 @@ public class TownyMissionList extends TownyMissionCommand {
                                         0,
                                         Util.hrToMs(mission.getHrAllowed()),
                                         mission.toJson(),
-                                        town.getName());
+                                        town.getName(),
+                                        null);
                                 taskDao.add(entry);
                             } catch (JsonProcessingException e) {
                                 e.printStackTrace();

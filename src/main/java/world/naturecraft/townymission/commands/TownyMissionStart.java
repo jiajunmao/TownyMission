@@ -56,6 +56,7 @@ public class TownyMissionStart extends TownyMissionCommand {
 
                 TaskEntry entry = taskEntries.get(missionIdx - 1);
                 entry.setStartedTime(Util.currentTime());
+                entry.setStartedPlayer(player.getUniqueId().toString());
                 taskDao.update(entry);
 
                 try {

@@ -47,7 +47,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                         return false;
                     } else {
                         town = TownyUtil.residentOf(player);
-                        List<TaskEntry> taskEntries = taskDao.getTownTask(town);
+                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
                         for (TaskEntry e : taskEntries) {
                             if (e.getStartedTime() != 0) {
                                 taskDao.remove(e);
