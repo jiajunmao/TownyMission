@@ -48,7 +48,7 @@ public class TownyMissionStart extends TownyMissionCommand {
             Player player = (Player) sender;
             if (sanityCheck(sender, args)) {
                 Town town = TownyUtil.residentOf(player);
-                List<TaskEntry> taskEntries = taskDao.getTownTask(town);
+                List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
                 int missionIdx = Integer.parseInt(args[1]);
 
                 TaskEntry entry = taskEntries.get(missionIdx - 1);

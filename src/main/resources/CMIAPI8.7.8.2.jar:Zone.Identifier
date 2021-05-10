@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://github.com/Zrips/CMI-API/releases/tag/8.7.8.2
+HostUrl=https://github-releases.githubusercontent.com/112189511/f5c38b00-a799-11eb-9c87-096b87e1fb97?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20210510%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210510T213332Z&X-Amz-Expires=300&X-Amz-Signature=e2bb7dc472a02d3a4421c35fe8cdc5828a3c57b742e41e7d85793e0410b737c2&X-Amz-SignedHeaders=host&actor_id=36388031&key_id=0&repo_id=112189511&response-content-disposition=attachment%3B%20filename%3DCMIAPI8.7.8.2.jar&response-content-type=application%2Foctet-stream

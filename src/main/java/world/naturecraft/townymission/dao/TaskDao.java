@@ -5,8 +5,8 @@
 package world.naturecraft.townymission.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class TaskDao extends Dao<TaskEntry> {
         return num;
     }
 
-    public List<TaskEntry> getTownTask(Town town) {
+    public List<TaskEntry> getTownTasks(Town town) {
         List<TaskEntry> list = new ArrayList<>();
         for (TaskEntry e : db.getEntries()) {
             if (e.getTown().equalsIgnoreCase(town.getName())) {
@@ -40,6 +40,19 @@ public class TaskDao extends Dao<TaskEntry> {
         }
 
         return list;
+    }
+
+    public List<TaskEntry> getTownTasks(Town town, MissionType missionType) {
+        List<TaskEntry> list = getTownTasks(town);
+        List<TaskEntry> filtered = new ArrayList<>();
+
+        for (TaskEntry e : list) {
+            if (e.getTaskType().equalsIgnoreCase(missionType.name())) {
+                filtered.add(e);
+            }
+        }
+
+        return filtered;
     }
 
     public boolean hasStartedMission(Town town) {
