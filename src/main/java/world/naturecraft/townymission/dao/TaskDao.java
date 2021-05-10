@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.event.Listener;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
@@ -88,6 +89,7 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param town the town
      * @return the boolean
      */
+    @Deprecated
     public boolean hasStartedMission(Town town) {
         for (TaskEntry e : db.getEntries()) {
             if (e.getTown().equalsIgnoreCase(town.getName())) {
@@ -98,6 +100,18 @@ public class TaskDao extends Dao<TaskEntry> {
         }
 
         return false;
+    }
+
+    public TaskEntry getStartedMission(Town town) {
+        for (TaskEntry e : db.getEntries()) {
+            if (e.getTown().equalsIgnoreCase(town.getName())) {
+                if (e.getStartedTime() != 0) {
+                    return e;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

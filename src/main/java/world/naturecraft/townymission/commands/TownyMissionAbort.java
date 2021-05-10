@@ -39,32 +39,45 @@ public class TownyMissionAbort extends TownyMissionCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (player.hasPermission("townymission.player")) {
-                Town town;
-                if ((town = TownyUtil.residentOf(player)) != null) {
-                    if (!taskDao.hasStartedMission(town)) {
-                        Util.sendMsg(sender, "&c Your town has not started a mission yet!");
-                        return false;
+            if (sanityCheck(player)) {
+                Town town = TownyUtil.residentOf(player);
+                List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
+                for (TaskEntry e : taskEntries) {
+                    if (e.getStartedTime() != 0) {
+                        taskDao.remove(e);
+                        Util.sendMsg(sender, "&c The mission has been aborted");
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public boolean sanityCheck(Player player) {
+        if (player.hasPermission("townymission.player")) {
+            Town town;
+            if ((town = TownyUtil.residentOf(player)) != null) {
+                TaskEntry entry;
+                if ((entry = taskDao.getStartedMission(town)) != null) {
+                    if (entry.getStartedPlayer().equalsIgnoreCase(player.getUniqueId().toString()) || TownyUtil.mayorOf(player) != null) {
+                        return true;
                     } else {
-                        town = TownyUtil.residentOf(player);
-                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                        for (TaskEntry e : taskEntries) {
-                            if (e.getStartedTime() != 0) {
-                                taskDao.remove(e);
-                                Util.sendMsg(sender, "&c The mission has been aborted");
-                            }
-                        }
+                        Util.sendMsg(player, "&c You either need to be the mayor or started the mission yourself to abort!");
+                        return false;
                     }
                 } else {
-                    Util.sendMsg(sender, "&c You would have to be in a town to use TownyMission");
+                    Util.sendMsg(player, "&c Your town does not have a started missions!");
                     return false;
                 }
             } else {
-                onNoPermission(sender);
+                Util.sendMsg(player, "&c You need to belong to a town to start a mission!");
                 return false;
             }
+        } else {
+            Util.sendMsg(player, "&c You do not have permission for this command!");
+            return false;
         }
-        return true;
     }
 
     /**

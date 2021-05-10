@@ -6,6 +6,7 @@ api-version: 1.16
 
 depend:
   - Towny
+  - CMI
 
 permissions:
   townymission.player:

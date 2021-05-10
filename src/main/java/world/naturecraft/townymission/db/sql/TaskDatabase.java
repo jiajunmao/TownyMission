@@ -76,7 +76,8 @@ public class TaskDatabase extends Database<TaskEntry> {
                     entry.getStartedTime() + "', '" +
                     entry.getAllowedTime() + "', '" +
                     entry.getTaskJson() + "', '" +
-                    entry.getTown() + "');";
+                    entry.getTown() + "', '" +
+                    entry.getStartedPlayer() + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -109,7 +110,7 @@ public class TaskDatabase extends Database<TaskEntry> {
                     "', allowed_time='" + entry.getAllowedTime() +
                     "', task_json='" + entry.getTaskJson() +
                     "', town='" + entry.getTown() +
-                    "', town='" + entry.getStartedPlayer() +
+                    "', started_player='" + entry.getStartedPlayer() +
                     "' WHERE id='" + entry.getId() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
