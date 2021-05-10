@@ -26,6 +26,8 @@ public class Expansion extends MissionJson {
      * @param world     the world
      * @param amount    the amount
      * @param completed the completed
+     * @param hrAllowed the hr allowed
+     * @param reward    the reward
      */
     @ConstructorProperties({"world", "amount", "completed", "hrAllowed", "reward"})
     public Expansion(String world, int amount, int completed, int hrAllowed, int reward) {
@@ -38,11 +40,17 @@ public class Expansion extends MissionJson {
      *
      * @param json the json
      * @return the expansion
+     * @throws JsonProcessingException the json processing exception
      */
     public static Expansion parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Expansion.class);
     }
 
+    /**
+     * Gets world.
+     *
+     * @return the world
+     */
     public String getWorld() {
         return world;
     }

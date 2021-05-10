@@ -18,6 +18,9 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
 
+/**
+ * The type Towny mission start.
+ */
 public class TownyMissionStart extends TownyMissionCommand {
 
     /**
@@ -67,6 +70,13 @@ public class TownyMissionStart extends TownyMissionCommand {
         return true;
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param sender the sender
+     * @param args   the args
+     * @return the boolean
+     */
     public boolean sanityCheck(@NotNull CommandSender sender, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;

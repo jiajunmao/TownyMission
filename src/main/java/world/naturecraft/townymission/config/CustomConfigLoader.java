@@ -18,12 +18,22 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * The type Custom config loader.
+ */
 public class CustomConfigLoader {
 
-    private TownyMission instance;
-    private Map<MissionType, FileConfiguration> customConfigs;
+    private final TownyMission instance;
+    private final Map<MissionType, FileConfiguration> customConfigs;
     private FileConfiguration langConfig;
 
+    /**
+     * Instantiates a new Custom config loader.
+     *
+     * @param instance the instance
+     * @throws IOException                   the io exception
+     * @throws InvalidConfigurationException the invalid configuration exception
+     */
     public CustomConfigLoader(TownyMission instance) throws IOException, InvalidConfigurationException {
         this.instance = instance;
         this.customConfigs = new HashMap<>();
@@ -35,7 +45,7 @@ public class CustomConfigLoader {
     private void createMissionConfig() throws IOException, InvalidConfigurationException {
         for (MissionType missionType : MissionType.values()) {
             String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
-            String filePath = "missions/"+fileName;
+            String filePath = "missions/" + fileName;
             File customConfig = new File(instance.getDataFolder(), filePath);
             if (!customConfig.exists()) {
                 customConfig.getParentFile().getParentFile().mkdirs();
@@ -73,8 +83,8 @@ public class CustomConfigLoader {
         Reader reader = new InputStreamReader(instance.getResource("lang.yml"));
         pluginConfig.load(reader);
 
-        for(String key : pluginConfig.getConfigurationSection("").getKeys(true)) {
-            if(currLangConfig.getString(key) == null) {
+        for (String key : pluginConfig.getConfigurationSection("").getKeys(true)) {
+            if (currLangConfig.getString(key) == null) {
                 currLangConfig.createSection(key);
                 currLangConfig.set(key, pluginConfig.getString(key));
             }
@@ -82,10 +92,21 @@ public class CustomConfigLoader {
         currLangConfig.save(langFile);
     }
 
+    /**
+     * Gets lang config.
+     *
+     * @return the lang config
+     */
     public FileConfiguration getLangConfig() {
         return langConfig;
     }
 
+    /**
+     * Gets mission config.
+     *
+     * @param missionType the mission type
+     * @return the mission config
+     */
     public FileConfiguration getMissionConfig(MissionType missionType) {
         return customConfigs.getOrDefault(missionType, null);
     }

@@ -8,10 +8,19 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 
+/**
+ * The type Towny util.
+ */
 public class TownyUtil {
 
+    /**
+     * Mayor of town.
+     *
+     * @param player the player
+     * @return the town
+     */
     public static Town mayorOf(Player player) {
-        for(Town t : TownyAPI.getInstance().getDataSource().getTowns()) {
+        for (Town t : TownyAPI.getInstance().getDataSource().getTowns()) {
             if (t.hasMayor() && t.getMayor().getPlayer().equals(player)) {
                 return t;
             }
@@ -19,8 +28,14 @@ public class TownyUtil {
         return null;
     }
 
+    /**
+     * Resident of town.
+     *
+     * @param player the player
+     * @return the town
+     */
     public static Town residentOf(Player player) {
-        for(Town t : TownyAPI.getInstance().getDataSource().getTowns()) {
+        for (Town t : TownyAPI.getInstance().getDataSource().getTowns()) {
             if (t.hasResident(player.getDisplayName())) {
                 return t;
             }

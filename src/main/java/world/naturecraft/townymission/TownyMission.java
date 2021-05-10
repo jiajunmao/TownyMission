@@ -10,7 +10,6 @@ import world.naturecraft.townymission.commands.TownyMissionRoot;
 import world.naturecraft.townymission.commands.TownyMissionStart;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
-import world.naturecraft.townymission.dao.Dao;
 import world.naturecraft.townymission.db.sql.*;
 import world.naturecraft.townymission.listeners.MoneyListener;
 import world.naturecraft.townymission.utils.Util;
@@ -81,6 +80,9 @@ public class TownyMission extends JavaPlugin {
         dbList.put(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(this, db, Util.getDbName(DbType.SEASON_HISTORY)));
     }
 
+    /**
+     * Register commands.
+     */
     public void registerCommands() {
         this.rootCmd = new TownyMissionRoot(this);
         this.getCommand("townymission").setExecutor(rootCmd);
@@ -90,6 +92,9 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("start", new TownyMissionStart(this));
     }
 
+    /**
+     * Register listeners.
+     */
     public void registerListeners() {
         getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
     }
@@ -130,10 +135,21 @@ public class TownyMission extends JavaPlugin {
         db.close();
     }
 
+    /**
+     * Gets custom config.
+     *
+     * @return the custom config
+     */
     public CustomConfigLoader getCustomConfig() {
         return customConfigLoader;
     }
 
+    /**
+     * Gets db.
+     *
+     * @param dbType the db type
+     * @return the db
+     */
     public Database getDb(DbType dbType) {
         return dbList.get(dbType);
     }

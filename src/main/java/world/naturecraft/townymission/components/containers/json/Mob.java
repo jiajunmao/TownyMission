@@ -23,6 +23,8 @@ public class Mob extends MissionJson {
      * @param entityType the entity type
      * @param amount     the amount
      * @param completed  the completed
+     * @param hrAllowed  the hr allowed
+     * @param reward     the reward
      */
     @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward"})
     public Mob(EntityType entityType, int amount, int completed, int hrAllowed, int reward) {
@@ -35,11 +37,17 @@ public class Mob extends MissionJson {
      *
      * @param json the json
      * @return the mob
+     * @throws JsonProcessingException the json processing exception
      */
     public static Mob parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Mob.class);
     }
 
+    /**
+     * Gets entity type.
+     *
+     * @return the entity type
+     */
     public EntityType getEntityType() {
         return entityType;
     }

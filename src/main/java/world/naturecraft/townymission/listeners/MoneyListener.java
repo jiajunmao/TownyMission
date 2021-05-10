@@ -10,17 +10,26 @@ import world.naturecraft.townymission.components.containers.json.Money;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.TownyUtil;
-import world.naturecraft.townymission.utils.Util;
 
 /**
  * The type Money listener.
  */
 public class MoneyListener extends TownyMissionListener {
 
+    /**
+     * Instantiates a new Money listener.
+     *
+     * @param instance the instance
+     */
     public MoneyListener(TownyMission instance) {
         super(instance);
     }
 
+    /**
+     * On money receive.
+     *
+     * @param event the event
+     */
     @EventHandler
     public void onMoneyReceive(CMIUserBalanceChangeEvent event) {
         Player player = event.getUser().getPlayer();
@@ -57,6 +66,7 @@ public class MoneyListener extends TownyMissionListener {
      * Assume that sender is player when the command is invoked
      *
      * @param player the player
+     * @param event  the event
      * @return true if sanity checks pass
      */
     public boolean sanityCheck(Player player, CMIUserBalanceChangeEvent event) {
@@ -68,11 +78,7 @@ public class MoneyListener extends TownyMissionListener {
                 if (taskDao.getTownTasks(town, MissionType.MONEY).size() >= 1) {
                     double diff = event.getTo() - event.getFrom();
                     System.out.println("diff: " + diff);
-                    if (diff > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return diff > 0;
                 } else {
                     return false;
                 }

@@ -23,6 +23,9 @@ import world.naturecraft.townymission.utils.Util;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The type Towny mission list.
+ */
 public class TownyMissionList extends TownyMissionCommand {
 
 

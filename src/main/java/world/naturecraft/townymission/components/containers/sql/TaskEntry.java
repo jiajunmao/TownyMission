@@ -14,8 +14,8 @@ public class TaskEntry {
     private final String taskType;
     private final long addedTime;
     private final String town;
-    private long startedTime;
     private final long allowedTime;
+    private long startedTime;
     private String taskJson;
 
     /**
@@ -48,6 +48,11 @@ public class TaskEntry {
         return id;
     }
 
+    /**
+     * Gets added time.
+     *
+     * @return the added time
+     */
     public long getAddedTime() {
         return addedTime;
     }
@@ -70,6 +75,11 @@ public class TaskEntry {
         return startedTime;
     }
 
+    /**
+     * Sets started time.
+     *
+     * @param startedTime the started time
+     */
     public void setStartedTime(long startedTime) {
         this.startedTime = startedTime;
     }
@@ -83,6 +93,11 @@ public class TaskEntry {
         return taskJson;
     }
 
+    /**
+     * Sets task json.
+     *
+     * @param taskJson the task json
+     */
     public void setTaskJson(String taskJson) {
         this.taskJson = taskJson;
     }
@@ -96,6 +111,12 @@ public class TaskEntry {
         return town;
     }
 
+    /**
+     * Gets display line.
+     *
+     * @return the display line
+     * @throws JsonProcessingException the json processing exception
+     */
     public String getDisplayLine() throws JsonProcessingException {
         MissionType missionType = MissionType.valueOf(taskType.toUpperCase(Locale.ROOT));
         if (missionType.equals(MissionType.EXPANSION)) {
@@ -113,6 +134,11 @@ public class TaskEntry {
         }
     }
 
+    /**
+     * Gets allowed time.
+     *
+     * @return the allowed time
+     */
     public long getAllowedTime() {
         return allowedTime;
     }

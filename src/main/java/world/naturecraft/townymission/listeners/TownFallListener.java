@@ -4,5 +4,8 @@
 
 package world.naturecraft.townymission.listeners;
 
+/**
+ * The type Town fall listener.
+ */
 public class TownFallListener {
 }

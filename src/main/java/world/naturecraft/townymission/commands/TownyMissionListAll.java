@@ -4,15 +4,13 @@
 
 package world.naturecraft.townymission.commands;
 
-import me.clip.placeholderapi.configuration.ExpansionSort;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.json.*;
+import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.CustomConfigParser;
 import world.naturecraft.townymission.utils.MultilineBuilder;
@@ -23,6 +21,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * The type Towny mission list all.
+ */
 public class TownyMissionListAll extends TownyMissionCommand {
 
     /**
