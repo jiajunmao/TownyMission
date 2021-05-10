@@ -4,6 +4,9 @@
 
 package world.naturecraft.townymission.components.enums;
 
+/**
+ * The enum Mission type.
+ */
 public enum MissionType {
     /**
      * Resource task type.

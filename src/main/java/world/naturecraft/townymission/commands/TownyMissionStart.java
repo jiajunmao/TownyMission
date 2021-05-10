@@ -18,6 +18,9 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
 
+/**
+ * The type Towny mission start.
+ */
 public class TownyMissionStart extends TownyMissionCommand {
 
     /**
@@ -48,11 +51,12 @@ public class TownyMissionStart extends TownyMissionCommand {
             Player player = (Player) sender;
             if (sanityCheck(sender, args)) {
                 Town town = TownyUtil.residentOf(player);
-                List<TaskEntry> taskEntries = taskDao.getTownTask(town);
+                List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
                 int missionIdx = Integer.parseInt(args[1]);
 
                 TaskEntry entry = taskEntries.get(missionIdx - 1);
                 entry.setStartedTime(Util.currentTime());
+                entry.setStartedPlayer(player.getUniqueId().toString());
                 taskDao.update(entry);
 
                 try {
@@ -60,6 +64,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                 } catch (JsonProcessingException e) {
                     logger.severe("Error while parsing Json " + entry.getTaskJson());
                     e.printStackTrace();
+                    // I want to want to write a comment
                 }
             }
         }
@@ -67,11 +72,22 @@ public class TownyMissionStart extends TownyMissionCommand {
         return true;
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param sender the sender
+     * @param args   the args
+     * @return the boolean
+     */
     public boolean sanityCheck(@NotNull CommandSender sender, @NotNull String[] args) {
+        // /tm start <num>
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (player.hasPermission("townymission.player")) {
-                if (Integer.parseInt(args[1]) <= 15 && Integer.parseInt(args[1]) >= 1) {
+                if (args.length == 1) {
+                    Util.sendMsg(sender, "&c Command format error, mission number missing");
+                    return false;
+                } else if (Integer.parseInt(args[1]) <= 15 && Integer.parseInt(args[1]) >= 1) {
                     Town town;
                     if ((town = TownyUtil.residentOf(player)) != null) {
                         if (!taskDao.hasStartedMission(town)) {

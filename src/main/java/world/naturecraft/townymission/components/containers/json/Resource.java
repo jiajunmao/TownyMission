@@ -26,6 +26,8 @@ public class Resource extends MissionJson {
      * @param type      the type
      * @param amount    the amount
      * @param completed the completed
+     * @param hrAllowed the hr allowed
+     * @param reward    the reward
      */
     @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward"})
     public Resource(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward) {
@@ -39,15 +41,26 @@ public class Resource extends MissionJson {
      *
      * @param json the json
      * @return the resource
+     * @throws JsonProcessingException the json processing exception
      */
     public static Resource parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Resource.class);
     }
 
+    /**
+     * Is mi boolean.
+     *
+     * @return the boolean
+     */
     public boolean isMi() {
         return isMi;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public Material getType() {
         return type;
     }

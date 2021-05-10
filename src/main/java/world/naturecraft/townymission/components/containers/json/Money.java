@@ -15,7 +15,10 @@ public class Money extends MissionJson {
     /**
      * Instantiates a new Money.
      *
+     * @param amount    the amount
      * @param completed the completed
+     * @param hrAllowed the hr allowed
+     * @param reward    the reward
      */
     @ConstructorProperties({"amount", "completed", "hrAllowed", "reward"})
     public Money(int amount, int completed, int hrAllowed, int reward) {
@@ -27,6 +30,7 @@ public class Money extends MissionJson {
      *
      * @param json the json
      * @return the money
+     * @throws JsonProcessingException the json processing exception
      */
     public static Money parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Money.class);

@@ -10,8 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
 
-import java.beans.ConstructorProperties;
-
 /**
  * The type Json entry.
  */
@@ -28,6 +26,15 @@ public abstract class MissionJson {
     @JsonProperty("completed")
     private int completed;
 
+    /**
+     * Instantiates a new Mission json.
+     *
+     * @param missionType the mission type
+     * @param amount      the amount
+     * @param completed   the completed
+     * @param hrAllowed   the hr allowed
+     * @param reward      the reward
+     */
     protected MissionJson(MissionType missionType, int amount, int completed, int hrAllowed, int reward) {
         this.missionType = missionType;
         this.reward = reward;
@@ -45,6 +52,12 @@ public abstract class MissionJson {
         }
     }
 
+    /**
+     * To json string.
+     *
+     * @return the string
+     * @throws JsonProcessingException the json processing exception
+     */
     public String toJson() throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(this);
     }
@@ -57,27 +70,57 @@ public abstract class MissionJson {
     @JsonIgnore
     public abstract String getDisplayLine();
 
+    /**
+     * Gets reward.
+     *
+     * @return the reward
+     */
     public int getReward() {
         return reward;
     }
 
+    /**
+     * Gets amount.
+     *
+     * @return the amount
+     */
     public int getAmount() {
         return amount;
     }
 
+    /**
+     * Gets completed.
+     *
+     * @return the completed
+     */
     public int getCompleted() {
         return completed;
     }
 
+    /**
+     * Sets completed.
+     *
+     * @param completed the completed
+     */
     public void setCompleted(int completed) {
         this.completed = completed;
     }
 
+    /**
+     * Gets mission type.
+     *
+     * @return the mission type
+     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public MissionType getMissionType() {
         return missionType;
     }
 
+    /**
+     * Gets hr allowed.
+     *
+     * @return the hr allowed
+     */
     public int getHrAllowed() {
         return hrAllowed;
     }

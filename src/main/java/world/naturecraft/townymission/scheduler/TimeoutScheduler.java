@@ -4,5 +4,8 @@
 
 package world.naturecraft.townymission.scheduler;
 
+/**
+ * The type Timeout scheduler.
+ */
 public class TimeoutScheduler {
 }

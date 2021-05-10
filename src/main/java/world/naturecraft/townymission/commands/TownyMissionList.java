@@ -5,9 +5,7 @@
 package world.naturecraft.townymission.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,20 +15,17 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
-import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.CustomConfigParser;
-import world.naturecraft.townymission.dao.TaskDao;
-import world.naturecraft.townymission.db.sql.TaskDatabase;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
+/**
+ * The type Towny mission list.
+ */
 public class TownyMissionList extends TownyMissionCommand {
 
 
@@ -80,7 +75,8 @@ public class TownyMissionList extends TownyMissionCommand {
                                         0,
                                         Util.hrToMs(mission.getHrAllowed()),
                                         mission.toJson(),
-                                        town.getName());
+                                        town.getName(),
+                                        null);
                                 taskDao.add(entry);
                             } catch (JsonProcessingException e) {
                                 e.printStackTrace();
@@ -90,7 +86,7 @@ public class TownyMissionList extends TownyMissionCommand {
                         MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Current Assignments&7------");
                         int index = 1;
 
-                        for (TaskEntry e : taskDao.getTownTask(town)) {
+                        for (TaskEntry e : taskDao.getTownTasks(town)) {
                             try {
                                 builder.add("&e" + index + ". Type&f: " + e.getTaskType() + " " + e.getDisplayLine());
                             } catch (JsonProcessingException exp) {

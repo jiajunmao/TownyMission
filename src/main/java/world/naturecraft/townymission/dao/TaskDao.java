@@ -5,21 +5,36 @@
 package world.naturecraft.townymission.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Task dao.
+ */
 public class TaskDao extends Dao<TaskEntry> {
 
-    private TaskDatabase db;
+    private final TaskDatabase db;
 
+    /**
+     * Instantiates a new Task dao.
+     *
+     * @param db the db
+     */
     public TaskDao(TaskDatabase db) {
         this.db = db;
     }
 
+    /**
+     * Gets num added.
+     *
+     * @param town the town
+     * @return the num added
+     */
     public int getNumAdded(Town town) {
         int num = 0;
         for (TaskEntry e : db.getEntries()) {
@@ -31,7 +46,13 @@ public class TaskDao extends Dao<TaskEntry> {
         return num;
     }
 
-    public List<TaskEntry> getTownTask(Town town) {
+    /**
+     * Gets town tasks.
+     *
+     * @param town the town
+     * @return the town tasks
+     */
+    public List<TaskEntry> getTownTasks(Town town) {
         List<TaskEntry> list = new ArrayList<>();
         for (TaskEntry e : db.getEntries()) {
             if (e.getTown().equalsIgnoreCase(town.getName())) {
@@ -42,6 +63,33 @@ public class TaskDao extends Dao<TaskEntry> {
         return list;
     }
 
+    /**
+     * Gets town tasks.
+     *
+     * @param town        the town
+     * @param missionType the mission type
+     * @return the town tasks
+     */
+    public List<TaskEntry> getTownTasks(Town town, MissionType missionType) {
+        List<TaskEntry> list = getTownTasks(town);
+        List<TaskEntry> filtered = new ArrayList<>();
+
+        for (TaskEntry e : list) {
+            if (e.getTaskType().equalsIgnoreCase(missionType.name())) {
+                filtered.add(e);
+            }
+        }
+
+        return filtered;
+    }
+
+    /**
+     * Has started mission boolean.
+     *
+     * @param town the town
+     * @return the boolean
+     */
+    @Deprecated
     public boolean hasStartedMission(Town town) {
         for (TaskEntry e : db.getEntries()) {
             if (e.getTown().equalsIgnoreCase(town.getName())) {
@@ -54,14 +102,41 @@ public class TaskDao extends Dao<TaskEntry> {
         return false;
     }
 
+    public TaskEntry getStartedMission(Town town) {
+        for (TaskEntry e : db.getEntries()) {
+            if (e.getTown().equalsIgnoreCase(town.getName())) {
+                if (e.getStartedTime() != 0) {
+                    return e;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Add.
+     *
+     * @param entry the entry
+     */
     public void add(TaskEntry entry) {
         db.add(entry);
     }
 
+    /**
+     * Remove.
+     *
+     * @param entry the entry
+     */
     public void remove(TaskEntry entry) {
         db.remove(entry);
     }
 
+    /**
+     * Update.
+     *
+     * @param entry the entry
+     */
     public void update(TaskEntry entry) {
         db.update(entry);
     }
