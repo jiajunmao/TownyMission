@@ -3,7 +3,6 @@ package world.naturecraft.townymission.utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -77,18 +76,41 @@ public class Util {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
+    /**
+     * Translate color string.
+     *
+     * @param message the message
+     * @return the string
+     */
     public static String translateColor(String message) {
         return translateVanillaColor(translateHexColor("\\{#", "\\}", message));
     }
 
+    /**
+     * Current time long.
+     *
+     * @return the long
+     */
     public static long currentTime() {
         return System.currentTimeMillis();
     }
 
+    /**
+     * Hr to ms long.
+     *
+     * @param hr the hr
+     * @return the long
+     */
     public static long hrToMs(int hr) {
         return (long) hr * 60 * 60 * 1000;
     }
 
+    /**
+     * Classify task entry map.
+     *
+     * @param list the list
+     * @return the map
+     */
     public static Map<MissionType, List<TaskEntry>> classifyTaskEntry(List<TaskEntry> list) {
         Map<MissionType, List<TaskEntry>> map = new HashMap<>();
         for (MissionType missionType : MissionType.values()) {

@@ -21,6 +21,7 @@ public class TaskHistoryEntry {
      *
      * @param id            the id
      * @param taskType      the task type
+     * @param addedTime     the added time
      * @param startedTime   the started time
      * @param allowedTime   the allowed time
      * @param taskJson      the task json
@@ -204,10 +205,20 @@ public class TaskHistoryEntry {
         this.season = season;
     }
 
+    /**
+     * Gets added time.
+     *
+     * @return the added time
+     */
     public long getAddedTime() {
         return addedTime;
     }
 
+    /**
+     * Sets added time.
+     *
+     * @param addedTime the added time
+     */
     public void setAddedTime(long addedTime) {
         this.addedTime = addedTime;
     }

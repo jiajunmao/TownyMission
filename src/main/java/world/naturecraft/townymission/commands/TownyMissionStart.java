@@ -18,6 +18,9 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
 
+/**
+ * The type Towny mission start.
+ */
 public class TownyMissionStart extends TownyMissionCommand {
 
     /**
@@ -48,7 +51,7 @@ public class TownyMissionStart extends TownyMissionCommand {
             Player player = (Player) sender;
             if (sanityCheck(sender, args)) {
                 Town town = TownyUtil.residentOf(player);
-                List<TaskEntry> taskEntries = taskDao.getTownTask(town);
+                List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
                 int missionIdx = Integer.parseInt(args[1]);
 
                 TaskEntry entry = taskEntries.get(missionIdx - 1);
@@ -68,6 +71,13 @@ public class TownyMissionStart extends TownyMissionCommand {
         return true;
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param sender the sender
+     * @param args   the args
+     * @return the boolean
+     */
     public boolean sanityCheck(@NotNull CommandSender sender, @NotNull String[] args) {
         // /tm start <num>
         if (sender instanceof Player) {

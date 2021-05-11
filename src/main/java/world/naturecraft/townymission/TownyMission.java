@@ -7,8 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
-import world.naturecraft.townymission.dao.Dao;
 import world.naturecraft.townymission.db.sql.*;
+import world.naturecraft.townymission.listeners.MoneyListener;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -51,6 +51,7 @@ public class TownyMission extends JavaPlugin {
         initializeDatabases();
 
         registerCommands();
+        registerListeners();
 
         if (!enabled) {
             Bukkit.getPluginManager().disablePlugin(this);
@@ -67,15 +68,18 @@ public class TownyMission extends JavaPlugin {
      * Register databases.
      */
     public void registerDatabases() {
-        register(DbType.PLAYER, new PlayerDatabase(this, db, Util.getDbName(DbType.PLAYER)));
-        register(DbType.TASK, new TaskDatabase(this, db, Util.getDbName(DbType.TASK)));
-        register(DbType.TASK_HISTORY, new TaskHistoryDatabase(this, db, Util.getDbName(DbType.TASK_HISTORY)));
-        register(DbType.SPRINT, new SprintDatabase(this, db, Util.getDbName(DbType.SPRINT)));
-        register(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(this, db, Util.getDbName(DbType.SPRINT_HISTORY)));
-        register(DbType.SEASON, new SeasonDatabase(this, db, Util.getDbName(DbType.SEASON)));
-        register(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(this, db, Util.getDbName(DbType.SEASON_HISTORY)));
+        dbList.put(DbType.PLAYER, new PlayerDatabase(this, db, Util.getDbName(DbType.PLAYER)));
+        dbList.put(DbType.TASK, new TaskDatabase(this, db, Util.getDbName(DbType.TASK)));
+        dbList.put(DbType.TASK_HISTORY, new TaskHistoryDatabase(this, db, Util.getDbName(DbType.TASK_HISTORY)));
+        dbList.put(DbType.SPRINT, new SprintDatabase(this, db, Util.getDbName(DbType.SPRINT)));
+        dbList.put(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(this, db, Util.getDbName(DbType.SPRINT_HISTORY)));
+        dbList.put(DbType.SEASON, new SeasonDatabase(this, db, Util.getDbName(DbType.SEASON)));
+        dbList.put(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(this, db, Util.getDbName(DbType.SEASON_HISTORY)));
     }
 
+    /**
+     * Register commands.
+     */
     public void registerCommands() {
         this.rootCmd = new TownyMissionRoot(this);
         this.getCommand("townymission").setExecutor(rootCmd);
@@ -84,6 +88,13 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("list", new TownyMissionList(this));
         rootCmd.registerCommand("start", new TownyMissionStart(this));
         rootCmd.registerCommand("abort", new TownyMissionAbort(this));
+    }
+
+    /**
+     * Register listeners.
+     */
+    public void registerListeners() {
+        getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
     }
 
     /**
@@ -123,19 +134,20 @@ public class TownyMission extends JavaPlugin {
     }
 
     /**
-     * Register.
+     * Gets custom config.
      *
-     * @param dbType   the db type
-     * @param database the database
+     * @return the custom config
      */
-    public void register(DbType dbType, Database database) {
-        dbList.put(dbType, database);
-    }
-
     public CustomConfigLoader getCustomConfig() {
         return customConfigLoader;
     }
 
+    /**
+     * Gets db.
+     *
+     * @param dbType the db type
+     * @return the db
+     */
     public Database getDb(DbType dbType) {
         return dbList.get(dbType);
     }

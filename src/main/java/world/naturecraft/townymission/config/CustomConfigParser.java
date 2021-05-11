@@ -6,19 +6,27 @@ package world.naturecraft.townymission.config;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.json.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * The type Custom config parser.
+ */
 public class CustomConfigParser {
 
+    /**
+     * Parse list.
+     *
+     * @param type              the type
+     * @param fileConfiguration the file configuration
+     * @return the list
+     */
     public static List<MissionJson> parse(MissionType type, FileConfiguration fileConfiguration) {
         List<MissionJson> list = new ArrayList<>();
         for (String key : fileConfiguration.getKeys(false)) {
@@ -47,10 +55,23 @@ public class CustomConfigParser {
         return list;
     }
 
+    /**
+     * Parse list.
+     *
+     * @param missionType the mission type
+     * @param instance    the instance
+     * @return the list
+     */
     public static List<MissionJson> parse(MissionType missionType, TownyMission instance) {
         return parse(missionType, instance.getCustomConfig().getMissionConfig(missionType));
     }
 
+    /**
+     * Parse all list.
+     *
+     * @param instance the instance
+     * @return the list
+     */
     public static List<MissionJson> parseAll(TownyMission instance) {
         List<MissionJson> all = new ArrayList<>();
         for (MissionType missionType : MissionType.values()) {

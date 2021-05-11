@@ -25,6 +25,9 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
      */
     protected Logger logger;
 
+    /**
+     * The Task dao.
+     */
     protected TaskDao taskDao;
 
     /**
@@ -38,10 +41,20 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
         this.taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
     }
 
+    /**
+     * On unknown.
+     *
+     * @param sender the sender
+     */
     public void onUnknown(CommandSender sender) {
         Util.sendMsg(sender, "&c The command you are looking for does not exist");
     }
 
+    /**
+     * On no permission.
+     *
+     * @param sender the sender
+     */
     public void onNoPermission(CommandSender sender) {
         Util.sendMsg(sender, "&c You do not have the permission to execute this command");
     }

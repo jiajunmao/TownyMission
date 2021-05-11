@@ -4,6 +4,11 @@
 
 package world.naturecraft.townymission.dao;
 
+/**
+ * The type Dao.
+ *
+ * @param <T> the type parameter
+ */
 public abstract class Dao<T> {
 
 }

@@ -7,18 +7,31 @@ package world.naturecraft.townymission.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Multiline builder.
+ */
 public class MultilineBuilder {
 
-    private String header;
-    private List<String> lines;
-    private String footer;
+    private final String header;
+    private final List<String> lines;
+    private final String footer;
 
+    /**
+     * Instantiates a new Multiline builder.
+     *
+     * @param header the header
+     */
     public MultilineBuilder(String header) {
         this.header = header;
         lines = new ArrayList<>();
         footer = "&e------------------";
     }
 
+    /**
+     * Add.
+     *
+     * @param line the line
+     */
     public void add(String line) {
         lines.add(line);
     }

@@ -4,7 +4,16 @@
 
 package world.naturecraft.townymission.components.enums;
 
+/**
+ * The enum Rank type.
+ */
 public enum RankType {
+    /**
+     * Sprint rank type.
+     */
     SPRINT,
+    /**
+     * Season rank type.
+     */
     SEASON
 }

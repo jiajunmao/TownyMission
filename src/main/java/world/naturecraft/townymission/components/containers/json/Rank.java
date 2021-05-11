@@ -21,9 +21,10 @@ public class Rank {
     /**
      * Instantiates a new Season rank.
      *
-     * @param townId       the town id
-     * @param townName     the town name
-     * @param points the points
+     * @param missionType the mission type
+     * @param townId      the town id
+     * @param townName    the town name
+     * @param points      the points
      */
     public Rank(MissionType missionType, String townId, String townName, int points) {
         this.missionType = missionType;
@@ -32,11 +33,24 @@ public class Rank {
         this.points = points;
     }
 
-    public String toJson() throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(this);
-    }
-
+    /**
+     * Parse rank.
+     *
+     * @param json the json
+     * @return the rank
+     * @throws JsonProcessingException the json processing exception
+     */
     public static Rank parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, Rank.class);
+    }
+
+    /**
+     * To json string.
+     *
+     * @return the string
+     * @throws JsonProcessingException the json processing exception
+     */
+    public String toJson() throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(this);
     }
 }
