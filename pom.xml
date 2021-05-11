@@ -4,12 +4,12 @@
 
     <groupId>world.naturecraft</groupId>
     <artifactId>TownyMission</artifactId>
-    <version>0.0.16-SNAPSHOT</version>
+    <version>0.0.16</version>
 
     <scm>
         <connection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git</connection>
         <developerConnection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.0.16</tag>
     </scm>
 
     <properties>
