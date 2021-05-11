@@ -39,5 +39,14 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: net.teozfrank:UltimateVotes:0.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/src/main/resources/UltimateVotes.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

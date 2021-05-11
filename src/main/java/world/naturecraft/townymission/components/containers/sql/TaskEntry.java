@@ -104,6 +104,9 @@ public class TaskEntry {
         this.taskJson = taskJson;
     }
 
+    public void setTaskJson(MissionJson json) throws JsonProcessingException {
+        this.taskJson = json.toJson();
+    }
     /**
      * Gets town.
      *

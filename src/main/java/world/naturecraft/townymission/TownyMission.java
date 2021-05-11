@@ -3,12 +3,14 @@ package world.naturecraft.townymission;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import teozfrank.ultimatevotes.events.VoteRewardEvent;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.db.sql.*;
-import world.naturecraft.townymission.listeners.MoneyListener;
+import world.naturecraft.townymission.listeners.*;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -95,6 +97,10 @@ public class TownyMission extends JavaPlugin {
      */
     public void registerListeners() {
         getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
+        getServer().getPluginManager().registerEvents(new VoteListener(this), this);
+        getServer().getPluginManager().registerEvents(new MobListener(this), this);
+        getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
+        getServer().getPluginManager().registerEvents(new ExpansionListener(this), this);
     }
 
     /**
