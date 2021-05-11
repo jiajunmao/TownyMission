@@ -10,6 +10,7 @@ variables:
 
 stages:
   - build
+  - deploy
   - release
   - notification
 
@@ -56,12 +57,12 @@ fail_notification:
   when: on_failure
 
 pages:
-  stage: notification
+  stage: deploy
   dependencies:
     - build
   script:
     - mvn javadoc:javadoc
-    - mv target/site/apidocs/ public/
+    - mv target/site/apidocs public
   artifacts:
     paths:
       - public

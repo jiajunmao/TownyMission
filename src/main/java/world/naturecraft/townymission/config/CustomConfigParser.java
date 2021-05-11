@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,7 +41,14 @@ public class CustomConfigParser {
                 list.add(new Expansion(world, amount, 0, hrAllowed, reward));
             } else if (type.equals(MissionType.MOB)) {
                 String mobType = section.getString("type");
-                list.add(new Mob(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward));
+                Mob mob = new Mob(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward);
+                list.add(mob);
+                System.out.println("Completed: " + mob.getCompleted());
+                try {
+                    System.out.println("Json: " + mob.toJson());
+                } catch (JsonProcessingException exception) {
+                    exception.printStackTrace();
+                }
             } else if (type.equals(MissionType.MONEY)) {
                 list.add(new Money(amount, 0, hrAllowed, reward));
             } else if (type.equals(MissionType.RESOURCE)) {
@@ -75,7 +83,6 @@ public class CustomConfigParser {
     public static List<MissionJson> parseAll(TownyMission instance) {
         List<MissionJson> all = new ArrayList<>();
         for (MissionType missionType : MissionType.values()) {
-            FileConfiguration customConfig = instance.getCustomConfig().getMissionConfig(missionType);
             List<MissionJson> customList = parse(missionType, instance);
             all.addAll(customList);
         }

@@ -36,6 +36,7 @@ public class TaskDatabase extends Database<TaskEntry> {
                     "`allowed_time` BIGINT NOT NULL, " +
                     "`task_json` VARCHAR(255) NOT NULL ," +
                     "`town` VARCHAR(255) NOT NULL ," +
+                    "`started_player` VARCHAR(255) NOT NULL," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -53,12 +54,13 @@ public class TaskDatabase extends Database<TaskEntry> {
 
             while (result.next()) {
                 list.add(new TaskEntry(result.getInt("id"),
-                        result.getString("task_type"),
-                        result.getLong("added_time"),
-                        result.getLong("started_time"),
-                        result.getLong("allowed_time"),
-                        result.getString("task_json"),
-                        result.getString("town")));
+                    result.getString("task_type"),
+                    result.getLong("added_time"),
+                    result.getLong("started_time"),
+                    result.getLong("allowed_time"),
+                    result.getString("task_json"),
+                    result.getString("town"),
+                    result.getString("started_player")));
             }
             return null;
         });
@@ -74,7 +76,8 @@ public class TaskDatabase extends Database<TaskEntry> {
                     entry.getStartedTime() + "', '" +
                     entry.getAllowedTime() + "', '" +
                     entry.getTaskJson() + "', '" +
-                    entry.getTown() + "');";
+                    entry.getTown() + "', '" +
+                    entry.getStartedPlayer() + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -107,6 +110,7 @@ public class TaskDatabase extends Database<TaskEntry> {
                     "', allowed_time='" + entry.getAllowedTime() +
                     "', task_json='" + entry.getTaskJson() +
                     "', town='" + entry.getTown() +
+                    "', started_player='" + entry.getStartedPlayer() +
                     "' WHERE id='" + entry.getId() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();

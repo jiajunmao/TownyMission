@@ -13,10 +13,11 @@ public class TaskEntry {
     private final int id;
     private final String taskType;
     private final long addedTime;
-    private final String town;
-    private final long allowedTime;
     private long startedTime;
+    private final long allowedTime;
     private String taskJson;
+    private final String town;
+    private String startedPlayer;
 
     /**
      * Instantiates a new Task entry.
@@ -29,7 +30,7 @@ public class TaskEntry {
      * @param taskJson    the task json
      * @param town        the town
      */
-    public TaskEntry(int id, String taskType, long addedTime, long startedTime, long allowedTime, String taskJson, String town) {
+    public TaskEntry(int id, String taskType, long addedTime, long startedTime, long allowedTime, String taskJson, String town, String startedPlayer) {
         this.id = id;
         this.taskType = taskType;
         this.addedTime = addedTime;
@@ -37,6 +38,7 @@ public class TaskEntry {
         this.allowedTime = allowedTime;
         this.taskJson = taskJson;
         this.town = town;
+        this.startedPlayer = startedPlayer;
     }
 
     /**
@@ -102,6 +104,9 @@ public class TaskEntry {
         this.taskJson = taskJson;
     }
 
+    public void setTaskJson(MissionJson json) throws JsonProcessingException {
+        this.taskJson = json.toJson();
+    }
     /**
      * Gets town.
      *
@@ -141,5 +146,13 @@ public class TaskEntry {
      */
     public long getAllowedTime() {
         return allowedTime;
+    }
+
+    public void setStartedPlayer(String startedPlayer) {
+        this.startedPlayer = startedPlayer;
+    }
+
+    public String getStartedPlayer() {
+        return startedPlayer;
     }
 }

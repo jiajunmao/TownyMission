@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.CustomConfigParser;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -75,7 +76,8 @@ public class TownyMissionList extends TownyMissionCommand {
                                         0,
                                         Util.hrToMs(mission.getHrAllowed()),
                                         mission.toJson(),
-                                        town.getName());
+                                        town.getName(),
+                                        null);
                                 taskDao.add(entry);
                             } catch (JsonProcessingException e) {
                                 e.printStackTrace();
@@ -87,7 +89,11 @@ public class TownyMissionList extends TownyMissionCommand {
 
                         for (TaskEntry e : taskDao.getTownTasks(town)) {
                             try {
-                                builder.add("&e" + index + ". Type&f: " + e.getTaskType() + " " + e.getDisplayLine());
+                                if (e.getStartedTime() != 0) {
+                                    builder.add("&3" + index + ". Type&f: " + e.getTaskType() + " " + e.getDisplayLine());
+                                } else {
+                                    builder.add("&e" + index + ". Type&f: " + e.getTaskType() + " " + e.getDisplayLine());
+                                }
                             } catch (JsonProcessingException exp) {
                                 logger.severe("Json parsing error when parsing " + e.getTaskJson());
                                 exp.printStackTrace();

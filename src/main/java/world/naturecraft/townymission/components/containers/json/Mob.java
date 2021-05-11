@@ -28,7 +28,7 @@ public class Mob extends MissionJson {
      */
     @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward"})
     public Mob(EntityType entityType, int amount, int completed, int hrAllowed, int reward) {
-        super(MissionType.MOB, reward, amount, hrAllowed, completed);
+        super(MissionType.MOB, amount, completed, hrAllowed, reward);
         this.entityType = entityType;
     }
 
