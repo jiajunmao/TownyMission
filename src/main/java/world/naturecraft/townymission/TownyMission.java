@@ -90,6 +90,7 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("list", new TownyMissionList(this));
         rootCmd.registerCommand("start", new TownyMissionStart(this));
         rootCmd.registerCommand("abort", new TownyMissionAbort(this));
+        rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
     }
 
     /**

@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.beans.ConstructorProperties;
+import java.util.Map;
 
 /**
  * The type Resource.
  */
-public class Resource extends MissionJson {
+public class ResourceJson extends MissionJson {
 
     @JsonProperty("mi")
     private final boolean isMi;
@@ -29,9 +31,9 @@ public class Resource extends MissionJson {
      * @param hrAllowed the hr allowed
      * @param reward    the reward
      */
-    @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward"})
-    public Resource(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward) {
-        super(MissionType.RESOURCE, amount, completed, hrAllowed, reward);
+    @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "contributions"})
+    public ResourceJson(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+        super(MissionType.RESOURCE, amount, completed, hrAllowed, reward, contributions);
         this.isMi = isMi;
         this.type = type;
     }
@@ -43,8 +45,8 @@ public class Resource extends MissionJson {
      * @return the resource
      * @throws JsonProcessingException the json processing exception
      */
-    public static Resource parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, Resource.class);
+    public static ResourceJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, ResourceJson.class);
     }
 
     /**

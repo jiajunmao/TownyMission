@@ -70,17 +70,16 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param missionType the mission type
      * @return the town tasks
      */
-    public List<TaskEntry> getTownTasks(Town town, MissionType missionType) {
+    public TaskEntry getTownTasks(Town town, MissionType missionType) {
         List<TaskEntry> list = getTownTasks(town);
-        List<TaskEntry> filtered = new ArrayList<>();
 
         for (TaskEntry e : list) {
             if (e.getTaskType().equalsIgnoreCase(missionType.name())) {
-                filtered.add(e);
+                return e;
             }
         }
 
-        return filtered;
+        return null;
     }
 
     /**

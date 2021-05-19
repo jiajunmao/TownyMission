@@ -7,7 +7,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.json.Expansion;
+import world.naturecraft.townymission.components.containers.json.ExpansionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -41,7 +41,7 @@ public class ExpansionListener extends TownyMissionListener {
         if (taskDao.getStartedMission(town) != null && taskDao.getStartedMission(town).getTaskType().equalsIgnoreCase(MissionType.EXPANSION.name()) ) {
             TaskEntry taskEntry = taskDao.getStartedMission(town);
             try {
-                Expansion expansionJson = Expansion.parse(taskEntry.getTaskJson());
+                ExpansionJson expansionJson = ExpansionJson.parse(taskEntry.getTaskJson());
                 expansionJson.setCompleted(expansionJson.getCompleted() + 1);
                 taskEntry.setTaskJson(expansionJson);
             } catch (JsonProcessingException exception) {

@@ -125,15 +125,15 @@ public class TaskEntry {
     public String getDisplayLine() throws JsonProcessingException {
         MissionType missionType = MissionType.valueOf(taskType.toUpperCase(Locale.ROOT));
         if (missionType.equals(MissionType.EXPANSION)) {
-            return Expansion.parse(taskJson).getDisplayLine();
+            return ExpansionJson.parse(taskJson).getDisplayLine();
         } else if (missionType.equals(MissionType.MOB)) {
-            return Mob.parse(taskJson).getDisplayLine();
+            return MobJson.parse(taskJson).getDisplayLine();
         } else if (missionType.equals(MissionType.MONEY)) {
-            return Money.parse(taskJson).getDisplayLine();
+            return MoneyJson.parse(taskJson).getDisplayLine();
         } else if (missionType.equals(MissionType.VOTE)) {
-            return Vote.parse(taskJson).getDisplayLine();
+            return VoteJson.parse(taskJson).getDisplayLine();
         } else if (missionType.equals(MissionType.RESOURCE)) {
-            return Resource.parse(taskJson).getDisplayLine();
+            return ResourceJson.parse(taskJson).getDisplayLine();
         } else {
             return null;
         }

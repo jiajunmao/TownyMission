@@ -16,6 +16,7 @@ import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -129,6 +130,12 @@ public class TownyMissionStart extends TownyMissionCommand {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return null;
+        List<String> tabList = new ArrayList<>();
+        if (args.length == 2) {
+            for(int i = 1; i <= 15; i++) {
+                tabList.add(String.valueOf(i));
+            }
+        }
+        return tabList;
     }
 }

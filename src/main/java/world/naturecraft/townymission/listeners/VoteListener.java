@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import teozfrank.ultimatevotes.events.VoteRewardEvent;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.json.Vote;
+import world.naturecraft.townymission.components.containers.json.VoteJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -32,9 +32,9 @@ public class VoteListener extends TownyMissionListener {
         if (sanityCheck(e.getPlayer())) {
             TaskEntry entry = taskDao.getStartedMission(TownyUtil.residentOf(e.getPlayer()));
 
-            Vote voteJson;
+            VoteJson voteJson;
             try {
-                voteJson = Vote.parse(entry.getTaskJson());
+                voteJson = VoteJson.parse(entry.getTaskJson());
                 voteJson.setCompleted(voteJson.getCompleted() + e.getVoteCount());
                 entry.setTaskJson(voteJson);
             } catch (JsonProcessingException jsonProcessingException) {

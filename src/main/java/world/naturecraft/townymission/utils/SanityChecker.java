@@ -1,7 +1,10 @@
 package world.naturecraft.townymission.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.dao.TaskDao;
@@ -58,11 +61,14 @@ public class SanityChecker {
     }
 
     public SanityChecker customCheck(BooleanChecker checker) {
+        // Other logic
+
         customChecks.add(checker);
         return this;
     }
 
     public boolean check() {
+
         if (checkHasTown) {
             if (TownyUtil.residentOf(player) == null)
                 return false;

@@ -8,11 +8,12 @@ import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.beans.ConstructorProperties;
+import java.util.Map;
 
 /**
  * The type Mob.
  */
-public class Mob extends MissionJson {
+public class MobJson extends MissionJson {
 
     @JsonProperty("entityType")
     private final EntityType entityType;
@@ -26,9 +27,9 @@ public class Mob extends MissionJson {
      * @param hrAllowed  the hr allowed
      * @param reward     the reward
      */
-    @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward"})
-    public Mob(EntityType entityType, int amount, int completed, int hrAllowed, int reward) {
-        super(MissionType.MOB, amount, completed, hrAllowed, reward);
+    @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward", "contributions"})
+    public MobJson(EntityType entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+        super(MissionType.MOB, amount, completed, hrAllowed, reward, contributions);
         this.entityType = entityType;
     }
 
@@ -39,8 +40,8 @@ public class Mob extends MissionJson {
      * @return the mob
      * @throws JsonProcessingException the json processing exception
      */
-    public static Mob parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, Mob.class);
+    public static MobJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, MobJson.class);
     }
 
     /**

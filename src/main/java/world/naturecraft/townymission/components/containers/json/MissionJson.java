@@ -8,7 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bukkit.entity.Player;
 import world.naturecraft.townymission.components.enums.MissionType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Json entry.
@@ -25,6 +29,8 @@ public abstract class MissionJson {
     private final int amount;
     @JsonProperty("completed")
     private int completed;
+    @JsonProperty("contributions")
+    private Map<String, Integer> contributions;
 
     /**
      * Instantiates a new Mission json.
@@ -35,12 +41,17 @@ public abstract class MissionJson {
      * @param hrAllowed   the hr allowed
      * @param reward      the reward
      */
-    protected MissionJson(MissionType missionType, int amount, int completed, int hrAllowed, int reward) {
+    protected MissionJson(MissionType missionType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         this.missionType = missionType;
         this.reward = reward;
         this.amount = amount;
         this.completed = completed;
         this.hrAllowed = hrAllowed;
+        if (contributions == null) {
+            this.contributions = new HashMap<>();
+        } else {
+            this.contributions = contributions;
+        }
     }
 
     public String toString() {
@@ -123,5 +134,23 @@ public abstract class MissionJson {
      */
     public int getHrAllowed() {
         return hrAllowed;
+    }
+
+    public void addContribution(String playerUUID, int amount) {
+        if (contributions.containsKey(playerUUID)) {
+            contributions.put(playerUUID, contributions.get(playerUUID) + amount);
+        } else {
+            contributions.put(playerUUID, amount);
+        }
+    }
+
+    public void removeContribution(String playerUUID, int amount) {
+        if (contributions.containsKey(playerUUID)) {
+            contributions.put(playerUUID, contributions.get(playerUUID) - amount);
+        }
+    }
+
+    public void removeContributions(String playerUUID) {
+        contributions.remove(playerUUID);
     }
 }

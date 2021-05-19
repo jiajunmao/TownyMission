@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.json.Mob;
+import world.naturecraft.townymission.components.containers.json.MobJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -47,7 +47,7 @@ public class MobListener extends TownyMissionListener {
                     if (sane) {
                         TaskEntry taskEntry = taskDao.getStartedMission(TownyUtil.residentOf(killer));
                         try {
-                            Mob mobJson = Mob.parse(taskEntry.getTaskJson());
+                            MobJson mobJson = MobJson.parse(taskEntry.getTaskJson());
                             mobJson.setCompleted(mobJson.getCompleted() + 1);
                             taskEntry.setTaskJson(mobJson);
                         } catch (JsonProcessingException exp) {

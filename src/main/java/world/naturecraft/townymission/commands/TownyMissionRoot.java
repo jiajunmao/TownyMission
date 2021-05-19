@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,11 @@ public class TownyMissionRoot extends TownyMissionCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length == 0) {
+            Util.sendMsg(sender, "&f I am too lazy to make a help page again -Barb");
+            return false;
+        }
+
         if (commands.containsKey(args[0])) {
             getExecutor(args[0]).onCommand(sender, command, alias, args);
         } else {

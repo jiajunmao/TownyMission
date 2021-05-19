@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.json.Money;
+import world.naturecraft.townymission.components.containers.json.MoneyJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -40,11 +40,11 @@ public class MoneyListener extends TownyMissionListener {
             public void run() {
                 if (sanityCheck(player, event)) {
                     Town town = TownyUtil.residentOf(player);
-                    TaskEntry moneyTask = taskDao.getTownTasks(town, MissionType.MONEY).get(0);
+                    TaskEntry moneyTask = taskDao.getTownTasks(town, MissionType.MONEY);
 
-                    Money money;
+                    MoneyJson money;
                     try {
-                        money = Money.parse(moneyTask.getTaskJson());
+                        money = MoneyJson.parse(moneyTask.getTaskJson());
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                         return;
