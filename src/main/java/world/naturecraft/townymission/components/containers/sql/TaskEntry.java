@@ -13,10 +13,10 @@ public class TaskEntry {
     private final int id;
     private final String taskType;
     private final long addedTime;
-    private long startedTime;
     private final long allowedTime;
-    private String taskJson;
     private final String town;
+    private long startedTime;
+    private String taskJson;
     private String startedPlayer;
 
     /**
@@ -107,6 +107,7 @@ public class TaskEntry {
     public void setTaskJson(MissionJson json) throws JsonProcessingException {
         this.taskJson = json.toJson();
     }
+
     /**
      * Gets town.
      *
@@ -148,11 +149,11 @@ public class TaskEntry {
         return allowedTime;
     }
 
-    public void setStartedPlayer(String startedPlayer) {
-        this.startedPlayer = startedPlayer;
-    }
-
     public String getStartedPlayer() {
         return startedPlayer;
+    }
+
+    public void setStartedPlayer(String startedPlayer) {
+        this.startedPlayer = startedPlayer;
     }
 }

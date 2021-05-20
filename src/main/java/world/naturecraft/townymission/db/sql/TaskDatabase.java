@@ -54,13 +54,13 @@ public class TaskDatabase extends Database<TaskEntry> {
 
             while (result.next()) {
                 list.add(new TaskEntry(result.getInt("id"),
-                    result.getString("task_type"),
-                    result.getLong("added_time"),
-                    result.getLong("started_time"),
-                    result.getLong("allowed_time"),
-                    result.getString("task_json"),
-                    result.getString("town"),
-                    result.getString("started_player")));
+                        result.getString("task_type"),
+                        result.getLong("added_time"),
+                        result.getLong("started_time"),
+                        result.getLong("allowed_time"),
+                        result.getString("task_json"),
+                        result.getString("town"),
+                        result.getString("started_player")));
             }
             return null;
         });

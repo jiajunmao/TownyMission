@@ -1,10 +1,7 @@
 package world.naturecraft.townymission.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.dao.TaskDao;
@@ -24,9 +21,9 @@ public class SanityChecker {
     private boolean checkIsMissionType;
     private MissionType missionType;
 
-    private List<BooleanChecker> customChecks;
+    private final List<BooleanChecker> customChecks;
 
-    private TaskDao taskDao;
+    private final TaskDao taskDao;
     private Player player;
 
     public SanityChecker(TownyMission instance) {

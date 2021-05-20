@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.event.Listener;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.db.sql.TaskDatabase;

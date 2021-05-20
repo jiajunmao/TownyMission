@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.listeners;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,7 +11,6 @@ import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
-import world.naturecraft.townymission.utils.Util;
 
 /**
  * The type Vote listener.
@@ -31,11 +29,12 @@ public class VoteListener extends TownyMissionListener {
     public void onVoteReceived(VoteRewardEvent e) {
         if (sanityCheck(e.getPlayer())) {
             TaskEntry entry = taskDao.getStartedMission(TownyUtil.residentOf(e.getPlayer()));
+            int count = e.getUnclaimedCount();
 
             VoteJson voteJson;
             try {
                 voteJson = VoteJson.parse(entry.getTaskJson());
-                voteJson.setCompleted(voteJson.getCompleted() + e.getVoteCount());
+                voteJson.setCompleted(voteJson.getCompleted() + count);
                 entry.setTaskJson(voteJson);
             } catch (JsonProcessingException jsonProcessingException) {
                 jsonProcessingException.printStackTrace();

@@ -27,7 +27,7 @@ public class TownFallListener extends TownyMissionListener {
     public void onTownFall(TownRuinedEvent e) {
         Town town = e.getTown();
 
-        for(TaskEntry entry : taskDao.getTownTasks(town)) {
+        for (TaskEntry entry : taskDao.getTownTasks(town)) {
             taskDao.remove(entry);
         }
     }

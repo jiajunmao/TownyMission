@@ -61,7 +61,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                         int total = 0;
                         int index = 0;
-                        for(ItemStack itemStack : player.getInventory().getContents()) {
+                        for (ItemStack itemStack : player.getInventory().getContents()) {
                             if (itemStack != null && itemStack.getType().equals(resourceJson.getType())) {
                                 total += itemStack.getAmount();
                                 player.getInventory().setItem(index, null);
@@ -115,12 +115,10 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .customCheck(() -> {
                     if (args.length == 1)
                         return true;
-                    if (args.length == 2 && args[1].equalsIgnoreCase("all"))
-                        return true;
-
-                    return false;
+                    return args.length == 2 && args[1].equalsIgnoreCase("all");
                 }).check();
     }
+
     /**
      * Requests a list of possible completions for a command argument.
      *

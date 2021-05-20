@@ -5,12 +5,10 @@ import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.json.ExpansionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.utils.SanityChecker;
 
 /**
  * The type Expansion listener.
@@ -38,7 +36,7 @@ public class ExpansionListener extends TownyMissionListener {
         }
 
 
-        if (taskDao.getStartedMission(town) != null && taskDao.getStartedMission(town).getTaskType().equalsIgnoreCase(MissionType.EXPANSION.name()) ) {
+        if (taskDao.getStartedMission(town) != null && taskDao.getStartedMission(town).getTaskType().equalsIgnoreCase(MissionType.EXPANSION.name())) {
             TaskEntry taskEntry = taskDao.getStartedMission(town);
             try {
                 ExpansionJson expansionJson = ExpansionJson.parse(taskEntry.getTaskJson());

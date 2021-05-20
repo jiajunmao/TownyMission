@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public abstract class MissionJson {
     @JsonProperty("completed")
     private int completed;
     @JsonProperty("contributions")
-    private Map<String, Integer> contributions;
+    private final Map<String, Integer> contributions;
 
     /**
      * Instantiates a new Mission json.

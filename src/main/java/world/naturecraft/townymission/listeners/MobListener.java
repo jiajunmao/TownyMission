@@ -13,8 +13,6 @@ import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
-import java.util.Locale;
-
 public class MobListener extends TownyMissionListener {
 
     /**

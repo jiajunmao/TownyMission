@@ -132,7 +132,7 @@ public class TownyMissionStart extends TownyMissionCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
         if (args.length == 2) {
-            for(int i = 1; i <= 15; i++) {
+            for (int i = 1; i <= 15; i++) {
                 tabList.add(String.valueOf(i));
             }
         }

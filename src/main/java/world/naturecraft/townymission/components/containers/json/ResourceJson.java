@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.beans.ConstructorProperties;
