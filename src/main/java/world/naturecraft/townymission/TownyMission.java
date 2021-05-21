@@ -4,11 +4,13 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
+import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.db.sql.*;
 import world.naturecraft.townymission.listeners.external.*;
+import world.naturecraft.townymission.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -96,6 +98,7 @@ public class TownyMission extends JavaPlugin {
     public void registerListeners() {
         getServer().getPluginManager().registerEvents(new MissionListener(this), this);
         getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
+        getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
     }
 
     /**

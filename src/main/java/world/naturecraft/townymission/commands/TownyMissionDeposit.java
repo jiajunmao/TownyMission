@@ -91,7 +91,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         try {
                             resourceEntry.setMissionJson(resourceJson);
 
-                            DoMissionEvent missionEvent = new DoMissionEvent(player, resourceEntry);
+                            DoMissionEvent missionEvent = new DoMissionEvent(player, resourceEntry, true);
                             Bukkit.getPluginManager().callEvent(missionEvent);
 
                             if (!missionEvent.isCanceled()) {

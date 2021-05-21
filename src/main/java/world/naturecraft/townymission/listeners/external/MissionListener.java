@@ -149,7 +149,7 @@ public class MissionListener extends TownyMissionListener {
                         return;
                     }
 
-                    DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry);
+                    DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
                     pluginManager.callEvent(missionEvent);
                     try {
                         if (!missionEvent.isCanceled()) {

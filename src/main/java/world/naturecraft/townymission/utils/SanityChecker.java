@@ -113,7 +113,6 @@ public class SanityChecker {
      */
     public boolean check() {
 
-        System.out.println("Starting sanity check");
         if (checkHasTown) {
             if (TownyUtil.residentOf(player) == null) {
                 Util.sendMsg(player, "&cYou do not belong to a town!");
@@ -121,7 +120,6 @@ public class SanityChecker {
             }
         }
 
-        System.out.println("Passed checkHasTown");
         if (checkIsMayor) {
             if (!checkHasTown)
                 return false;
@@ -131,8 +129,6 @@ public class SanityChecker {
             }
         }
 
-        System.out.println("Passed checkIsMayor");
-
         if (checkHasStarted) {
             if (!checkHasTown)
                 return false;
@@ -141,7 +137,6 @@ public class SanityChecker {
                 return false;
             }
         }
-        System.out.println("Passed checkHasStarted");
 
         if (checkIsMissionType) {
             if (!checkHasStarted)
@@ -151,7 +146,6 @@ public class SanityChecker {
                 return false;
             }
         }
-        System.out.println("Passed checkIsMissionType");
 
         if (customChecks.size() != 0) {
             for (BooleanChecker checker : customChecks) {
@@ -159,7 +153,6 @@ public class SanityChecker {
                     return false;
             }
         }
-        System.out.println("Passed customChecks");
 
         return true;
     }

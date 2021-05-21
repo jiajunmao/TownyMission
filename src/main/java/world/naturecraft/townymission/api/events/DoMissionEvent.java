@@ -29,7 +29,8 @@ public class DoMissionEvent extends Event implements Cancellable {
      * @param player the player
      * @param entry  the entry
      */
-    public DoMissionEvent(Player player, TaskEntry entry) {
+    public DoMissionEvent(Player player, TaskEntry entry, boolean isAsync) {
+        super(isAsync);
         this.player = player;
         this.taskEntry = entry;
         this.isCanceled = false;

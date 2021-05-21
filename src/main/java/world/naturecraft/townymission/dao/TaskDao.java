@@ -126,13 +126,6 @@ public class TaskDao extends Dao<TaskEntry> {
      * @throws JsonProcessingException the json processing exception
      */
     public void update(TaskEntry entry) throws JsonProcessingException {
-        System.out.println(entry.getId());
-        System.out.println(entry.getMissionType().name());
-        System.out.println(entry.getAddedTime());
-        System.out.println(entry.getStartedTime());
-        System.out.println(entry.getAllowedTime());
-        System.out.println(entry.getMissionJson().toJson());
-        System.out.println(entry.getStartedPlayer().getUniqueId().toString());
         db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
     }
 }
