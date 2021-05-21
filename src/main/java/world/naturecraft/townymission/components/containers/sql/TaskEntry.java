@@ -59,7 +59,7 @@ public class TaskEntry extends SqlEntry {
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
      * @param townName          the town name
-     * @param startedPlayerName the started player name
+     * @param startedPlayerUUID the started player name
      * @throws JsonProcessingException the json processing exception
      */
     public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
