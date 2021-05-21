@@ -62,25 +62,36 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
         return list;
     }
 
-    @Override
-    public void add(SprintHistoryEntry entry) {
+    /**
+     * Add.
+     *
+     * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
+    public void add(int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
-                    entry.getSeason() + "' , '" +
-                    entry.getSprint() + "' , '" +
-                    entry.getStartedTime() + "' , '" +
-                    entry.getRankJson() + "');";
+                    season + "' , '" +
+                    sprint + "' , '" +
+                    startedTime + "' , '" +
+                    rankJson + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
         });
     }
 
-    @Override
-    public void remove(SprintHistoryEntry entry) {
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
+    public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + entry.getId() + "');";
+                    "id='" + id + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -90,17 +101,20 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
     /**
      * Update.
      *
-     * @param entry the entry
+     * @param id          the id
+     * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
      */
-    @Override
-    public void update(SprintHistoryEntry entry) {
+    public void update(int id, int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET season='" + entry.getSeason() +
-                    "', sprint='" + entry.getSprint() +
-                    "', started_time='" + entry.getStartedTime() +
-                    "', rank_json='" + entry.getRankJson() +
-                    "' WHERE id='" + entry.getId() + "';";
+                    " SET season='" + season +
+                    "', sprint='" + sprint +
+                    "', started_time='" + startedTime +
+                    "', rank_json='" + rankJson +
+                    "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

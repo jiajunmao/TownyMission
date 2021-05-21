@@ -6,9 +6,13 @@ package world.naturecraft.townymission.components.containers.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Json entry.
@@ -25,30 +29,29 @@ public abstract class MissionJson {
     private final int amount;
     @JsonProperty("completed")
     private int completed;
+    @JsonProperty("contributions")
+    private final Map<String, Integer> contributions;
 
     /**
      * Instantiates a new Mission json.
      *
-     * @param missionType the mission type
-     * @param amount      the amount
-     * @param completed   the completed
-     * @param hrAllowed   the hr allowed
-     * @param reward      the reward
+     * @param missionType   the mission type
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
-    protected MissionJson(MissionType missionType, int amount, int completed, int hrAllowed, int reward) {
+    protected MissionJson(MissionType missionType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         this.missionType = missionType;
         this.reward = reward;
         this.amount = amount;
         this.completed = completed;
         this.hrAllowed = hrAllowed;
-    }
-
-    public String toString() {
-        try {
-            return toJson();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+        if (contributions == null) {
+            this.contributions = new HashMap<>();
+        } else {
+            this.contributions = contributions;
         }
     }
 
@@ -123,5 +126,51 @@ public abstract class MissionJson {
      */
     public int getHrAllowed() {
         return hrAllowed;
+    }
+
+    /**
+     * Add contribution.
+     *
+     * @param playerUUID the player uuid
+     * @param amount     the amount
+     */
+    public void addContribution(String playerUUID, int amount) {
+        if (contributions.containsKey(playerUUID)) {
+            contributions.put(playerUUID, contributions.get(playerUUID) + amount);
+        } else {
+            contributions.put(playerUUID, amount);
+        }
+    }
+
+    /**
+     * Remove contribution.
+     *
+     * @param playerUUID the player uuid
+     * @param amount     the amount
+     */
+    public void removeContribution(String playerUUID, int amount) {
+        if (contributions.containsKey(playerUUID)) {
+            contributions.put(playerUUID, contributions.get(playerUUID) - amount);
+        }
+    }
+
+    /**
+     * Remove contributions.
+     *
+     * @param playerUUID the player uuid
+     */
+    public void removeContributions(String playerUUID) {
+        contributions.remove(playerUUID);
+    }
+
+    /**
+     * Parse mission json.
+     *
+     * @param json the json
+     * @return the mission json
+     * @throws JsonProcessingException the json processing exception
+     */
+    public static MissionJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, MissionJson.class);
     }
 }

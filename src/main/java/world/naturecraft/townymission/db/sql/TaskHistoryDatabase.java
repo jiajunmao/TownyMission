@@ -73,7 +73,11 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
         return list;
     }
 
-    @Override
+    /**
+     * Add.
+     *
+     * @param entry the entry
+     */
     public void add(TaskHistoryEntry entry) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
@@ -93,7 +97,11 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
         });
     }
 
-    @Override
+    /**
+     * Remove.
+     *
+     * @param entry the entry
+     */
     public void remove(TaskHistoryEntry entry) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -104,12 +112,12 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
         });
     }
 
+
     /**
      * Update.
      *
      * @param entry the entry
      */
-    @Override
     public void update(TaskHistoryEntry entry) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +

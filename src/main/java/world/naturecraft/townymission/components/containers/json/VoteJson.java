@@ -6,34 +6,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.beans.ConstructorProperties;
+import java.util.Map;
 
 /**
- * The type Money.
+ * The type Vote.
  */
-public class Money extends MissionJson {
+public class VoteJson extends MissionJson {
 
     /**
-     * Instantiates a new Money.
+     * Instantiates a new Vote.
      *
-     * @param amount    the amount
-     * @param completed the completed
-     * @param hrAllowed the hr allowed
-     * @param reward    the reward
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
-    @ConstructorProperties({"amount", "completed", "hrAllowed", "reward"})
-    public Money(int amount, int completed, int hrAllowed, int reward) {
-        super(MissionType.MONEY, amount, completed, hrAllowed, reward);
+    @ConstructorProperties({"amount", "completed", "hrAllowed", "reward", "contributions"})
+    public VoteJson(int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+        super(MissionType.VOTE, amount, completed, hrAllowed, reward, contributions);
     }
 
     /**
-     * Parse money.
+     * Parse vote.
      *
      * @param json the json
-     * @return the money
+     * @return the vote
      * @throws JsonProcessingException the json processing exception
      */
-    public static Money parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, Money.class);
+    public static VoteJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, VoteJson.class);
     }
 
     /**

@@ -4,8 +4,8 @@
 
 package world.naturecraft.townymission.dao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.event.Listener;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
@@ -38,7 +38,7 @@ public class TaskDao extends Dao<TaskEntry> {
     public int getNumAdded(Town town) {
         int num = 0;
         for (TaskEntry e : db.getEntries()) {
-            if (e.getTown().equalsIgnoreCase(town.getName())) {
+            if (e.getTown().equals(town)) {
                 num++;
             }
         }
@@ -55,7 +55,7 @@ public class TaskDao extends Dao<TaskEntry> {
     public List<TaskEntry> getTownTasks(Town town) {
         List<TaskEntry> list = new ArrayList<>();
         for (TaskEntry e : db.getEntries()) {
-            if (e.getTown().equalsIgnoreCase(town.getName())) {
+            if (e.getTown().equals(town)) {
                 list.add(e);
             }
         }
@@ -70,17 +70,16 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param missionType the mission type
      * @return the town tasks
      */
-    public List<TaskEntry> getTownTasks(Town town, MissionType missionType) {
+    public TaskEntry getTownTask(Town town, MissionType missionType) {
         List<TaskEntry> list = getTownTasks(town);
-        List<TaskEntry> filtered = new ArrayList<>();
 
         for (TaskEntry e : list) {
-            if (e.getTaskType().equalsIgnoreCase(missionType.name())) {
-                filtered.add(e);
+            if (e.getMissionType().equals(missionType)) {
+                return e;
             }
         }
 
-        return filtered;
+        return null;
     }
 
     /**
@@ -92,7 +91,7 @@ public class TaskDao extends Dao<TaskEntry> {
     @Deprecated
     public boolean hasStartedMission(Town town) {
         for (TaskEntry e : db.getEntries()) {
-            if (e.getTown().equalsIgnoreCase(town.getName())) {
+            if (e.getTown().equals(town)) {
                 if (e.getStartedTime() != 0) {
                     return true;
                 }
@@ -102,9 +101,15 @@ public class TaskDao extends Dao<TaskEntry> {
         return false;
     }
 
+    /**
+     * Gets started mission.
+     *
+     * @param town the town
+     * @return the started mission
+     */
     public TaskEntry getStartedMission(Town town) {
         for (TaskEntry e : db.getEntries()) {
-            if (e.getTown().equalsIgnoreCase(town.getName())) {
+            if (e.getTown().equals(town)) {
                 if (e.getStartedTime() != 0) {
                     return e;
                 }
@@ -118,9 +123,10 @@ public class TaskDao extends Dao<TaskEntry> {
      * Add.
      *
      * @param entry the entry
+     * @throws JsonProcessingException the json processing exception
      */
-    public void add(TaskEntry entry) {
-        db.add(entry);
+    public void add(TaskEntry entry) throws JsonProcessingException {
+        db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
     }
 
     /**
@@ -129,15 +135,16 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param entry the entry
      */
     public void remove(TaskEntry entry) {
-        db.remove(entry);
+        db.remove(entry.getId());
     }
 
     /**
      * Update.
      *
      * @param entry the entry
+     * @throws JsonProcessingException the json processing exception
      */
-    public void update(TaskEntry entry) {
-        db.update(entry);
+    public void update(TaskEntry entry) throws JsonProcessingException {
+        db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
     }
 }

@@ -8,11 +8,12 @@ import org.bukkit.Material;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.beans.ConstructorProperties;
+import java.util.Map;
 
 /**
  * The type Resource.
  */
-public class Resource extends MissionJson {
+public class ResourceJson extends MissionJson {
 
     @JsonProperty("mi")
     private final boolean isMi;
@@ -22,16 +23,17 @@ public class Resource extends MissionJson {
     /**
      * Instantiates a new Resource.
      *
-     * @param isMi      the is mi
-     * @param type      the type
-     * @param amount    the amount
-     * @param completed the completed
-     * @param hrAllowed the hr allowed
-     * @param reward    the reward
+     * @param isMi          the is mi
+     * @param type          the type
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
-    @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward"})
-    public Resource(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward) {
-        super(MissionType.RESOURCE, amount, completed, hrAllowed, reward);
+    @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "contributions"})
+    public ResourceJson(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+        super(MissionType.RESOURCE, amount, completed, hrAllowed, reward, contributions);
         this.isMi = isMi;
         this.type = type;
     }
@@ -43,8 +45,8 @@ public class Resource extends MissionJson {
      * @return the resource
      * @throws JsonProcessingException the json processing exception
      */
-    public static Resource parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, Resource.class);
+    public static ResourceJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, ResourceJson.class);
     }
 
     /**

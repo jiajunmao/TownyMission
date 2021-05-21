@@ -13,6 +13,9 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
 
+/**
+ * The type Towny mission abort.
+ */
 public class TownyMissionAbort extends TownyMissionCommand {
     /**
      * Instantiates a new Towny mission command.
@@ -54,13 +57,19 @@ public class TownyMissionAbort extends TownyMissionCommand {
         return true;
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public boolean sanityCheck(Player player) {
         if (player.hasPermission("townymission.player")) {
             Town town;
             if ((town = TownyUtil.residentOf(player)) != null) {
                 TaskEntry entry;
                 if ((entry = taskDao.getStartedMission(town)) != null) {
-                    if (entry.getStartedPlayer().equalsIgnoreCase(player.getUniqueId().toString()) || TownyUtil.mayorOf(player) != null) {
+                    if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
                         return true;
                     } else {
                         Util.sendMsg(player, "&c You either need to be the mayor or started the mission yourself to abort!");

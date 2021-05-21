@@ -1,11 +1,12 @@
 package world.naturecraft.townymission.components.containers.sql;
 
+import world.naturecraft.townymission.components.enums.DbType;
+
 /**
  * The type Task history entry.
  */
-public class TaskHistoryEntry {
+public class TaskHistoryEntry extends SqlEntry {
 
-    private int id;
     private String taskType;
     private long addedTime;
     private long startedTime;
@@ -27,12 +28,13 @@ public class TaskHistoryEntry {
      * @param allowedTime   the allowed time
      * @param taskJson      the task json
      * @param town          the town
+     * @param startedPlayer the started player
      * @param completedTime the completed time
      * @param sprint        the sprint
      * @param season        the season
      */
     public TaskHistoryEntry(int id, String taskType, long addedTime, long startedTime, long allowedTime, String taskJson, String town, String startedPlayer, long completedTime, int sprint, int season) {
-        this.id = id;
+        super(id, DbType.TASK_HISTORY);
         this.taskType = taskType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;
@@ -43,24 +45,6 @@ public class TaskHistoryEntry {
         this.completedTime = completedTime;
         this.sprint = sprint;
         this.season = season;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**
@@ -225,10 +209,20 @@ public class TaskHistoryEntry {
         this.addedTime = addedTime;
     }
 
+    /**
+     * Gets started player.
+     *
+     * @return the started player
+     */
     public String getStartedPlayer() {
         return startedPlayer;
     }
 
+    /**
+     * Sets started player.
+     *
+     * @param startedPlayer the started player
+     */
     public void setStartedPlayer(String startedPlayer) {
         this.startedPlayer = startedPlayer;
     }

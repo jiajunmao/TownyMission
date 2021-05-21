@@ -4,7 +4,10 @@
 
 package world.naturecraft.townymission.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.dao.TaskDao;
@@ -25,6 +28,11 @@ public abstract class TownyMissionListener implements Listener {
     protected TaskDao taskDao;
 
     /**
+     * The Plugin manager.
+     */
+    protected PluginManager pluginManager;
+
+    /**
      * Instantiates a new Towny mission listener.
      *
      * @param instance the instance
@@ -32,5 +40,15 @@ public abstract class TownyMissionListener implements Listener {
     public TownyMissionListener(TownyMission instance) {
         this.instance = instance;
         taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
+        pluginManager = Bukkit.getPluginManager();
+    }
+
+    /**
+     * Run task asynchronously.
+     *
+     * @param r the r
+     */
+    protected void runTaskAsynchronously(BukkitRunnable r) {
+        r.runTaskAsynchronously(instance);
     }
 }

@@ -1,9 +1,11 @@
 package world.naturecraft.townymission.components.containers.sql;
 
+import world.naturecraft.townymission.components.enums.DbType;
+
 /**
  * The type Sprint entry.
  */
-public class SprintEntry {
+public class SprintEntry extends SqlEntry {
     private int id;
     private String townID;
     private String townName;
@@ -22,7 +24,7 @@ public class SprintEntry {
      * @param season       the season
      */
     public SprintEntry(int id, String townID, String townName, int naturepoints, int sprint, int season) {
-        this.id = id;
+        super(id, DbType.SPRINT);
         this.townID = townID;
         this.townName = townName;
         this.naturepoints = naturepoints;

@@ -1,9 +1,11 @@
 package world.naturecraft.townymission.components.containers.sql;
 
+import world.naturecraft.townymission.components.enums.DbType;
+
 /**
  * The type Sprint history entry.
  */
-public class SprintHistoryEntry {
+public class SprintHistoryEntry extends SqlEntry {
     private int id;
     private int season;
     private int sprint;
@@ -20,7 +22,7 @@ public class SprintHistoryEntry {
      * @param rankJson    the rank json
      */
     public SprintHistoryEntry(int id, int season, int sprint, long startedTime, String rankJson) {
-        this.id = id;
+        super(id, DbType.SPRINT_HISTORY);
         this.season = season;
         this.sprint = sprint;
         this.startedTime = startedTime;

@@ -4,9 +4,10 @@ main: world.naturecraft.townymission.TownyMission
 version: 0.0.1
 api-version: 1.16
 
-depend:
-  - Towny
+softdepend:
   - CMI
+  - UltimateVotes
+  - Towny
 
 permissions:
   townymission.player:
@@ -39,7 +40,7 @@ permissions:
 commands:
   townymission:
     description: Root command
-    aliases: tm
+    aliases: tms
   townymission info:
     description: overview
   townymission rank:

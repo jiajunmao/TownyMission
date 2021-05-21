@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -37,18 +38,25 @@ public class CustomConfigParser {
 
             if (type.equals(MissionType.EXPANSION)) {
                 String world = section.getString("world");
-                list.add(new Expansion(world, amount, 0, hrAllowed, reward));
+                list.add(new ExpansionJson(world, amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.MOB)) {
                 String mobType = section.getString("type");
-                list.add(new Mob(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward));
+                MobJson mobJson = new MobJson(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward, null);
+                list.add(mobJson);
+                System.out.println("Completed: " + mobJson.getCompleted());
+                try {
+                    System.out.println("Json: " + mobJson.toJson());
+                } catch (JsonProcessingException exception) {
+                    exception.printStackTrace();
+                }
             } else if (type.equals(MissionType.MONEY)) {
-                list.add(new Money(amount, 0, hrAllowed, reward));
+                list.add(new MoneyJson(amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.RESOURCE)) {
                 boolean isMi = section.getBoolean("isMi");
                 String resourceType = section.getString("type");
-                list.add(new Resource(isMi, Material.valueOf(resourceType), amount, 0, hrAllowed, reward));
+                list.add(new ResourceJson(isMi, Material.valueOf(resourceType), amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.VOTE)) {
-                list.add(new Vote(amount, 0, hrAllowed, reward));
+                list.add(new VoteJson(amount, 0, hrAllowed, reward, null));
             }
         }
 
@@ -75,7 +83,6 @@ public class CustomConfigParser {
     public static List<MissionJson> parseAll(TownyMission instance) {
         List<MissionJson> all = new ArrayList<>();
         for (MissionType missionType : MissionType.values()) {
-            FileConfiguration customConfig = instance.getCustomConfig().getMissionConfig(missionType);
             List<MissionJson> customList = parse(missionType, instance);
             all.addAll(customList);
         }

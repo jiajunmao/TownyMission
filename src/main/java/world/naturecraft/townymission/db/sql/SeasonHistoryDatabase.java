@@ -60,24 +60,34 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
         return list;
     }
 
-    @Override
-    public void add(SeasonHistoryEntry entry) {
+    /**
+     * Add.
+     *
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
+    public void add(int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
-                    entry.getSeason() + "', '" +
-                    entry.getStartTime() + "', '" +
-                    entry.getRankJson() + "');";
+                    season + "', '" +
+                    startedTime + "', '" +
+                    rankJson + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
         });
     }
 
-    @Override
-    public void remove(SeasonHistoryEntry entry) {
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
+    public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + entry.getId() + "');";
+                    "id='" + id + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -87,16 +97,18 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
     /**
      * Update.
      *
-     * @param entry the entry
+     * @param id          the id
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
      */
-    @Override
-    public void update(SeasonHistoryEntry entry) {
+    public void update(int id, int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET season='" + entry.getSeason() +
-                    "', started_time='" + entry.getStartTime() +
-                    "', rank_json='" + entry.getRankJson() +
-                    "' WHERE id='" + entry.getId() + "';";
+                    " SET season='" + season +
+                    "', started_time='" + startedTime +
+                    "', rank_json='" + rankJson +
+                    "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

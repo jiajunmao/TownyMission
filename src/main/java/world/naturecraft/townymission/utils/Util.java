@@ -118,7 +118,7 @@ public class Util {
         }
 
         for (TaskEntry e : list) {
-            MissionType type = MissionType.valueOf(e.getTaskType().toUpperCase(Locale.ROOT));
+            MissionType type = e.getMissionType();
             map.get(type).add(e);
         }
 

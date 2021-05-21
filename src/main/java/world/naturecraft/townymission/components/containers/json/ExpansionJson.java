@@ -11,11 +11,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.beans.ConstructorProperties;
+import java.util.Map;
 
 /**
  * The type Expansion.
  */
-public class Expansion extends MissionJson {
+public class ExpansionJson extends MissionJson {
 
     @JsonProperty("world")
     private final String world;
@@ -23,27 +24,28 @@ public class Expansion extends MissionJson {
     /**
      * Instantiates a new Expansion.
      *
-     * @param world     the world
-     * @param amount    the amount
-     * @param completed the completed
-     * @param hrAllowed the hr allowed
-     * @param reward    the reward
+     * @param world         the world
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
-    @ConstructorProperties({"world", "amount", "completed", "hrAllowed", "reward"})
-    public Expansion(String world, int amount, int completed, int hrAllowed, int reward) {
-        super(MissionType.EXPANSION, amount, completed, hrAllowed, reward);
+    @ConstructorProperties({"world", "amount", "completed", "hrAllowed", "reward", "contributions"})
+    public ExpansionJson(String world, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+        super(MissionType.EXPANSION, amount, completed, hrAllowed, reward, contributions);
         this.world = world;
     }
 
     /**
-     * Parse expansion.
+     * Parse expansion json.
      *
      * @param json the json
-     * @return the expansion
+     * @return the expansion json
      * @throws JsonProcessingException the json processing exception
      */
-    public static Expansion parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, Expansion.class);
+    public static ExpansionJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, ExpansionJson.class);
     }
 
     /**
