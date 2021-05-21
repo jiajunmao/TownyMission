@@ -53,10 +53,10 @@ public class TownyMissionDeposit extends TownyMissionCommand {
             boolean sane = sanityCheck(player, args);
 
             if (sane) {
-                TaskEntry resourceEntry = taskDao.getTownTasks(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                TaskEntry resourceEntry = taskDao.getTownTask(TownyUtil.residentOf(player), MissionType.RESOURCE);
                 ResourceJson resourceJson;
                 try {
-                    resourceJson = ResourceJson.parse(resourceEntry.getTaskJson());
+                    resourceJson = (ResourceJson) resourceEntry.getMissionJson();
 
                     if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                         int total = 0;
@@ -74,7 +74,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
                         player.setItemInHand(null);
                     }
-                    resourceEntry.setTaskJson(resourceJson);
+                    resourceEntry.setMissionJson(resourceJson);
                     taskDao.update(resourceEntry);
 
                 } catch (JsonProcessingException exception) {
@@ -99,18 +99,13 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownTasks(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    TaskEntry resourceEntry = taskDao.getTownTask(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     return resourceEntry != null;
                 })
                 .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownTasks(TownyUtil.residentOf(player), MissionType.RESOURCE);
-                    try {
-                        ResourceJson resourceJson = ResourceJson.parse(resourceEntry.getTaskJson());
-                        return player.getItemInHand().getType().equals(resourceJson.getType());
-                    } catch (JsonProcessingException exception) {
-                        exception.printStackTrace();
-                        return false;
-                    }
+                    TaskEntry resourceEntry = taskDao.getTownTask(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    ResourceJson resourceJson = (ResourceJson) resourceEntry.getMissionJson();
+                    return player.getItemInHand().getType().equals(resourceJson.getType());
                 })
                 .customCheck(() -> {
                     if (args.length == 1)

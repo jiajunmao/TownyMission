@@ -1,11 +1,12 @@
 package world.naturecraft.townymission.components.containers.sql;
 
+import world.naturecraft.townymission.components.enums.DbType;
+
 /**
  * The type Task history entry.
  */
-public class TaskHistoryEntry {
+public class TaskHistoryEntry extends SqlEntry {
 
-    private int id;
     private String taskType;
     private long addedTime;
     private long startedTime;
@@ -32,7 +33,7 @@ public class TaskHistoryEntry {
      * @param season        the season
      */
     public TaskHistoryEntry(int id, String taskType, long addedTime, long startedTime, long allowedTime, String taskJson, String town, String startedPlayer, long completedTime, int sprint, int season) {
-        this.id = id;
+        super(id, DbType.TASK_HISTORY);
         this.taskType = taskType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;
@@ -43,24 +44,6 @@ public class TaskHistoryEntry {
         this.completedTime = completedTime;
         this.sprint = sprint;
         this.season = season;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

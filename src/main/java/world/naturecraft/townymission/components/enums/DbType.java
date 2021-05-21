@@ -5,10 +5,6 @@ package world.naturecraft.townymission.components.enums;
  */
 public enum DbType {
     /**
-     * Player db type.
-     */
-    PLAYER,
-    /**
      * Season db type.
      */
     SEASON,

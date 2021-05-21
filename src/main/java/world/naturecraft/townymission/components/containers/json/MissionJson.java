@@ -6,6 +6,7 @@ package world.naturecraft.townymission.components.containers.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -50,15 +51,6 @@ public abstract class MissionJson {
             this.contributions = new HashMap<>();
         } else {
             this.contributions = contributions;
-        }
-    }
-
-    public String toString() {
-        try {
-            return toJson();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -151,5 +143,9 @@ public abstract class MissionJson {
 
     public void removeContributions(String playerUUID) {
         contributions.remove(playerUUID);
+    }
+
+    public static MissionJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, MissionJson.class);
     }
 }

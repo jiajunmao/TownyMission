@@ -57,13 +57,13 @@ public class TownyMissionStart extends TownyMissionCommand {
 
                 TaskEntry entry = taskEntries.get(missionIdx - 1);
                 entry.setStartedTime(Util.currentTime());
-                entry.setStartedPlayer(player.getUniqueId().toString());
-                taskDao.update(entry);
+                entry.setStartedPlayer(player);
 
                 try {
-                    Util.sendMsg(sender, "&f You have started " + entry.getTaskType() + " " + entry.getDisplayLine());
+                    taskDao.update(entry);
+                    Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
                 } catch (JsonProcessingException e) {
-                    logger.severe("Error while parsing Json " + entry.getTaskJson());
+                    logger.severe("Error while parsing Json " + entry.getMissionJson());
                     e.printStackTrace();
                     // I want to want to write a comment
                 }

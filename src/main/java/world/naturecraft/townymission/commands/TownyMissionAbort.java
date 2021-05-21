@@ -60,7 +60,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
             if ((town = TownyUtil.residentOf(player)) != null) {
                 TaskEntry entry;
                 if ((entry = taskDao.getStartedMission(town)) != null) {
-                    if (entry.getStartedPlayer().equalsIgnoreCase(player.getUniqueId().toString()) || TownyUtil.mayorOf(player) != null) {
+                    if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
                         return true;
                     } else {
                         Util.sendMsg(player, "&c You either need to be the mayor or started the mission yourself to abort!");

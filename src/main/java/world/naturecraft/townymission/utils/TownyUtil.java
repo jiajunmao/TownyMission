@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.utils;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 
@@ -42,5 +43,13 @@ public class TownyUtil {
         }
 
         return null;
+    }
+
+    public static Town getTownByName(String townName) {
+        try {
+            return TownyAPI.getInstance().getDataSource().getTown(townName);
+        } catch (NotRegisteredException exception) {
+            return null;
+        }
     }
 }

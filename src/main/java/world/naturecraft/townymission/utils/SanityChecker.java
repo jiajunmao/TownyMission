@@ -89,7 +89,7 @@ public class SanityChecker {
         if (checkIsMissionType) {
             if (!checkHasStarted)
                 return false;
-            if (!taskDao.getStartedMission(TownyUtil.residentOf(player)).getTaskType().equalsIgnoreCase(missionType.name()))
+            if (!taskDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType))
                 return false;
         }
 

@@ -36,13 +36,6 @@ public class ExpansionJson extends MissionJson {
         this.world = world;
     }
 
-    /**
-     * Parse expansion.
-     *
-     * @param json the json
-     * @return the expansion
-     * @throws JsonProcessingException the json processing exception
-     */
     public static ExpansionJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, ExpansionJson.class);
     }

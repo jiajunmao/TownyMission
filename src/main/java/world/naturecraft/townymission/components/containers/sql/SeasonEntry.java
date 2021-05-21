@@ -1,10 +1,11 @@
 package world.naturecraft.townymission.components.containers.sql;
 
+import world.naturecraft.townymission.components.enums.DbType;
+
 /**
  * The type Season entry.
  */
-public class SeasonEntry {
-    private int id;
+public class SeasonEntry extends SqlEntry {
     private String townID;
     private String townName;
     private int seasonPoint;
@@ -20,29 +21,11 @@ public class SeasonEntry {
      * @param season      the season
      */
     public SeasonEntry(int id, String townID, String townName, int seasonPoint, int season) {
-        this.id = id;
+        super(id, DbType.SEASON);
         this.townID = townID;
         this.townName = townName;
         this.seasonPoint = seasonPoint;
         this.season = season;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

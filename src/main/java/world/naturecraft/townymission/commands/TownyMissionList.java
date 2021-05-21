@@ -89,12 +89,12 @@ public class TownyMissionList extends TownyMissionCommand {
                         for (TaskEntry e : taskDao.getTownTasks(town)) {
                             try {
                                 if (e.getStartedTime() != 0) {
-                                    builder.add("&3" + index + ". Type&f: " + e.getTaskType() + " " + e.getDisplayLine());
+                                    builder.add("&3" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
                                 } else {
-                                    builder.add("&e" + index + ". Type&f: " + e.getTaskType() + " " + e.getDisplayLine());
+                                    builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
                                 }
                             } catch (JsonProcessingException exp) {
-                                logger.severe("Json parsing error when parsing " + e.getTaskJson());
+                                logger.severe("Json parsing error when parsing " + e.getMissionJson());
                                 exp.printStackTrace();
                             }
                             index++;

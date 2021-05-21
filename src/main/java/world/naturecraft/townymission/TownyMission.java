@@ -8,7 +8,7 @@ import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.db.sql.*;
-import world.naturecraft.townymission.listeners.*;
+import world.naturecraft.townymission.listeners.external.*;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -68,7 +68,6 @@ public class TownyMission extends JavaPlugin {
      * Register databases.
      */
     public void registerDatabases() {
-        dbList.put(DbType.PLAYER, new PlayerDatabase(this, db, Util.getDbName(DbType.PLAYER)));
         dbList.put(DbType.TASK, new TaskDatabase(this, db, Util.getDbName(DbType.TASK)));
         dbList.put(DbType.TASK_HISTORY, new TaskHistoryDatabase(this, db, Util.getDbName(DbType.TASK_HISTORY)));
         dbList.put(DbType.SPRINT, new SprintDatabase(this, db, Util.getDbName(DbType.SPRINT)));
@@ -95,11 +94,8 @@ public class TownyMission extends JavaPlugin {
      * Register listeners.
      */
     public void registerListeners() {
-        getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
-        getServer().getPluginManager().registerEvents(new VoteListener(this), this);
-        getServer().getPluginManager().registerEvents(new MobListener(this), this);
+        getServer().getPluginManager().registerEvents(new MissionListener(this), this);
         getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
-        getServer().getPluginManager().registerEvents(new ExpansionListener(this), this);
     }
 
     /**
