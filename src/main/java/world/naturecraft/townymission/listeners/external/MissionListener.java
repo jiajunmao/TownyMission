@@ -88,7 +88,7 @@ public class MissionListener extends TownyMissionListener {
             .isMissionType(MissionType.EXPANSION)
             .customCheck(() -> {
                 try {
-                    TaskEntry entry = taskDao.getTownTask(e.getTownBlock().getTown(), MissionType.EXPANSION);
+                    TaskEntry entry = taskDao.getTownStartedMission(e.getTownBlock().getTown(), MissionType.EXPANSION);
                     return entry.getTown().equals(e.getTownBlock().getTown());
                 } catch (NotRegisteredException notRegisteredException) {
                     return false;
@@ -116,7 +116,7 @@ public class MissionListener extends TownyMissionListener {
                     .hasStarted()
                     .isMissionType(MissionType.MOB)
                     .customCheck(() -> {
-                        TaskEntry taskEntry = taskDao.getTownTask(TownyUtil.residentOf(killer), MissionType.MOB);
+                        TaskEntry taskEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(killer), MissionType.MOB);
                         MobJson mobJson = (MobJson) taskEntry.getMissionJson();
                         return mobJson.getEntityType().equals(dead.getType());
                     });
@@ -139,7 +139,7 @@ public class MissionListener extends TownyMissionListener {
             public void run() {
                 if (sanityChecker.check()) {
                     Town town = TownyUtil.residentOf(player);
-                    TaskEntry taskEntry = taskDao.getTownTask(town, missionType);
+                    TaskEntry taskEntry = taskDao.getTownStartedMission(town, missionType);
                     MissionJson json = taskEntry.getMissionJson();
                     json.setCompleted(json.getCompleted() + amount);
                     try {

@@ -12,6 +12,7 @@ import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.TownyUtil;
 
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * The type Task entry.
@@ -61,8 +62,8 @@ public class TaskEntry extends SqlEntry {
      * @param startedPlayerName the started player name
      * @throws JsonProcessingException the json processing exception
      */
-    public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerName) throws JsonProcessingException {
-        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), startedPlayerName == null ? null : Bukkit.getPlayer(startedPlayerName));
+    public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
+        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), startedPlayerUUID.equals("null") ? null : Bukkit.getPlayer(UUID.fromString(startedPlayerUUID)));
 
         //TODO: replace with polymorphism
         switch (missionType) {

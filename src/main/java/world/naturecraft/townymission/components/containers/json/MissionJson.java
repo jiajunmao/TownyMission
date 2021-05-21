@@ -109,6 +109,10 @@ public abstract class MissionJson {
         this.completed = completed;
     }
 
+    public void addCompleted(int amount) {
+        this.completed += amount;
+    }
+
     /**
      * Gets mission type.
      *

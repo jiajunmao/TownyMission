@@ -70,35 +70,16 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param missionType the mission type
      * @return the town tasks
      */
-    public TaskEntry getTownTask(Town town, MissionType missionType) {
+    public TaskEntry getTownStartedMission(Town town, MissionType missionType) {
         List<TaskEntry> list = getTownTasks(town);
 
         for (TaskEntry e : list) {
-            if (e.getMissionType().equals(missionType)) {
+            if (e.getMissionType().equals(missionType) && e.getStartedTime() != 0) {
                 return e;
             }
         }
 
         return null;
-    }
-
-    /**
-     * Has started mission boolean.
-     *
-     * @param town the town
-     * @return the boolean
-     */
-    @Deprecated
-    public boolean hasStartedMission(Town town) {
-        for (TaskEntry e : db.getEntries()) {
-            if (e.getTown().equals(town)) {
-                if (e.getStartedTime() != 0) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -126,7 +107,7 @@ public class TaskDao extends Dao<TaskEntry> {
      * @throws JsonProcessingException the json processing exception
      */
     public void add(TaskEntry entry) throws JsonProcessingException {
-        db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
+        db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer() == null ? null : entry.getStartedPlayer().getUniqueId().toString());
     }
 
     /**
@@ -145,6 +126,13 @@ public class TaskDao extends Dao<TaskEntry> {
      * @throws JsonProcessingException the json processing exception
      */
     public void update(TaskEntry entry) throws JsonProcessingException {
+        System.out.println(entry.getId());
+        System.out.println(entry.getMissionType().name());
+        System.out.println(entry.getAddedTime());
+        System.out.println(entry.getStartedTime());
+        System.out.println(entry.getAllowedTime());
+        System.out.println(entry.getMissionJson().toJson());
+        System.out.println(entry.getStartedPlayer().getUniqueId().toString());
         db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
     }
 }

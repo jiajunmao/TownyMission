@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
@@ -42,16 +43,24 @@ public class TownyMissionAbort extends TownyMissionCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (sanityCheck(player)) {
-                Town town = TownyUtil.residentOf(player);
-                List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                for (TaskEntry e : taskEntries) {
-                    if (e.getStartedTime() != 0) {
-                        taskDao.remove(e);
-                        Util.sendMsg(sender, "&c The mission has been aborted");
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (sanityCheck(player)) {
+                        Town town = TownyUtil.residentOf(player);
+                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
+                        for (TaskEntry e : taskEntries) {
+                            if (e.getStartedTime() != 0) {
+                                taskDao.remove(e);
+                                Util.sendMsg(sender, "&c The mission has been aborted");
+                            }
+                        }
                     }
                 }
-            }
+            };
+
+            r.runTaskAsynchronously(instance);
         }
 
         return true;

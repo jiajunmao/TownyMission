@@ -9,6 +9,7 @@ import world.naturecraft.townymission.db.sql.TaskDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The type Sanity checker.
@@ -112,32 +113,45 @@ public class SanityChecker {
      */
     public boolean check() {
 
+        System.out.println("Starting sanity check");
         if (checkHasTown) {
-            if (TownyUtil.residentOf(player) == null)
-                return false;
-        }
-
-        if (checkIsMayor) {
-            if (!checkHasTown)
-                return false;
-            if (TownyUtil.mayorOf(player) == null) {
+            if (TownyUtil.residentOf(player) == null) {
+                Util.sendMsg(player, "&cYou do not belong to a town!");
                 return false;
             }
         }
 
+        System.out.println("Passed checkHasTown");
+        if (checkIsMayor) {
+            if (!checkHasTown)
+                return false;
+            if (TownyUtil.mayorOf(player) == null) {
+                Util.sendMsg(player, "&cYou are not the mayor!");
+                return false;
+            }
+        }
+
+        System.out.println("Passed checkIsMayor");
+
         if (checkHasStarted) {
             if (!checkHasTown)
                 return false;
-            if (taskDao.getStartedMission(TownyUtil.residentOf(player)) == null)
+            if (taskDao.getStartedMission(TownyUtil.residentOf(player)) == null) {
+                Util.sendMsg(player, "&cYour town does not have a started mission!");
                 return false;
+            }
         }
+        System.out.println("Passed checkHasStarted");
 
         if (checkIsMissionType) {
             if (!checkHasStarted)
                 return false;
-            if (!taskDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType))
+            if (!taskDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType)) {
+                Util.sendMsg(player, "&cYour town's started mission type is not " + missionType.name().toLowerCase(Locale.ROOT));
                 return false;
+            }
         }
+        System.out.println("Passed checkIsMissionType");
 
         if (customChecks.size() != 0) {
             for (BooleanChecker checker : customChecks) {
@@ -145,6 +159,7 @@ public class SanityChecker {
                     return false;
             }
         }
+        System.out.println("Passed customChecks");
 
         return true;
     }

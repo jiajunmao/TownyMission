@@ -5,13 +5,16 @@
 package world.naturecraft.townymission.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.components.containers.json.ResourceJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -21,6 +24,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The type Towny mission deposit.
@@ -53,44 +57,58 @@ public class TownyMissionDeposit extends TownyMissionCommand {
         // /tms deposit all
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            boolean sane = sanityCheck(player, args);
 
-            if (sane) {
-                TaskEntry resourceEntry = taskDao.getTownTask(TownyUtil.residentOf(player), MissionType.RESOURCE);
-                ResourceJson resourceJson;
-                try {
-                    resourceJson = (ResourceJson) resourceEntry.getMissionJson();
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    boolean sane = sanityCheck(player, args);
 
-                    if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
-                        int total = 0;
-                        int index = 0;
-                        for (ItemStack itemStack : player.getInventory().getContents()) {
-                            if (itemStack != null && itemStack.getType().equals(resourceJson.getType())) {
-                                total += itemStack.getAmount();
-                                player.getInventory().setItem(index, null);
+                    if (sane) {
+                        TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                        ResourceJson resourceJson;
+
+                        resourceJson = (ResourceJson) resourceEntry.getMissionJson();
+
+                        if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
+                            int total = 0;
+                            int index = 0;
+                            for (ItemStack itemStack : player.getInventory().getContents()) {
+                                if (itemStack != null && itemStack.getType().equals(resourceJson.getType())) {
+                                    total += itemStack.getAmount();
+                                    player.getInventory().setItem(index, null);
+                                }
+                                index++;
                             }
-                            index++;
+
+                            resourceJson.addContribution(player.getUniqueId().toString(), total);
+                            resourceJson.addCompleted(total);
+                        } else {
+                            resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
+                            resourceJson.addCompleted(player.getItemInHand().getAmount());
+                            player.setItemInHand(null);
                         }
 
-                        resourceJson.addContribution(player.getUniqueId().toString(), total);
+                        try {
+                            resourceEntry.setMissionJson(resourceJson);
+
+                            DoMissionEvent missionEvent = new DoMissionEvent(player, resourceEntry);
+                            Bukkit.getPluginManager().callEvent(missionEvent);
+
+                            if (!missionEvent.isCanceled()) {
+                                taskDao.update(resourceEntry);
+                            }
+                        } catch (JsonProcessingException exception) {
+                            exception.printStackTrace();
+                            Util.sendMsg(player, "Something went wrong during depositing");
+                        }
                     } else {
-                        resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
-                        player.setItemInHand(null);
+                        Util.sendMsg(player, "Something went wrong during depositing");
+                        logger.severe("TownyMission deposit failed sanity check");
                     }
-                    resourceEntry.setMissionJson(resourceJson);
-                    taskDao.update(resourceEntry);
-
-                } catch (JsonProcessingException exception) {
-                    exception.printStackTrace();
-                    Util.sendMsg(player, "Something went wrong during depositing");
-                    return false;
                 }
+            };
 
-                return true;
-            } else {
-                Util.sendMsg(player, "Something went wrong during depositing");
-                logger.severe("TownyMission deposit failed sanity check");
-            }
+            r.runTaskAsynchronously(instance);
         }
         return true;
     }
@@ -109,18 +127,31 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownTask(TownyUtil.residentOf(player), MissionType.RESOURCE);
-                    return resourceEntry != null;
-                })
-                .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownTask(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     ResourceJson resourceJson = (ResourceJson) resourceEntry.getMissionJson();
-                    return player.getItemInHand().getType().equals(resourceJson.getType());
+                    if (player.getItemInHand().getType().equals(resourceJson.getType())) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, "&cThe item you are holding does not match the mission's resource type!");
+                        Util.sendMsg(player, "&cRequired type: " + resourceJson.getType().name().toLowerCase(Locale.ROOT));
+                        Util.sendMsg(player, "&cIn-hand type: " + player.getItemInHand().getType().name().toLowerCase(Locale.ROOT));
+                        try {
+                            System.out.println(resourceJson.toJson());
+                        } catch (JsonProcessingException exception) {
+                            exception.printStackTrace();
+                        }
+                        return false;
+                    }
                 })
                 .customCheck(() -> {
                     if (args.length == 1)
                         return true;
-                    return args.length == 2 && args[1].equalsIgnoreCase("all");
+                    if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, "&cCommand format error!");
+                        return false;
+                    }
                 }).check();
     }
 

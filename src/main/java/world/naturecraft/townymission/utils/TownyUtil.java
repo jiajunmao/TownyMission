@@ -42,6 +42,7 @@ public class TownyUtil {
             }
         }
 
+        System.out.println("Player " + player.getDisplayName() + " not found");
         return null;
     }
 
