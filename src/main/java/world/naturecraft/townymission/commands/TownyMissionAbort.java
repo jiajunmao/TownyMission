@@ -13,6 +13,9 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
 
+/**
+ * The type Towny mission abort.
+ */
 public class TownyMissionAbort extends TownyMissionCommand {
     /**
      * Instantiates a new Towny mission command.
@@ -54,6 +57,12 @@ public class TownyMissionAbort extends TownyMissionCommand {
         return true;
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public boolean sanityCheck(Player player) {
         if (player.hasPermission("townymission.player")) {
             Town town;

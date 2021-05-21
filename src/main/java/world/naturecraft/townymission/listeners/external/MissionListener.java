@@ -25,6 +25,9 @@ import world.naturecraft.townymission.listeners.TownyMissionListener;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
+/**
+ * The type Mission listener.
+ */
 public class MissionListener extends TownyMissionListener {
 
     /**
@@ -36,6 +39,11 @@ public class MissionListener extends TownyMissionListener {
         super(instance);
     }
 
+    /**
+     * On vote received.
+     *
+     * @param e the e
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVoteReceived(VoteRewardEvent e) {
         Player player = e.getPlayer();
@@ -48,6 +56,11 @@ public class MissionListener extends TownyMissionListener {
         doLogic(sanityChecker, MissionType.VOTE, player, e.getUnclaimedCount());
     }
 
+    /**
+     * On money receive.
+     *
+     * @param event the event
+     */
     @EventHandler
     public void onMoneyReceive(CMIUserBalanceChangeEvent event) {
         Player player = event.getUser().getPlayer();
@@ -62,6 +75,11 @@ public class MissionListener extends TownyMissionListener {
         doLogic(checker, MissionType.MONEY, event.getUser().getPlayer(), (int) (event.getTo() - event.getFrom()));
     }
 
+    /**
+     * On town expansion.
+     *
+     * @param e the e
+     */
     @EventHandler
     public void onTownExpansion(TownClaimEvent e) {
         SanityChecker checker = new SanityChecker(instance).target(e.getResident().getPlayer())
@@ -81,6 +99,11 @@ public class MissionListener extends TownyMissionListener {
         doLogic(checker, MissionType.EXPANSION, e.getResident().getPlayer(), 1);
     }
 
+    /**
+     * On mob kill.
+     *
+     * @param e the e
+     */
     @EventHandler
     public void onMobKill(EntityDeathEvent e) {
         LivingEntity dead = e.getEntity();
@@ -102,6 +125,14 @@ public class MissionListener extends TownyMissionListener {
         }
     }
 
+    /**
+     * Do logic.
+     *
+     * @param sanityChecker the sanity checker
+     * @param missionType   the mission type
+     * @param player        the player
+     * @param amount        the amount
+     */
     public void doLogic(SanityChecker sanityChecker, MissionType missionType, Player player, int amount) {
         BukkitRunnable r = new BukkitRunnable() {
             @Override

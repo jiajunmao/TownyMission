@@ -23,12 +23,13 @@ public class ResourceJson extends MissionJson {
     /**
      * Instantiates a new Resource.
      *
-     * @param isMi      the is mi
-     * @param type      the type
-     * @param amount    the amount
-     * @param completed the completed
-     * @param hrAllowed the hr allowed
-     * @param reward    the reward
+     * @param isMi          the is mi
+     * @param type          the type
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
     @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "contributions"})
     public ResourceJson(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {

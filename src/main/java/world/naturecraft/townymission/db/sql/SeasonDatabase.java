@@ -61,6 +61,14 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         return list;
     }
 
+    /**
+     * Add.
+     *
+     * @param townUUID    the town uuid
+     * @param townName    the town name
+     * @param seasonPoint the season point
+     * @param season      the season
+     */
     public void add(String townUUID, String townName, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
@@ -74,6 +82,11 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -84,6 +97,15 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         });
     }
 
+    /**
+     * Update.
+     *
+     * @param id          the id
+     * @param townUUID    the town uuid
+     * @param townName    the town name
+     * @param seasonPoint the season point
+     * @param season      the season
+     */
     public void update(int id, String townUUID, String townName, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +

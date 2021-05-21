@@ -60,6 +60,13 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
         return list;
     }
 
+    /**
+     * Add.
+     *
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void add(int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
@@ -72,6 +79,11 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -82,6 +94,14 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
         });
     }
 
+    /**
+     * Update.
+     *
+     * @param id          the id
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void update(int id, int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +

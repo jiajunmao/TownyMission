@@ -28,13 +28,14 @@ public class TaskEntry extends SqlEntry {
     /**
      * Instantiates a new Task entry.
      *
-     * @param id          the id
-     * @param missionType    the task type
-     * @param addedTime   the time the task is added
-     * @param startedTime the started time
-     * @param allowedTime the allowed time
-     * @param missionJson    the task json
-     * @param town        the town
+     * @param id            the id
+     * @param missionType   the task type
+     * @param addedTime     the time the task is added
+     * @param startedTime   the started time
+     * @param allowedTime   the allowed time
+     * @param missionJson   the task json
+     * @param town          the town
+     * @param startedPlayer the started player
      */
     public TaskEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, Town town, Player startedPlayer) {
         super(id, DbType.TASK);
@@ -47,6 +48,19 @@ public class TaskEntry extends SqlEntry {
         this.startedPlayer = startedPlayer;
     }
 
+    /**
+     * Instantiates a new Task entry.
+     *
+     * @param id                the id
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townName          the town name
+     * @param startedPlayerName the started player name
+     * @throws JsonProcessingException the json processing exception
+     */
     public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerName) throws JsonProcessingException {
         this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), startedPlayerName == null ? null : Bukkit.getPlayer(startedPlayerName));
 
@@ -115,6 +129,12 @@ public class TaskEntry extends SqlEntry {
         return missionJson;
     }
 
+    /**
+     * Sets mission json.
+     *
+     * @param json the json
+     * @throws JsonProcessingException the json processing exception
+     */
     public void setMissionJson(MissionJson json) throws JsonProcessingException {
         this.missionJson = json;
     }
@@ -132,6 +152,7 @@ public class TaskEntry extends SqlEntry {
      * Gets display line.
      *
      * @return the display line
+     * @throws JsonProcessingException the json processing exception
      */
     public String getDisplayLine() throws JsonProcessingException {
         return missionJson.getDisplayLine();
@@ -146,10 +167,20 @@ public class TaskEntry extends SqlEntry {
         return allowedTime;
     }
 
+    /**
+     * Gets started player.
+     *
+     * @return the started player
+     */
     public Player getStartedPlayer() {
         return startedPlayer;
     }
 
+    /**
+     * Sets started player.
+     *
+     * @param startedPlayer the started player
+     */
     public void setStartedPlayer(Player startedPlayer) {
         this.startedPlayer = startedPlayer;
     }

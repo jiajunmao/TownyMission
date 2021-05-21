@@ -45,6 +45,12 @@ public class TownyUtil {
         return null;
     }
 
+    /**
+     * Gets town by name.
+     *
+     * @param townName the town name
+     * @return the town by name
+     */
     public static Town getTownByName(String townName) {
         try {
             return TownyAPI.getInstance().getDataSource().getTown(townName);

@@ -25,6 +25,11 @@ public class TownFallListener extends TownyMissionListener {
         super(instance);
     }
 
+    /**
+     * On town fall.
+     *
+     * @param e the e
+     */
     @EventHandler
     public void onTownFall(TownRuinedEvent e) {
         Town town = e.getTown();

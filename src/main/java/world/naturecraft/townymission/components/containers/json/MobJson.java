@@ -21,11 +21,12 @@ public class MobJson extends MissionJson {
     /**
      * Instantiates a new Mob.
      *
-     * @param entityType the entity type
-     * @param amount     the amount
-     * @param completed  the completed
-     * @param hrAllowed  the hr allowed
-     * @param reward     the reward
+     * @param entityType    the entity type
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
     @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward", "contributions"})
     public MobJson(EntityType entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {

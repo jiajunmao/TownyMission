@@ -16,10 +16,11 @@ public class MoneyJson extends MissionJson {
     /**
      * Instantiates a new Money.
      *
-     * @param amount    the amount
-     * @param completed the completed
-     * @param hrAllowed the hr allowed
-     * @param reward    the reward
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
     @ConstructorProperties({"amount", "completed", "hrAllowed", "reward", "contributions"})
     public MoneyJson(int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {

@@ -101,6 +101,12 @@ public class TaskDao extends Dao<TaskEntry> {
         return false;
     }
 
+    /**
+     * Gets started mission.
+     *
+     * @param town the town
+     * @return the started mission
+     */
     public TaskEntry getStartedMission(Town town) {
         for (TaskEntry e : db.getEntries()) {
             if (e.getTown().equals(town)) {
@@ -117,6 +123,7 @@ public class TaskDao extends Dao<TaskEntry> {
      * Add.
      *
      * @param entry the entry
+     * @throws JsonProcessingException the json processing exception
      */
     public void add(TaskEntry entry) throws JsonProcessingException {
         db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
@@ -135,6 +142,7 @@ public class TaskDao extends Dao<TaskEntry> {
      * Update.
      *
      * @param entry the entry
+     * @throws JsonProcessingException the json processing exception
      */
     public void update(TaskEntry entry) throws JsonProcessingException {
         db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());

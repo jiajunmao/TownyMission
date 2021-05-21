@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 
+/**
+ * The type Do mission event.
+ */
 public class DoMissionEvent extends Event implements Cancellable {
 
     private boolean isCanceled;
@@ -20,6 +23,12 @@ public class DoMissionEvent extends Event implements Cancellable {
     private TaskEntry taskEntry;
     private static final HandlerList handlers = new HandlerList();
 
+    /**
+     * Instantiates a new Do mission event.
+     *
+     * @param player the player
+     * @param entry  the entry
+     */
     public DoMissionEvent(Player player, TaskEntry entry) {
         this.player = player;
         this.taskEntry = entry;
@@ -32,6 +41,11 @@ public class DoMissionEvent extends Event implements Cancellable {
         return handlers;
     }
 
+    /**
+     * Gets handler list.
+     *
+     * @return the handler list
+     */
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -58,14 +72,29 @@ public class DoMissionEvent extends Event implements Cancellable {
         this.isCanceled = cancel;
     }
 
+    /**
+     * Is canceled boolean.
+     *
+     * @return the boolean
+     */
     public boolean isCanceled() {
         return isCanceled;
     }
 
+    /**
+     * Gets player.
+     *
+     * @return the player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Gets task entry.
+     *
+     * @return the task entry
+     */
     public TaskEntry getTaskEntry() {
         return taskEntry;
     }

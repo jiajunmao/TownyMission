@@ -63,6 +63,15 @@ public class SprintDatabase extends Database<SprintEntry> {
         return list;
     }
 
+    /**
+     * Add.
+     *
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
+     */
     public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
@@ -77,6 +86,11 @@ public class SprintDatabase extends Database<SprintEntry> {
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -87,6 +101,16 @@ public class SprintDatabase extends Database<SprintEntry> {
         });
     }
 
+    /**
+     * Update.
+     *
+     * @param id           the id
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
+     */
     public void update(int id, String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +

@@ -62,6 +62,14 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
         return list;
     }
 
+    /**
+     * Add.
+     *
+     * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void add(int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
@@ -75,6 +83,11 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -85,6 +98,15 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
         });
     }
 
+    /**
+     * Update.
+     *
+     * @param id          the id
+     * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void update(int id, int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +

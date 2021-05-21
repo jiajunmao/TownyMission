@@ -27,6 +27,9 @@ public abstract class TownyMissionListener implements Listener {
      */
     protected TaskDao taskDao;
 
+    /**
+     * The Plugin manager.
+     */
     protected PluginManager pluginManager;
 
     /**
@@ -40,6 +43,11 @@ public abstract class TownyMissionListener implements Listener {
         pluginManager = Bukkit.getPluginManager();
     }
 
+    /**
+     * Run task asynchronously.
+     *
+     * @param r the r
+     */
     protected void runTaskAsynchronously(BukkitRunnable r) {
         r.runTaskAsynchronously(instance);
     }

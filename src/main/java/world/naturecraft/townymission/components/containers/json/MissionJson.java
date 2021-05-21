@@ -35,11 +35,12 @@ public abstract class MissionJson {
     /**
      * Instantiates a new Mission json.
      *
-     * @param missionType the mission type
-     * @param amount      the amount
-     * @param completed   the completed
-     * @param hrAllowed   the hr allowed
-     * @param reward      the reward
+     * @param missionType   the mission type
+     * @param amount        the amount
+     * @param completed     the completed
+     * @param hrAllowed     the hr allowed
+     * @param reward        the reward
+     * @param contributions the contributions
      */
     protected MissionJson(MissionType missionType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         this.missionType = missionType;
@@ -127,6 +128,12 @@ public abstract class MissionJson {
         return hrAllowed;
     }
 
+    /**
+     * Add contribution.
+     *
+     * @param playerUUID the player uuid
+     * @param amount     the amount
+     */
     public void addContribution(String playerUUID, int amount) {
         if (contributions.containsKey(playerUUID)) {
             contributions.put(playerUUID, contributions.get(playerUUID) + amount);
@@ -135,16 +142,34 @@ public abstract class MissionJson {
         }
     }
 
+    /**
+     * Remove contribution.
+     *
+     * @param playerUUID the player uuid
+     * @param amount     the amount
+     */
     public void removeContribution(String playerUUID, int amount) {
         if (contributions.containsKey(playerUUID)) {
             contributions.put(playerUUID, contributions.get(playerUUID) - amount);
         }
     }
 
+    /**
+     * Remove contributions.
+     *
+     * @param playerUUID the player uuid
+     */
     public void removeContributions(String playerUUID) {
         contributions.remove(playerUUID);
     }
 
+    /**
+     * Parse mission json.
+     *
+     * @param json the json
+     * @return the mission json
+     * @throws JsonProcessingException the json processing exception
+     */
     public static MissionJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, MissionJson.class);
     }

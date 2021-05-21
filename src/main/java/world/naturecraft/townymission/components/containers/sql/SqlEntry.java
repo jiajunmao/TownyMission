@@ -6,19 +6,38 @@ package world.naturecraft.townymission.components.containers.sql;
 
 import world.naturecraft.townymission.components.enums.DbType;
 
+/**
+ * The type Sql entry.
+ */
 public abstract class SqlEntry {
     private int id;
     private DbType type;
 
+    /**
+     * Instantiates a new Sql entry.
+     *
+     * @param id   the id
+     * @param type the type
+     */
     public SqlEntry(int id, DbType type) {
         this.id = id;
         this.type = type;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(int id) {
         this.id = id;
     }

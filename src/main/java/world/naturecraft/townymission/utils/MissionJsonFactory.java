@@ -7,7 +7,16 @@ package world.naturecraft.townymission.utils;
 import world.naturecraft.townymission.components.containers.json.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 
+/**
+ * The type Mission json factory.
+ */
 public class MissionJsonFactory {
+    /**
+     * To class class.
+     *
+     * @param type the type
+     * @return the class
+     */
     public static Class<? extends MissionJson> toClass(MissionType type) {
         switch (type.name()) {
             case "VOTE":

@@ -45,6 +45,7 @@ public abstract class Database<T> {
      * @return the entries
      */
     public abstract List<T> getEntries();
+
     /**
      * Execute t.
      *

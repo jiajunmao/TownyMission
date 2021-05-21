@@ -22,6 +22,9 @@ import world.naturecraft.townymission.utils.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Towny mission deposit.
+ */
 public class TownyMissionDeposit extends TownyMissionCommand {
     /**
      * Instantiates a new Towny mission command.
@@ -92,6 +95,13 @@ public class TownyMissionDeposit extends TownyMissionCommand {
         return true;
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param player the player
+     * @param args   the args
+     * @return the boolean
+     */
     public boolean sanityCheck(Player player, String[] args) {
         return new SanityChecker(instance)
                 .target(player)

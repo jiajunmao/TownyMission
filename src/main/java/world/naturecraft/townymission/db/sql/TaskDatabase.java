@@ -72,6 +72,17 @@ public class TaskDatabase extends Database<TaskEntry> {
         return list;
     }
 
+    /**
+     * Add.
+     *
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townName          the town name
+     * @param startedPlayerUUID the started player uuid
+     */
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
@@ -88,6 +99,11 @@ public class TaskDatabase extends Database<TaskEntry> {
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -101,7 +117,14 @@ public class TaskDatabase extends Database<TaskEntry> {
     /**
      * Update.
      *
-     * @param entry the entry
+     * @param id                the id
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townName          the town name
+     * @param startedPlayerUUID the started player uuid
      */
     public void update(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         execute(conn -> {

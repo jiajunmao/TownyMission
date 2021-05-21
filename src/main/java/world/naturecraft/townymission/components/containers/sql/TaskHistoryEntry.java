@@ -28,6 +28,7 @@ public class TaskHistoryEntry extends SqlEntry {
      * @param allowedTime   the allowed time
      * @param taskJson      the task json
      * @param town          the town
+     * @param startedPlayer the started player
      * @param completedTime the completed time
      * @param sprint        the sprint
      * @param season        the season
@@ -208,10 +209,20 @@ public class TaskHistoryEntry extends SqlEntry {
         this.addedTime = addedTime;
     }
 
+    /**
+     * Gets started player.
+     *
+     * @return the started player
+     */
     public String getStartedPlayer() {
         return startedPlayer;
     }
 
+    /**
+     * Sets started player.
+     *
+     * @param startedPlayer the started player
+     */
     public void setStartedPlayer(String startedPlayer) {
         this.startedPlayer = startedPlayer;
     }
