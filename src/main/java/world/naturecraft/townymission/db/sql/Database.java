@@ -45,28 +45,6 @@ public abstract class Database<T> {
      * @return the entries
      */
     public abstract List<T> getEntries();
-
-    /**
-     * Add.
-     *
-     * @param entry the entry
-     */
-    public abstract void add(T entry);
-
-    /**
-     * Remove.
-     *
-     * @param entry the entry
-     */
-    public abstract void remove(T entry);
-
-    /**
-     * Update.
-     *
-     * @param entry the entry
-     */
-    public abstract void update(T entry);
-
     /**
      * Execute t.
      *

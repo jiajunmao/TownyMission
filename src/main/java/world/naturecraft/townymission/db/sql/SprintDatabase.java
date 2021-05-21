@@ -63,47 +63,39 @@ public class SprintDatabase extends Database<SprintEntry> {
         return list;
     }
 
-    @Override
-    public void add(SprintEntry entry) {
+    public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
-                    entry.getTownID() + "', '" +
-                    entry.getTownName() + "', '" +
-                    entry.getNaturepoints() + "', '" +
-                    entry.getSprint() + "', '" +
-                    entry.getSeason() + "');";
+                    townUUID + "', '" +
+                    townName + "', '" +
+                    naturePoints + "', '" +
+                    sprint + "', '" +
+                    season + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
         });
     }
 
-    @Override
-    public void remove(SprintEntry entry) {
+    public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + entry.getId() + "');";
+                    "id='" + id + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
         });
     }
 
-    /**
-     * Update.
-     *
-     * @param entry the entry
-     */
-    @Override
-    public void update(SprintEntry entry) {
+    public void update(int id, String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET town_id='" + entry.getTownID() +
-                    "', town_name='" + entry.getTownName() +
-                    "', naturepoints='" + entry.getNaturepoints() +
-                    "', sprint='" + entry.getSprint() +
-                    "', season='" + entry.getSeason() +
-                    "' WHERE id='" + entry.getId() + "';";
+                    " SET town_id='" + townUUID +
+                    "', town_name='" + townName +
+                    "', naturepoints='" + naturePoints +
+                    "', sprint='" + sprint +
+                    "', season='" + season +
+                    "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

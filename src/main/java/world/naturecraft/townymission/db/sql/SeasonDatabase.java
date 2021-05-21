@@ -61,45 +61,37 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         return list;
     }
 
-    @Override
-    public void add(SeasonEntry entry) {
+    public void add(String townUUID, String townName, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
-                    entry.getTownID() + "', '" +
-                    entry.getTownName() + "', '" +
-                    entry.getSeasonPoint() + "', '" +
-                    entry.getSeason() + "');";
+                    townUUID + "', '" +
+                    townName + "', '" +
+                    seasonPoint + "', '" +
+                    season + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
         });
     }
 
-    @Override
-    public void remove(SeasonEntry entry) {
+    public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + entry.getId() + "');";
+                    "id='" + id + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
         });
     }
 
-    /**
-     * Update.
-     *
-     * @param entry the entry
-     */
-    @Override
-    public void update(SeasonEntry entry) {
+    public void update(int id, String townUUID, String townName, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET town_id='" + entry.getTownID() +
-                    "', town_name='" + entry.getTownName() +
-                    "', seasonpoints='" + entry.getSeasonPoint() +
-                    "', season='" + entry.getSeason() +
-                    "' WHERE id='" + entry.getId() + "';";
+                    " SET town_id='" + townUUID +
+                    "', town_name='" + townName +
+                    "', seasonpoints='" + seasonPoint +
+                    "', season='" + season +
+                    "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
