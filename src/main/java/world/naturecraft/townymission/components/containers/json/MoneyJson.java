@@ -34,7 +34,7 @@ public class MoneyJson extends MissionJson {
      * @return the money
      * @throws JsonProcessingException the json processing exception
      */
-    public static MoneyJson parse(String json) throws JsonProcessingException {
+    public static MissionJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, MoneyJson.class);
     }
 

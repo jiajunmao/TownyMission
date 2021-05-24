@@ -34,7 +34,7 @@ public class VoteJson extends MissionJson {
      * @return the vote
      * @throws JsonProcessingException the json processing exception
      */
-    public static VoteJson parse(String json) throws JsonProcessingException {
+    public static MissionJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, VoteJson.class);
     }
 

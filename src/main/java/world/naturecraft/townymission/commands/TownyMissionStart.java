@@ -91,7 +91,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                 } else if (Integer.parseInt(args[1]) <= 15 && Integer.parseInt(args[1]) >= 1) {
                     Town town;
                     if ((town = TownyUtil.residentOf(player)) != null) {
-                        if (taskDao.getStartedMission(town) != null) {
+                        if (taskDao.getStartedMission(town) == null) {
                             return true;
                         } else {
                             Util.sendMsg(sender, "&c Your town already has a started mission!");

@@ -44,7 +44,7 @@ public class ExpansionJson extends MissionJson {
      * @return the expansion json
      * @throws JsonProcessingException the json processing exception
      */
-    public static ExpansionJson parse(String json) throws JsonProcessingException {
+    public static MissionJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, ExpansionJson.class);
     }
 

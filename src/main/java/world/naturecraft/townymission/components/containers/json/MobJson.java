@@ -41,7 +41,7 @@ public class MobJson extends MissionJson {
      * @return the mob
      * @throws JsonProcessingException the json processing exception
      */
-    public static MobJson parse(String json) throws JsonProcessingException {
+    public static MissionJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, MobJson.class);
     }
 

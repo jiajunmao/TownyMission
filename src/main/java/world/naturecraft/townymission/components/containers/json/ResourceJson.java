@@ -45,7 +45,7 @@ public class ResourceJson extends MissionJson {
      * @return the resource
      * @throws JsonProcessingException the json processing exception
      */
-    public static ResourceJson parse(String json) throws JsonProcessingException {
+    public static MissionJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, ResourceJson.class);
     }
 

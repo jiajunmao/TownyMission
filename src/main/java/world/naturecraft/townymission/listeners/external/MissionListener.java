@@ -142,6 +142,7 @@ public class MissionListener extends TownyMissionListener {
                     TaskEntry taskEntry = taskDao.getTownStartedMission(town, missionType);
                     MissionJson json = taskEntry.getMissionJson();
                     json.setCompleted(json.getCompleted() + amount);
+                    json.addContribution(player.getUniqueId().toString(), amount);
                     try {
                         taskEntry.setMissionJson(json);
                     } catch (JsonProcessingException exception) {

@@ -63,26 +63,10 @@ public class TaskEntry extends SqlEntry {
      * @throws JsonProcessingException the json processing exception
      */
     public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
-        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), startedPlayerUUID.equals("null") ? null : Bukkit.getPlayer(UUID.fromString(startedPlayerUUID)));
+        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), (startedPlayerUUID == null || startedPlayerUUID.equals("null")) ? null : Bukkit.getPlayer(UUID.fromString(startedPlayerUUID)));
 
         //TODO: replace with polymorphism
-        switch (missionType) {
-            case "VOTE":
-                setMissionJson(VoteJson.parse(missionJson));
-                break;
-            case "MONEY":
-                setMissionJson(MoneyJson.parse(missionJson));
-                break;
-            case "MOB":
-                setMissionJson(MobJson.parse(missionJson));
-                break;
-            case "EXPANSION":
-                setMissionJson(ExpansionJson.parse(missionJson));
-                break;
-            case "RESOURCE":
-                setMissionJson(ResourceJson.parse(missionJson));
-                break;
-        }
+        this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
     }
 
     /**
