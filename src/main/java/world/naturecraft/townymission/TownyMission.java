@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
-import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
@@ -90,6 +89,7 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("start", new TownyMissionStart(this));
         rootCmd.registerCommand("abort", new TownyMissionAbort(this));
         rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
+        rootCmd.registerCommand("claim", new TownyMissionClaim(this));
     }
 
     /**

@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.listeners.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.util.concurrent.UncheckedTimeoutException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMission;

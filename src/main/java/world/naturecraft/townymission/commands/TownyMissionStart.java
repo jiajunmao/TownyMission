@@ -9,10 +9,12 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
@@ -49,25 +51,32 @@ public class TownyMissionStart extends TownyMissionCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         // /townymission start <number>
         if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (sanityCheck(sender, args)) {
-                Town town = TownyUtil.residentOf(player);
-                List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                int missionIdx = Integer.parseInt(args[1]);
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Player player = (Player) sender;
+                    if (sanityCheck(player, args)) {
+                        Town town = TownyUtil.residentOf(player);
+                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
+                        int missionIdx = Integer.parseInt(args[1]);
 
-                TaskEntry entry = taskEntries.get(missionIdx - 1);
-                entry.setStartedTime(Util.currentTime());
-                entry.setStartedPlayer(player);
+                        TaskEntry entry = taskEntries.get(missionIdx - 1);
+                        entry.setStartedTime(Util.currentTime());
+                        entry.setStartedPlayer(player);
 
-                try {
-                    taskDao.update(entry);
-                    Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
-                } catch (JsonProcessingException e) {
-                    logger.severe("Error while parsing Json " + entry.getMissionJson());
-                    e.printStackTrace();
-                    // I want to want to write a comment
+                        try {
+                            taskDao.update(entry);
+                            Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
+                        } catch (JsonProcessingException e) {
+                            logger.severe("Error while parsing Json " + entry.getMissionJson());
+                            e.printStackTrace();
+                            // I want to want to write a comment
+                        }
+                    }
                 }
-            }
+            };
+
+            r.runTaskAsynchronously(instance);
         }
 
         return true;
@@ -76,42 +85,30 @@ public class TownyMissionStart extends TownyMissionCommand {
     /**
      * Sanity check boolean.
      *
-     * @param sender the sender
+     * @param player the sender
      * @param args   the args
      * @return the boolean
      */
-    public boolean sanityCheck(@NotNull CommandSender sender, @NotNull String[] args) {
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tm start <num>
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (player.hasPermission("townymission.player")) {
-                if (args.length == 1) {
-                    Util.sendMsg(sender, "&c Command format error, mission number missing");
-                    return false;
-                } else if (Integer.parseInt(args[1]) <= 15 && Integer.parseInt(args[1]) >= 1) {
-                    Town town;
-                    if ((town = TownyUtil.residentOf(player)) != null) {
-                        if (taskDao.getStartedMission(town) == null) {
-                            return true;
-                        } else {
-                            Util.sendMsg(sender, "&c Your town already has a started mission!");
-                            return false;
-                        }
-                    } else {
-                        Util.sendMsg(sender, "&c You would have to be in a town to use TownyMission");
-                        return false;
-                    }
-                } else {
-                    Util.sendMsg(sender, "&c Command format error");
+        return new SanityChecker(instance).target(player)
+            .hasTown()
+            .hasPermission("townymission.player")
+            .customCheck(() -> {
+                if (args.length == 1 || (Integer.parseInt(args[1]) <= 15 && Integer.parseInt(args[1]) >= 1)) {
+                    Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
                     return false;
                 }
-            } else {
-                onNoPermission(sender);
-                return false;
-            }
-        } else {
-            return true;
-        }
+                return true;
+            }).customCheck(() -> {
+                Town town = TownyUtil.residentOf(player);
+                if (taskDao.getStartedMission(town) == null) {
+                    return true;
+                } else {
+                    Util.sendMsg(player, Util.getLangEntry("commands.start.onAlreadyStarted", instance));
+                    return false;
+                }
+            }).check();
     }
 
     /**

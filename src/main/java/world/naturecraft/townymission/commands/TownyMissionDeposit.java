@@ -99,10 +99,10 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             }
                         } catch (JsonProcessingException exception) {
                             exception.printStackTrace();
-                            Util.sendMsg(player, "Something went wrong during depositing");
+                            //Util.sendMsg(player, "Something went wrong during depositing");
                         }
                     } else {
-                        Util.sendMsg(player, "Something went wrong during depositing");
+                        //Util.sendMsg(player, "Something went wrong during depositing");
                         logger.severe("TownyMission deposit failed sanity check");
                     }
                 }
@@ -132,9 +132,9 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     if (player.getItemInHand().getType().equals(resourceJson.getType())) {
                         return true;
                     } else {
-                        Util.sendMsg(player, "&cThe item you are holding does not match the mission's resource type!");
-                        Util.sendMsg(player, "&cRequired type: " + resourceJson.getType().name().toLowerCase(Locale.ROOT));
-                        Util.sendMsg(player, "&cIn-hand type: " + player.getItemInHand().getType().name().toLowerCase(Locale.ROOT));
+                        Util.sendMsg(player, Util.getLangEntry("commands.deposit.onNotMatch", instance));
+                        Util.sendMsg(player, Util.getLangEntry("commands.deposit.requiredItem", instance).replace("%item%", resourceJson.getType().name().toLowerCase(Locale.ROOT)));
+                        Util.sendMsg(player, "&cIn-hand type: " + Util.getLangEntry("commands.deposit.inHandItem", instance).replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         try {
                             System.out.println(resourceJson.toJson());
                         } catch (JsonProcessingException exception) {
@@ -149,7 +149,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                         return true;
                     } else {
-                        Util.sendMsg(player, "&cCommand format error!");
+                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
                         return false;
                     }
                 }).check();

@@ -6,7 +6,9 @@ import org.bukkit.command.TabExecutor;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.dao.TaskDao;
+import world.naturecraft.townymission.dao.TaskHistoryDao;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
+import world.naturecraft.townymission.db.sql.TaskHistoryDatabase;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.logging.Logger;
@@ -30,6 +32,8 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
      */
     protected TaskDao taskDao;
 
+    protected TaskHistoryDao taskHistoryDao;
+
     /**
      * Instantiates a new Towny mission command.
      *
@@ -39,6 +43,7 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
         this.instance = instance;
         this.logger = instance.getLogger();
         this.taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
+        this.taskHistoryDao = new TaskHistoryDao((TaskHistoryDatabase) instance.getDb(DbType.TASK_HISTORY));
     }
 
     /**

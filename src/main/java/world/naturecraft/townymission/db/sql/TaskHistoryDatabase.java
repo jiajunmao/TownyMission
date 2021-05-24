@@ -106,7 +106,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
                     townName + "', '" +
                     startedPlayerUUID + "', '" +
                     completedTime + "', '" +
-                    isClaimed + "', '" +
+                    (isClaimed ? 1 : 0) + "', '" +
                     sprint + "', '" +
                     season + "');";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -157,7 +157,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
                     "', town='" + townName +
                     "', started_player='" + startedPlayerUUID +
                     "', completed_time='" + completedTime +
-                    "', claimed='" + isClaimed +
+                    "', claimed='" + (isClaimed ? 1 : 0) +
                     "', sprint='" + sprint +
                     "', season='" + season +
                     "' WHERE id='" + id + "';";

@@ -1,0 +1,30 @@
+# Both hex and vanilla color code are supported
+# Please do not change or add the placeholder in the language file, or things will break
+# The hex format is {#FFFFFF}
+
+prefix: "&6[TownyMission]"
+
+commands:
+  abort:
+    onSuccess: "&cThe mission has been aborted"
+    onNotMayorOrStarter: "&cYou either need to be the mayor or started the mission yourself to abort!"
+  claim:
+    onNotFound: "&cYour town does not have unclaimed missions!"
+  deposit:
+    noNotMatch: "&cThe item you are holding does not match the mission's resource type!"
+    requiredItem: "&cRequired type: %item%"
+    inHandItem: "&cIn-hand type: %item%"
+  start:
+    onAlreadyStarted: "&c Your town already has a started mission!"
+
+  sanityChecker:
+    onNoTown: "&cYou do not belong to a town!"
+    onNotMayor: "&cYou are not the mayor!"
+    onNoStartedMission: "&cYour town does not have a started mission!"
+    onMissionTypeMismatch: "&cYour town's started mission type is not %missionType%"
+    onNoPermission: "&cYou do not have the '%permission%' permission!"
+
+universal:
+  onCommandNotFound: "&cCommand not found!"
+  onCommandFormatError: "&cCommand format error!"
+

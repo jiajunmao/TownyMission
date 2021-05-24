@@ -3,6 +3,7 @@ package world.naturecraft.townymission.utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -39,7 +40,13 @@ public class Util {
         } else {
             sender.getServer().getLogger().info(translateColor(message));
         }
+    }
 
+    public static String getLangEntry(String path, TownyMission instance) {
+        String finalString = "";
+        finalString += instance.getCustomConfig().getLangConfig().getString("prefix") + " ";
+        finalString += instance.getCustomConfig().getLangConfig().getString(path);
+        return finalString;
     }
 
     /**

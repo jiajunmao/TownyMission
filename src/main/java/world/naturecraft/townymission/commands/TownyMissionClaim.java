@@ -1,7 +1,10 @@
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
+
 package world.naturecraft.townymission.commands;
 
 import com.palmergames.bukkit.towny.object.Town;
-import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,23 +12,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
+import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
 
-/**
- * The type Towny mission abort.
- */
-public class TownyMissionAbort extends TownyMissionCommand {
+public class TownyMissionClaim extends TownyMissionCommand {
+
     /**
      * Instantiates a new Towny mission command.
      *
      * @param instance the instance
      */
-    public TownyMissionAbort(TownyMission instance) {
+    public TownyMissionClaim(TownyMission instance) {
         super(instance);
     }
 
@@ -44,19 +46,30 @@ public class TownyMissionAbort extends TownyMissionCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            Player player = (Player) sender;
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (sanityCheck(player)) {
+                    Player player = (Player) sender;
+
+                    boolean sane = new SanityChecker(instance).target(player)
+                            .hasTown().check();
+
+                    if (sane) {
                         Town town = TownyUtil.residentOf(player);
-                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                        for (TaskEntry e : taskEntries) {
-                            if (e.getStartedTime() != 0) {
-                                taskDao.remove(e);
-                                Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
+                        List<TaskHistoryEntry> list = taskHistoryDao.getAllUnclaimed(town);
+
+                        if (list.size() == 0) {
+                            Util.sendMsg(player, Util.getLangEntry("commands.claim.onNotFound", instance));
+                        } else {
+                            //TODO: Check matching season and sprint
+                            MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Unclaimed Missions&7------");
+                            int index= 1;
+                            for (TaskHistoryEntry e : list) {
+                                builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getMissionJson().getDisplayLine());
+                                index++;
                             }
+                            Util.sendMsg(player, builder.toString());
                         }
                     }
                 }
@@ -64,34 +77,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
 
             r.runTaskAsynchronously(instance);
         }
-
         return true;
-    }
-
-    /**
-     * Sanity check boolean.
-     *
-     * @param player the player
-     * @return the boolean
-     */
-    public boolean sanityCheck(Player player) {
-
-        SanityChecker checker = new SanityChecker(instance).target(player)
-            .hasTown()
-            .hasStarted()
-            .hasPermission("townymission.player")
-            .customCheck(() -> {
-                Town town = TownyUtil.residentOf(player);
-                TaskEntry entry = taskDao.getStartedMission(town);
-                if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
-                    return true;
-                } else {
-                    Util.sendMsg(player, Util.getLangEntry("commands.abort.onNotMayorOrStarter", instance));
-                    return false;
-                }
-            });
-
-        return checker.check();
     }
 
     /**
@@ -107,8 +93,9 @@ public class TownyMissionAbort extends TownyMissionCommand {
      * @return A List of possible completions for the final argument, or null
      * to default to the command executor
      */
+    @Nullable
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return null;
     }
 }
