@@ -46,32 +46,31 @@ public class TownyMissionClaim extends TownyMissionCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    Player player = (Player) sender;
+                Player player = (Player) sender;
 
-                    boolean sane = new SanityChecker(instance).target(player)
-                            .hasTown().check();
+                boolean sane = new SanityChecker(instance).target(player)
+                        .hasTown().check();
 
-                    if (sane) {
-                        Town town = TownyUtil.residentOf(player);
-                        List<TaskHistoryEntry> list = taskHistoryDao.getAllUnclaimed(town);
+                if (sane) {
+                    Town town = TownyUtil.residentOf(player);
+                    List<TaskHistoryEntry> list = taskHistoryDao.getAllUnclaimed(town);
 
-                        if (list.size() == 0) {
-                            Util.sendMsg(player, Util.getLangEntry("commands.claim.onNotFound", instance));
-                        } else {
-                            //TODO: Check matching season and sprint
-                            MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Unclaimed Missions&7------");
-                            int index= 1;
-                            for (TaskHistoryEntry e : list) {
-                                builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getMissionJson().getDisplayLine());
-                                index++;
-                            }
-                            Util.sendMsg(player, builder.toString());
+                    if (list.size() == 0) {
+                        Util.sendMsg(player, Util.getLangEntry("commands.claim.onNotFound", instance));
+                    } else {
+                        //TODO: Check matching season and sprint
+                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Unclaimed Missions&7------");
+                        int index= 1;
+                        for (TaskHistoryEntry e : list) {
+                            builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getMissionJson().getDisplayLine());
+                            index++;
                         }
+                        Util.sendMsg(player, builder.toString());
                     }
+                }
                 }
             };
 
