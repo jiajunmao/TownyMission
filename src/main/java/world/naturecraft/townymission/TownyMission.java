@@ -8,7 +8,8 @@ import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.db.sql.*;
-import world.naturecraft.townymission.listeners.external.*;
+import world.naturecraft.townymission.listeners.external.MissionListener;
+import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.utils.Util;
 

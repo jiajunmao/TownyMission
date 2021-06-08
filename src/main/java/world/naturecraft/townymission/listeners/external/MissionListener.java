@@ -18,14 +18,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import teozfrank.ultimatevotes.events.VoteRewardEvent;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
-import world.naturecraft.townymission.components.containers.json.*;
+import world.naturecraft.townymission.components.containers.json.MissionJson;
+import world.naturecraft.townymission.components.containers.json.MobJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
-
-import javax.xml.validation.SchemaFactoryConfigurationError;
 
 /**
  * The type Mission listener.
@@ -48,6 +47,7 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVoteReceived(VoteRewardEvent e) {
+        System.out.println("VoteRewardEvent triggered");
         Player player = e.getPlayer();
 
         SanityChecker sanityChecker = new SanityChecker(instance).target(player)
@@ -67,14 +67,13 @@ public class MissionListener extends TownyMissionListener {
     public void onMoneyReceive(CMIUserBalanceChangeEvent event) {
         System.out.println("CMIUserBalanceChangeEvent triggered");
         Player player = event.getUser().getPlayer();
-        SanityChecker checker = new SanityChecker(instance).target(player)
-            .hasTown()
-            .hasStarted()
-            .isMissionType(MissionType.MONEY)
-            .customCheck(() -> event.getSource() == null)
-            .customCheck(() -> (event.getTo() - event.getFrom() > 0));
+        SanityChecker checker = new SanityChecker(instance).target(player).silent(true)
+                .hasTown()
+                .hasStarted()
+                .isMissionType(MissionType.MONEY)
+                .customCheck(() -> event.getSource() == null)
+                .customCheck(() -> (event.getTo() - event.getFrom() > 0));
 
-        System.out.println("Received balance change event, sanity check: " + checker.check());
         doLogic(checker, MissionType.MONEY, event.getUser().getPlayer(), (int) (event.getTo() - event.getFrom()));
     }
 
@@ -85,19 +84,20 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onTownExpansion(TownClaimEvent e) {
+        System.out.println("TownClaimEvent triggered");
         SanityChecker checker = new SanityChecker(instance).target(e.getResident().getPlayer())
-            .hasTown()
-            .hasStarted()
-            .isMissionType(MissionType.EXPANSION)
-            .customCheck(() -> {
-                try {
-                    TaskEntry entry = taskDao.getTownStartedMission(e.getTownBlock().getTown(), MissionType.EXPANSION);
-                    return entry.getTown().equals(e.getTownBlock().getTown());
-                } catch (NotRegisteredException notRegisteredException) {
-                    return false;
-                }
+                .hasTown()
+                .hasStarted()
+                .isMissionType(MissionType.EXPANSION)
+                .customCheck(() -> {
+                    try {
+                        TaskEntry entry = taskDao.getTownStartedMission(e.getTownBlock().getTown(), MissionType.EXPANSION);
+                        return entry.getTown().equals(e.getTownBlock().getTown());
+                    } catch (NotRegisteredException notRegisteredException) {
+                        return false;
+                    }
 
-            });
+                });
 
         doLogic(checker, MissionType.EXPANSION, e.getResident().getPlayer(), 1);
     }
@@ -115,7 +115,7 @@ public class MissionListener extends TownyMissionListener {
 
         if (killer != null) {
 
-            SanityChecker checker =  new SanityChecker(instance).target(killer)
+            SanityChecker checker = new SanityChecker(instance).target(killer)
                     .hasTown()
                     .hasStarted()
                     .isMissionType(MissionType.MOB)
@@ -141,33 +141,31 @@ public class MissionListener extends TownyMissionListener {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
-            if (sanityChecker.check()) {
-                Town town = TownyUtil.residentOf(player);
-                TaskEntry taskEntry = taskDao.getTownStartedMission(town, missionType);
-                MissionJson json = taskEntry.getMissionJson();
-                json.setCompleted(json.getCompleted() + amount);
-                json.addContribution(player.getUniqueId().toString(), amount);
-                try {
-                    taskEntry.setMissionJson(json);
-                } catch (JsonProcessingException exception) {
-                    exception.printStackTrace();
-                    return;
-                }
-
-                DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
-                pluginManager.callEvent(missionEvent);
-                try {
-                    if (!missionEvent.isCanceled()) {
-                        taskDao.update(taskEntry);
+                if (sanityChecker.check()) {
+                    Town town = TownyUtil.residentOf(player);
+                    TaskEntry taskEntry = taskDao.getTownStartedMission(town, missionType);
+                    MissionJson json = taskEntry.getMissionJson();
+                    json.setCompleted(json.getCompleted() + amount);
+                    json.addContribution(player.getUniqueId().toString(), amount);
+                    try {
+                        taskEntry.setMissionJson(json);
+                    } catch (JsonProcessingException exception) {
+                        exception.printStackTrace();
+                        return;
                     }
-                } catch (JsonProcessingException exception) {
-                    exception.printStackTrace();
-                    return;
-                }
 
-            } else {
-                logger.warning("Event sanity check failed: " + missionType.name());
-            }
+                    DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
+                    pluginManager.callEvent(missionEvent);
+                    try {
+                        if (!missionEvent.isCanceled()) {
+                            taskDao.update(taskEntry);
+                        }
+                    } catch (JsonProcessingException exception) {
+                        exception.printStackTrace();
+                        return;
+                    }
+
+                }
             }
         };
 

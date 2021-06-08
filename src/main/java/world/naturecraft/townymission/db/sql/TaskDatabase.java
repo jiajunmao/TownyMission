@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
-import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

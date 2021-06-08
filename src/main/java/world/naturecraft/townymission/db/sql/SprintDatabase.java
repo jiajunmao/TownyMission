@@ -51,12 +51,14 @@ public class SprintDatabase extends Database<SprintEntry> {
             ResultSet result = p.executeQuery();
 
             while (result.next()) {
-                list.add(new SprintEntry(result.getInt("id"),
+                SprintEntry entry = new SprintEntry(result.getInt("id"),
                         result.getString("town_id"),
                         result.getString("town_name"),
                         result.getInt("naturepoints"),
                         result.getInt("sprint"),
-                        result.getInt("season")));
+                        result.getInt("season"));
+                list.add(entry);
+                System.out.println("SprintDb parse in id: " + result.getInt("id") + " with entry id: " + entry.getId());
             }
             return null;
         });

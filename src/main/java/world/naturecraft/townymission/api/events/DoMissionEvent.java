@@ -10,18 +10,17 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
-import world.naturecraft.townymission.components.enums.MissionType;
 
 /**
  * The type Do mission event.
  */
 public class DoMissionEvent extends Event implements Cancellable {
 
-    private boolean isCanceled;
-    private Player player;
-    // !!IMPORTANT!! this entry contains the **updated** info
-    private TaskEntry taskEntry;
     private static final HandlerList handlers = new HandlerList();
+    private boolean isCanceled;
+    private final Player player;
+    // !!IMPORTANT!! this entry contains the **updated** info
+    private final TaskEntry taskEntry;
 
     /**
      * Instantiates a new Do mission event.
@@ -36,18 +35,18 @@ public class DoMissionEvent extends Event implements Cancellable {
         this.isCanceled = false;
     }
 
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
     /**
      * Gets handler list.
      *
      * @return the handler list
      */
     public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
 

@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.commands;
 
 import com.palmergames.bukkit.towny.object.Town;
-import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,19 +76,19 @@ public class TownyMissionAbort extends TownyMissionCommand {
     public boolean sanityCheck(Player player) {
 
         SanityChecker checker = new SanityChecker(instance).target(player)
-            .hasTown()
-            .hasStarted()
-            .hasPermission("townymission.player")
-            .customCheck(() -> {
-                Town town = TownyUtil.residentOf(player);
-                TaskEntry entry = taskDao.getStartedMission(town);
-                if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
-                    return true;
-                } else {
-                    Util.sendMsg(player, Util.getLangEntry("commands.abort.onNotMayorOrStarter", instance));
-                    return false;
-                }
-            });
+                .hasTown()
+                .hasStarted()
+                .hasPermission("townymission.player")
+                .customCheck(() -> {
+                    Town town = TownyUtil.residentOf(player);
+                    TaskEntry entry = taskDao.getStartedMission(town);
+                    if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, Util.getLangEntry("commands.abort.onNotMayorOrStarter", instance));
+                        return false;
+                    }
+                });
 
         return checker.check();
     }

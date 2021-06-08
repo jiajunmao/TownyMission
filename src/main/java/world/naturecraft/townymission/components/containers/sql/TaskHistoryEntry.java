@@ -33,11 +33,11 @@ public class TaskHistoryEntry extends SqlEntry {
      * Instantiates a new Task history entry.
      *
      * @param id            the id
-     * @param missionType      the task type
+     * @param missionType   the task type
      * @param addedTime     the added time
      * @param startedTime   the started time
      * @param allowedTime   the allowed time
-     * @param missionJson      the task json
+     * @param missionJson   the task json
      * @param town          the town
      * @param startedPlayer the started player
      * @param completedTime the completed time

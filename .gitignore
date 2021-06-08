@@ -1,7 +1,2 @@
 /.idea/
 /target/
-dev_settings.xml
-/devenv/world*
-/devenv/logs/
-/devenv/cache/
-/devenv/plugins/Towny/

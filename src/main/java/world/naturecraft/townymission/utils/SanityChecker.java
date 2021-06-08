@@ -7,7 +7,6 @@ import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.dao.TaskDao;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
 
-import java.awt.event.WindowStateListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,22 +16,17 @@ import java.util.Locale;
  */
 public class SanityChecker {
 
-    private TownyMission instance;
-
-    private boolean checkHasTown;
-
-    private boolean checkIsMayor;
-
-    private boolean checkHasStarted;
-
-    private boolean checkIsMissionType;
-    private MissionType missionType;
-
     private final List<String> permissions;
     private final List<BooleanChecker> customChecks;
-
     private final TaskDao taskDao;
+    private final TownyMission instance;
+    private boolean checkHasTown;
+    private boolean checkIsMayor;
+    private boolean checkHasStarted;
+    private boolean checkIsMissionType;
+    private MissionType missionType;
     private Player player;
+    private boolean isSilent;
 
     /**
      * Instantiates a new Sanity checker.
@@ -44,6 +38,7 @@ public class SanityChecker {
         taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
         customChecks = new ArrayList<>();
         permissions = new ArrayList<>();
+        isSilent = false;
     }
 
     /**
@@ -54,6 +49,11 @@ public class SanityChecker {
      */
     public SanityChecker target(Player player) {
         this.player = player;
+        return this;
+    }
+
+    public SanityChecker silent(boolean isSilent) {
+        this.isSilent = isSilent;
         return this;
     }
 
@@ -126,7 +126,8 @@ public class SanityChecker {
 
         if (checkHasTown) {
             if (TownyUtil.residentOf(player) == null) {
-                Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoTown", instance));
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoTown", instance));
                 return false;
             }
         }
@@ -135,7 +136,8 @@ public class SanityChecker {
             if (!checkHasTown)
                 return false;
             if (TownyUtil.mayorOf(player) == null) {
-                Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNotMayor", instance));
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNotMayor", instance));
                 return false;
             }
         }
@@ -144,7 +146,8 @@ public class SanityChecker {
             if (!checkHasTown)
                 return false;
             if (taskDao.getStartedMission(TownyUtil.residentOf(player)) == null) {
-                Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoStartedMission", instance));
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoStartedMission", instance));
                 return false;
             }
         }
@@ -153,7 +156,8 @@ public class SanityChecker {
             if (!checkHasStarted)
                 return false;
             if (!taskDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType)) {
-                Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onMissionTypeMismatch", instance).replace("%missionType%", missionType.name().toLowerCase(Locale.ROOT)));
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onMissionTypeMismatch", instance).replace("%missionType%", missionType.name().toLowerCase(Locale.ROOT)));
                 return false;
             }
         }
@@ -161,7 +165,8 @@ public class SanityChecker {
         if (permissions.size() != 0) {
             for (String s : permissions) {
                 if (!player.hasPermission(s)) {
-                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoPermission", instance).replace("%permission%", s));
+                    if (!isSilent)
+                        Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoPermission", instance).replace("%permission%", s));
                     return false;
                 }
             }

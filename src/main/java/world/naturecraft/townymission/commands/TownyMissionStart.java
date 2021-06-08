@@ -54,25 +54,25 @@ public class TownyMissionStart extends TownyMissionCommand {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                Player player = (Player) sender;
-                if (sanityCheck(player, args)) {
-                    Town town = TownyUtil.residentOf(player);
-                    List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                    int missionIdx = Integer.parseInt(args[1]);
+                    Player player = (Player) sender;
+                    if (sanityCheck(player, args)) {
+                        Town town = TownyUtil.residentOf(player);
+                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
+                        int missionIdx = Integer.parseInt(args[1]);
 
-                    TaskEntry entry = taskEntries.get(missionIdx - 1);
-                    entry.setStartedTime(Util.currentTime());
-                    entry.setStartedPlayer(player);
+                        TaskEntry entry = taskEntries.get(missionIdx - 1);
+                        entry.setStartedTime(Util.currentTime());
+                        entry.setStartedPlayer(player);
 
-                    try {
-                        taskDao.update(entry);
-                        Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
-                    } catch (JsonProcessingException e) {
-                        logger.severe("Error while parsing Json " + entry.getMissionJson());
-                        e.printStackTrace();
-                        // I want to want to write a comment
+                        try {
+                            taskDao.update(entry);
+                            Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
+                        } catch (JsonProcessingException e) {
+                            logger.severe("Error while parsing Json " + entry.getMissionJson());
+                            e.printStackTrace();
+                            // I want to want to write a comment
+                        }
                     }
-                }
                 }
             };
 
@@ -92,23 +92,23 @@ public class TownyMissionStart extends TownyMissionCommand {
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tm start <num>
         return new SanityChecker(instance).target(player)
-            .hasTown()
-            .hasPermission("townymission.player")
-            .customCheck(() -> {
-                if (args.length == 1 || (Integer.parseInt(args[1]) > 15 || Integer.parseInt(args[1]) < 1)) {
-                    Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
-                    return false;
-                }
-                return true;
-            }).customCheck(() -> {
-                Town town = TownyUtil.residentOf(player);
-                if (taskDao.getStartedMission(town) == null) {
+                .hasTown()
+                .hasPermission("townymission.player")
+                .customCheck(() -> {
+                    if (args.length == 1 || (Integer.parseInt(args[1]) > 15 || Integer.parseInt(args[1]) < 1)) {
+                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                        return false;
+                    }
                     return true;
-                } else {
-                    Util.sendMsg(player, Util.getLangEntry("commands.start.onAlreadyStarted", instance));
-                    return false;
-                }
-            }).check();
+                }).customCheck(() -> {
+                    Town town = TownyUtil.residentOf(player);
+                    if (taskDao.getStartedMission(town) == null) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, Util.getLangEntry("commands.start.onAlreadyStarted", instance));
+                        return false;
+                    }
+                }).check();
     }
 
     /**

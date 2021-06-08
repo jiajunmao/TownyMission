@@ -10,13 +10,13 @@ commands:
     onNotMayorOrStarter: "&cYou either need to be the mayor or started the mission yourself to abort!"
   claim:
     onNotFound: "&cYour town does not have unclaimed missions!"
+    onSuccess: "&cYou have successfully claimed your rewards. Your have claimed %points% points."
   deposit:
     noNotMatch: "&cThe item you are holding does not match the mission's resource type!"
     requiredItem: "&cRequired type: %item%"
     inHandItem: "&cIn-hand type: %item%"
   start:
     onAlreadyStarted: "&c Your town already has a started mission!"
-
   sanityChecker:
     onNoTown: "&cYou do not belong to a town!"
     onNotMayor: "&cYou are not the mayor!"

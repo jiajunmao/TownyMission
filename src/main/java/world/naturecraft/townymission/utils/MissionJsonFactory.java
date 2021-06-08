@@ -40,13 +40,13 @@ public class MissionJsonFactory {
             case "VOTE":
                 return (VoteJson.parse(missionJson));
             case "MONEY":
-                return(MoneyJson.parse(missionJson));
+                return (MoneyJson.parse(missionJson));
             case "MOB":
-                return(MobJson.parse(missionJson));
+                return (MobJson.parse(missionJson));
             case "EXPANSION":
-                return(ExpansionJson.parse(missionJson));
+                return (ExpansionJson.parse(missionJson));
             case "RESOURCE":
-                return(ResourceJson.parse(missionJson));
+                return (ResourceJson.parse(missionJson));
             default:
                 return null;
         }

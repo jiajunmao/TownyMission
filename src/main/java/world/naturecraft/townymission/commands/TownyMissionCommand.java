@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
+
 package world.naturecraft.townymission.commands;
 
 import org.bukkit.command.CommandExecutor;
@@ -5,8 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.dao.SprintDao;
 import world.naturecraft.townymission.dao.TaskDao;
 import world.naturecraft.townymission.dao.TaskHistoryDao;
+import world.naturecraft.townymission.db.sql.SprintDatabase;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
 import world.naturecraft.townymission.db.sql.TaskHistoryDatabase;
 import world.naturecraft.townymission.utils.Util;
@@ -31,8 +37,8 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
      * The Task dao.
      */
     protected TaskDao taskDao;
-
     protected TaskHistoryDao taskHistoryDao;
+    protected SprintDao sprintDao;
 
     /**
      * Instantiates a new Towny mission command.
@@ -44,6 +50,7 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
         this.logger = instance.getLogger();
         this.taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
         this.taskHistoryDao = new TaskHistoryDao((TaskHistoryDatabase) instance.getDb(DbType.TASK_HISTORY));
+        this.sprintDao = new SprintDao((SprintDatabase) instance.getDb(DbType.SPRINT));
     }
 
     /**

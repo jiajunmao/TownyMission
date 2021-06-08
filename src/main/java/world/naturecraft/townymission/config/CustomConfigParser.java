@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.config;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

@@ -153,7 +153,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
                     "', added_time='" + addedTime +
                     "', started_time='" + startedTime +
                     "', allowed_time='" + allowedTime +
-                    "', task_json='" +taskJson +
+                    "', task_json='" + taskJson +
                     "', town='" + townName +
                     "', started_player='" + startedPlayerUUID +
                     "', completed_time='" + completedTime +

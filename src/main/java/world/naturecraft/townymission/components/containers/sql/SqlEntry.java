@@ -11,7 +11,7 @@ import world.naturecraft.townymission.components.enums.DbType;
  */
 public abstract class SqlEntry {
     private int id;
-    private DbType type;
+    private final DbType type;
 
     /**
      * Instantiates a new Sql entry.

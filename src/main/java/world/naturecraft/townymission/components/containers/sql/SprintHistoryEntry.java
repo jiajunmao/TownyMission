@@ -6,7 +6,6 @@ import world.naturecraft.townymission.components.enums.DbType;
  * The type Sprint history entry.
  */
 public class SprintHistoryEntry extends SqlEntry {
-    private int id;
     private int season;
     private int sprint;
     private long startedTime;
@@ -27,24 +26,6 @@ public class SprintHistoryEntry extends SqlEntry {
         this.sprint = sprint;
         this.startedTime = startedTime;
         this.rankJson = rankJson;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**
