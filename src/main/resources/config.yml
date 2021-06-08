@@ -1,6 +1,36 @@
+# Database settings
 database:
+  # The address of the database, in IP or domain name
   address:
+  # The port of the database, default should be 3306
   port:
+  # The name of the database
   name:
+  # The username to access the database
   username:
+  # The password to access the database
   password:
+
+# Sprint settings
+sprint:
+  # The current sprint, do not touch unless you know what you are doing
+  current: 1
+  # Duration of the sprint, in days
+  duration: 5
+  # Interval between two springs, in days
+  interval: 2
+
+season:
+  # The current season, do not touch unless you know what you are doing
+  current: 1
+  # Number of sprints that a season will have
+  sprintsPerSeason:
+  # The started time of this season, do not touch unless you know what you are doing
+  # Changing this might corrupt database and interfere with normal sprint/season progression
+  # In Java millisecond datetime format
+  startedTime:
+  # Interval between two season, in days
+  interval: 7
+
+# Interval to check whether a town has timeouted on this current mission, in minutes
+checkTimeOutInterval: 60

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
+import world.naturecraft.townymission.api.exceptions.NotStartedException;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
@@ -39,6 +40,16 @@ public class DoMissionListener extends TownyMissionListener {
         TaskEntry taskEntry = e.getTaskEntry();
         Player player = e.getPlayer();
         MissionJson missionjson = taskEntry.getMissionJson();
+
+        // If a task is not started, or have already timed out, ignore do mission event
+        try {
+            if (taskEntry.getStartedTime() == 0 || Util.isTimedOut(taskEntry)) {
+                return;
+            }
+        } catch (NotStartedException notStartedException) {
+            notStartedException.printStackTrace();
+            return;
+        }
 
         if (missionjson.getCompleted() >= missionjson.getAmount()) {
             taskDao.remove(taskEntry);
