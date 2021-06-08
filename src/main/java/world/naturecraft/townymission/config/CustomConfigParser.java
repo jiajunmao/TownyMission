@@ -43,12 +43,6 @@ public class CustomConfigParser {
                 String mobType = section.getString("type");
                 MobJson mobJson = new MobJson(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward, null);
                 list.add(mobJson);
-                System.out.println("Completed: " + mobJson.getCompleted());
-                try {
-                    System.out.println("Json: " + mobJson.toJson());
-                } catch (JsonProcessingException exception) {
-                    exception.printStackTrace();
-                }
             } else if (type.equals(MissionType.MONEY)) {
                 list.add(new MoneyJson(amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.RESOURCE)) {

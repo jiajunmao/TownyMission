@@ -46,13 +46,18 @@ public class TownyMissionClaim extends TownyMissionCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
+            // /tms claim
+            // /tms claim all
+            // /tms claim <num>
+
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
                 Player player = (Player) sender;
 
                 boolean sane = new SanityChecker(instance).target(player)
-                        .hasTown().check();
+                        .hasTown()
+                        .customCheck(() -> args.length == 1 || args.length == 2).check();
 
                 if (sane) {
                     Town town = TownyUtil.residentOf(player);
@@ -60,15 +65,28 @@ public class TownyMissionClaim extends TownyMissionCommand {
 
                     if (list.size() == 0) {
                         Util.sendMsg(player, Util.getLangEntry("commands.claim.onNotFound", instance));
+                        return;
                     } else {
                         //TODO: Check matching season and sprint
-                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Unclaimed Missions&7------");
-                        int index= 1;
-                        for (TaskHistoryEntry e : list) {
-                            builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getMissionJson().getDisplayLine());
-                            index++;
+
+                        // Listing all the claims
+                        if (args.length == 1) {
+                            MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Unclaimed Missions&7------");
+                            int index= 1;
+                            for (TaskHistoryEntry e : list) {
+                                builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getMissionJson().getDisplayLine());
+                                index++;
+                            }
+                            Util.sendMsg(player, builder.toString());
+                        } else if (args.length == 2 && Util.isInt(args[1])) {
+                            int choice = Integer.parseInt(args[1]) - 1;
+                            if (choice >= list.size()) {
+                                Util.sendMsg(player, Util.getLangEntry("commands.claim.notValidIndex", instance));
+                                return;
+                            }
+
+                            TaskHistoryEntry entry = list.get(choice);
                         }
-                        Util.sendMsg(player, builder.toString());
                     }
                 }
                 }

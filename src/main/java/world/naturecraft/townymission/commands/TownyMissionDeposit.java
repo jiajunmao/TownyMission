@@ -135,11 +135,6 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         Util.sendMsg(player, Util.getLangEntry("commands.deposit.onNotMatch", instance));
                         Util.sendMsg(player, Util.getLangEntry("commands.deposit.requiredItem", instance).replace("%item%", resourceJson.getType().name().toLowerCase(Locale.ROOT)));
                         Util.sendMsg(player, "&cIn-hand type: " + Util.getLangEntry("commands.deposit.inHandItem", instance).replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
-                        try {
-                            System.out.println(resourceJson.toJson());
-                        } catch (JsonProcessingException exception) {
-                            exception.printStackTrace();
-                        }
                         return false;
                     }
                 })

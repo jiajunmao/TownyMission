@@ -160,9 +160,10 @@ public class SanityChecker {
 
         if (permissions.size() != 0) {
             for (String s : permissions) {
-                if (!player.hasPermission(s))
+                if (!player.hasPermission(s)) {
                     Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoPermission", instance).replace("%permission%", s));
                     return false;
+                }
             }
             return true;
         }

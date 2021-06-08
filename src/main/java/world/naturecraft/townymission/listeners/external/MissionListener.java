@@ -25,6 +25,8 @@ import world.naturecraft.townymission.listeners.TownyMissionListener;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
+import javax.xml.validation.SchemaFactoryConfigurationError;
+
 /**
  * The type Mission listener.
  */
@@ -61,8 +63,9 @@ public class MissionListener extends TownyMissionListener {
      *
      * @param event the event
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onMoneyReceive(CMIUserBalanceChangeEvent event) {
+        System.out.println("CMIUserBalanceChangeEvent triggered");
         Player player = event.getUser().getPlayer();
         SanityChecker checker = new SanityChecker(instance).target(player)
             .hasTown()
@@ -71,7 +74,7 @@ public class MissionListener extends TownyMissionListener {
             .customCheck(() -> event.getSource() == null)
             .customCheck(() -> (event.getTo() - event.getFrom() > 0));
 
-
+        System.out.println("Received balance change event, sanity check: " + checker.check());
         doLogic(checker, MissionType.MONEY, event.getUser().getPlayer(), (int) (event.getTo() - event.getFrom()));
     }
 
@@ -106,6 +109,7 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onMobKill(EntityDeathEvent e) {
+        System.out.println("EntityDeathEvent triggered");
         LivingEntity dead = e.getEntity();
         Player killer = e.getEntity().getKiller();
 
@@ -137,31 +141,33 @@ public class MissionListener extends TownyMissionListener {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
-                if (sanityChecker.check()) {
-                    Town town = TownyUtil.residentOf(player);
-                    TaskEntry taskEntry = taskDao.getTownStartedMission(town, missionType);
-                    MissionJson json = taskEntry.getMissionJson();
-                    json.setCompleted(json.getCompleted() + amount);
-                    json.addContribution(player.getUniqueId().toString(), amount);
-                    try {
-                        taskEntry.setMissionJson(json);
-                    } catch (JsonProcessingException exception) {
-                        exception.printStackTrace();
-                        return;
-                    }
-
-                    DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
-                    pluginManager.callEvent(missionEvent);
-                    try {
-                        if (!missionEvent.isCanceled()) {
-                            taskDao.update(taskEntry);
-                        }
-                    } catch (JsonProcessingException exception) {
-                        exception.printStackTrace();
-                        return;
-                    }
-
+            if (sanityChecker.check()) {
+                Town town = TownyUtil.residentOf(player);
+                TaskEntry taskEntry = taskDao.getTownStartedMission(town, missionType);
+                MissionJson json = taskEntry.getMissionJson();
+                json.setCompleted(json.getCompleted() + amount);
+                json.addContribution(player.getUniqueId().toString(), amount);
+                try {
+                    taskEntry.setMissionJson(json);
+                } catch (JsonProcessingException exception) {
+                    exception.printStackTrace();
+                    return;
                 }
+
+                DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
+                pluginManager.callEvent(missionEvent);
+                try {
+                    if (!missionEvent.isCanceled()) {
+                        taskDao.update(taskEntry);
+                    }
+                } catch (JsonProcessingException exception) {
+                    exception.printStackTrace();
+                    return;
+                }
+
+            } else {
+                logger.warning("Event sanity check failed: " + missionType.name());
+            }
             }
         };
 
