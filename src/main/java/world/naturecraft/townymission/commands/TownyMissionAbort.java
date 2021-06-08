@@ -48,16 +48,16 @@ public class TownyMissionAbort extends TownyMissionCommand {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (sanityCheck(player)) {
-                        Town town = TownyUtil.residentOf(player);
-                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                        for (TaskEntry e : taskEntries) {
-                            if (e.getStartedTime() != 0) {
-                                taskDao.remove(e);
-                                Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
-                            }
+                if (sanityCheck(player)) {
+                    Town town = TownyUtil.residentOf(player);
+                    List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
+                    for (TaskEntry e : taskEntries) {
+                        if (e.getStartedTime() != 0) {
+                            taskDao.remove(e);
+                            Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
                         }
                     }
+                }
                 }
             };
 

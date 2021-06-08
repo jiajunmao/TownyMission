@@ -12,7 +12,9 @@ commands:
     onNotFound: "&cYour town does not have unclaimed missions!"
     onSuccess: "&cYou have successfully claimed your rewards. Your have claimed %points% points."
   deposit:
-    noNotMatch: "&cThe item you are holding does not match the mission's resource type!"
+    onNotMatch: "&cThe item you are holding does not match the mission's resource type!"
+    onMissionTimedOut: "&cYour mission has timed out! Please abort the current mission and start a new one!"
+    onSuccess: "&fYou have successfully deposited %number% of %type%!"
     requiredItem: "&cRequired type: %item%"
     inHandItem: "&cIn-hand type: %item%"
   start:

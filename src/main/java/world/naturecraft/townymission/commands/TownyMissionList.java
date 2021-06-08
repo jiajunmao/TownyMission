@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.exceptions.NotStartedException;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.config.CustomConfigParser;
@@ -88,9 +89,15 @@ public class TownyMissionList extends TownyMissionCommand {
 
                         for (TaskEntry e : taskDao.getTownTasks(town)) {
                             try {
-                                if (e.getStartedTime() != 0) {
-                                    builder.add("&3" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-                                } else {
+                                try {
+                                    if (Util.isTimedOut(e)) {
+                                        builder.add("&c" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
+                                    } else if (e.getStartedTime() != 0) {
+                                        builder.add("&3" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
+                                    } else {
+                                        builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
+                                    }
+                                } catch (NotStartedException notStartedException) {
                                     builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
                                 }
                             } catch (JsonProcessingException exp) {

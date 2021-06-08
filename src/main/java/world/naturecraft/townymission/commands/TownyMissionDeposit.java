@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
+import world.naturecraft.townymission.api.exceptions.NotStartedException;
 import world.naturecraft.townymission.components.containers.json.ResourceJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -82,10 +83,17 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
                             resourceJson.addContribution(player.getUniqueId().toString(), total);
                             resourceJson.addCompleted(total);
+                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onSuccess", instance)
+                                    .replace("%number", String.valueOf(total)
+                                    .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         } else {
+                            int number = player.getItemInHand().getAmount();
                             resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
-                            resourceJson.addCompleted(player.getItemInHand().getAmount());
+                            resourceJson.addCompleted(number);
                             player.setItemInHand(null);
+                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onSuccess", instance)
+                                    .replace("%number", String.valueOf(number)
+                                    .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         }
 
                         try {
@@ -101,9 +109,6 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             exception.printStackTrace();
                             //Util.sendMsg(player, "Something went wrong during depositing");
                         }
-                    } else {
-                        //Util.sendMsg(player, "Something went wrong during depositing");
-                        logger.severe("TownyMission deposit failed sanity check");
                     }
                 }
             };
@@ -137,6 +142,20 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         Util.sendMsg(player, "&cIn-hand type: " + Util.getLangEntry("commands.deposit.inHandItem", instance).replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         return false;
                     }
+                })
+                .customCheck(() -> {
+                    TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    try {
+                        if (Util.isTimedOut(resourceEntry)) {
+                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onMissionTimedOut", instance));
+                            return false;
+                        }
+                    } catch (NotStartedException e) {
+                        // This should not happen, if it gets to this, it must have been started
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
                 })
                 .customCheck(() -> {
                     if (args.length == 1)
