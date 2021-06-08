@@ -8,6 +8,10 @@ before_script:
 variables:
   LINK_ARTIFACT: "true"
 
+default:
+  tags:
+    - docker
+
 stages:
   - build
   - deploy
