@@ -8,7 +8,9 @@ import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.db.sql.*;
-import world.naturecraft.townymission.listeners.external.*;
+import world.naturecraft.townymission.listeners.external.MissionListener;
+import world.naturecraft.townymission.listeners.external.TownFallListener;
+import world.naturecraft.townymission.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -88,6 +90,7 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("start", new TownyMissionStart(this));
         rootCmd.registerCommand("abort", new TownyMissionAbort(this));
         rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
+        rootCmd.registerCommand("claim", new TownyMissionClaim(this));
     }
 
     /**
@@ -96,6 +99,7 @@ public class TownyMission extends JavaPlugin {
     public void registerListeners() {
         getServer().getPluginManager().registerEvents(new MissionListener(this), this);
         getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
+        getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
     }
 
     /**

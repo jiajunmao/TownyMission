@@ -24,7 +24,7 @@ public class MultilineBuilder {
     public MultilineBuilder(String header) {
         this.header = header;
         lines = new ArrayList<>();
-        footer = "&e------------------";
+        footer = "&7------------------";
     }
 
     /**

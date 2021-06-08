@@ -1,20 +1,31 @@
 package world.naturecraft.townymission.components.containers.sql;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.utils.MissionJsonFactory;
+import world.naturecraft.townymission.utils.TownyUtil;
+
+import java.util.UUID;
 
 /**
  * The type Task history entry.
  */
 public class TaskHistoryEntry extends SqlEntry {
 
-    private String taskType;
+    private MissionType missionType;
     private long addedTime;
     private long startedTime;
     private long allowedTime;
-    private String taskJson;
-    private String town;
-    private String startedPlayer;
+    private MissionJson missionJson;
+    private Town town;
+    private Player startedPlayer;
     private long completedTime;
+    private boolean claimed;
     private int sprint;
     private int season;
 
@@ -22,29 +33,44 @@ public class TaskHistoryEntry extends SqlEntry {
      * Instantiates a new Task history entry.
      *
      * @param id            the id
-     * @param taskType      the task type
+     * @param missionType   the task type
      * @param addedTime     the added time
      * @param startedTime   the started time
      * @param allowedTime   the allowed time
-     * @param taskJson      the task json
+     * @param missionJson   the task json
      * @param town          the town
      * @param startedPlayer the started player
      * @param completedTime the completed time
      * @param sprint        the sprint
      * @param season        the season
      */
-    public TaskHistoryEntry(int id, String taskType, long addedTime, long startedTime, long allowedTime, String taskJson, String town, String startedPlayer, long completedTime, int sprint, int season) {
+    public TaskHistoryEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime,
+                            MissionJson missionJson, Town town, Player startedPlayer, long completedTime, boolean claimed,
+                            int sprint, int season) {
         super(id, DbType.TASK_HISTORY);
-        this.taskType = taskType;
+        this.missionType = missionType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;
         this.allowedTime = allowedTime;
-        this.taskJson = taskJson;
+        this.missionJson = missionJson;
         this.town = town;
         this.startedPlayer = startedPlayer;
         this.completedTime = completedTime;
+        this.claimed = claimed;
         this.sprint = sprint;
         this.season = season;
+    }
+
+    public TaskHistoryEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime,
+                            String missionJson, String townName, String startedPlayer, long completedTime,
+                            boolean claimed, int sprint, int season) throws JsonProcessingException {
+        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), Bukkit.getPlayer(UUID.fromString(startedPlayer)), completedTime, claimed, sprint, season);
+        this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
+    }
+
+    public TaskHistoryEntry(TaskEntry entry, long completedTime) {
+        this(0, entry.getMissionType(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(),
+                entry.getMissionJson(), entry.getTown(), entry.getStartedPlayer(), completedTime, false, 0, 0);
     }
 
     /**
@@ -52,17 +78,17 @@ public class TaskHistoryEntry extends SqlEntry {
      *
      * @return the task type
      */
-    public String getTaskType() {
-        return taskType;
+    public MissionType getMissionType() {
+        return missionType;
     }
 
     /**
      * Sets task type.
      *
-     * @param taskType the task type
+     * @param missionType the task type
      */
-    public void setTaskType(String taskType) {
-        this.taskType = taskType;
+    public void setMissionType(MissionType missionType) {
+        this.missionType = missionType;
     }
 
     /**
@@ -106,17 +132,17 @@ public class TaskHistoryEntry extends SqlEntry {
      *
      * @return the task json
      */
-    public String getTaskJson() {
-        return taskJson;
+    public MissionJson getMissionJson() {
+        return missionJson;
     }
 
     /**
      * Sets task json.
      *
-     * @param taskJson the task json
+     * @param missionJson the task json
      */
-    public void setTaskJson(String taskJson) {
-        this.taskJson = taskJson;
+    public void setTaskJson(MissionJson missionJson) {
+        this.missionJson = missionJson;
     }
 
     /**
@@ -124,7 +150,7 @@ public class TaskHistoryEntry extends SqlEntry {
      *
      * @return the town
      */
-    public String getTown() {
+    public Town getTown() {
         return town;
     }
 
@@ -133,7 +159,7 @@ public class TaskHistoryEntry extends SqlEntry {
      *
      * @param town the town
      */
-    public void setTown(String town) {
+    public void setTown(Town town) {
         this.town = town;
     }
 
@@ -214,7 +240,7 @@ public class TaskHistoryEntry extends SqlEntry {
      *
      * @return the started player
      */
-    public String getStartedPlayer() {
+    public Player getStartedPlayer() {
         return startedPlayer;
     }
 
@@ -223,7 +249,15 @@ public class TaskHistoryEntry extends SqlEntry {
      *
      * @param startedPlayer the started player
      */
-    public void setStartedPlayer(String startedPlayer) {
+    public void setStartedPlayer(Player startedPlayer) {
         this.startedPlayer = startedPlayer;
+    }
+
+    public boolean isClaimed() {
+        return claimed;
+    }
+
+    public void setClaimed(boolean claimed) {
+        this.claimed = claimed;
     }
 }

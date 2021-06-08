@@ -9,25 +9,24 @@ import world.naturecraft.townymission.db.sql.TaskDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The type Sanity checker.
  */
 public class SanityChecker {
 
+    private final List<String> permissions;
+    private final List<BooleanChecker> customChecks;
+    private final TaskDao taskDao;
+    private final TownyMission instance;
     private boolean checkHasTown;
-
     private boolean checkIsMayor;
-
     private boolean checkHasStarted;
-
     private boolean checkIsMissionType;
     private MissionType missionType;
-
-    private final List<BooleanChecker> customChecks;
-
-    private final TaskDao taskDao;
     private Player player;
+    private boolean isSilent;
 
     /**
      * Instantiates a new Sanity checker.
@@ -35,8 +34,11 @@ public class SanityChecker {
      * @param instance the instance
      */
     public SanityChecker(TownyMission instance) {
+        this.instance = instance;
         taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
         customChecks = new ArrayList<>();
+        permissions = new ArrayList<>();
+        isSilent = false;
     }
 
     /**
@@ -47,6 +49,11 @@ public class SanityChecker {
      */
     public SanityChecker target(Player player) {
         this.player = player;
+        return this;
+    }
+
+    public SanityChecker silent(boolean isSilent) {
+        this.isSilent = isSilent;
         return this;
     }
 
@@ -92,6 +99,11 @@ public class SanityChecker {
         return this;
     }
 
+    public SanityChecker hasPermission(String permission) {
+        permissions.add(permission);
+        return this;
+    }
+
     /**
      * Custom check sanity checker.
      *
@@ -113,14 +125,19 @@ public class SanityChecker {
     public boolean check() {
 
         if (checkHasTown) {
-            if (TownyUtil.residentOf(player) == null)
+            if (TownyUtil.residentOf(player) == null) {
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoTown", instance));
                 return false;
+            }
         }
 
         if (checkIsMayor) {
             if (!checkHasTown)
                 return false;
             if (TownyUtil.mayorOf(player) == null) {
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNotMayor", instance));
                 return false;
             }
         }
@@ -128,15 +145,32 @@ public class SanityChecker {
         if (checkHasStarted) {
             if (!checkHasTown)
                 return false;
-            if (taskDao.getStartedMission(TownyUtil.residentOf(player)) == null)
+            if (taskDao.getStartedMission(TownyUtil.residentOf(player)) == null) {
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoStartedMission", instance));
                 return false;
+            }
         }
 
         if (checkIsMissionType) {
             if (!checkHasStarted)
                 return false;
-            if (!taskDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType))
+            if (!taskDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType)) {
+                if (!isSilent)
+                    Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onMissionTypeMismatch", instance).replace("%missionType%", missionType.name().toLowerCase(Locale.ROOT)));
                 return false;
+            }
+        }
+
+        if (permissions.size() != 0) {
+            for (String s : permissions) {
+                if (!player.hasPermission(s)) {
+                    if (!isSilent)
+                        Util.sendMsg(player, Util.getLangEntry("commands.sanityChecker.onNoPermission", instance).replace("%permission%", s));
+                    return false;
+                }
+            }
+            return true;
         }
 
         if (customChecks.size() != 0) {

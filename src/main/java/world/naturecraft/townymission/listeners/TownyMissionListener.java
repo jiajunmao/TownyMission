@@ -11,7 +11,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.dao.TaskDao;
+import world.naturecraft.townymission.dao.TaskHistoryDao;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
+import world.naturecraft.townymission.db.sql.TaskHistoryDatabase;
+
+import java.util.logging.Logger;
 
 /**
  * The type Towny mission listener.
@@ -27,10 +31,14 @@ public abstract class TownyMissionListener implements Listener {
      */
     protected TaskDao taskDao;
 
+    protected TaskHistoryDao taskHistoryDao;
+
     /**
      * The Plugin manager.
      */
     protected PluginManager pluginManager;
+
+    protected Logger logger;
 
     /**
      * Instantiates a new Towny mission listener.
@@ -40,7 +48,9 @@ public abstract class TownyMissionListener implements Listener {
     public TownyMissionListener(TownyMission instance) {
         this.instance = instance;
         taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
+        taskHistoryDao = new TaskHistoryDao((TaskHistoryDatabase) instance.getDb(DbType.TASK_HISTORY));
         pluginManager = Bukkit.getPluginManager();
+        logger = instance.getLogger();
     }
 
     /**

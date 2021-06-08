@@ -4,11 +4,16 @@
 
 package world.naturecraft.townymission.listeners.internal;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
+import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
+import world.naturecraft.townymission.utils.Util;
 
 /**
  * The type Do mission listener.
@@ -32,5 +37,17 @@ public class DoMissionListener extends TownyMissionListener {
     @EventHandler
     public void onDoMission(DoMissionEvent e) {
         TaskEntry taskEntry = e.getTaskEntry();
+        Player player = e.getPlayer();
+        MissionJson missionjson = taskEntry.getMissionJson();
+
+        if (missionjson.getCompleted() >= missionjson.getAmount()) {
+            taskDao.remove(taskEntry);
+            TaskHistoryEntry taskHistoryEntry = new TaskHistoryEntry(taskEntry, Util.currentTime());
+            try {
+                taskHistoryDao.add(taskHistoryEntry);
+            } catch (JsonProcessingException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 }

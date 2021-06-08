@@ -36,6 +36,9 @@ public class TownyUtil {
      * @return the town
      */
     public static Town residentOf(Player player) {
+        if (player == null)
+            return null;
+
         for (Town t : TownyAPI.getInstance().getDataSource().getTowns()) {
             if (t.hasResident(player.getDisplayName())) {
                 return t;

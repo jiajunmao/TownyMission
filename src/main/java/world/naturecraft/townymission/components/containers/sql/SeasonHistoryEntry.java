@@ -6,7 +6,6 @@ import world.naturecraft.townymission.components.enums.DbType;
  * The type Season history entry.
  */
 public class SeasonHistoryEntry extends SqlEntry {
-    private int id;
     private int season;
     private long startTime;
     private String rankJson;
@@ -24,24 +23,6 @@ public class SeasonHistoryEntry extends SqlEntry {
         this.season = season;
         this.startTime = startTime;
         this.rankJson = rankJson;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

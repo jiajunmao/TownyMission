@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.components.containers.json.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 
@@ -29,6 +30,23 @@ public class MissionJsonFactory {
                 return MobJson.class;
             case "RESOURCE":
                 return ResourceJson.class;
+            default:
+                return null;
+        }
+    }
+
+    public static MissionJson getJson(String missionJson, MissionType missionType) throws JsonProcessingException {
+        switch (missionType.name()) {
+            case "VOTE":
+                return (VoteJson.parse(missionJson));
+            case "MONEY":
+                return (MoneyJson.parse(missionJson));
+            case "MOB":
+                return (MobJson.parse(missionJson));
+            case "EXPANSION":
+                return (ExpansionJson.parse(missionJson));
+            case "RESOURCE":
+                return (ResourceJson.parse(missionJson));
             default:
                 return null;
         }

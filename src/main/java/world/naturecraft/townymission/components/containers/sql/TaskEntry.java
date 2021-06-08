@@ -1,17 +1,16 @@
 package world.naturecraft.townymission.components.containers.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import world.naturecraft.townymission.components.containers.json.*;
+import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.TownyUtil;
 
-import java.util.Locale;
+import java.util.UUID;
 
 /**
  * The type Task entry.
@@ -58,30 +57,14 @@ public class TaskEntry extends SqlEntry {
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
      * @param townName          the town name
-     * @param startedPlayerName the started player name
+     * @param startedPlayerUUID the started player name
      * @throws JsonProcessingException the json processing exception
      */
-    public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerName) throws JsonProcessingException {
-        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), startedPlayerName == null ? null : Bukkit.getPlayer(startedPlayerName));
+    public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
+        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), (startedPlayerUUID == null || startedPlayerUUID.equals("null")) ? null : Bukkit.getPlayer(UUID.fromString(startedPlayerUUID)));
 
         //TODO: replace with polymorphism
-        switch (missionType) {
-            case "VOTE":
-                setMissionJson(VoteJson.parse(missionJson));
-                break;
-            case "MONEY":
-                setMissionJson(MoneyJson.parse(missionJson));
-                break;
-            case "MOB":
-                setMissionJson(MobJson.parse(missionJson));
-                break;
-            case "EXPANSION":
-                setMissionJson(ExpansionJson.parse(missionJson));
-                break;
-            case "RESOURCE":
-                setMissionJson(ResourceJson.parse(missionJson));
-                break;
-        }
+        this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
     }
 
     /**

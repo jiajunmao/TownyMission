@@ -6,7 +6,6 @@ import world.naturecraft.townymission.components.enums.DbType;
  * The type Sprint entry.
  */
 public class SprintEntry extends SqlEntry {
-    private int id;
     private String townID;
     private String townName;
     private int naturepoints;
@@ -30,24 +29,6 @@ public class SprintEntry extends SqlEntry {
         this.naturepoints = naturepoints;
         this.sprint = sprint;
         this.season = season;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

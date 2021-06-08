@@ -6,7 +6,6 @@ package world.naturecraft.townymission.components.containers.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -27,10 +26,10 @@ public abstract class MissionJson {
     private final int hrAllowed;
     @JsonProperty("amount")
     private final int amount;
-    @JsonProperty("completed")
-    private int completed;
     @JsonProperty("contributions")
     private final Map<String, Integer> contributions;
+    @JsonProperty("completed")
+    private int completed;
 
     /**
      * Instantiates a new Mission json.
@@ -53,6 +52,17 @@ public abstract class MissionJson {
         } else {
             this.contributions = contributions;
         }
+    }
+
+    /**
+     * Parse mission json.
+     *
+     * @param json the json
+     * @return the mission json
+     * @throws JsonProcessingException the json processing exception
+     */
+    public static MissionJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, MissionJson.class);
     }
 
     /**
@@ -109,6 +119,10 @@ public abstract class MissionJson {
         this.completed = completed;
     }
 
+    public void addCompleted(int amount) {
+        this.completed += amount;
+    }
+
     /**
      * Gets mission type.
      *
@@ -161,16 +175,5 @@ public abstract class MissionJson {
      */
     public void removeContributions(String playerUUID) {
         contributions.remove(playerUUID);
-    }
-
-    /**
-     * Parse mission json.
-     *
-     * @param json the json
-     * @return the mission json
-     * @throws JsonProcessingException the json processing exception
-     */
-    public static MissionJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, MissionJson.class);
     }
 }

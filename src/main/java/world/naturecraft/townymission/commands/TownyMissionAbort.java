@@ -4,10 +4,12 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
@@ -42,16 +44,24 @@ public class TownyMissionAbort extends TownyMissionCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (sanityCheck(player)) {
-                Town town = TownyUtil.residentOf(player);
-                List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                for (TaskEntry e : taskEntries) {
-                    if (e.getStartedTime() != 0) {
-                        taskDao.remove(e);
-                        Util.sendMsg(sender, "&c The mission has been aborted");
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (sanityCheck(player)) {
+                        Town town = TownyUtil.residentOf(player);
+                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
+                        for (TaskEntry e : taskEntries) {
+                            if (e.getStartedTime() != 0) {
+                                taskDao.remove(e);
+                                Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
+                            }
+                        }
                     }
                 }
-            }
+            };
+
+            r.runTaskAsynchronously(instance);
         }
 
         return true;
@@ -64,29 +74,23 @@ public class TownyMissionAbort extends TownyMissionCommand {
      * @return the boolean
      */
     public boolean sanityCheck(Player player) {
-        if (player.hasPermission("townymission.player")) {
-            Town town;
-            if ((town = TownyUtil.residentOf(player)) != null) {
-                TaskEntry entry;
-                if ((entry = taskDao.getStartedMission(town)) != null) {
+
+        SanityChecker checker = new SanityChecker(instance).target(player)
+                .hasTown()
+                .hasStarted()
+                .hasPermission("townymission.player")
+                .customCheck(() -> {
+                    Town town = TownyUtil.residentOf(player);
+                    TaskEntry entry = taskDao.getStartedMission(town);
                     if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
                         return true;
                     } else {
-                        Util.sendMsg(player, "&c You either need to be the mayor or started the mission yourself to abort!");
+                        Util.sendMsg(player, Util.getLangEntry("commands.abort.onNotMayorOrStarter", instance));
                         return false;
                     }
-                } else {
-                    Util.sendMsg(player, "&c Your town does not have a started missions!");
-                    return false;
-                }
-            } else {
-                Util.sendMsg(player, "&c You need to belong to a town to start a mission!");
-                return false;
-            }
-        } else {
-            Util.sendMsg(player, "&c You do not have permission for this command!");
-            return false;
-        }
+                });
+
+        return checker.check();
     }
 
     /**
