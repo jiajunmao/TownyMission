@@ -27,5 +27,7 @@ public enum DbType {
     /**
      * Task history db type.
      */
-    TASK_HISTORY
+    TASK_HISTORY,
+
+    COOLDOWN
 }
