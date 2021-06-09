@@ -18,7 +18,8 @@ commands:
     requiredItem: "&cRequired type: %item%"
     inHandItem: "&cIn-hand type: %item%"
   start:
-    onAlreadyStarted: "&c Your town already has a started mission!"
+    onAlreadyStarted: "&cYour town already has a started mission!"
+    onStillInCooldown: "&cYour town is still in cooldown for claiming mission! Please wait %time%"
   sanityChecker:
     onNoTown: "&cYou do not belong to a town!"
     onNotMayor: "&cYou are not the mayor!"

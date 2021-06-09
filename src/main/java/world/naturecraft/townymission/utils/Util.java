@@ -114,6 +114,9 @@ public class Util {
         return (long) hr * 60 * 60 * 1000;
     }
 
+    public static long minuteToMs(int minute) {
+        return (long) minute * 60 * 1000;
+    }
     /**
      * Classify task entry map.
      *

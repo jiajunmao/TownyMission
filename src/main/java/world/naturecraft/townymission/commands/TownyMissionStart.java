@@ -13,6 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.exceptions.NotFoundException;
+import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
@@ -21,7 +23,9 @@ import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Towny mission start.
@@ -115,17 +119,34 @@ public class TownyMissionStart extends TownyMissionCommand {
                     }
                     return true;
                 }).customCheck(() -> {
-                    System.out.println("Checking started mission...");
                     Town town = TownyUtil.residentOf(player);
 
                     if (taskDao.getStartedMission(town) == null) {
-                        System.out.println("Town " + town.getName() + " does not have a started mission, passing check");
                         return true;
                     } else {
                         Util.sendMsg(player, Util.getLangEntry("commands.start.onAlreadyStarted", instance));
-                        System.out.println("Town " + town.getName() + " has a started mission: " + taskDao.getStartedMission(town).getMissionJson());
                         return false;
                     }
+                }).customCheck(() -> {
+                   Town town = TownyUtil.residentOf(player);
+
+                   try {
+                       if (cooldownDao.isStillInCooldown(town)) {
+                           long remainingTime = cooldownDao.getRemaining(town);
+                           String display = String.format("%02d:%02d",
+                                   TimeUnit.MILLISECONDS.toHours(remainingTime),
+                                   TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
+                                           TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
+                           Util.sendMsg(player, Util.getLangEntry("commands.start.onStillInCooldown", instance).replace("%time%", display));
+                           return false;
+                       } else {
+                           return true;
+                       }
+                   } catch (NotFoundException e) {
+                       Date date = new Date();
+                       cooldownDao.add(new CooldownEntry(0, town, date.getTime(), 0));
+                       return true;
+                   }
                 }).check();
     }
 

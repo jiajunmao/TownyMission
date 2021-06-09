@@ -156,15 +156,9 @@ public class MissionListener extends TownyMissionListener {
 
                     DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
                     pluginManager.callEvent(missionEvent);
-                    try {
-                        if (!missionEvent.isCanceled()) {
-                            taskDao.update(taskEntry);
-                        }
-                    } catch (JsonProcessingException exception) {
-                        exception.printStackTrace();
-                        return;
+                    if (!missionEvent.isCanceled()) {
+                        taskDao.update(taskEntry);
                     }
-
                 }
             }
         };

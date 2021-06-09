@@ -23,6 +23,11 @@ participants:
   # How many required naturepoints are added to the base line for each successive sprint
   sprintBaselineIncrement: 1000
 
+# Mission settings
+mission:
+  # Cooldown between abort/complete and town getting new mission, in minutes
+  cooldown: 30
+
 # Sprint settings
 sprint:
   # The current sprint, do not touch unless you know what you are doing

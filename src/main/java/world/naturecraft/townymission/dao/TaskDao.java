@@ -6,6 +6,7 @@ package world.naturecraft.townymission.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
+import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.db.sql.TaskDatabase;
@@ -104,10 +105,14 @@ public class TaskDao extends Dao<TaskEntry> {
      * Add.
      *
      * @param entry the entry
-     * @throws JsonProcessingException the json processing exception
+     * @throws DataProcessException the json processing exception
      */
-    public void add(TaskEntry entry) throws JsonProcessingException {
-        db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer() == null ? null : entry.getStartedPlayer().getUniqueId().toString());
+    public void add(TaskEntry entry) {
+        try {
+            db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer() == null ? null : entry.getStartedPlayer().getUniqueId().toString());
+        } catch (JsonProcessingException e) {
+            throw new DataProcessException(e);
+        }
     }
 
     /**
@@ -123,10 +128,14 @@ public class TaskDao extends Dao<TaskEntry> {
      * Update.
      *
      * @param entry the entry
-     * @throws JsonProcessingException the json processing exception
+     * @throws DataProcessException the json processing exception
      */
-    public void update(TaskEntry entry) throws JsonProcessingException {
-        db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
+    public void update(TaskEntry entry) {
+        try {
+            db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
+        } catch (JsonProcessingException e) {
+            throw new DataProcessException(e);
+        }
     }
 
     @Override

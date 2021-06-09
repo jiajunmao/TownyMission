@@ -76,6 +76,7 @@ public class TownyMission extends JavaPlugin {
         dbList.put(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(this, db, Util.getDbName(DbType.SPRINT_HISTORY)));
         dbList.put(DbType.SEASON, new SeasonDatabase(this, db, Util.getDbName(DbType.SEASON)));
         dbList.put(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(this, db, Util.getDbName(DbType.SEASON_HISTORY)));
+        dbList.put(DbType.COOLDOWN, new CooldownDatabase(this, db, Util.getDbName(DbType.COOLDOWN)));
     }
 
     /**

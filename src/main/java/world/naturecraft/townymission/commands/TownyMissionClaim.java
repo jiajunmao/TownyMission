@@ -112,11 +112,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
 
 
                                 entry.setClaimed(true);
-                                try {
-                                    taskHistoryDao.update(entry);
-                                } catch (JsonProcessingException exception) {
-                                    exception.printStackTrace();
-                                }
+                                taskHistoryDao.update(entry);
                                 Util.sendMsg(player, Util.getLangEntry("commands.claim.onSuccess", instance).replace("%points%", String.valueOf(reward)));
                             } else {
                                 // Claim all rewards
@@ -135,11 +131,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                     totalPoints += taskHistoryEntry.getMissionJson().getReward();
                                     sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() + taskHistoryEntry.getMissionJson().getReward());
                                     taskHistoryEntry.setClaimed(true);
-                                    try {
-                                        taskHistoryDao.update(taskHistoryEntry);
-                                    } catch (JsonProcessingException exception) {
-                                        exception.printStackTrace();
-                                    }
+                                    taskHistoryDao.update(taskHistoryEntry);
                                 }
 
                                 sprintDao.update(sprintEntry);

@@ -38,6 +38,7 @@ public class CooldownDatabase extends Database<CooldownEntry> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`id` INT NOT NULL AUTO_INCREMENT ," +
                     "`town_uuid` VARCHAR(255) NOT NULL ," +
+                    "`started_time` BIGINT NOT NULL," +
                     "`cooldown` BIGINT NOT NULL," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -57,30 +58,27 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
-            try {
-                ResultSet result = p.executeQuery();
-                while (result.next()) {
-                    try {
-                        list.add(new CooldownEntry(result.getInt("id"),
-                                result.getString("town_uuid"),
-                                result.getInt("cooldown")));
-                    } catch (NotRegisteredException e) {
-                        e.printStackTrace();
-                    }
+            ResultSet result = p.executeQuery();
+            while (result.next()) {
+                try {
+                    list.add(new CooldownEntry(result.getInt("id"),
+                            result.getString("town_uuid"),
+                            result.getLong("started_time"),
+                            result.getLong("cooldown")));
+                } catch (NotRegisteredException e) {
+                    e.printStackTrace();
                 }
-                return null;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return null;
             }
+            return null;
         });
         return list;
     }
 
-    public void add(String townUUID, long cooldown) {
+    public void add(String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
                     townUUID + "', '" +
+                    startedTime + "', '" +
                     cooldown + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -98,10 +96,11 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         });
     }
 
-    public void update(int id, String townUUID, long cooldown) {
+    public void update(int id, String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_uuid='" + townUUID +
+                    "', started_time='" + startedTime +
                     "', cooldown='" + cooldown +
                     "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);

@@ -14,16 +14,18 @@ import java.util.UUID;
 public class CooldownEntry extends SqlEntry {
 
     private Town town;
+    private long startedTime;
     private long cooldown;
 
-    public CooldownEntry(int id, Town town, long cooldown) {
+    public CooldownEntry(int id, Town town, long startedTime, long cooldown) {
         super(id, DbType.COOLDOWN);
         this.town = town;
+        this.startedTime = startedTime;
         this.cooldown = cooldown;
     }
 
-    public CooldownEntry(int id, String townUUID, long cooldown) throws NotRegisteredException {
-        this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)), cooldown);
+    public CooldownEntry(int id, String townUUID, long startedTime, long cooldown) throws NotRegisteredException {
+        this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)), startedTime, cooldown);
     }
 
     public Town getTown() {
@@ -40,5 +42,13 @@ public class CooldownEntry extends SqlEntry {
 
     public void setCooldown(long cooldown) {
         this.cooldown = cooldown;
+    }
+
+    public long getStartedTime() {
+        return startedTime;
+    }
+
+    public void setStartedTime(long startedTime) {
+        this.startedTime = startedTime;
     }
 }

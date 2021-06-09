@@ -9,14 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.dao.SeasonDao;
-import world.naturecraft.townymission.dao.SprintDao;
-import world.naturecraft.townymission.dao.TaskDao;
-import world.naturecraft.townymission.dao.TaskHistoryDao;
-import world.naturecraft.townymission.db.sql.SeasonDatabase;
-import world.naturecraft.townymission.db.sql.SprintDatabase;
-import world.naturecraft.townymission.db.sql.TaskDatabase;
-import world.naturecraft.townymission.db.sql.TaskHistoryDatabase;
+import world.naturecraft.townymission.dao.*;
+import world.naturecraft.townymission.db.sql.*;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.logging.Logger;
@@ -42,6 +36,7 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
     protected TaskHistoryDao taskHistoryDao;
     protected SprintDao sprintDao;
     protected SeasonDao seasonDao;
+    protected CooldownDao cooldownDao;
 
     /**
      * Instantiates a new Towny mission command.
@@ -55,6 +50,7 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
         this.taskHistoryDao = new TaskHistoryDao((TaskHistoryDatabase) instance.getDb(DbType.TASK_HISTORY));
         this.sprintDao = new SprintDao((SprintDatabase) instance.getDb(DbType.SPRINT));
         this.seasonDao = new SeasonDao((SeasonDatabase) instance.getDb(DbType.SEASON));
+        this.cooldownDao = new CooldownDao((CooldownDatabase) instance.getDb(DbType.COOLDOWN));
     }
 
     /**

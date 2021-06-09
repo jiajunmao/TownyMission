@@ -18,9 +18,9 @@ public abstract class Dao<T extends SqlEntry> {
 
     public abstract List<T> getEntries();
 
-    public abstract void add(T data) throws JsonProcessingException;
+    public abstract void add(T data);
 
-    public abstract void update(T data) throws JsonProcessingException;
+    public abstract void update(T data);
 
     public abstract void remove(T data);
 }

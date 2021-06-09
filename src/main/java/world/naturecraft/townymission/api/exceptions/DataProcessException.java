@@ -4,5 +4,19 @@
 
 package world.naturecraft.townymission.api.exceptions;
 
-public class DataProcessException extends Throwable {
+import javax.xml.crypto.Data;
+
+public class DataProcessException extends RuntimeException {
+
+    public DataProcessException(String message) {
+        super(message);
+    }
+
+    public DataProcessException(Exception e) {
+        super(e);
+    }
+
+    public DataProcessException() {
+        this("Something went wrong during data processing.");
+    }
 }
