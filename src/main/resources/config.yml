@@ -11,6 +11,23 @@ database:
   # The password to access the database
   password:
 
+# Settings for participants in the sprint/season
+participants:
+  # How many points does each town has to earn regardless to enter the ranking
+  sprintRewardBaseline: 2000
+  # How many extra points each town must make when they have multiple members
+  # Formula for total reward entry bar is: baseline+(n-1)*scale
+  sprintRewardMemberScale: 1500
+  # Whether there is a max cap that the entry bar can reach
+  sprintRewardBaselineCap: 15000
+  # How many required naturepoints are added to the base line for each successive sprint
+  sprintBaselineIncrement: 1000
+
+# Mission settings
+mission:
+  # Cooldown between abort/complete and town getting new mission, in minutes
+  cooldown: 30
+
 # Sprint settings
 sprint:
   # The current sprint, do not touch unless you know what you are doing

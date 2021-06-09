@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.commands;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,11 +9,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,13 +53,11 @@ public class TownyMissionAbort extends TownyMissionCommand {
                 public void run() {
                 if (sanityCheck(player)) {
                     Town town = TownyUtil.residentOf(player);
-                    List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                    for (TaskEntry e : taskEntries) {
-                        if (e.getStartedTime() != 0) {
-                            taskDao.remove(e);
-                            Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
-                        }
-                    }
+                    TaskEntry taskEntry = taskDao.getStartedMission(town);
+                    taskDao.remove(taskEntry);
+
+                    cooldownDao.startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+                    Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
                 }
                 }
             };

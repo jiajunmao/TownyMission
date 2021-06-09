@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.utils;
 
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -113,6 +114,9 @@ public class Util {
         return (long) hr * 60 * 60 * 1000;
     }
 
+    public static long minuteToMs(int minute) {
+        return (long) minute * 60 * 1000;
+    }
     /**
      * Classify task entry map.
      *
@@ -140,6 +144,17 @@ public class Util {
 
         long currentTime = new Date().getTime();
         return entry.getStartedTime() + entry.getAllowedTime() < currentTime;
+    }
+
+    public static int getRankingPoints(int numResident, int naturePoint, TownyMission instance) {
+        int baseline = instance.getConfig().getInt("participants.sprintRewardBaseline");
+        int memberScale = instance.getConfig().getInt("participants.sprintRewardMemberScale");
+        int baselineCap = instance.getConfig().getInt("participants.sprintRewardBaselineCap");
+        int increment = instance.getConfig().getInt("participants.sprintBaselineIncrement");
+        int currentSprint = instance.getConfig().getInt("sprint.current");
+
+        int realBaseline = Math.min(baseline + memberScale * (numResident - 1), baselineCap) + increment*(currentSprint-1);
+        return (naturePoint-realBaseline)/numResident;
     }
 
     public static boolean isInt(String str) {

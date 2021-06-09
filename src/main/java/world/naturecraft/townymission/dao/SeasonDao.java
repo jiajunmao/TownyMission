@@ -4,50 +4,50 @@
 
 package world.naturecraft.townymission.dao;
 
+import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
+import world.naturecraft.townymission.db.sql.SeasonDatabase;
 import world.naturecraft.townymission.db.sql.SprintDatabase;
 
 import java.util.List;
 
-public class SprintDao extends Dao<SprintEntry> {
+public class SeasonDao extends Dao<SeasonEntry> {
+    private final SeasonDatabase database;
 
-    private final SprintDatabase database;
-
-    public SprintDao(SprintDatabase database) {
+    public SeasonDao(SeasonDatabase database) {
         this.database = database;
     }
 
-    public void update(SprintEntry entry) {
+    public void update(SeasonEntry entry) {
         if (get(entry.getTownID()) != null) {
-            database.update(entry.getId(), entry.getTownID(), entry.getTownName(), entry.getNaturepoints(), entry.getSprint(), entry.getSeason());
+            database.update(entry.getId(), entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
         }
     }
 
     @Override
-    public void remove(SprintEntry data) {
+    public void remove(SeasonEntry data) {
         database.remove(data.getId());
     }
 
-    public void add(SprintEntry entry) {
+    public void add(SeasonEntry entry) {
         if (get(entry.getTownID()) == null) {
-            database.add(entry.getTownID(), entry.getTownName(), entry.getNaturepoints(), entry.getSprint(), entry.getSeason());
+            database.add(entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
         } else {
             update(entry);
         }
     }
 
     @Override
-    public List<SprintEntry> getEntries() {
+    public List<SeasonEntry> getEntries() {
         return database.getEntries();
     }
 
-    public SprintEntry get(String townUUID) {
+    public SeasonEntry get(String townUUID) {
         if (database.getEntries() == null)
             return null;
 
-        for (SprintEntry s : database.getEntries()) {
+        for (SeasonEntry s : database.getEntries()) {
             if (s.getTownID().equalsIgnoreCase(townUUID)) {
-                System.out.println("SprintDao match with id: " + s.getId() + " and town name: " + s.getTownName());
                 return s;
             }
         }

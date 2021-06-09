@@ -54,11 +54,8 @@ public class DoMissionListener extends TownyMissionListener {
         if (missionjson.getCompleted() >= missionjson.getAmount()) {
             taskDao.remove(taskEntry);
             TaskHistoryEntry taskHistoryEntry = new TaskHistoryEntry(taskEntry, Util.currentTime());
-            try {
-                taskHistoryDao.add(taskHistoryEntry);
-            } catch (JsonProcessingException exception) {
-                exception.printStackTrace();
-            }
+            taskHistoryDao.add(taskHistoryEntry);
+            cooldownDao.startCooldown(taskEntry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
         }
     }
 }

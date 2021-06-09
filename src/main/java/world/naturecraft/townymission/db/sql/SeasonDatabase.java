@@ -6,6 +6,7 @@ import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,18 +46,22 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     public List<SeasonEntry> getEntries() {
         List<SeasonEntry> list = new ArrayList<>();
         execute(conn -> {
-            String sql = "";
+            String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
-            ResultSet result = p.executeQuery();
-
-            while (result.next()) {
-                list.add(new SeasonEntry(result.getInt("id"),
-                        result.getString("town_id"),
-                        result.getString("town_name"),
-                        result.getInt("seasonpoints"),
-                        result.getInt("season")));
+            try {
+                ResultSet result = p.executeQuery();
+                while (result.next()) {
+                    list.add(new SeasonEntry(result.getInt("id"),
+                            result.getString("town_id"),
+                            result.getString("town_name"),
+                            result.getInt("seasonpoints"),
+                            result.getInt("season")));
+                }
+                return null;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
             }
-            return null;
         });
         return list;
     }
