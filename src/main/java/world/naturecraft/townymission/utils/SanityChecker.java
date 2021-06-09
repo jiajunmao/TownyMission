@@ -170,16 +170,17 @@ public class SanityChecker {
                     return false;
                 }
             }
-            return true;
         }
 
         if (customChecks.size() != 0) {
+            boolean result = true;
             for (BooleanChecker checker : customChecks) {
-                if (!checker.check())
+                if (!checker.check()) {
                     return false;
+                }
             }
-        }
 
+        }
         return true;
     }
 
