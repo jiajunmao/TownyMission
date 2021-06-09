@@ -3,12 +3,18 @@ package world.naturecraft.townymission.components.containers.sql;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.TownyUtil;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.UUID;
 
@@ -166,5 +172,40 @@ public class TaskEntry extends SqlEntry {
      */
     public void setStartedPlayer(Player startedPlayer) {
         this.startedPlayer = startedPlayer;
+    }
+
+    private Material getGuiItemMaterial() {
+        switch (missionType) {
+            case RESOURCE:
+                return Material.WHEAT;
+            case MOB:
+                return Material.ZOMBIE_HEAD;
+            case EXPANSION:
+                return Material.GRASS_PATH;
+            case VOTE:
+                return Material.WRITABLE_BOOK;
+            case MONEY:
+                return Material.PAPER;
+            default:
+                return null;
+        }
+    }
+
+    public ItemStack getGuiItem() {
+        ItemStack stack = new ItemStack(getGuiItemMaterial(), 1);
+
+        ItemMeta meta = stack.getItemMeta();
+
+        String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
+        meta.setDisplayName(Util.translateColor(displayName));
+        meta.setLore(missionJson.getLore());
+
+        if (startedTime != 0) {
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+
+        stack.setItemMeta(meta);
+        return stack;
     }
 }

@@ -16,6 +16,7 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.NotStartedException;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.gui.MissionManageGui;
 import world.naturecraft.townymission.config.CustomConfigParser;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -54,68 +55,71 @@ public class TownyMissionList extends TownyMissionCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            BukkitRunnable r = new BukkitRunnable() {
-                @Override
-                public void run() {
+//            BukkitRunnable r = new BukkitRunnable() {
+//                @Override
+//                public void run() {
                     Player player = (Player) sender;
                     Town town;
                     if ((town = TownyUtil.residentOf(player)) != null) {
-                        int diff = 15 - taskDao.getNumAdded(town);
-                        List<MissionJson> missions = CustomConfigParser.parseAll(instance);
-                        int size = missions.size();
-                        Random rand = new Random();
+                        MissionManageGui gui = new MissionManageGui(instance, player);
+                        gui.openInventory();
 
-                        for (int i = 0; i < diff; i++) {
-                            //TODO: Prevent duplicates
-                            int index = rand.nextInt(size);
-                            MissionJson mission = missions.get(index);
-                            try {
-                                TaskEntry entry = new TaskEntry(0,
-                                        mission.getMissionType().name(),
-                                        Util.currentTime(),
-                                        0,
-                                        Util.hrToMs(mission.getHrAllowed()),
-                                        mission.toJson(),
-                                        town.getName(),
-                                        null);
-                                taskDao.add(entry);
-                            } catch (JsonProcessingException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Current Assignments&7------");
-                        int index = 1;
-
-                        for (TaskEntry e : taskDao.getTownTasks(town)) {
-                            try {
-                                try {
-                                    if (Util.isTimedOut(e)) {
-                                        builder.add("&c" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-                                    } else if (e.getStartedTime() != 0) {
-                                        builder.add("&3" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-                                    } else {
-                                        builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-                                    }
-                                } catch (NotStartedException notStartedException) {
-                                    builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-                                }
-                            } catch (JsonProcessingException exp) {
-                                logger.severe("Json parsing error when parsing " + e.getMissionJson());
-                                exp.printStackTrace();
-                            }
-                            index++;
-                        }
-
-                        Util.sendMsg(sender, Util.translateColor(builder.toString()));
+//                        int diff = 15 - taskDao.getNumAdded(town);
+//                        List<MissionJson> missions = CustomConfigParser.parseAll(instance);
+//                        int size = missions.size();
+//                        Random rand = new Random();
+//
+//                        for (int i = 0; i < diff; i++) {
+//                            //TODO: Prevent duplicates
+//                            int index = rand.nextInt(size);
+//                            MissionJson mission = missions.get(index);
+//                            try {
+//                                TaskEntry entry = new TaskEntry(0,
+//                                        mission.getMissionType().name(),
+//                                        Util.currentTime(),
+//                                        0,
+//                                        Util.hrToMs(mission.getHrAllowed()),
+//                                        mission.toJson(),
+//                                        town.getName(),
+//                                        null);
+//                                taskDao.add(entry);
+//                            } catch (JsonProcessingException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Current Assignments&7------");
+//                        int index = 1;
+//
+//                        for (TaskEntry e : taskDao.getTownTasks(town)) {
+//                            try {
+//                                try {
+//                                    if (Util.isTimedOut(e)) {
+//                                        builder.add("&c" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
+//                                    } else if (e.getStartedTime() != 0) {
+//                                        builder.add("&3" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
+//                                    } else {
+//                                        builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
+//                                    }
+//                                } catch (NotStartedException notStartedException) {
+//                                    builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
+//                                }
+//                            } catch (JsonProcessingException exp) {
+//                                logger.severe("Json parsing error when parsing " + e.getMissionJson());
+//                                exp.printStackTrace();
+//                            }
+//                            index++;
+//                        }
+//
+//                        Util.sendMsg(sender, Util.translateColor(builder.toString()));
 
                     } else {
                         Util.sendMsg(sender, "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
                     }
-                }
-            };
+//                }
+//            };
 
-            r.runTaskAsynchronously(instance);
+//            r.runTaskAsynchronously(instance);
         }
 
         return true;

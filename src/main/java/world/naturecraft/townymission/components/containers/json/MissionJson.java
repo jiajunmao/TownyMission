@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,6 +83,13 @@ public abstract class MissionJson {
      */
     @JsonIgnore
     public abstract String getDisplayLine();
+
+    /**
+     * Get the item lore if using GUI
+     * @return The lore in a list of string
+     */
+    @JsonIgnore
+    public abstract List<String> getLore();
 
     /**
      * Gets reward.

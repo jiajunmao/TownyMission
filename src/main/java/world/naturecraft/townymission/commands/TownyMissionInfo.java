@@ -62,7 +62,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                             return true;
                         }
                         else {
-                            Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                            Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                             return false;
                         }
                     }).check();

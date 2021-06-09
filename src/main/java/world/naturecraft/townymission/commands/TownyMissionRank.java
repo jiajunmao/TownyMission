@@ -60,7 +60,7 @@ public class TownyMissionRank extends TownyMissionCommand {
                     if (args.length == 1 || args.length == 2) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                 }).check();

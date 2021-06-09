@@ -83,7 +83,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
                             resourceJson.addContribution(player.getUniqueId().toString(), total);
                             resourceJson.addCompleted(total);
-                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onSuccess", instance)
+                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(total)
                                     .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         } else {
@@ -91,7 +91,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
                             resourceJson.addCompleted(number);
                             player.setItemInHand(null);
-                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onSuccess", instance)
+                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(number)
                                     .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         }
@@ -137,9 +137,9 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     if (player.getItemInHand().getType().equals(resourceJson.getType())) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("commands.deposit.onNotMatch", instance));
-                        Util.sendMsg(player, Util.getLangEntry("commands.deposit.requiredItem", instance).replace("%item%", resourceJson.getType().name().toLowerCase(Locale.ROOT)));
-                        Util.sendMsg(player, "&cIn-hand type: " + Util.getLangEntry("commands.deposit.inHandItem", instance).replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
+                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.onNotMatch"));
+                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceJson.getType().name().toLowerCase(Locale.ROOT)));
+                        Util.sendMsg(player, "&cIn-hand type: " + instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         return false;
                     }
                 })
@@ -147,7 +147,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     try {
                         if (Util.isTimedOut(resourceEntry)) {
-                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onMissionTimedOut", instance));
+                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));
                             return false;
                         }
                     } catch (NotStartedException e) {
@@ -163,7 +163,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                 }).check();

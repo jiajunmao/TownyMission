@@ -2,10 +2,16 @@ package world.naturecraft.townymission.utils;
 
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.ItemMergeEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.NotStartedException;
+import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -42,13 +48,6 @@ public class Util {
         } else {
             sender.getServer().getLogger().info(translateColor(message));
         }
-    }
-
-    public static String getLangEntry(String path, TownyMission instance) {
-        String finalString = "";
-        finalString += instance.getCustomConfig().getLangConfig().getString("prefix") + " ";
-        finalString += instance.getCustomConfig().getLangConfig().getString(path);
-        return finalString;
     }
 
     /**
@@ -173,5 +172,11 @@ public class Util {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static String capitalizeFirst(String str) {
+        str = str.toLowerCase(Locale.ROOT);
+        str = str.substring(0,1).toUpperCase(Locale.ROOT) + str.substring(1);
+        return str;
     }
 }

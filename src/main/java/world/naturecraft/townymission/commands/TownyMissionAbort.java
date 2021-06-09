@@ -57,7 +57,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                     taskDao.remove(taskEntry);
 
                     cooldownDao.startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
-                    Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
+                    Util.sendMsg(sender, instance.getLangEntry("commands.abort.onSuccess"));
                 }
                 }
             };
@@ -86,7 +86,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                     if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("commands.abort.onNotMayorOrStarter", instance));
+                        Util.sendMsg(player, instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
                         return false;
                     }
                 });

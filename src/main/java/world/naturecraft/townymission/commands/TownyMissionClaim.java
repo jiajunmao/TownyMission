@@ -61,10 +61,15 @@ public class TownyMissionClaim extends TownyMissionCommand {
                     boolean sane = new SanityChecker(instance).target(player)
                             .hasTown()
                             .customCheck(() -> {
-                                        if (args.length == 1 || (args.length == 2 && Util.isInt(args[1]) && Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 15) || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
+                                        if (args.length == 1
+                                                || (args.length == 2
+                                                    && Util.isInt(args[1])
+                                                    && Integer.parseInt(args[1]) >= 1
+                                                    && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
+                                                || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
                                             return true;
                                         } else {
-                                            Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                                            Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                                             return false;
                                         }
                                     }
@@ -75,7 +80,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                         List<TaskHistoryEntry> list = taskHistoryDao.getAllUnclaimed(town);
 
                         if (list.size() == 0) {
-                            Util.sendMsg(player, Util.getLangEntry("commands.claim.onNotFound", instance));
+                            Util.sendMsg(player, instance.getLangEntry("commands.claim.onNotFound"));
                             return;
                         } else {
                             //TODO: Check matching season and sprint
@@ -92,7 +97,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                             } else if (args.length == 2 && Util.isInt(args[1])) {
                                 int choice = Integer.parseInt(args[1]) - 1;
                                 if (choice >= list.size()) {
-                                    Util.sendMsg(player, Util.getLangEntry("commands.claim.notValidIndex", instance));
+                                    Util.sendMsg(player, instance.getLangEntry("commands.claim.notValidIndex"));
                                     return;
                                 }
 
@@ -113,7 +118,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
 
                                 entry.setClaimed(true);
                                 taskHistoryDao.update(entry);
-                                Util.sendMsg(player, Util.getLangEntry("commands.claim.onSuccess", instance).replace("%points%", String.valueOf(reward)));
+                                Util.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess").replace("%points%", String.valueOf(reward)));
                             } else {
                                 // Claim all rewards
                                 //TODO: command format sanity check in sanity checker
@@ -135,7 +140,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 }
 
                                 sprintDao.update(sprintEntry);
-                                Util.sendMsg(player, Util.getLangEntry("commands.claim.onSuccess", instance).replace("%points%", String.valueOf(totalPoints)));
+                                Util.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess").replace("%points%", String.valueOf(totalPoints)));
                             }
                         }
                     }

@@ -27,6 +27,8 @@ participants:
 mission:
   # Cooldown between abort/complete and town getting new mission, in minutes
   cooldown: 30
+  # How many missions a town can see
+  amount: 14
 
 # Sprint settings
 sprint:

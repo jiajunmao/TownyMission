@@ -63,7 +63,6 @@ public class TownyMissionStart extends TownyMissionCommand {
                     Player player = (Player) sender;
                     if (sanityCheck(player, args)) {
 
-                        System.out.println("Passed sanity check");
                         Town town = TownyUtil.residentOf(player);
                         List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
                         int missionIdx = Integer.parseInt(args[1]);
@@ -113,8 +112,9 @@ public class TownyMissionStart extends TownyMissionCommand {
                 .hasTown()
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
-                    if (args.length == 1 || (Integer.parseInt(args[1]) > 15 || Integer.parseInt(args[1]) < 1)) {
-                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                    if (args.length == 1 ||
+                            (Integer.parseInt(args[1]) > instance.getConfig().getInt("mission.amount") || Integer.parseInt(args[1]) < 1)) {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
@@ -124,7 +124,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                     if (taskDao.getStartedMission(town) == null) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("commands.start.onAlreadyStarted", instance));
+                        Util.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
                         return false;
                     }
                 }).customCheck(() -> {
@@ -137,7 +137,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                                    TimeUnit.MILLISECONDS.toHours(remainingTime),
                                    TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
-                           Util.sendMsg(player, Util.getLangEntry("commands.start.onStillInCooldown", instance).replace("%time%", display));
+                           Util.sendMsg(player, instance.getLangEntry("commands.start.onStillInCooldown").replace("%time%", display));
                            return false;
                        } else {
                            return true;
@@ -168,7 +168,7 @@ public class TownyMissionStart extends TownyMissionCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
         if (args.length == 2) {
-            for (int i = 1; i <= 15; i++) {
+            for (int i = 1; i <= instance.getConfig().getInt("mission.amount"); i++) {
                 tabList.add(String.valueOf(i));
             }
         }
