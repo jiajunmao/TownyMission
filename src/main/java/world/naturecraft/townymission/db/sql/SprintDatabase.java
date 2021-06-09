@@ -6,6 +6,7 @@ import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,18 +49,22 @@ public class SprintDatabase extends Database<SprintEntry> {
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
-            ResultSet result = p.executeQuery();
+            try {
+                ResultSet result = p.executeQuery();
 
-            while (result.next()) {
-                SprintEntry entry = new SprintEntry(result.getInt("id"),
-                        result.getString("town_id"),
-                        result.getString("town_name"),
-                        result.getInt("naturepoints"),
-                        result.getInt("sprint"),
-                        result.getInt("season"));
-                list.add(entry);
-                System.out.println("SprintDb parse in id: " + result.getInt("id") + " with entry id: " + entry.getId());
+                while (result.next()) {
+                    SprintEntry entry = new SprintEntry(result.getInt("id"),
+                            result.getString("town_id"),
+                            result.getString("town_name"),
+                            result.getInt("naturepoints"),
+                            result.getInt("sprint"),
+                            result.getInt("season"));
+                    list.add(entry);
+                }
+            } catch (SQLException e) {
+                return null;
             }
+
             return null;
         });
         return list;

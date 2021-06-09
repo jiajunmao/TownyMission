@@ -7,6 +7,8 @@ package world.naturecraft.townymission.dao;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.db.sql.SprintDatabase;
 
+import java.util.List;
+
 public class SprintDao extends Dao<SprintEntry> {
 
     private final SprintDatabase database;
@@ -17,9 +19,13 @@ public class SprintDao extends Dao<SprintEntry> {
 
     public void update(SprintEntry entry) {
         if (get(entry.getTownID()) != null) {
-            System.out.println("Updating sprint entry for town: " + entry.getTownName() + " and naturepoints: " + entry.getNaturepoints() + " with id: " + entry.getId());
             database.update(entry.getId(), entry.getTownID(), entry.getTownName(), entry.getNaturepoints(), entry.getSprint(), entry.getSeason());
         }
+    }
+
+    @Override
+    public void remove(SprintEntry data) {
+        database.remove(data.getId());
     }
 
     public void add(SprintEntry entry) {
@@ -30,7 +36,15 @@ public class SprintDao extends Dao<SprintEntry> {
         }
     }
 
+    @Override
+    public List<SprintEntry> getEntries() {
+        return database.getEntries();
+    }
+
     public SprintEntry get(String townUUID) {
+        if (database.getEntries() == null)
+            return null;
+
         for (SprintEntry s : database.getEntries()) {
             if (s.getTownID().equalsIgnoreCase(townUUID)) {
                 System.out.println("SprintDao match with id: " + s.getId() + " and town name: " + s.getTownName());

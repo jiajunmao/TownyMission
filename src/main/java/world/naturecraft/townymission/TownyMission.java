@@ -92,6 +92,7 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
         rootCmd.registerCommand("claim", new TownyMissionClaim(this));
         rootCmd.registerCommand("info", new TownyMissionInfo(this));
+        rootCmd.registerCommand("rank", new TownyMissionRank(this));
     }
 
     /**

@@ -4,5 +4,5 @@
 
 package world.naturecraft.townymission.api.exceptions;
 
-public class NotRegisteredException extends Throwable{
+public class NotFoundException extends Throwable {
 }

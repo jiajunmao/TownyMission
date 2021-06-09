@@ -70,4 +70,9 @@ public class TaskHistoryDao extends Dao<TaskHistoryEntry> {
                 entry.getSprint(),
                 entry.getSeason());
     }
+
+    @Override
+    public List<TaskHistoryEntry> getEntries() {
+        return db.getEntries();
+    }
 }

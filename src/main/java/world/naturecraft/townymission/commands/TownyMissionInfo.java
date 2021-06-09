@@ -56,7 +56,16 @@ public class TownyMissionInfo extends TownyMissionCommand {
             Player player = (Player) sender;
 
             boolean sane = new SanityChecker(instance).target(player)
-                    .hasTown().check();
+                    .hasTown()
+                    .customCheck(() -> {
+                        if (args.length == 1) {
+                            return true;
+                        }
+                        else {
+                            Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                            return false;
+                        }
+                    }).check();
 
             if (sane) {
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Overview&7------");

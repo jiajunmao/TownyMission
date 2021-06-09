@@ -128,4 +128,9 @@ public class TaskDao extends Dao<TaskEntry> {
     public void update(TaskEntry entry) throws JsonProcessingException {
         db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
     }
+
+    @Override
+    public List<TaskEntry> getEntries() {
+        return db.getEntries();
+    }
 }

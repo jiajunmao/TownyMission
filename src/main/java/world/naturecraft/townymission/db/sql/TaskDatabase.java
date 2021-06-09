@@ -7,6 +7,7 @@ import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,21 +52,26 @@ public class TaskDatabase extends Database<TaskEntry> {
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
-            ResultSet result = p.executeQuery();
+            try {
+                ResultSet result = p.executeQuery();
 
-            while (result.next()) {
-                try {
-                    list.add(new TaskEntry(result.getInt("id"),
-                            result.getString("task_type"),
-                            result.getLong("added_time"),
-                            result.getLong("started_time"),
-                            result.getLong("allowed_time"),
-                            result.getString("task_json"),
-                            result.getString("town"),
-                            result.getString("started_player")));
-                } catch (JsonProcessingException exception) {
-                    exception.printStackTrace();
+                while (result.next()) {
+                    try {
+                        list.add(new TaskEntry(result.getInt("id"),
+                                result.getString("task_type"),
+                                result.getLong("added_time"),
+                                result.getLong("started_time"),
+                                result.getLong("allowed_time"),
+                                result.getString("task_json"),
+                                result.getString("town"),
+                                result.getString("started_player")));
+                    } catch (JsonProcessingException exception) {
+                        exception.printStackTrace();
+                    }
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
             }
             return null;
         });

@@ -13,6 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -56,6 +58,8 @@ public class TownyMissionStart extends TownyMissionCommand {
                 public void run() {
                     Player player = (Player) sender;
                     if (sanityCheck(player, args)) {
+
+                        System.out.println("Passed sanity check");
                         Town town = TownyUtil.residentOf(player);
                         List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
                         int missionIdx = Integer.parseInt(args[1]);
@@ -71,6 +75,16 @@ public class TownyMissionStart extends TownyMissionCommand {
                             logger.severe("Error while parsing Json " + entry.getMissionJson());
                             e.printStackTrace();
                             // I want to want to write a comment
+                        }
+
+                        if (sprintDao.get(town.getUUID().toString()) == null) {
+                            SprintEntry sprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("sprint.current"), instance.getConfig().getInt("season.current"));
+                            sprintDao.add(sprintEntry);
+                        }
+
+                        if (seasonDao.get(town.getUUID().toString()) == null) {
+                            SeasonEntry seasonEntry = new SeasonEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("season.current"));
+                            seasonDao.add(seasonEntry);
                         }
                     }
                 }
@@ -101,11 +115,15 @@ public class TownyMissionStart extends TownyMissionCommand {
                     }
                     return true;
                 }).customCheck(() -> {
+                    System.out.println("Checking started mission...");
                     Town town = TownyUtil.residentOf(player);
+
                     if (taskDao.getStartedMission(town) == null) {
+                        System.out.println("Town " + town.getName() + " does not have a started mission, passing check");
                         return true;
                     } else {
                         Util.sendMsg(player, Util.getLangEntry("commands.start.onAlreadyStarted", instance));
+                        System.out.println("Town " + town.getName() + " has a started mission: " + taskDao.getStartedMission(town).getMissionJson());
                         return false;
                     }
                 }).check();
