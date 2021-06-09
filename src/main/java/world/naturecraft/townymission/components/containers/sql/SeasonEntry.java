@@ -1,11 +1,12 @@
 package world.naturecraft.townymission.components.containers.sql;
 
+import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.enums.DbType;
 
 /**
  * The type Season entry.
  */
-public class SeasonEntry extends SqlEntry {
+public class SeasonEntry extends SqlEntry implements Rankable {
     private String townID;
     private String townName;
     private int seasonPoint;
@@ -98,5 +99,20 @@ public class SeasonEntry extends SqlEntry {
      */
     public void setSeason(int season) {
         this.season = season;
+    }
+
+    @Override
+    public int getPoint() {
+        return getSeasonPoint();
+    }
+
+    @Override
+    public String getID() {
+        return townID;
+    }
+
+    @Override
+    public int compareTo(@NotNull Rankable rankable) {
+        return this.getPoint() - rankable.getPoint();
     }
 }
