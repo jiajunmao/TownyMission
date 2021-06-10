@@ -19,6 +19,8 @@ import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigParser;
 import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.services.MissionService;
+import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
@@ -39,7 +41,7 @@ public class MissionManageGui extends TownyMissionGui {
 
     public void initializeItems() {
         Town town = TownyUtil.residentOf(player);
-        MissionDao missionDao = (MissionDao)instance.getDao(DbType.MISSION);
+        MissionDao missionDao = MissionDao.getInstance();
         int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
         List<MissionJson> missions = CustomConfigParser.parseAll(instance);
         int size = missions.size();
@@ -112,7 +114,6 @@ public class MissionManageGui extends TownyMissionGui {
 
         final Player p = (Player) e.getWhoClicked();
 
-        // Using slots click is a best option for your inventory click's
-        p.sendMessage("You clicked at slot " + e.getRawSlot());
+
     }
 }

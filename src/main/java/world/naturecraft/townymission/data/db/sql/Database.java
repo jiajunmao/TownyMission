@@ -18,18 +18,15 @@ public abstract class Database<T> {
      * The Table name.
      */
     protected final String tableName;
-    private final TownyMission instance;
     private final HikariDataSource db;
 
     /**
      * Instantiates a new Database.
      *
-     * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public Database(TownyMission instance, HikariDataSource db, String tableName) {
-        this.instance = instance;
+    public Database(HikariDataSource db, String tableName) {
         this.db = db;
         this.tableName = tableName;
     }

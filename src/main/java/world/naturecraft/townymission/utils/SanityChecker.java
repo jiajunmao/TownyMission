@@ -35,7 +35,7 @@ public class SanityChecker {
      */
     public SanityChecker(TownyMission instance) {
         this.instance = instance;
-        missionDao = new MissionDao((MissionDatabase) instance.getDb(DbType.MISSION));
+        missionDao = MissionDao.getInstance();
         customChecks = new ArrayList<>();
         permissions = new ArrayList<>();
         isSilent = false;

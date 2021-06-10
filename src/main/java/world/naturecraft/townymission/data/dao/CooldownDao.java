@@ -14,7 +14,8 @@ import java.util.List;
 
 public class CooldownDao extends Dao<CooldownEntry> {
 
-    private CooldownDatabase db;
+    private static CooldownDao singleton;
+    private final CooldownDatabase db;
 
     public CooldownDao(CooldownDatabase db) {
         this.db = db;
@@ -77,5 +78,12 @@ public class CooldownDao extends Dao<CooldownEntry> {
             entry.setCooldown(cooldown);
             update(entry);
         }
+    }
+
+    public static CooldownDao getInstance() {
+        if (singleton == null) {
+            singleton = new CooldownDao(CooldownDatabase.getInstance());
+        }
+        return singleton;
     }
 }

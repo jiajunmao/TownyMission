@@ -16,15 +16,16 @@ import java.util.List;
  */
 public class MissionDatabase extends Database<MissionEntry> {
 
+    private static MissionDatabase singleton = null;
     /**
      * Instantiates a new Task database.
      *
-     * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public MissionDatabase(TownyMission instance, HikariDataSource db, String tableName) {
-        super(instance, db, tableName);
+    public MissionDatabase(HikariDataSource db, String tableName) {
+        super(db, tableName);
+        singleton = this;
     }
 
     @Override
@@ -147,5 +148,9 @@ public class MissionDatabase extends Database<MissionEntry> {
             p.executeUpdate();
             return null;
         });
+    }
+
+    public static MissionDatabase getInstance() {
+        return singleton;
     }
 }

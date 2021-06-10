@@ -15,15 +15,17 @@ import java.util.List;
  */
 public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
 
+    private static MissionHistoryDatabase singleton = null;
+
     /**
      * Instantiates a new Task history database.
      *
-     * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public MissionHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
-        super(instance, db, tableName);
+    public MissionHistoryDatabase(HikariDataSource db, String tableName) {
+        super(db, tableName);
+        singleton = this;
     }
 
     @Override
@@ -134,6 +136,7 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
     /**
      * Update.
      *
+     * @param id                the id
      * @param missionType       the mission type
      * @param addedTime         the added time
      * @param startedTime       the started time
@@ -165,5 +168,9 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
             p.executeUpdate();
             return null;
         });
+    }
+
+    public static MissionHistoryDatabase getInstance() {
+        return singleton;
     }
 }

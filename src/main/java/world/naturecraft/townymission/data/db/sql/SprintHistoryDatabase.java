@@ -14,15 +14,17 @@ import java.util.List;
  */
 public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
 
+    private static SprintHistoryDatabase singleton;
+
     /**
      * Instantiates a new Sprint history database.
      *
-     * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public SprintHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
-        super(instance, db, tableName);
+    public SprintHistoryDatabase(HikariDataSource db, String tableName) {
+        super(db, tableName);
+        singleton = this;
     }
 
     @Override
@@ -119,5 +121,9 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
             p.executeUpdate();
             return null;
         });
+    }
+
+    public static SprintHistoryDatabase getInstance() {
+        return singleton;
     }
 }

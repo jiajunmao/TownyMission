@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -81,7 +83,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
 
                 // Started Mission section
                 builder.add("&5--Mission Section--");
-                if ((taskEntry = missionDao.getStartedMission(town)) != null) {
+                if ((taskEntry = MissionDao.getInstance().getStartedMission(town)) != null) {
                     builder.add("&eCurrent Mission: &f" + taskEntry.getMissionJson().getDisplayLine());
                     builder.add("&eStarted By: &f" + taskEntry.getStartedPlayer().getName());
 
@@ -127,7 +129,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                 int realBaseline = baseline + (town.getNumResidents()-1)*memberScale + (currentSprint - 1)*baselineIncrement;
                 realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
-                int naturepoints = sprintDao.get(town.getUUID().toString()).getNaturepoints();
+                int naturepoints = SprintDao.getInstance().get(town.getUUID().toString()).getNaturepoints();
 
                 builder.add("&eTotal Points: &f" + naturepoints);
                 builder.add("&eBaseline: &f" + realBaseline);

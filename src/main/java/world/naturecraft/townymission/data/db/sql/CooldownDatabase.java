@@ -9,21 +9,28 @@ import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 
+import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Cooldown database.
+ */
 public class CooldownDatabase extends Database<CooldownEntry> {
+
+    private static CooldownDatabase singleton = null;
+
     /**
      * Instantiates a new Database.
      *
-     * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public CooldownDatabase(TownyMission instance, HikariDataSource db, String tableName) {
-        super(instance, db, tableName);
+    public CooldownDatabase(HikariDataSource db, String tableName) {
+        super(db, tableName);
+        singleton = this;
     }
 
     /**
@@ -71,6 +78,13 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         return list;
     }
 
+    /**
+     * Add.
+     *
+     * @param townUUID    the town uuid
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     */
     public void add(String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
@@ -83,6 +97,11 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -93,6 +112,14 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         });
     }
 
+    /**
+     * Update.
+     *
+     * @param id          the id
+     * @param townUUID    the town uuid
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     */
     public void update(int id, String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
@@ -104,5 +131,9 @@ public class CooldownDatabase extends Database<CooldownEntry> {
             p.executeUpdate();
             return null;
         });
+    }
+
+    public static CooldownDatabase getInstance() {
+        return singleton;
     }
 }

@@ -19,6 +19,7 @@ import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -65,8 +66,8 @@ public class TownyMissionStart extends TownyMissionCommand {
                     Player player = (Player) sender;
                     if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
-                        MissionEntry entry = missionDao.getStartedMission(town);
-                        ((MissionService) instance.getService(DbType.MISSION)).startMission(player, Integer.parseInt(args[1]));
+                        MissionEntry entry = MissionDao.getInstance().getStartedMission(town);
+                        MissionService.getInstance().startMission(player, Integer.parseInt(args[1]));
                         try {
                             Util.sendMsg(sender, instance.getLangEntry("commands.start.onSuccess")
                                     .replace("%type%", entry.getMissionType().name())
@@ -103,36 +104,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                         return false;
                     }
                     return true;
-                }).customCheck(() -> {
-                    Town town = TownyUtil.residentOf(player);
-
-                    if (missionDao.getStartedMission(town) == null) {
-                        return true;
-                    } else {
-                        Util.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
-                        return false;
-                    }
-                }).customCheck(() -> {
-                   Town town = TownyUtil.residentOf(player);
-
-                   try {
-                       if (cooldownDao.isStillInCooldown(town)) {
-                           long remainingTime = cooldownDao.getRemaining(town);
-                           String display = String.format("%02d:%02d",
-                                   TimeUnit.MILLISECONDS.toHours(remainingTime),
-                                   TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
-                                           TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
-                           Util.sendMsg(player, instance.getLangEntry("commands.start.onStillInCooldown").replace("%time%", display));
-                           return false;
-                       } else {
-                           return true;
-                       }
-                   } catch (NotFoundException e) {
-                       Date date = new Date();
-                       cooldownDao.add(new CooldownEntry(0, town, date.getTime(), 0));
-                       return true;
-                   }
-                }).check();
+                }).customCheck(() -> MissionService.getInstance().canStartMission(player)).check();
     }
 
     /**

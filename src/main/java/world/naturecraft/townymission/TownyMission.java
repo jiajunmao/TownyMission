@@ -28,7 +28,6 @@ public class TownyMission extends JavaPlugin {
 
     private final Logger logger = getLogger();
     private Map<DbType, Database> dbList;
-    private Map<DbType, Dao> daoList;
     private Map<DbType, TownyMissionService> serviceList;
     private HikariDataSource db;
     private CustomConfigLoader customConfigLoader;
@@ -53,12 +52,10 @@ public class TownyMission extends JavaPlugin {
 
         logger.info("=========   CONNECTING TO TOWNYMISSION DATABASE   =========");
         dbList = new HashMap<>();
-        daoList = new HashMap<>();
         serviceList = new HashMap<>();
         connect();
         registerDatabases();
         initializeDatabases();
-        registerDao();
         registerService();
 
         registerCommands();
@@ -79,21 +76,13 @@ public class TownyMission extends JavaPlugin {
      * Register databases.
      */
     public void registerDatabases() {
-        dbList.put(DbType.MISSION, new MissionDatabase(this, db, Util.getDbName(DbType.MISSION)));
-        dbList.put(DbType.MISSION_HISTORY, new MissionHistoryDatabase(this, db, Util.getDbName(DbType.MISSION_HISTORY)));
-        dbList.put(DbType.SPRINT, new SprintDatabase(this, db, Util.getDbName(DbType.SPRINT)));
-        dbList.put(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(this, db, Util.getDbName(DbType.SPRINT_HISTORY)));
-        dbList.put(DbType.SEASON, new SeasonDatabase(this, db, Util.getDbName(DbType.SEASON)));
-        dbList.put(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(this, db, Util.getDbName(DbType.SEASON_HISTORY)));
-        dbList.put(DbType.COOLDOWN, new CooldownDatabase(this, db, Util.getDbName(DbType.COOLDOWN)));
-    }
-
-    public void registerDao() {
-        daoList.put(DbType.MISSION, new MissionDao((MissionDatabase) getDb(DbType.MISSION)));
-        daoList.put(DbType.MISSION_HISTORY, new MissionHistoryDao((MissionHistoryDatabase) getDb(DbType.MISSION_HISTORY)));
-        daoList.put(DbType.SPRINT, new SprintDao((SprintDatabase) getDb(DbType.SPRINT)));
-        daoList.put(DbType.SEASON, new SeasonDao((SeasonDatabase) getDb(DbType.SEASON)));
-        daoList.put(DbType.COOLDOWN, new CooldownDao((CooldownDatabase) getDb(DbType.COOLDOWN)));
+        dbList.put(DbType.MISSION, new MissionDatabase(db, Util.getDbName(DbType.MISSION)));
+        dbList.put(DbType.MISSION_HISTORY, new MissionHistoryDatabase(db, Util.getDbName(DbType.MISSION_HISTORY)));
+        dbList.put(DbType.SPRINT, new SprintDatabase(db, Util.getDbName(DbType.SPRINT)));
+        dbList.put(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(db, Util.getDbName(DbType.SPRINT_HISTORY)));
+        dbList.put(DbType.SEASON, new SeasonDatabase(db, Util.getDbName(DbType.SEASON)));
+        dbList.put(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(db, Util.getDbName(DbType.SEASON_HISTORY)));
+        dbList.put(DbType.COOLDOWN, new CooldownDatabase(db, Util.getDbName(DbType.COOLDOWN)));
     }
 
     public void registerService() {
@@ -169,24 +158,6 @@ public class TownyMission extends JavaPlugin {
      */
     public CustomConfigLoader getCustomConfig() {
         return customConfigLoader;
-    }
-
-    /**
-     * Gets db.
-     *
-     * @param dbType the db type
-     * @return the db
-     */
-    public Database getDb(DbType dbType) {
-        return dbList.get(dbType);
-    }
-
-    public Dao getDao(DbType dbType) {
-        return daoList.get(dbType);
-    }
-
-    public TownyMissionService getService(DbType dbType) {
-        return serviceList.get(dbType);
     }
 
     public String getLangEntry(String path) {

@@ -15,15 +15,16 @@ import java.util.List;
  */
 public class SeasonDatabase extends Database<SeasonEntry> {
 
+    private static SeasonDatabase singleton = null;
     /**
      * Instantiates a new Season database.
      *
-     * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public SeasonDatabase(TownyMission instance, HikariDataSource db, String tableName) {
-        super(instance, db, tableName);
+    public SeasonDatabase(HikariDataSource db, String tableName) {
+        super(db, tableName);
+        singleton = this;
     }
 
     @Override
@@ -123,5 +124,9 @@ public class SeasonDatabase extends Database<SeasonEntry> {
             p.executeUpdate();
             return null;
         });
+    }
+
+    public static SeasonDatabase getInstance() {
+        return singleton;
     }
 }

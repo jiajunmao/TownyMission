@@ -22,6 +22,7 @@ import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.json.MobJson;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -91,7 +92,7 @@ public class MissionListener extends TownyMissionListener {
                 .isMissionType(MissionType.EXPANSION)
                 .customCheck(() -> {
                     try {
-                        MissionEntry entry = missionDao.getTownStartedMission(e.getTownBlock().getTown(), MissionType.EXPANSION);
+                        MissionEntry entry = MissionDao.getInstance().getTownStartedMission(e.getTownBlock().getTown(), MissionType.EXPANSION);
                         return entry.getTown().equals(e.getTownBlock().getTown());
                     } catch (NotRegisteredException notRegisteredException) {
                         return false;
@@ -120,7 +121,7 @@ public class MissionListener extends TownyMissionListener {
                     .hasStarted()
                     .isMissionType(MissionType.MOB)
                     .customCheck(() -> {
-                        MissionEntry taskEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(killer), MissionType.MOB);
+                        MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(killer), MissionType.MOB);
                         MobJson mobJson = (MobJson) taskEntry.getMissionJson();
                         return mobJson.getEntityType().equals(dead.getType());
                     });
@@ -143,7 +144,7 @@ public class MissionListener extends TownyMissionListener {
             public void run() {
                 if (sanityChecker.check()) {
                     Town town = TownyUtil.residentOf(player);
-                    MissionEntry taskEntry = missionDao.getTownStartedMission(town, missionType);
+                    MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town, missionType);
                     MissionJson json = taskEntry.getMissionJson();
                     json.setCompleted(json.getCompleted() + amount);
                     json.addContribution(player.getUniqueId().toString(), amount);
@@ -157,7 +158,7 @@ public class MissionListener extends TownyMissionListener {
                     DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
                     pluginManager.callEvent(missionEvent);
                     if (!missionEvent.isCanceled()) {
-                        missionDao.update(taskEntry);
+                        MissionDao.getInstance().update(taskEntry);
                     }
                 }
             }

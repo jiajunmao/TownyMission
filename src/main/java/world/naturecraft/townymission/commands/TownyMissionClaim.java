@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
+import world.naturecraft.townymission.data.dao.MissionHistoryDao;
+import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -56,6 +58,9 @@ public class TownyMissionClaim extends TownyMissionCommand {
                 @Override
                 public void run() {
                     Player player = (Player) sender;
+
+                    SprintDao sprintDao = SprintDao.getInstance();
+                    MissionHistoryDao missionHistoryDao = MissionHistoryDao.getInstance();
 
                     boolean sane = new SanityChecker(instance).target(player)
                             .hasTown()

@@ -19,6 +19,7 @@ import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.json.ResourceJson;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -62,6 +63,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    MissionDao missionDao = MissionDao.getInstance();
                     boolean sane = sanityCheck(player, args);
 
                     if (sane) {
@@ -126,6 +128,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
      * @return the boolean
      */
     public boolean sanityCheck(Player player, String[] args) {
+        MissionDao missionDao = MissionDao.getInstance();
         return new SanityChecker(instance)
                 .target(player)
                 .hasTown()

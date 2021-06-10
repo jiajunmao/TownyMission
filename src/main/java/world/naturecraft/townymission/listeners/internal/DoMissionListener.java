@@ -46,7 +46,7 @@ public class DoMissionListener extends TownyMissionListener {
         }
 
         if (missionjson.getCompleted() >= missionjson.getAmount()) {
-            ((MissionService) instance.getService(DbType.MISSION)).completeMission(missionEntry.getTown());
+            MissionService.getInstance().completeMission(missionEntry.getTown());
         }
     }
 }

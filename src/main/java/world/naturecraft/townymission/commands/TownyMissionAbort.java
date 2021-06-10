@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -52,7 +53,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                 public void run() {
                 if (sanityCheck(player)) {
                     Town town = TownyUtil.residentOf(player);
-                    ((MissionService) instance.getService(DbType.MISSION)).abortMission(town);
+                    MissionService.getInstance().abortMission(town);
                     Util.sendMsg(sender, instance.getLangEntry("commands.abort.onSuccess"));
                 }
                 }
@@ -78,7 +79,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
                     Town town = TownyUtil.residentOf(player);
-                    MissionEntry entry = missionDao.getStartedMission(town);
+                    MissionEntry entry = MissionDao.getInstance().getStartedMission(town);
                     if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
                         return true;
                     } else {

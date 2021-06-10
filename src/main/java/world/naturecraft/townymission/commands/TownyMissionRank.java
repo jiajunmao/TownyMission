@@ -16,6 +16,7 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.Rankable;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
+import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.RankUtil;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -68,9 +69,9 @@ public class TownyMissionRank extends TownyMissionCommand {
             if (sane && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
                 List<Rankable> entryList;
                 if (args[1].equalsIgnoreCase("sprint"))
-                    entryList = (List<Rankable>) RankUtil.sort(sprintDao.getEntries());
+                    entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
                 else
-                    entryList = (List<Rankable>) RankUtil.sort(seasonDao.getEntries());
+                    entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Sprint Rank&7------");
                 int index = 1;
                 for (Rankable entry : entryList) {

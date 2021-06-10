@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 import world.naturecraft.townymission.data.db.sql.MissionDatabase;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 public class MissionDao extends Dao<MissionEntry> {
 
+    private static MissionDao singleton;
     private final MissionDatabase db;
 
     /**
@@ -141,5 +143,12 @@ public class MissionDao extends Dao<MissionEntry> {
     @Override
     public List<MissionEntry> getEntries() {
         return db.getEntries();
+    }
+
+    public static MissionDao getInstance() {
+        if (singleton == null) {
+            singleton = new MissionDao(MissionDatabase.getInstance());
+        }
+        return singleton;
     }
 }
