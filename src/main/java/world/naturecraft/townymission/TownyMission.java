@@ -12,6 +12,8 @@ import world.naturecraft.townymission.data.db.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
+import world.naturecraft.townymission.services.MissionService;
+import world.naturecraft.townymission.services.TownyMissionService;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -27,6 +29,7 @@ public class TownyMission extends JavaPlugin {
     private final Logger logger = getLogger();
     private Map<DbType, Database> dbList;
     private Map<DbType, Dao> daoList;
+    private Map<DbType, TownyMissionService> serviceList;
     private HikariDataSource db;
     private CustomConfigLoader customConfigLoader;
     private TownyMissionRoot rootCmd;
@@ -51,10 +54,12 @@ public class TownyMission extends JavaPlugin {
         logger.info("=========   CONNECTING TO TOWNYMISSION DATABASE   =========");
         dbList = new HashMap<>();
         daoList = new HashMap<>();
+        serviceList = new HashMap<>();
         connect();
         registerDatabases();
         initializeDatabases();
         registerDao();
+        registerService();
 
         registerCommands();
         registerListeners();
@@ -74,8 +79,8 @@ public class TownyMission extends JavaPlugin {
      * Register databases.
      */
     public void registerDatabases() {
-        dbList.put(DbType.TASK, new MissionDatabase(this, db, Util.getDbName(DbType.TASK)));
-        dbList.put(DbType.TASK_HISTORY, new MissionHistoryDatabase(this, db, Util.getDbName(DbType.TASK_HISTORY)));
+        dbList.put(DbType.MISSION, new MissionDatabase(this, db, Util.getDbName(DbType.MISSION)));
+        dbList.put(DbType.MISSION_HISTORY, new MissionHistoryDatabase(this, db, Util.getDbName(DbType.MISSION_HISTORY)));
         dbList.put(DbType.SPRINT, new SprintDatabase(this, db, Util.getDbName(DbType.SPRINT)));
         dbList.put(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(this, db, Util.getDbName(DbType.SPRINT_HISTORY)));
         dbList.put(DbType.SEASON, new SeasonDatabase(this, db, Util.getDbName(DbType.SEASON)));
@@ -84,11 +89,15 @@ public class TownyMission extends JavaPlugin {
     }
 
     public void registerDao() {
-        daoList.put(DbType.TASK, new MissionDao((MissionDatabase) getDb(DbType.TASK)));
-        daoList.put(DbType.TASK_HISTORY, new MissionHistoryDao((MissionHistoryDatabase) getDb(DbType.TASK_HISTORY)));
+        daoList.put(DbType.MISSION, new MissionDao((MissionDatabase) getDb(DbType.MISSION)));
+        daoList.put(DbType.MISSION_HISTORY, new MissionHistoryDao((MissionHistoryDatabase) getDb(DbType.MISSION_HISTORY)));
         daoList.put(DbType.SPRINT, new SprintDao((SprintDatabase) getDb(DbType.SPRINT)));
         daoList.put(DbType.SEASON, new SeasonDao((SeasonDatabase) getDb(DbType.SEASON)));
         daoList.put(DbType.COOLDOWN, new CooldownDao((CooldownDatabase) getDb(DbType.COOLDOWN)));
+    }
+
+    public void registerService() {
+        serviceList.put(DbType.MISSION, new MissionService(this));
     }
 
     /**
@@ -174,6 +183,10 @@ public class TownyMission extends JavaPlugin {
 
     public Dao getDao(DbType dbType) {
         return daoList.get(dbType);
+    }
+
+    public TownyMissionService getService(DbType dbType) {
+        return serviceList.get(dbType);
     }
 
     public String getLangEntry(String path) {

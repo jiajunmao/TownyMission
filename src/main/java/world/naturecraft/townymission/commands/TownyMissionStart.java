@@ -18,6 +18,8 @@ import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -62,32 +64,15 @@ public class TownyMissionStart extends TownyMissionCommand {
                 public void run() {
                     Player player = (Player) sender;
                     if (sanityCheck(player, args)) {
-
                         Town town = TownyUtil.residentOf(player);
-                        List<MissionEntry> taskEntries = missionDao.getTownMissions(town);
-                        int missionIdx = Integer.parseInt(args[1]);
-
-                        MissionEntry entry = taskEntries.get(missionIdx - 1);
-                        entry.setStartedTime(Util.currentTime());
-                        entry.setStartedPlayer(player);
-
+                        MissionEntry entry = missionDao.getStartedMission(town);
+                        ((MissionService) instance.getService(DbType.MISSION)).startMission(player, Integer.parseInt(args[1]));
                         try {
-                            missionDao.update(entry);
-                            Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
-                        } catch (JsonProcessingException e) {
-                            logger.severe("Error while parsing Json " + entry.getMissionJson());
-                            e.printStackTrace();
-                            // I want to want to write a comment
-                        }
-
-                        if (sprintDao.get(town.getUUID().toString()) == null) {
-                            SprintEntry sprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("sprint.current"), instance.getConfig().getInt("season.current"));
-                            sprintDao.add(sprintEntry);
-                        }
-
-                        if (seasonDao.get(town.getUUID().toString()) == null) {
-                            SeasonEntry seasonEntry = new SeasonEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("season.current"));
-                            seasonDao.add(seasonEntry);
+                            Util.sendMsg(sender, instance.getLangEntry("commands.start.onSuccess")
+                                    .replace("%type%", entry.getMissionType().name())
+                                    .replace("%details%", entry.getDisplayLine()));
+                        } catch (JsonProcessingException exception) {
+                            exception.printStackTrace();
                         }
                     }
                 }

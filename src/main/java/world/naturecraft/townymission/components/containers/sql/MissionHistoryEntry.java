@@ -47,7 +47,7 @@ public class MissionHistoryEntry extends SqlEntry {
     public MissionHistoryEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime,
                                MissionJson missionJson, Town town, Player startedPlayer, long completedTime, boolean claimed,
                                int sprint, int season) {
-        super(id, DbType.TASK_HISTORY);
+        super(id, DbType.MISSION_HISTORY);
         this.missionType = missionType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;

@@ -39,7 +39,7 @@ public class MissionManageGui extends TownyMissionGui {
 
     public void initializeItems() {
         Town town = TownyUtil.residentOf(player);
-        MissionDao missionDao = (MissionDao)instance.getDao(DbType.TASK);
+        MissionDao missionDao = (MissionDao)instance.getDao(DbType.MISSION);
         int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
         List<MissionJson> missions = CustomConfigParser.parseAll(instance);
         int size = missions.size();

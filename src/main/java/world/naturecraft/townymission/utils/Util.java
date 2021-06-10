@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.NotStartedException;
+import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -129,9 +129,9 @@ public class Util {
         return map;
     }
 
-    public static boolean isTimedOut(MissionEntry entry) throws NotStartedException {
+    public static boolean isTimedOut(MissionEntry entry) throws NoStartedException {
         if (entry.getStartedTime() == 0) {
-            throw new NotStartedException(entry);
+            throw new NoStartedException(entry);
         }
 
         long currentTime = new Date().getTime();

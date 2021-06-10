@@ -20,6 +20,7 @@ commands:
   start:
     onAlreadyStarted: "&cYour town already has a started mission!"
     onStillInCooldown: "&cYour town is still in cooldown for claiming mission! Please wait %time%"
+    onSuccess: "&f You have started %type% %details%"
   sanityChecker:
     onNoTown: "&cYou do not belong to a town!"
     onNotMayor: "&cYou are not the mayor!"

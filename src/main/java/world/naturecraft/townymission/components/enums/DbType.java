@@ -23,11 +23,11 @@ public enum DbType {
     /**
      * Task db type.
      */
-    TASK,
+    MISSION,
     /**
      * Task history db type.
      */
-    TASK_HISTORY,
+    MISSION_HISTORY,
 
     COOLDOWN
 }

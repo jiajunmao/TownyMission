@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
-import world.naturecraft.townymission.api.exceptions.NotStartedException;
+import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.json.ResourceJson;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -150,7 +150,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));
                             return false;
                         }
-                    } catch (NotStartedException e) {
+                    } catch (NoStartedException e) {
                         // This should not happen, if it gets to this, it must have been started
                         e.printStackTrace();
                         return false;

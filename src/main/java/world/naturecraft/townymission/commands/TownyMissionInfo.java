@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.NotStartedException;
+import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -110,7 +110,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                                             TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
                             builder.add("&eRemaining Time: &f" + display);
                         }
-                    } catch (NotStartedException e) {
+                    } catch (NoStartedException e) {
                         // Ignore, not possible
                     }
                 } else {

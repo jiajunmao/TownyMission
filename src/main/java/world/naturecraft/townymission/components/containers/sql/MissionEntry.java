@@ -43,7 +43,7 @@ public class MissionEntry extends SqlEntry {
      * @param startedPlayer the started player
      */
     public MissionEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, Town town, Player startedPlayer) {
-        super(id, DbType.TASK);
+        super(id, DbType.MISSION);
         this.missionType = missionType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;

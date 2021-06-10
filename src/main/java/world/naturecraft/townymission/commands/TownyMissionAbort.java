@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -50,10 +52,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                 public void run() {
                 if (sanityCheck(player)) {
                     Town town = TownyUtil.residentOf(player);
-                    MissionEntry taskEntry = missionDao.getStartedMission(town);
-                    missionDao.remove(taskEntry);
-
-                    cooldownDao.startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+                    ((MissionService) instance.getService(DbType.MISSION)).abortMission(town);
                     Util.sendMsg(sender, instance.getLangEntry("commands.abort.onSuccess"));
                 }
                 }

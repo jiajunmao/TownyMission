@@ -56,8 +56,8 @@ public abstract class TownyMissionListener implements Listener {
     public TownyMissionListener(TownyMission instance) {
         this.instance = instance;
 
-        missionDao = new MissionDao((MissionDatabase) instance.getDb(DbType.TASK));
-        missionHistoryDao = new MissionHistoryDao((MissionHistoryDatabase) instance.getDb(DbType.TASK_HISTORY));
+        missionDao = new MissionDao((MissionDatabase) instance.getDb(DbType.MISSION));
+        missionHistoryDao = new MissionHistoryDao((MissionHistoryDatabase) instance.getDb(DbType.MISSION_HISTORY));
         sprintDao = new SprintDao((SprintDatabase) instance.getDb(DbType.SPRINT));
         cooldownDao = new CooldownDao((CooldownDatabase) instance.getDb(DbType.COOLDOWN));
 

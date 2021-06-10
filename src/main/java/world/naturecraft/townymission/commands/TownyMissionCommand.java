@@ -46,8 +46,8 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
     public TownyMissionCommand(TownyMission instance) {
         this.instance = instance;
         this.logger = instance.getLogger();
-        this.missionDao = new MissionDao((MissionDatabase) instance.getDb(DbType.TASK));
-        this.missionHistoryDao = new MissionHistoryDao((MissionHistoryDatabase) instance.getDb(DbType.TASK_HISTORY));
+        this.missionDao = new MissionDao((MissionDatabase) instance.getDb(DbType.MISSION));
+        this.missionHistoryDao = new MissionHistoryDao((MissionHistoryDatabase) instance.getDb(DbType.MISSION_HISTORY));
         this.sprintDao = new SprintDao((SprintDatabase) instance.getDb(DbType.SPRINT));
         this.seasonDao = new SeasonDao((SeasonDatabase) instance.getDb(DbType.SEASON));
         this.cooldownDao = new CooldownDao((CooldownDatabase) instance.getDb(DbType.COOLDOWN));
