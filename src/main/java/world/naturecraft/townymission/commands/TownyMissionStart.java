@@ -17,7 +17,10 @@ import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -62,33 +65,15 @@ public class TownyMissionStart extends TownyMissionCommand {
                 public void run() {
                     Player player = (Player) sender;
                     if (sanityCheck(player, args)) {
-
-                        System.out.println("Passed sanity check");
                         Town town = TownyUtil.residentOf(player);
-                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
-                        int missionIdx = Integer.parseInt(args[1]);
-
-                        TaskEntry entry = taskEntries.get(missionIdx - 1);
-                        entry.setStartedTime(Util.currentTime());
-                        entry.setStartedPlayer(player);
-
+                        MissionEntry entry = MissionDao.getInstance().getStartedMission(town);
+                        MissionService.getInstance().startMission(player, Integer.parseInt(args[1]));
                         try {
-                            taskDao.update(entry);
-                            Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
-                        } catch (JsonProcessingException e) {
-                            logger.severe("Error while parsing Json " + entry.getMissionJson());
-                            e.printStackTrace();
-                            // I want to want to write a comment
-                        }
-
-                        if (sprintDao.get(town.getUUID().toString()) == null) {
-                            SprintEntry sprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("sprint.current"), instance.getConfig().getInt("season.current"));
-                            sprintDao.add(sprintEntry);
-                        }
-
-                        if (seasonDao.get(town.getUUID().toString()) == null) {
-                            SeasonEntry seasonEntry = new SeasonEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("season.current"));
-                            seasonDao.add(seasonEntry);
+                            Util.sendMsg(sender, instance.getLangEntry("commands.start.onSuccess")
+                                    .replace("%type%", entry.getMissionType().name())
+                                    .replace("%details%", entry.getDisplayLine()));
+                        } catch (JsonProcessingException exception) {
+                            exception.printStackTrace();
                         }
                     }
                 }
@@ -113,41 +98,13 @@ public class TownyMissionStart extends TownyMissionCommand {
                 .hasTown()
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
-                    if (args.length == 1 || (Integer.parseInt(args[1]) > 15 || Integer.parseInt(args[1]) < 1)) {
-                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                    if (args.length == 1 ||
+                            (Integer.parseInt(args[1]) > instance.getConfig().getInt("mission.amount") || Integer.parseInt(args[1]) < 1)) {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
-                }).customCheck(() -> {
-                    Town town = TownyUtil.residentOf(player);
-
-                    if (taskDao.getStartedMission(town) == null) {
-                        return true;
-                    } else {
-                        Util.sendMsg(player, Util.getLangEntry("commands.start.onAlreadyStarted", instance));
-                        return false;
-                    }
-                }).customCheck(() -> {
-                   Town town = TownyUtil.residentOf(player);
-
-                   try {
-                       if (cooldownDao.isStillInCooldown(town)) {
-                           long remainingTime = cooldownDao.getRemaining(town);
-                           String display = String.format("%02d:%02d",
-                                   TimeUnit.MILLISECONDS.toHours(remainingTime),
-                                   TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
-                                           TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
-                           Util.sendMsg(player, Util.getLangEntry("commands.start.onStillInCooldown", instance).replace("%time%", display));
-                           return false;
-                       } else {
-                           return true;
-                       }
-                   } catch (NotFoundException e) {
-                       Date date = new Date();
-                       cooldownDao.add(new CooldownEntry(0, town, date.getTime(), 0));
-                       return true;
-                   }
-                }).check();
+                }).customCheck(() -> MissionService.getInstance().canStartMission(player)).check();
     }
 
     /**
@@ -168,7 +125,7 @@ public class TownyMissionStart extends TownyMissionCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
         if (args.length == 2) {
-            for (int i = 1; i <= 15; i++) {
+            for (int i = 1; i <= instance.getConfig().getInt("mission.amount"); i++) {
                 tabList.add(String.valueOf(i));
             }
         }

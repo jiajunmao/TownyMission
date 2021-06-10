@@ -4,9 +4,22 @@
 
 package world.naturecraft.townymission.components.containers.sql;
 
+/**
+ * The interface Rankable.
+ */
 public interface Rankable extends Comparable<Rankable> {
 
+    /**
+     * Gets point.
+     *
+     * @return the point
+     */
     int getPoint();
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     String getID();
 }

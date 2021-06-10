@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.commands;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -9,13 +8,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,11 +53,8 @@ public class TownyMissionAbort extends TownyMissionCommand {
                 public void run() {
                 if (sanityCheck(player)) {
                     Town town = TownyUtil.residentOf(player);
-                    TaskEntry taskEntry = taskDao.getStartedMission(town);
-                    taskDao.remove(taskEntry);
-
-                    cooldownDao.startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
-                    Util.sendMsg(sender, Util.getLangEntry("commands.abort.onSuccess", instance));
+                    MissionService.getInstance().abortMission(town);
+                    Util.sendMsg(sender, instance.getLangEntry("commands.abort.onSuccess"));
                 }
                 }
             };
@@ -82,11 +79,11 @@ public class TownyMissionAbort extends TownyMissionCommand {
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
                     Town town = TownyUtil.residentOf(player);
-                    TaskEntry entry = taskDao.getStartedMission(town);
+                    MissionEntry entry = MissionDao.getInstance().getStartedMission(town);
                     if (entry.getStartedPlayer().equals(player) || TownyUtil.mayorOf(player) != null) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("commands.abort.onNotMayorOrStarter", instance));
+                        Util.sendMsg(player, instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
                         return false;
                     }
                 });

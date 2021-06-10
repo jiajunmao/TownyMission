@@ -9,7 +9,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
 
 /**
@@ -37,8 +38,8 @@ public class TownFallListener extends TownyMissionListener {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
-                for (TaskEntry entry : taskDao.getTownTasks(town)) {
-                    taskDao.remove(entry);
+                for (MissionEntry entry : MissionDao.getInstance().getTownMissions(town)) {
+                    MissionDao.getInstance().remove(entry);
                 }
             }
         };

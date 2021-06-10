@@ -16,6 +16,7 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.Rankable;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
+import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.RankUtil;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -26,6 +27,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Towny mission rank.
+ */
 public class TownyMissionRank extends TownyMissionCommand {
     /**
      * Instantiates a new Towny mission command.
@@ -60,7 +64,7 @@ public class TownyMissionRank extends TownyMissionCommand {
                     if (args.length == 1 || args.length == 2) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                 }).check();
@@ -68,9 +72,9 @@ public class TownyMissionRank extends TownyMissionCommand {
             if (sane && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
                 List<Rankable> entryList;
                 if (args[1].equalsIgnoreCase("sprint"))
-                    entryList = (List<Rankable>) RankUtil.sort(sprintDao.getEntries());
+                    entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
                 else
-                    entryList = (List<Rankable>) RankUtil.sort(seasonDao.getEntries());
+                    entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Sprint Rank&7------");
                 int index = 1;
                 for (Rankable entry : entryList) {

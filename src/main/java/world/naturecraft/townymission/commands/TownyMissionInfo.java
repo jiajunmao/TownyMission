@@ -11,8 +11,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.NotStartedException;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.api.exceptions.NoStartedException;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -20,11 +22,13 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type Towny mission info.
+ */
 public class TownyMissionInfo extends TownyMissionCommand {
 
     /**
@@ -62,7 +66,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                             return true;
                         }
                         else {
-                            Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                            Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                             return false;
                         }
                     }).check();
@@ -70,7 +74,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
             if (sane) {
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Overview&7------");
                 Town town = TownyUtil.residentOf(player);
-                TaskEntry taskEntry;
+                MissionEntry taskEntry;
 
                 // Server-wide section
                 builder.add("&5--Basic Info Section--");
@@ -82,7 +86,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
 
                 // Started Mission section
                 builder.add("&5--Mission Section--");
-                if ((taskEntry = taskDao.getStartedMission(town)) != null) {
+                if ((taskEntry = MissionDao.getInstance().getStartedMission(town)) != null) {
                     builder.add("&eCurrent Mission: &f" + taskEntry.getMissionJson().getDisplayLine());
                     builder.add("&eStarted By: &f" + taskEntry.getStartedPlayer().getName());
 
@@ -111,7 +115,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                                             TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
                             builder.add("&eRemaining Time: &f" + display);
                         }
-                    } catch (NotStartedException e) {
+                    } catch (NoStartedException e) {
                         // Ignore, not possible
                     }
                 } else {
@@ -128,7 +132,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                 int realBaseline = baseline + (town.getNumResidents()-1)*memberScale + (currentSprint - 1)*baselineIncrement;
                 realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
-                int naturepoints = sprintDao.get(town.getUUID().toString()).getNaturepoints();
+                int naturepoints = SprintDao.getInstance().get(town.getUUID().toString()).getNaturepoints();
 
                 builder.add("&eTotal Points: &f" + naturepoints);
                 builder.add("&eBaseline: &f" + realBaseline);

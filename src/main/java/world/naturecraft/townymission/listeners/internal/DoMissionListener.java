@@ -4,16 +4,16 @@
 
 package world.naturecraft.townymission.listeners.internal;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
-import world.naturecraft.townymission.api.exceptions.NotStartedException;
+import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
-import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
+import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.Util;
 
 /**
@@ -37,25 +37,16 @@ public class DoMissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onDoMission(DoMissionEvent e) {
-        TaskEntry taskEntry = e.getTaskEntry();
-        Player player = e.getPlayer();
-        MissionJson missionjson = taskEntry.getMissionJson();
+        MissionEntry missionEntry = e.getTaskEntry();
+        MissionJson missionjson = missionEntry.getMissionJson();
 
         // If a task is not started, or have already timed out, ignore do mission event
-        try {
-            if (taskEntry.getStartedTime() == 0 || Util.isTimedOut(taskEntry)) {
-                return;
-            }
-        } catch (NotStartedException notStartedException) {
-            notStartedException.printStackTrace();
+        if (missionEntry.getStartedTime() == 0 || Util.isTimedOut(missionEntry)) {
             return;
         }
 
         if (missionjson.getCompleted() >= missionjson.getAmount()) {
-            taskDao.remove(taskEntry);
-            TaskHistoryEntry taskHistoryEntry = new TaskHistoryEntry(taskEntry, Util.currentTime());
-            taskHistoryDao.add(taskHistoryEntry);
-            cooldownDao.startCooldown(taskEntry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+            MissionService.getInstance().completeMission(missionEntry.getTown());
         }
     }
 }

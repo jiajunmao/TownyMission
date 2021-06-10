@@ -15,10 +15,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
-import world.naturecraft.townymission.api.exceptions.NotStartedException;
+import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.json.ResourceJson;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -62,10 +63,11 @@ public class TownyMissionDeposit extends TownyMissionCommand {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    MissionDao missionDao = MissionDao.getInstance();
                     boolean sane = sanityCheck(player, args);
 
                     if (sane) {
-                        TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                        MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                         ResourceJson resourceJson;
 
                         resourceJson = (ResourceJson) resourceEntry.getMissionJson();
@@ -83,7 +85,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
                             resourceJson.addContribution(player.getUniqueId().toString(), total);
                             resourceJson.addCompleted(total);
-                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onSuccess", instance)
+                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(total)
                                     .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         } else {
@@ -91,7 +93,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
                             resourceJson.addCompleted(number);
                             player.setItemInHand(null);
-                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onSuccess", instance)
+                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(number)
                                     .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         }
@@ -103,7 +105,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             Bukkit.getPluginManager().callEvent(missionEvent);
 
                             if (!missionEvent.isCanceled()) {
-                                taskDao.update(resourceEntry);
+                                missionDao.update(resourceEntry);
                             }
                         } catch (JsonProcessingException exception) {
                             exception.printStackTrace();
@@ -126,31 +128,32 @@ public class TownyMissionDeposit extends TownyMissionCommand {
      * @return the boolean
      */
     public boolean sanityCheck(Player player, String[] args) {
+        MissionDao missionDao = MissionDao.getInstance();
         return new SanityChecker(instance)
                 .target(player)
                 .hasTown()
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     ResourceJson resourceJson = (ResourceJson) resourceEntry.getMissionJson();
                     if (player.getItemInHand().getType().equals(resourceJson.getType())) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("commands.deposit.onNotMatch", instance));
-                        Util.sendMsg(player, Util.getLangEntry("commands.deposit.requiredItem", instance).replace("%item%", resourceJson.getType().name().toLowerCase(Locale.ROOT)));
-                        Util.sendMsg(player, "&cIn-hand type: " + Util.getLangEntry("commands.deposit.inHandItem", instance).replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
+                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.onNotMatch"));
+                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceJson.getType().name().toLowerCase(Locale.ROOT)));
+                        Util.sendMsg(player, "&cIn-hand type: " + instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         return false;
                     }
                 })
                 .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     try {
                         if (Util.isTimedOut(resourceEntry)) {
-                            Util.sendMsg(player, Util.getLangEntry("commands.deposit.onMissionTimedOut", instance));
+                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));
                             return false;
                         }
-                    } catch (NotStartedException e) {
+                    } catch (NoStartedException e) {
                         // This should not happen, if it gets to this, it must have been started
                         e.printStackTrace();
                         return false;
@@ -163,7 +166,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                         return true;
                     } else {
-                        Util.sendMsg(player, Util.getLangEntry("universal.onCommandFormatError", instance));
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                 }).check();

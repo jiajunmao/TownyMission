@@ -10,14 +10,14 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.dao.CooldownDao;
-import world.naturecraft.townymission.dao.SprintDao;
-import world.naturecraft.townymission.dao.TaskDao;
-import world.naturecraft.townymission.dao.TaskHistoryDao;
-import world.naturecraft.townymission.db.sql.CooldownDatabase;
-import world.naturecraft.townymission.db.sql.SprintDatabase;
-import world.naturecraft.townymission.db.sql.TaskDatabase;
-import world.naturecraft.townymission.db.sql.TaskHistoryDatabase;
+import world.naturecraft.townymission.data.dao.CooldownDao;
+import world.naturecraft.townymission.data.dao.SprintDao;
+import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.data.dao.MissionHistoryDao;
+import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
+import world.naturecraft.townymission.data.db.sql.SprintDatabase;
+import world.naturecraft.townymission.data.db.sql.MissionDatabase;
+import world.naturecraft.townymission.data.db.sql.MissionHistoryDatabase;
 
 import java.util.logging.Logger;
 
@@ -30,22 +30,15 @@ public abstract class TownyMissionListener implements Listener {
      * The Instance.
      */
     protected TownyMission instance;
-    /**
-     * The Task dao.
-     */
-    protected TaskDao taskDao;
-
-    protected TaskHistoryDao taskHistoryDao;
-
-    protected SprintDao sprintDao;
-
-    protected CooldownDao cooldownDao;
 
     /**
      * The Plugin manager.
      */
     protected PluginManager pluginManager;
 
+    /**
+     * The Logger.
+     */
     protected Logger logger;
 
     /**
@@ -55,11 +48,6 @@ public abstract class TownyMissionListener implements Listener {
      */
     public TownyMissionListener(TownyMission instance) {
         this.instance = instance;
-
-        taskDao = new TaskDao((TaskDatabase) instance.getDb(DbType.TASK));
-        taskHistoryDao = new TaskHistoryDao((TaskHistoryDatabase) instance.getDb(DbType.TASK_HISTORY));
-        sprintDao = new SprintDao((SprintDatabase) instance.getDb(DbType.SPRINT));
-        cooldownDao = new CooldownDao((CooldownDatabase) instance.getDb(DbType.COOLDOWN));
 
         pluginManager = Bukkit.getPluginManager();
         logger = instance.getLogger();

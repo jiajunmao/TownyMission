@@ -7,24 +7,34 @@ package world.naturecraft.townymission.utils;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.containers.sql.Rankable;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
-import world.naturecraft.townymission.components.containers.sql.SprintEntry;
-import world.naturecraft.townymission.components.containers.sql.SqlEntry;
-import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.dao.Dao;
-import world.naturecraft.townymission.dao.SeasonDao;
-import world.naturecraft.townymission.dao.SprintDao;
+import world.naturecraft.townymission.data.dao.Dao;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The type Rank util.
+ */
 public class RankUtil {
+    /**
+     * Sort list.
+     *
+     * @param list the list
+     * @return the list
+     */
     public static List<? extends Rankable> sort(List<? extends Rankable> list) {
         Collections.sort(list);
         return list;
     }
 
+    /**
+     * Gets rank.
+     *
+     * @param town the town
+     * @param dao  the dao
+     * @return the rank
+     * @throws NotFoundException the not found exception
+     */
     public static int getRank(Town town, Dao<? extends Rankable> dao) throws NotFoundException {
         List<Rankable> list = (List<Rankable>) dao.getEntries();
         Collections.sort(list);

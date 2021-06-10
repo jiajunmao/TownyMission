@@ -1,12 +1,11 @@
 package world.naturecraft.townymission.utils;
 
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.NotStartedException;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.api.exceptions.NoStartedException;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 
@@ -42,13 +41,6 @@ public class Util {
         } else {
             sender.getServer().getLogger().info(translateColor(message));
         }
-    }
-
-    public static String getLangEntry(String path, TownyMission instance) {
-        String finalString = "";
-        finalString += instance.getCustomConfig().getLangConfig().getString("prefix") + " ";
-        finalString += instance.getCustomConfig().getLangConfig().getString(path);
-        return finalString;
     }
 
     /**
@@ -114,22 +106,29 @@ public class Util {
         return (long) hr * 60 * 60 * 1000;
     }
 
+    /**
+     * Minute to ms long.
+     *
+     * @param minute the minute
+     * @return the long
+     */
     public static long minuteToMs(int minute) {
         return (long) minute * 60 * 1000;
     }
+
     /**
      * Classify task entry map.
      *
      * @param list the list
      * @return the map
      */
-    public static Map<MissionType, List<TaskEntry>> classifyTaskEntry(List<TaskEntry> list) {
-        Map<MissionType, List<TaskEntry>> map = new HashMap<>();
+    public static Map<MissionType, List<MissionEntry>> classifyTaskEntry(List<MissionEntry> list) {
+        Map<MissionType, List<MissionEntry>> map = new HashMap<>();
         for (MissionType missionType : MissionType.values()) {
             map.put(missionType, new ArrayList<>());
         }
 
-        for (TaskEntry e : list) {
+        for (MissionEntry e : list) {
             MissionType type = e.getMissionType();
             map.get(type).add(e);
         }
@@ -137,15 +136,30 @@ public class Util {
         return map;
     }
 
-    public static boolean isTimedOut(TaskEntry entry) throws NotStartedException {
+    /**
+     * Is timed out boolean.
+     *
+     * @param entry the entry
+     * @return the boolean
+     * @throws NoStartedException the no started exception
+     */
+    public static boolean isTimedOut(MissionEntry entry) throws NoStartedException {
         if (entry.getStartedTime() == 0) {
-            throw new NotStartedException(entry);
+            throw new NoStartedException(entry);
         }
 
         long currentTime = new Date().getTime();
         return entry.getStartedTime() + entry.getAllowedTime() < currentTime;
     }
 
+    /**
+     * Gets ranking points.
+     *
+     * @param numResident the num resident
+     * @param naturePoint the nature point
+     * @param instance    the instance
+     * @return the ranking points
+     */
     public static int getRankingPoints(int numResident, int naturePoint, TownyMission instance) {
         int baseline = instance.getConfig().getInt("participants.sprintRewardBaseline");
         int memberScale = instance.getConfig().getInt("participants.sprintRewardMemberScale");
@@ -157,6 +171,12 @@ public class Util {
         return (naturePoint-realBaseline)/numResident;
     }
 
+    /**
+     * Is int boolean.
+     *
+     * @param str the str
+     * @return the boolean
+     */
     public static boolean isInt(String str) {
         try {
             Integer.parseInt(str);
@@ -166,6 +186,12 @@ public class Util {
         }
     }
 
+    /**
+     * Is double boolean.
+     *
+     * @param str the str
+     * @return the boolean
+     */
     public static boolean isDouble(String str) {
         try {
             Double.parseDouble(str);
@@ -173,5 +199,17 @@ public class Util {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    /**
+     * Capitalize first string.
+     *
+     * @param str the str
+     * @return the string
+     */
+    public static String capitalizeFirst(String str) {
+        str = str.toLowerCase(Locale.ROOT);
+        str = str.substring(0,1).toUpperCase(Locale.ROOT) + str.substring(1);
+        return str;
     }
 }

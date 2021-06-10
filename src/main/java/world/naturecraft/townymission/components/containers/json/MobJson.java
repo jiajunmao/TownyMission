@@ -6,8 +6,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.beans.ConstructorProperties;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,5 +67,22 @@ public class MobJson extends MissionJson {
     @JsonIgnore
     public String getDisplayLine() {
         return "&f- &eType: &f" + getEntityType().getName() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
+    }
+
+    /**
+     * Get the item lore if using GUI
+     *
+     * @return The lore in a list of string
+     */
+    @Override
+    @JsonIgnore
+    public List<String> getLore() {
+        List<String> loreList = new ArrayList<>();
+        loreList.add(Util.translateColor("&r&eMob Type: &7" + Util.capitalizeFirst(entityType.name())));
+        loreList.add(Util.translateColor("&r&eAmount: &7" + getAmount()));
+        loreList.add(Util.translateColor("&r&eReward: &7" + getReward()));
+        loreList.add(Util.translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
+
+        return loreList;
     }
 }

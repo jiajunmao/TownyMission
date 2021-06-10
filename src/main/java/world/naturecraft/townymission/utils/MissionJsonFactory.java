@@ -35,6 +35,14 @@ public class MissionJsonFactory {
         }
     }
 
+    /**
+     * Gets json.
+     *
+     * @param missionJson the mission json
+     * @param missionType the mission type
+     * @return the json
+     * @throws JsonProcessingException the json processing exception
+     */
     public static MissionJson getJson(String missionJson, MissionType missionType) throws JsonProcessingException {
         switch (missionType.name()) {
             case "VOTE":

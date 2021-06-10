@@ -4,5 +4,8 @@
 
 package world.naturecraft.townymission.api.exceptions;
 
+/**
+ * The type Not found exception.
+ */
 public class NotFoundException extends RuntimeException {
 }
