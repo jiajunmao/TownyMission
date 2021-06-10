@@ -1,5 +1,3 @@
-image: maven:3.6-jdk-11
-
 before_script:
   - 'git config --global user.email "aaronmao.hangzhou@gmail.com"'
   - 'git config --global user.name "Barbadosian"'
@@ -10,7 +8,7 @@ variables:
 
 default:
   tags:
-    - docker
+    - shell
 
 stages:
   - build
@@ -21,7 +19,7 @@ stages:
 build:
   stage: build
   script:
-    - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml install'
+    - './mvnw -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml install'
   artifacts:
     paths:
       - target/TownyMission*.jar
@@ -32,7 +30,7 @@ release:
   only:
     - master
   script:
-    - 'mvn -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s ci_settings.xml release:prepare release:perform'
+    - './mvnw -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s ci_settings.xml release:prepare release:perform'
   artifacts:
     paths:
       - target/TownyMission*.jar
@@ -65,7 +63,7 @@ pages:
   dependencies:
     - build
   script:
-    - mvn javadoc:javadoc
+    - ./mvnw javadoc:javadoc
     - mv target/site/apidocs public
   artifacts:
     paths:
