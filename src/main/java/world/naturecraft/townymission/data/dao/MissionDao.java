@@ -2,14 +2,14 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.dao;
+package world.naturecraft.townymission.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.db.sql.TaskDatabase;
+import world.naturecraft.townymission.data.db.sql.MissionDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +17,16 @@ import java.util.List;
 /**
  * The type Task dao.
  */
-public class TaskDao extends Dao<TaskEntry> {
+public class MissionDao extends Dao<MissionEntry> {
 
-    private final TaskDatabase db;
+    private final MissionDatabase db;
 
     /**
      * Instantiates a new Task dao.
      *
      * @param db the db
      */
-    public TaskDao(TaskDatabase db) {
+    public MissionDao(MissionDatabase db) {
         this.db = db;
     }
 
@@ -38,7 +38,7 @@ public class TaskDao extends Dao<TaskEntry> {
      */
     public int getNumAdded(Town town) {
         int num = 0;
-        for (TaskEntry e : db.getEntries()) {
+        for (MissionEntry e : db.getEntries()) {
             if (e.getTown().equals(town)) {
                 num++;
             }
@@ -53,9 +53,9 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param town the town
      * @return the town tasks
      */
-    public List<TaskEntry> getTownTasks(Town town) {
-        List<TaskEntry> list = new ArrayList<>();
-        for (TaskEntry e : db.getEntries()) {
+    public List<MissionEntry> getTownMissions(Town town) {
+        List<MissionEntry> list = new ArrayList<>();
+        for (MissionEntry e : db.getEntries()) {
             if (e.getTown().equals(town)) {
                 list.add(e);
             }
@@ -71,10 +71,10 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param missionType the mission type
      * @return the town tasks
      */
-    public TaskEntry getTownStartedMission(Town town, MissionType missionType) {
-        List<TaskEntry> list = getTownTasks(town);
+    public MissionEntry getTownStartedMission(Town town, MissionType missionType) {
+        List<MissionEntry> list = getTownMissions(town);
 
-        for (TaskEntry e : list) {
+        for (MissionEntry e : list) {
             if (e.getMissionType().equals(missionType) && e.getStartedTime() != 0) {
                 return e;
             }
@@ -89,8 +89,8 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param town the town
      * @return the started mission
      */
-    public TaskEntry getStartedMission(Town town) {
-        for (TaskEntry e : db.getEntries()) {
+    public MissionEntry getStartedMission(Town town) {
+        for (MissionEntry e : db.getEntries()) {
             if (e.getTown().equals(town)) {
                 if (e.getStartedTime() != 0) {
                     return e;
@@ -107,7 +107,7 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param entry the entry
      * @throws DataProcessException the json processing exception
      */
-    public void add(TaskEntry entry) {
+    public void add(MissionEntry entry) {
         try {
             db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer() == null ? null : entry.getStartedPlayer().getUniqueId().toString());
         } catch (JsonProcessingException e) {
@@ -120,7 +120,7 @@ public class TaskDao extends Dao<TaskEntry> {
      *
      * @param entry the entry
      */
-    public void remove(TaskEntry entry) {
+    public void remove(MissionEntry entry) {
         db.remove(entry.getId());
     }
 
@@ -130,7 +130,7 @@ public class TaskDao extends Dao<TaskEntry> {
      * @param entry the entry
      * @throws DataProcessException the json processing exception
      */
-    public void update(TaskEntry entry) {
+    public void update(MissionEntry entry) {
         try {
             db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
         } catch (JsonProcessingException e) {
@@ -139,7 +139,7 @@ public class TaskDao extends Dao<TaskEntry> {
     }
 
     @Override
-    public List<TaskEntry> getEntries() {
+    public List<MissionEntry> getEntries() {
         return db.getEntries();
     }
 }

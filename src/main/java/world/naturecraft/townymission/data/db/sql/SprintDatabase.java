@@ -1,8 +1,8 @@
-package world.naturecraft.townymission.db.sql;
+package world.naturecraft.townymission.data.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,18 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Season database.
+ * The type Sprint database.
  */
-public class SeasonDatabase extends Database<SeasonEntry> {
+public class SprintDatabase extends Database<SprintEntry> {
 
     /**
-     * Instantiates a new Season database.
+     * Instantiates a new Sprint database.
      *
      * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public SeasonDatabase(TownyMission instance, HikariDataSource db, String tableName) {
+    public SprintDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }
 
@@ -33,7 +33,8 @@ public class SeasonDatabase extends Database<SeasonEntry> {
                     "`id` INT NOT NULL AUTO_INCREMENT ," +
                     "`town_id` VARCHAR(255) NOT NULL ," +
                     "`town_name` VARCHAR(255) NOT NULL, " +
-                    "`seasonpoints` INT NOT NULL, " +
+                    "`naturepoints` INT NOT NULL, " +
+                    "`sprint` INT NOT NULL ," +
                     "`season` INT NOT NULL ," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -43,25 +44,28 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     }
 
     @Override
-    public List<SeasonEntry> getEntries() {
-        List<SeasonEntry> list = new ArrayList<>();
+    public List<SprintEntry> getEntries() {
+        List<SprintEntry> list = new ArrayList<>();
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
             try {
                 ResultSet result = p.executeQuery();
+
                 while (result.next()) {
-                    list.add(new SeasonEntry(result.getInt("id"),
+                    SprintEntry entry = new SprintEntry(result.getInt("id"),
                             result.getString("town_id"),
                             result.getString("town_name"),
-                            result.getInt("seasonpoints"),
-                            result.getInt("season")));
+                            result.getInt("naturepoints"),
+                            result.getInt("sprint"),
+                            result.getInt("season"));
+                    list.add(entry);
                 }
-                return null;
             } catch (SQLException e) {
-                e.printStackTrace();
                 return null;
             }
+
+            return null;
         });
         return list;
     }
@@ -69,17 +73,19 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     /**
      * Add.
      *
-     * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
-     * @param season      the season
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
      */
-    public void add(String townUUID, String townName, int seasonPoint, int season) {
+    public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
                     townUUID + "', '" +
                     townName + "', '" +
-                    seasonPoint + "', '" +
+                    naturePoints + "', '" +
+                    sprint + "', '" +
                     season + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -105,18 +111,20 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     /**
      * Update.
      *
-     * @param id          the id
-     * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
-     * @param season      the season
+     * @param id           the id
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
      */
-    public void update(int id, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(int id, String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +
                     "', town_name='" + townName +
-                    "', seasonpoints='" + seasonPoint +
+                    "', naturepoints='" + naturePoints +
+                    "', sprint='" + sprint +
                     "', season='" + season +
                     "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);

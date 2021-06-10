@@ -17,7 +17,7 @@ import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -64,15 +64,15 @@ public class TownyMissionStart extends TownyMissionCommand {
                     if (sanityCheck(player, args)) {
 
                         Town town = TownyUtil.residentOf(player);
-                        List<TaskEntry> taskEntries = taskDao.getTownTasks(town);
+                        List<MissionEntry> taskEntries = missionDao.getTownMissions(town);
                         int missionIdx = Integer.parseInt(args[1]);
 
-                        TaskEntry entry = taskEntries.get(missionIdx - 1);
+                        MissionEntry entry = taskEntries.get(missionIdx - 1);
                         entry.setStartedTime(Util.currentTime());
                         entry.setStartedPlayer(player);
 
                         try {
-                            taskDao.update(entry);
+                            missionDao.update(entry);
                             Util.sendMsg(sender, "&f You have started " + entry.getMissionType() + " " + entry.getDisplayLine());
                         } catch (JsonProcessingException e) {
                             logger.severe("Error while parsing Json " + entry.getMissionJson());
@@ -121,7 +121,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                 }).customCheck(() -> {
                     Town town = TownyUtil.residentOf(player);
 
-                    if (taskDao.getStartedMission(town) == null) {
+                    if (missionDao.getStartedMission(town) == null) {
                         return true;
                     } else {
                         Util.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));

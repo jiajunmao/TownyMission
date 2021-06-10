@@ -1,9 +1,9 @@
-package world.naturecraft.townymission.db.sql;
+package world.naturecraft.townymission.data.db.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * The type Task history database.
  */
-public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
+public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
 
     /**
      * Instantiates a new Task history database.
@@ -22,7 +22,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
      * @param db        the db
      * @param tableName the table name
      */
-    public TaskHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
+    public MissionHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }
 
@@ -50,8 +50,8 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
     }
 
     @Override
-    public List<TaskHistoryEntry> getEntries() {
-        List<TaskHistoryEntry> list = new ArrayList<>();
+    public List<MissionHistoryEntry> getEntries() {
+        List<MissionHistoryEntry> list = new ArrayList<>();
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -59,7 +59,7 @@ public class TaskHistoryDatabase extends Database<TaskHistoryEntry> {
 
             while (result.next()) {
                 try {
-                    list.add(new TaskHistoryEntry(result.getInt("id"),
+                    list.add(new MissionHistoryEntry(result.getInt("id"),
                             result.getString("task_type"),
                             result.getLong("added_time"),
                             result.getLong("started_time"),

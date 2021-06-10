@@ -17,7 +17,7 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NotStartedException;
 import world.naturecraft.townymission.components.containers.json.ResourceJson;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -65,7 +65,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     boolean sane = sanityCheck(player, args);
 
                     if (sane) {
-                        TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                        MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                         ResourceJson resourceJson;
 
                         resourceJson = (ResourceJson) resourceEntry.getMissionJson();
@@ -103,7 +103,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             Bukkit.getPluginManager().callEvent(missionEvent);
 
                             if (!missionEvent.isCanceled()) {
-                                taskDao.update(resourceEntry);
+                                missionDao.update(resourceEntry);
                             }
                         } catch (JsonProcessingException exception) {
                             exception.printStackTrace();
@@ -132,7 +132,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     ResourceJson resourceJson = (ResourceJson) resourceEntry.getMissionJson();
                     if (player.getItemInHand().getType().equals(resourceJson.getType())) {
                         return true;
@@ -144,7 +144,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     }
                 })
                 .customCheck(() -> {
-                    TaskEntry resourceEntry = taskDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     try {
                         if (Util.isTimedOut(resourceEntry)) {
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));

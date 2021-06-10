@@ -2,13 +2,12 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.dao;
+package world.naturecraft.townymission.data.dao;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
-import world.naturecraft.townymission.db.sql.CooldownDatabase;
+import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 
 import java.util.Date;
 import java.util.List;

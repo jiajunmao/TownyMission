@@ -1,45 +1,38 @@
-/*
- * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
- */
+package world.naturecraft.townymission.data.db.sql;
 
-package world.naturecraft.townymission.db.sql;
-
-import com.mysql.fabric.xmlrpc.base.Data;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.containers.sql.SeasonHistoryEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CooldownDatabase extends Database<CooldownEntry> {
+/**
+ * The type Season history database.
+ */
+public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
+
     /**
-     * Instantiates a new Database.
+     * Instantiates a new Season history database.
      *
      * @param instance  the instance
      * @param db        the db
      * @param tableName the table name
      */
-    public CooldownDatabase(TownyMission instance, HikariDataSource db, String tableName) {
+    public SeasonHistoryDatabase(TownyMission instance, HikariDataSource db, String tableName) {
         super(instance, db, tableName);
     }
 
-    /**
-     * Create table.
-     */
     @Override
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`id` INT NOT NULL AUTO_INCREMENT ," +
-                    "`town_uuid` VARCHAR(255) NOT NULL ," +
-                    "`started_time` BIGINT NOT NULL," +
-                    "`cooldown` BIGINT NOT NULL," +
+                    "`season` INT NOT NULL ," +
+                    "`started_time` BIGINT NOT NULL ," +
+                    "`rank_json` VARCHAR(255) NOT NULL ," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -47,45 +40,50 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         });
     }
 
-    /**
-     * Gets entries.
-     *
-     * @return the entries
-     */
     @Override
-    public List<CooldownEntry> getEntries() {
-        List<CooldownEntry> list = new ArrayList<>();
+    public List<SeasonHistoryEntry> getEntries() {
+        List<SeasonHistoryEntry> list = new ArrayList<>();
         execute(conn -> {
-            String sql = "SELECT * FROM " + tableName + ";";
+            String sql = "SELECT * FROM " + tableName;
             PreparedStatement p = conn.prepareStatement(sql);
             ResultSet result = p.executeQuery();
+
             while (result.next()) {
-                try {
-                    list.add(new CooldownEntry(result.getInt("id"),
-                            result.getString("town_uuid"),
-                            result.getLong("started_time"),
-                            result.getLong("cooldown")));
-                } catch (NotRegisteredException e) {
-                    e.printStackTrace();
-                }
+                list.add(new SeasonHistoryEntry(result.getInt("id"),
+                        result.getInt("season"),
+                        result.getLong("started_time"),
+                        result.getString("rank_json")));
             }
+
             return null;
         });
         return list;
     }
 
-    public void add(String townUUID, long startedTime, long cooldown) {
+    /**
+     * Add.
+     *
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
+    public void add(int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
-                    townUUID + "', '" +
+                    season + "', '" +
                     startedTime + "', '" +
-                    cooldown + "');";
+                    rankJson + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(int id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -96,12 +94,20 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         });
     }
 
-    public void update(int id, String townUUID, long startedTime, long cooldown) {
+    /**
+     * Update.
+     *
+     * @param id          the id
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
+    public void update(int id, int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET town_uuid='" + townUUID +
+                    " SET season='" + season +
                     "', started_time='" + startedTime +
-                    "', cooldown='" + cooldown +
+                    "', rank_json='" + rankJson +
                     "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();

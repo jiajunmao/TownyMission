@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.NotStartedException;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -20,7 +20,6 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -70,7 +69,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
             if (sane) {
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Overview&7------");
                 Town town = TownyUtil.residentOf(player);
-                TaskEntry taskEntry;
+                MissionEntry taskEntry;
 
                 // Server-wide section
                 builder.add("&5--Basic Info Section--");
@@ -82,7 +81,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
 
                 // Started Mission section
                 builder.add("&5--Mission Section--");
-                if ((taskEntry = taskDao.getStartedMission(town)) != null) {
+                if ((taskEntry = missionDao.getStartedMission(town)) != null) {
                     builder.add("&eCurrent Mission: &f" + taskEntry.getMissionJson().getDisplayLine());
                     builder.add("&eStarted By: &f" + taskEntry.getStartedPlayer().getName());
 

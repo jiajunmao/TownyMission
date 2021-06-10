@@ -4,13 +4,13 @@
 
 package world.naturecraft.townymission.api.exceptions;
 
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 
 public class NotStartedException extends Throwable {
 
-    private TaskEntry entry;
+    private MissionEntry entry;
 
-    public NotStartedException(TaskEntry entry) {
+    public NotStartedException(MissionEntry entry) {
         this.entry = entry;
     }
 }

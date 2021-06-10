@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.db.sql;
+package world.naturecraft.townymission.data.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMission;

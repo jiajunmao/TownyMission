@@ -2,9 +2,8 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.dao;
+package world.naturecraft.townymission.data.dao;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.components.containers.sql.SqlEntry;
 
 import java.util.List;

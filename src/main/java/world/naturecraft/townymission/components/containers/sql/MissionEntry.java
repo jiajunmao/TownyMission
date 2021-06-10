@@ -21,7 +21,7 @@ import java.util.UUID;
 /**
  * The type Task entry.
  */
-public class TaskEntry extends SqlEntry {
+public class MissionEntry extends SqlEntry {
     private final MissionType missionType;
     private final long addedTime;
     private final long allowedTime;
@@ -42,7 +42,7 @@ public class TaskEntry extends SqlEntry {
      * @param town          the town
      * @param startedPlayer the started player
      */
-    public TaskEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, Town town, Player startedPlayer) {
+    public MissionEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, Town town, Player startedPlayer) {
         super(id, DbType.TASK);
         this.missionType = missionType;
         this.addedTime = addedTime;
@@ -66,7 +66,7 @@ public class TaskEntry extends SqlEntry {
      * @param startedPlayerUUID the started player name
      * @throws JsonProcessingException the json processing exception
      */
-    public TaskEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
+    public MissionEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
         this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), (startedPlayerUUID == null || startedPlayerUUID.equals("null")) ? null : Bukkit.getPlayer(UUID.fromString(startedPlayerUUID)));
 
         //TODO: replace with polymorphism

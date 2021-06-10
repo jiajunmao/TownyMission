@@ -4,15 +4,14 @@
 
 package world.naturecraft.townymission.listeners.internal;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NotStartedException;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
-import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
 import world.naturecraft.townymission.utils.Util;
 
@@ -37,7 +36,7 @@ public class DoMissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onDoMission(DoMissionEvent e) {
-        TaskEntry taskEntry = e.getTaskEntry();
+        MissionEntry taskEntry = e.getTaskEntry();
         Player player = e.getPlayer();
         MissionJson missionjson = taskEntry.getMissionJson();
 
@@ -52,9 +51,9 @@ public class DoMissionListener extends TownyMissionListener {
         }
 
         if (missionjson.getCompleted() >= missionjson.getAmount()) {
-            taskDao.remove(taskEntry);
-            TaskHistoryEntry taskHistoryEntry = new TaskHistoryEntry(taskEntry, Util.currentTime());
-            taskHistoryDao.add(taskHistoryEntry);
+            missionDao.remove(taskEntry);
+            MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(taskEntry, Util.currentTime());
+            missionHistoryDao.add(missionHistoryEntry);
             cooldownDao.startCooldown(taskEntry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
         }
     }

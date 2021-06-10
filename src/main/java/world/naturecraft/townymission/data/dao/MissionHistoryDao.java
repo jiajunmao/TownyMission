@@ -2,35 +2,35 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.dao;
+package world.naturecraft.townymission.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
-import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
-import world.naturecraft.townymission.db.sql.TaskHistoryDatabase;
+import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
+import world.naturecraft.townymission.data.db.sql.MissionHistoryDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskHistoryDao extends Dao<TaskHistoryEntry> {
+public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
 
-    private final TaskHistoryDatabase db;
+    private final MissionHistoryDatabase db;
 
     /**
      * Instantiates a new Task dao.
      *
      * @param db the db
      */
-    public TaskHistoryDao(TaskHistoryDatabase db) {
+    public MissionHistoryDao(MissionHistoryDatabase db) {
         this.db = db;
     }
 
-    public List<TaskHistoryEntry> getAllUnclaimed(Town town) {
-        List<TaskHistoryEntry> list = db.getEntries();
-        List<TaskHistoryEntry> result = new ArrayList<>();
+    public List<MissionHistoryEntry> getAllUnclaimed(Town town) {
+        List<MissionHistoryEntry> list = db.getEntries();
+        List<MissionHistoryEntry> result = new ArrayList<>();
 
-        for (TaskHistoryEntry e : list) {
+        for (MissionHistoryEntry e : list) {
             if (e.getTown().equals(town) && !e.isClaimed()) {
                 result.add(e);
             }
@@ -39,7 +39,7 @@ public class TaskHistoryDao extends Dao<TaskHistoryEntry> {
         return result;
     }
 
-    public void add(TaskHistoryEntry entry) {
+    public void add(MissionHistoryEntry entry) {
         try {
             db.add(entry.getMissionType().name(),
                     entry.getAddedTime(),
@@ -57,11 +57,11 @@ public class TaskHistoryDao extends Dao<TaskHistoryEntry> {
         }
     }
 
-    public void remove(TaskHistoryEntry entry) {
+    public void remove(MissionHistoryEntry entry) {
         db.remove(entry.getId());
     }
 
-    public void update(TaskHistoryEntry entry) {
+    public void update(MissionHistoryEntry entry) {
         try {
             db.update(entry.getId(),
                     entry.getMissionType().name(),
@@ -81,7 +81,7 @@ public class TaskHistoryDao extends Dao<TaskHistoryEntry> {
     }
 
     @Override
-    public List<TaskHistoryEntry> getEntries() {
+    public List<MissionHistoryEntry> getEntries() {
         return db.getEntries();
     }
 }

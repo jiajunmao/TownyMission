@@ -9,7 +9,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 
 /**
  * The type Do mission event.
@@ -20,7 +20,7 @@ public class DoMissionEvent extends Event implements Cancellable {
     private boolean isCanceled;
     private final Player player;
     // !!IMPORTANT!! this entry contains the **updated** info
-    private final TaskEntry taskEntry;
+    private final MissionEntry taskEntry;
 
     /**
      * Instantiates a new Do mission event.
@@ -28,7 +28,7 @@ public class DoMissionEvent extends Event implements Cancellable {
      * @param player the player
      * @param entry  the entry
      */
-    public DoMissionEvent(Player player, TaskEntry entry, boolean isAsync) {
+    public DoMissionEvent(Player player, MissionEntry entry, boolean isAsync) {
         super(isAsync);
         this.player = player;
         this.taskEntry = entry;
@@ -95,7 +95,7 @@ public class DoMissionEvent extends Event implements Cancellable {
      *
      * @return the task entry
      */
-    public TaskEntry getTaskEntry() {
+    public MissionEntry getTaskEntry() {
         return taskEntry;
     }
 }

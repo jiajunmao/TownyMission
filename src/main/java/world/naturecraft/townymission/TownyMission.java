@@ -5,12 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.commands.*;
-import world.naturecraft.townymission.components.containers.sql.SqlEntry;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigLoader;
-import world.naturecraft.townymission.dao.*;
-import world.naturecraft.townymission.db.sql.*;
+import world.naturecraft.townymission.data.dao.*;
+import world.naturecraft.townymission.data.db.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
@@ -76,8 +74,8 @@ public class TownyMission extends JavaPlugin {
      * Register databases.
      */
     public void registerDatabases() {
-        dbList.put(DbType.TASK, new TaskDatabase(this, db, Util.getDbName(DbType.TASK)));
-        dbList.put(DbType.TASK_HISTORY, new TaskHistoryDatabase(this, db, Util.getDbName(DbType.TASK_HISTORY)));
+        dbList.put(DbType.TASK, new MissionDatabase(this, db, Util.getDbName(DbType.TASK)));
+        dbList.put(DbType.TASK_HISTORY, new MissionHistoryDatabase(this, db, Util.getDbName(DbType.TASK_HISTORY)));
         dbList.put(DbType.SPRINT, new SprintDatabase(this, db, Util.getDbName(DbType.SPRINT)));
         dbList.put(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(this, db, Util.getDbName(DbType.SPRINT_HISTORY)));
         dbList.put(DbType.SEASON, new SeasonDatabase(this, db, Util.getDbName(DbType.SEASON)));
@@ -86,8 +84,8 @@ public class TownyMission extends JavaPlugin {
     }
 
     public void registerDao() {
-        daoList.put(DbType.TASK, new TaskDao((TaskDatabase) getDb(DbType.TASK)));
-        daoList.put(DbType.TASK_HISTORY, new TaskHistoryDao((TaskHistoryDatabase) getDb(DbType.TASK_HISTORY)));
+        daoList.put(DbType.TASK, new MissionDao((MissionDatabase) getDb(DbType.TASK)));
+        daoList.put(DbType.TASK_HISTORY, new MissionHistoryDao((MissionHistoryDatabase) getDb(DbType.TASK_HISTORY)));
         daoList.put(DbType.SPRINT, new SprintDao((SprintDatabase) getDb(DbType.SPRINT)));
         daoList.put(DbType.SEASON, new SeasonDao((SeasonDatabase) getDb(DbType.SEASON)));
         daoList.put(DbType.COOLDOWN, new CooldownDao((CooldownDatabase) getDb(DbType.COOLDOWN)));

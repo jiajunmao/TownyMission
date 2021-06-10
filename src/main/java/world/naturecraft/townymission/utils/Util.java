@@ -1,18 +1,11 @@
 package world.naturecraft.townymission.utils;
 
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.ItemMergeEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.NotStartedException;
-import world.naturecraft.townymission.components.containers.json.MissionJson;
-import world.naturecraft.townymission.components.containers.sql.TaskEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 
@@ -122,13 +115,13 @@ public class Util {
      * @param list the list
      * @return the map
      */
-    public static Map<MissionType, List<TaskEntry>> classifyTaskEntry(List<TaskEntry> list) {
-        Map<MissionType, List<TaskEntry>> map = new HashMap<>();
+    public static Map<MissionType, List<MissionEntry>> classifyTaskEntry(List<MissionEntry> list) {
+        Map<MissionType, List<MissionEntry>> map = new HashMap<>();
         for (MissionType missionType : MissionType.values()) {
             map.put(missionType, new ArrayList<>());
         }
 
-        for (TaskEntry e : list) {
+        for (MissionEntry e : list) {
             MissionType type = e.getMissionType();
             map.get(type).add(e);
         }
@@ -136,7 +129,7 @@ public class Util {
         return map;
     }
 
-    public static boolean isTimedOut(TaskEntry entry) throws NotStartedException {
+    public static boolean isTimedOut(MissionEntry entry) throws NotStartedException {
         if (entry.getStartedTime() == 0) {
             throw new NotStartedException(entry);
         }

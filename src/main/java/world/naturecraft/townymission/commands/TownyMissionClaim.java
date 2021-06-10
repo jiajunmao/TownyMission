@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.commands;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
-import world.naturecraft.townymission.components.containers.sql.TaskHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -77,7 +76,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
 
                     if (sane) {
                         Town town = TownyUtil.residentOf(player);
-                        List<TaskHistoryEntry> list = taskHistoryDao.getAllUnclaimed(town);
+                        List<MissionHistoryEntry> list = missionHistoryDao.getAllUnclaimed(town);
 
                         if (list.size() == 0) {
                             Util.sendMsg(player, instance.getLangEntry("commands.claim.onNotFound"));
@@ -89,7 +88,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                             if (args.length == 1) {
                                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Unclaimed Missions&7------");
                                 int index = 1;
-                                for (TaskHistoryEntry e : list) {
+                                for (MissionHistoryEntry e : list) {
                                     builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getMissionJson().getDisplayLine());
                                     index++;
                                 }
@@ -101,7 +100,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                     return;
                                 }
 
-                                TaskHistoryEntry entry = list.get(choice);
+                                MissionHistoryEntry entry = list.get(choice);
                                 int reward = entry.getMissionJson().getReward();
 
                                 // This means that sprint database does not contain the town info yet, adding
@@ -117,7 +116,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
 
 
                                 entry.setClaimed(true);
-                                taskHistoryDao.update(entry);
+                                missionHistoryDao.update(entry);
                                 Util.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess").replace("%points%", String.valueOf(reward)));
                             } else {
                                 // Claim all rewards
@@ -132,11 +131,11 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 SprintEntry sprintEntry = sprintDao.get(town.getUUID().toString());
                                 System.out.println("Sprint entry id: " + sprintEntry.getId());
 
-                                for (TaskHistoryEntry taskHistoryEntry : list) {
+                                for (MissionHistoryEntry taskHistoryEntry : list) {
                                     totalPoints += taskHistoryEntry.getMissionJson().getReward();
                                     sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() + taskHistoryEntry.getMissionJson().getReward());
                                     taskHistoryEntry.setClaimed(true);
-                                    taskHistoryDao.update(taskHistoryEntry);
+                                    missionHistoryDao.update(taskHistoryEntry);
                                 }
 
                                 sprintDao.update(sprintEntry);
