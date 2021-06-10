@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 import world.naturecraft.townymission.data.db.sql.MissionDatabase;
 
 import java.util.ArrayList;
@@ -25,10 +24,21 @@ public class MissionDao extends Dao<MissionEntry> {
 
     /**
      * Instantiates a new Task dao.
-     *
      */
     public MissionDao() {
         this.db = MissionDatabase.getInstance();
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionDao getInstance() {
+        if (singleton == null) {
+            singleton = new MissionDao();
+        }
+        return singleton;
     }
 
     /**
@@ -72,6 +82,7 @@ public class MissionDao extends Dao<MissionEntry> {
      * @param missionType the mission type
      * @return the town tasks
      */
+    @Deprecated
     public MissionEntry getTownStartedMission(Town town, MissionType missionType) {
         List<MissionEntry> list = getTownMissions(town);
 
@@ -90,6 +101,7 @@ public class MissionDao extends Dao<MissionEntry> {
      * @param town the town
      * @return the started mission
      */
+    @Deprecated
     public MissionEntry getStartedMission(Town town) {
         for (MissionEntry e : db.getEntries()) {
             if (e.getTown().equals(town)) {
@@ -142,17 +154,5 @@ public class MissionDao extends Dao<MissionEntry> {
     @Override
     public List<MissionEntry> getEntries() {
         return db.getEntries();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionDao getInstance() {
-        if (singleton == null) {
-            singleton = new MissionDao();
-        }
-        return singleton;
     }
 }

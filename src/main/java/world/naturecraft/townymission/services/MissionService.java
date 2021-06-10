@@ -10,12 +10,13 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.containers.sql.*;
+import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.*;
-import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,15 @@ public class MissionService extends TownyMissionService {
     public MissionService(TownyMission instance) {
         super(instance);
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionService getInstance() {
+        return singleton;
     }
 
     /**
@@ -150,12 +160,24 @@ public class MissionService extends TownyMissionService {
         CooldownDao.getInstance().startCooldown(missionEntry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionService getInstance() {
-        return singleton;
+    public List<MissionEntry> getStartedMissions(Town town) {
+        List<MissionEntry> entryList = new ArrayList<>();
+        for (MissionEntry e : MissionDao.getInstance().getEntries()) {
+            if (e.isStarted()) {
+                entryList.add(e);
+            }
+        }
+        return entryList;
+    }
+
+    public List<MissionEntry> getStartedMissions(Town town, MissionType missionType) {
+        List<MissionEntry> missionEntries = getStartedMissions(town);
+        List<MissionEntry> finalList = new ArrayList<>();
+        for (MissionEntry entry : missionEntries) {
+            if (entry.getMissionType().equals(missionType)) {
+                finalList.add(entry);
+            }
+        }
+        return finalList;
     }
 }

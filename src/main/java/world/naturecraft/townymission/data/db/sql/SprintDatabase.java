@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.data.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 
 import java.sql.PreparedStatement;
@@ -26,6 +25,15 @@ public class SprintDatabase extends Database<SprintEntry> {
     public SprintDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintDatabase getInstance() {
+        return singleton;
     }
 
     @Override
@@ -133,14 +141,5 @@ public class SprintDatabase extends Database<SprintEntry> {
             p.executeUpdate();
             return null;
         });
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintDatabase getInstance() {
-        return singleton;
     }
 }

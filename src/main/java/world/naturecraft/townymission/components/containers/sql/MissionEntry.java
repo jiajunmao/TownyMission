@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -13,11 +12,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.components.gui.GlowEnchant;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -207,14 +207,23 @@ public class MissionEntry extends SqlEntry {
 
         String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
         meta.setDisplayName(Util.translateColor(displayName));
-        meta.setLore(missionJson.getLore());
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
         if (startedTime != 0) {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            List<String> loreList = new ArrayList<>();
+            loreList.add(Util.translateColor("&eStatus: &aStarted"));
+            loreList.addAll(missionJson.getLore());
+            meta.setLore(loreList);
+        } else {
+            meta.setLore(missionJson.getLore());
         }
 
         stack.setItemMeta(meta);
         return stack;
+    }
+
+    public boolean isStarted() {
+        return startedTime != 0;
     }
 }

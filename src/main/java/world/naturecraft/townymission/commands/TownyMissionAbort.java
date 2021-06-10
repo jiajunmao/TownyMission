@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
-import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -51,11 +50,11 @@ public class TownyMissionAbort extends TownyMissionCommand {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                if (sanityCheck(player)) {
-                    Town town = TownyUtil.residentOf(player);
-                    MissionService.getInstance().abortMission(town);
-                    Util.sendMsg(sender, instance.getLangEntry("commands.abort.onSuccess"));
-                }
+                    if (sanityCheck(player)) {
+                        Town town = TownyUtil.residentOf(player);
+                        MissionService.getInstance().abortMission(town);
+                        Util.sendMsg(sender, instance.getLangEntry("commands.abort.onSuccess"));
+                    }
                 }
             };
 

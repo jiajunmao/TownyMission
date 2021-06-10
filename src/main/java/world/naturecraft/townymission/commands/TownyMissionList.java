@@ -50,14 +50,14 @@ public class TownyMissionList extends TownyMissionCommand {
 //            BukkitRunnable r = new BukkitRunnable() {
 //                @Override
 //                public void run() {
-                    Player player = (Player) sender;
-                    Town town;
-                    if ((town = TownyUtil.residentOf(player)) != null) {
-                        MissionManageGui gui = new MissionManageGui(instance);
-                        gui.openInventory(player);
-                    } else {
-                        Util.sendMsg(sender, "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
-                    }
+            Player player = (Player) sender;
+            Town town;
+            if ((town = TownyUtil.residentOf(player)) != null) {
+                MissionManageGui gui = new MissionManageGui(instance);
+                gui.openInventory(player);
+            } else {
+                Util.sendMsg(sender, "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
+            }
 //                }
 //            };
 

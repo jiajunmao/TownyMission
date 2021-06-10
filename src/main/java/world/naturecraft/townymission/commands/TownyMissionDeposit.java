@@ -87,7 +87,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             resourceJson.addCompleted(total);
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(total)
-                                    .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
+                                            .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         } else {
                             int number = player.getItemInHand().getAmount();
                             resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
@@ -95,7 +95,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             player.setItemInHand(null);
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(number)
-                                    .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
+                                            .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         }
 
                         try {

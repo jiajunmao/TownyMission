@@ -22,10 +22,21 @@ public class CooldownDao extends Dao<CooldownEntry> {
 
     /**
      * Instantiates a new Cooldown dao.
-     *
      */
     public CooldownDao() {
         this.db = CooldownDatabase.getInstance();
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static CooldownDao getInstance() {
+        if (singleton == null) {
+            singleton = new CooldownDao();
+        }
+        return singleton;
     }
 
     @Override
@@ -55,7 +66,7 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * @return the cooldown entry
      */
     public CooldownEntry get(Town town) {
-        for(CooldownEntry entry : getEntries()) {
+        for (CooldownEntry entry : getEntries()) {
             if (entry.getTown().equals(town)) {
                 return entry;
             }
@@ -106,17 +117,5 @@ public class CooldownDao extends Dao<CooldownEntry> {
             entry.setCooldown(cooldown);
             update(entry);
         }
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownDao getInstance() {
-        if (singleton == null) {
-            singleton = new CooldownDao();
-        }
-        return singleton;
     }
 }

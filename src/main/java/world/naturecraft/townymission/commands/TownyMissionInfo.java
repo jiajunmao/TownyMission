@@ -64,8 +64,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                     .customCheck(() -> {
                         if (args.length == 1) {
                             return true;
-                        }
-                        else {
+                        } else {
                             Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                             return false;
                         }
@@ -100,7 +99,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                     String display = String.format("%02d:%02d",
                             TimeUnit.MILLISECONDS.toHours(allowedTime),
                             TimeUnit.MILLISECONDS.toMinutes(allowedTime) -
-                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(allowedTime)));
+                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(allowedTime)));
                     builder.add("&eAllowed Time: &f" + display);
 
                     try {
@@ -129,7 +128,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                 int baselineCap = instance.getConfig().getInt("participants.sprintRewardBaselineCap");
                 int baselineIncrement = instance.getConfig().getInt("participants.sprintBaselineIncrement");
 
-                int realBaseline = baseline + (town.getNumResidents()-1)*memberScale + (currentSprint - 1)*baselineIncrement;
+                int realBaseline = baseline + (town.getNumResidents() - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
                 realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
                 int naturepoints = SprintDao.getInstance().get(town.getUUID().toString()).getNaturepoints();
@@ -137,7 +136,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                 builder.add("&eTotal Points: &f" + naturepoints);
                 builder.add("&eBaseline: &f" + realBaseline);
 
-                int rankingPoints = (naturepoints - realBaseline)/town.getNumResidents();
+                int rankingPoints = (naturepoints - realBaseline) / town.getNumResidents();
                 rankingPoints = Math.max(rankingPoints, 0);
                 builder.add("&eRanking Points: &f" + rankingPoints);
 

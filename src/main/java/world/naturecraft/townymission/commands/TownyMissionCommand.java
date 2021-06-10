@@ -8,9 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.dao.*;
-import world.naturecraft.townymission.data.db.sql.*;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.logging.Logger;

@@ -4,14 +4,11 @@
 
 package world.naturecraft.townymission.listeners.internal;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
-import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
-import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.Util;

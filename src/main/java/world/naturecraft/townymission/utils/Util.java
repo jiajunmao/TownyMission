@@ -167,8 +167,8 @@ public class Util {
         int increment = instance.getConfig().getInt("participants.sprintBaselineIncrement");
         int currentSprint = instance.getConfig().getInt("sprint.current");
 
-        int realBaseline = Math.min(baseline + memberScale * (numResident - 1), baselineCap) + increment*(currentSprint-1);
-        return (naturePoint-realBaseline)/numResident;
+        int realBaseline = Math.min(baseline + memberScale * (numResident - 1), baselineCap) + increment * (currentSprint - 1);
+        return (naturePoint - realBaseline) / numResident;
     }
 
     /**
@@ -209,7 +209,7 @@ public class Util {
      */
     public static String capitalizeFirst(String str) {
         str = str.toLowerCase(Locale.ROOT);
-        str = str.substring(0,1).toUpperCase(Locale.ROOT) + str.substring(1);
+        str = str.substring(0, 1).toUpperCase(Locale.ROOT) + str.substring(1);
         return str;
     }
 }

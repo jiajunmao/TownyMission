@@ -2,7 +2,6 @@ package world.naturecraft.townymission.data.db.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
 
 import java.sql.PreparedStatement;
@@ -26,6 +25,15 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
     public MissionHistoryDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionHistoryDatabase getInstance() {
+        return singleton;
     }
 
     @Override
@@ -132,7 +140,6 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
         });
     }
 
-
     /**
      * Update.
      *
@@ -168,14 +175,5 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
             p.executeUpdate();
             return null;
         });
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionHistoryDatabase getInstance() {
-        return singleton;
     }
 }

@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
-import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 import world.naturecraft.townymission.data.db.sql.SprintDatabase;
 
 import java.util.List;
@@ -23,6 +22,18 @@ public class SprintDao extends Dao<SprintEntry> {
      */
     public SprintDao() {
         this.database = SprintDatabase.getInstance();
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintDao getInstance() {
+        if (singleton == null) {
+            singleton = new SprintDao();
+        }
+        return singleton;
     }
 
     public void update(SprintEntry entry) {
@@ -65,17 +76,5 @@ public class SprintDao extends Dao<SprintEntry> {
             }
         }
         return null;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintDao getInstance() {
-        if (singleton == null) {
-            singleton = new SprintDao();
-        }
-        return singleton;
     }
 }

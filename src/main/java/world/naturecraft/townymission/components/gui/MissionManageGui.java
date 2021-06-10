@@ -16,11 +16,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
-import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.config.CustomConfigParser;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
-import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
@@ -32,8 +30,8 @@ import java.util.Random;
  */
 public class MissionManageGui extends TownyMissionGui {
 
-    private TownyMission instance;
-    private String guiTitle;
+    private final TownyMission instance;
+    private final String guiTitle;
 
     /**
      * Instantiates a new Mission manage gui.
@@ -52,6 +50,8 @@ public class MissionManageGui extends TownyMissionGui {
     public void initializeItems(Player player) {
         Town town = TownyUtil.residentOf(player);
         MissionDao missionDao = MissionDao.getInstance();
+
+        // Figure out how many missions the town is missing
         int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
         List<MissionJson> missions = CustomConfigParser.parseAll(instance);
         int size = missions.size();
@@ -76,16 +76,30 @@ public class MissionManageGui extends TownyMissionGui {
             }
         }
 
-        List<MissionEntry> taskList = missionDao.getTownMissions(town);
+        // Get and place all town missions
+        // TODO: Kinda wasteful, should be combined with adding logic above
+        List<MissionEntry> missionList = missionDao.getTownMissions(town);
         int placingIndex = 11;
-        for (int i = 0; i < taskList.size(); i++) {
+        for (MissionEntry entry : missionList) {
             if (placingIndex % 9 == 0) {
                 placingIndex += 2;
             }
 
-            inv.setItem(placingIndex, taskList.get(i).getGuiItem());
-            placingIndex++;
+            if (!entry.isStarted()) {
+                inv.setItem(placingIndex, entry.getGuiItem());
+                placingIndex++;
+            }
         }
+
+        // Put in all started missions
+        missionList = MissionService.getInstance().getStartedMissions(town);
+        placingIndex = 0;
+        for (MissionEntry entry : missionList) {
+            inv.setItem(0, entry.getGuiItem());
+            placingIndex += 9;
+        }
+
+        // Place filler glass panes
         placeFiller();
     }
 
@@ -154,8 +168,8 @@ public class MissionManageGui extends TownyMissionGui {
             }
 
             Town town = TownyUtil.residentOf(player);
-            MissionEntry missionEntry = MissionDao.getInstance().getStartedMission(town);
-            inv.setItem(slot, missionEntry.getGuiItem());
+            initializeItems(player);
+            player.updateInventory();
             player.setItemOnCursor(null);
         }
     }

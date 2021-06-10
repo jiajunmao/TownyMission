@@ -12,8 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionHistoryDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
@@ -70,9 +70,9 @@ public class TownyMissionClaim extends TownyMissionCommand {
                             .customCheck(() -> {
                                         if (args.length == 1
                                                 || (args.length == 2
-                                                    && Util.isInt(args[1])
-                                                    && Integer.parseInt(args[1]) >= 1
-                                                    && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
+                                                && Util.isInt(args[1])
+                                                && Integer.parseInt(args[1]) >= 1
+                                                && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
                                                 || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
                                             return true;
                                         } else {

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
-import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 import world.naturecraft.townymission.data.db.sql.MissionHistoryDatabase;
 
 import java.util.ArrayList;
@@ -29,6 +28,18 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
      */
     public MissionHistoryDao() {
         this.db = MissionHistoryDatabase.getInstance();
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionHistoryDao getInstance() {
+        if (singleton == null) {
+            singleton = new MissionHistoryDao();
+        }
+        return singleton;
     }
 
     /**
@@ -94,17 +105,5 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
     @Override
     public List<MissionHistoryEntry> getEntries() {
         return db.getEntries();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionHistoryDao getInstance() {
-        if (singleton == null) {
-            singleton = new MissionHistoryDao();
-        }
-        return singleton;
     }
 }

@@ -6,10 +6,8 @@ package world.naturecraft.townymission.data.db.sql;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 
-import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -31,6 +29,15 @@ public class CooldownDatabase extends Database<CooldownEntry> {
     public CooldownDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static CooldownDatabase getInstance() {
+        return singleton;
     }
 
     /**
@@ -131,14 +138,5 @@ public class CooldownDatabase extends Database<CooldownEntry> {
             p.executeUpdate();
             return null;
         });
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownDatabase getInstance() {
-        return singleton;
     }
 }
