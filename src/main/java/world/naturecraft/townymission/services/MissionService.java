@@ -34,6 +34,7 @@ public class MissionService extends TownyMissionService {
      */
     public MissionService(TownyMission instance) {
         super(instance);
+        singleton = this;
     }
 
     /**
@@ -101,6 +102,7 @@ public class MissionService extends TownyMissionService {
         int missionIdx = choice;
 
         MissionEntry entry = taskEntries.get(missionIdx - 1);
+
         entry.setStartedTime(Util.currentTime());
         entry.setStartedPlayer(player);
         MissionDao.getInstance().update(entry);

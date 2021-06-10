@@ -48,7 +48,6 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVoteReceived(VoteRewardEvent e) {
-        System.out.println("VoteRewardEvent triggered");
         Player player = e.getPlayer();
 
         SanityChecker sanityChecker = new SanityChecker(instance).target(player)
@@ -66,7 +65,6 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMoneyReceive(CMIUserBalanceChangeEvent event) {
-        System.out.println("CMIUserBalanceChangeEvent triggered");
         Player player = event.getUser().getPlayer();
         SanityChecker checker = new SanityChecker(instance).target(player).silent(true)
                 .hasTown()
@@ -85,7 +83,6 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onTownExpansion(TownClaimEvent e) {
-        System.out.println("TownClaimEvent triggered");
         SanityChecker checker = new SanityChecker(instance).target(e.getResident().getPlayer())
                 .hasTown()
                 .hasStarted()
@@ -110,7 +107,6 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onMobKill(EntityDeathEvent e) {
-        System.out.println("EntityDeathEvent triggered");
         LivingEntity dead = e.getEntity();
         Player killer = e.getEntity().getKiller();
 

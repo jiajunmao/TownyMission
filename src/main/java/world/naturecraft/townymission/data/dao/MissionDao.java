@@ -26,10 +26,9 @@ public class MissionDao extends Dao<MissionEntry> {
     /**
      * Instantiates a new Task dao.
      *
-     * @param db the db
      */
-    public MissionDao(MissionDatabase db) {
-        this.db = db;
+    public MissionDao() {
+        this.db = MissionDatabase.getInstance();
     }
 
     /**
@@ -152,7 +151,7 @@ public class MissionDao extends Dao<MissionEntry> {
      */
     public static MissionDao getInstance() {
         if (singleton == null) {
-            singleton = new MissionDao(MissionDatabase.getInstance());
+            singleton = new MissionDao();
         }
         return singleton;
     }

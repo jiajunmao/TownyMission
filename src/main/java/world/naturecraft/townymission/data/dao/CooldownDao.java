@@ -23,10 +23,9 @@ public class CooldownDao extends Dao<CooldownEntry> {
     /**
      * Instantiates a new Cooldown dao.
      *
-     * @param db the db
      */
-    public CooldownDao(CooldownDatabase db) {
-        this.db = db;
+    public CooldownDao() {
+        this.db = CooldownDatabase.getInstance();
     }
 
     @Override
@@ -99,12 +98,9 @@ public class CooldownDao extends Dao<CooldownEntry> {
      */
     public void startCooldown(Town town, long cooldown) {
         Date date = new Date();
-        System.out.println("Starting cooldown for town: " + town.getName());
         if (get(town) == null) {
-            System.out.println("Town does not exist, creating cooldown");
             add(new CooldownEntry(0, town, date.getTime(), cooldown));
         } else {
-            System.out.println("Town eixsts, updating cooldown");
             CooldownEntry entry = get(town);
             entry.setStartedTime(date.getTime());
             entry.setCooldown(cooldown);
@@ -119,7 +115,7 @@ public class CooldownDao extends Dao<CooldownEntry> {
      */
     public static CooldownDao getInstance() {
         if (singleton == null) {
-            singleton = new CooldownDao(CooldownDatabase.getInstance());
+            singleton = new CooldownDao();
         }
         return singleton;
     }

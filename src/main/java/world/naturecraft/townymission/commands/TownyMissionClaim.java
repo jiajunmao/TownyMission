@@ -137,7 +137,6 @@ public class TownyMissionClaim extends TownyMissionCommand {
 
                                 int totalPoints = 0;
                                 SprintEntry sprintEntry = sprintDao.get(town.getUUID().toString());
-                                System.out.println("Sprint entry id: " + sprintEntry.getId());
 
                                 for (MissionHistoryEntry taskHistoryEntry : list) {
                                     totalPoints += taskHistoryEntry.getMissionJson().getReward();

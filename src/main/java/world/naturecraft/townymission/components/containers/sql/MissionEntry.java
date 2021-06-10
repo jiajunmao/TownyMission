@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.components.gui.GlowEnchant;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -179,7 +181,7 @@ public class MissionEntry extends SqlEntry {
             case RESOURCE:
                 return Material.WHEAT;
             case MOB:
-                return Material.ZOMBIE_HEAD;
+                return Material.NETHERITE_SWORD;
             case EXPANSION:
                 return Material.GRASS_PATH;
             case VOTE:
@@ -198,15 +200,17 @@ public class MissionEntry extends SqlEntry {
      */
     public ItemStack getGuiItem() {
         ItemStack stack = new ItemStack(getGuiItemMaterial(), 1);
+        if (startedTime != 0)
+            stack.addUnsafeEnchantment(Enchantment.LUCK, 1);
 
         ItemMeta meta = stack.getItemMeta();
 
         String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
         meta.setDisplayName(Util.translateColor(displayName));
         meta.setLore(missionJson.getLore());
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
         if (startedTime != 0) {
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 

@@ -33,25 +33,23 @@ import java.util.Random;
 public class MissionManageGui extends TownyMissionGui {
 
     private TownyMission instance;
-    private Player player;
+    private String guiTitle;
 
     /**
      * Instantiates a new Mission manage gui.
      *
      * @param instance the instance
-     * @param player   the player
      */
-    public MissionManageGui(TownyMission instance, Player player) {
+    public MissionManageGui(TownyMission instance) {
         this.instance = instance;
-        this.player = player;
-        inv = Bukkit.createInventory(null, 36, "Mission Manage");
-        initializeItems();
+        guiTitle = "Mission Manage";
+        inv = Bukkit.createInventory(null, 36, guiTitle);
     }
 
     /**
      * Initialize items.
      */
-    public void initializeItems() {
+    public void initializeItems(Player player) {
         Town town = TownyUtil.residentOf(player);
         MissionDao missionDao = MissionDao.getInstance();
         int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
@@ -114,7 +112,8 @@ public class MissionManageGui extends TownyMissionGui {
     /**
      * Open inventory.
      */
-    public void openInventory() {
+    public void openInventory(Player player) {
+        initializeItems(player);
         player.openInventory(inv);
     }
 
@@ -126,7 +125,7 @@ public class MissionManageGui extends TownyMissionGui {
 // Check for clicks on items
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
-        if (e.getInventory() != inv) return;
+        if (!e.getView().getTitle().equalsIgnoreCase(guiTitle)) return;
 
         e.setCancelled(true);
 
@@ -135,8 +134,29 @@ public class MissionManageGui extends TownyMissionGui {
         // verify current item is not null
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
-        final Player p = (Player) e.getWhoClicked();
+        final Player player = (Player) e.getWhoClicked();
+        int slot = e.getSlot();
 
+        // This means the player is clicking on the fillers
+        if ((slot >= 1 && slot <= 8) || (slot >= 28 && slot <= 35) || slot == 10 || slot == 19) {
+            inv.setItem(slot, player.getItemOnCursor());
+            player.setItemOnCursor(null);
+            return;
+        }
 
+        // This means that the player is clicking on the unstarted missions
+        if ((slot >= 11 && slot <= 17) || (slot >= 20 && slot <= 26)) {
+            // Map the slot numbers to mission number
+            slot = (slot >= 11 && slot <= 17) ? slot - 10 : slot;
+            slot = (slot >= 20 && slot <= 26) ? slot - 12 : slot;
+            if (MissionService.getInstance().canStartMission(player)) {
+                MissionService.getInstance().startMission(player, slot);
+            }
+
+            Town town = TownyUtil.residentOf(player);
+            MissionEntry missionEntry = MissionDao.getInstance().getStartedMission(town);
+            inv.setItem(slot, missionEntry.getGuiItem());
+            player.setItemOnCursor(null);
+        }
     }
 }

@@ -21,10 +21,9 @@ public class SeasonDao extends Dao<SeasonEntry> {
     /**
      * Instantiates a new Season dao.
      *
-     * @param database the database
      */
-    public SeasonDao(SeasonDatabase database) {
-        this.database = database;
+    public SeasonDao() {
+        this.database = SeasonDatabase.getInstance();
     }
 
     public void update(SeasonEntry entry) {
@@ -76,7 +75,7 @@ public class SeasonDao extends Dao<SeasonEntry> {
      */
     public static SeasonDao getInstance() {
         if (singleton == null) {
-            singleton = new SeasonDao(SeasonDatabase.getInstance());
+            singleton = new SeasonDao();
         }
         return singleton;
     }

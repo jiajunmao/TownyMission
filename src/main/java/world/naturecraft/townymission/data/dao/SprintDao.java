@@ -20,11 +20,9 @@ public class SprintDao extends Dao<SprintEntry> {
 
     /**
      * Instantiates a new Sprint dao.
-     *
-     * @param database the database
      */
-    public SprintDao(SprintDatabase database) {
-        this.database = database;
+    public SprintDao() {
+        this.database = SprintDatabase.getInstance();
     }
 
     public void update(SprintEntry entry) {
@@ -63,7 +61,6 @@ public class SprintDao extends Dao<SprintEntry> {
 
         for (SprintEntry s : database.getEntries()) {
             if (s.getTownID().equalsIgnoreCase(townUUID)) {
-                System.out.println("SprintDao match with id: " + s.getId() + " and town name: " + s.getTownName());
                 return s;
             }
         }
@@ -77,7 +74,7 @@ public class SprintDao extends Dao<SprintEntry> {
      */
     public static SprintDao getInstance() {
         if (singleton == null) {
-            singleton = new SprintDao(SprintDatabase.getInstance());
+            singleton = new SprintDao();
         }
         return singleton;
     }

@@ -27,8 +27,8 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
      *
      * @param db the db
      */
-    public MissionHistoryDao(MissionHistoryDatabase db) {
-        this.db = db;
+    public MissionHistoryDao() {
+        this.db = MissionHistoryDatabase.getInstance();
     }
 
     /**
@@ -103,7 +103,7 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
      */
     public static MissionHistoryDao getInstance() {
         if (singleton == null) {
-            singleton = new MissionHistoryDao(MissionHistoryDatabase.getInstance());
+            singleton = new MissionHistoryDao();
         }
         return singleton;
     }

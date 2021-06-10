@@ -2,10 +2,14 @@ package world.naturecraft.townymission;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.gui.GlowEnchant;
+import world.naturecraft.townymission.components.gui.MissionManageGui;
 import world.naturecraft.townymission.config.CustomConfigLoader;
 import world.naturecraft.townymission.data.dao.*;
 import world.naturecraft.townymission.data.db.sql.*;
@@ -17,6 +21,7 @@ import world.naturecraft.townymission.services.TownyMissionService;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -60,6 +65,7 @@ public class TownyMission extends JavaPlugin {
 
         registerCommands();
         registerListeners();
+        registerGlow();
 
         if (!enabled) {
             Bukkit.getPluginManager().disablePlugin(this);
@@ -113,9 +119,30 @@ public class TownyMission extends JavaPlugin {
      * Register listeners.
      */
     public void registerListeners() {
+        // Event listeners
         getServer().getPluginManager().registerEvents(new MissionListener(this), this);
         getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
         getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
+
+        // GUI listeners
+        getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
+    }
+
+    public void registerGlow() {
+        try {
+            Field f = Enchantment.class.getDeclaredField("acceptingNew");
+            f.setAccessible(true);
+            f.set(null, true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            GlowEnchant glow = new GlowEnchant(NamespacedKey.randomKey());
+            Enchantment.registerEnchantment(glow);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
     }
 
     /**
