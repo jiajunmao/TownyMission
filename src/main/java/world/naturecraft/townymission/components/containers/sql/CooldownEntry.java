@@ -11,12 +11,23 @@ import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.UUID;
 
+/**
+ * The type Cooldown entry.
+ */
 public class CooldownEntry extends SqlEntry {
 
     private Town town;
     private long startedTime;
     private long cooldown;
 
+    /**
+     * Instantiates a new Cooldown entry.
+     *
+     * @param id          the id
+     * @param town        the town
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     */
     public CooldownEntry(int id, Town town, long startedTime, long cooldown) {
         super(id, DbType.COOLDOWN);
         this.town = town;
@@ -24,30 +35,69 @@ public class CooldownEntry extends SqlEntry {
         this.cooldown = cooldown;
     }
 
+    /**
+     * Instantiates a new Cooldown entry.
+     *
+     * @param id          the id
+     * @param townUUID    the town uuid
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     * @throws NotRegisteredException the not registered exception
+     */
     public CooldownEntry(int id, String townUUID, long startedTime, long cooldown) throws NotRegisteredException {
         this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)), startedTime, cooldown);
     }
 
+    /**
+     * Gets town.
+     *
+     * @return the town
+     */
     public Town getTown() {
         return town;
     }
 
+    /**
+     * Sets town.
+     *
+     * @param town the town
+     */
     public void setTown(Town town) {
         this.town = town;
     }
 
+    /**
+     * Gets cooldown.
+     *
+     * @return the cooldown
+     */
     public long getCooldown() {
         return cooldown;
     }
 
+    /**
+     * Sets cooldown.
+     *
+     * @param cooldown the cooldown
+     */
     public void setCooldown(long cooldown) {
         this.cooldown = cooldown;
     }
 
+    /**
+     * Gets started time.
+     *
+     * @return the started time
+     */
     public long getStartedTime() {
         return startedTime;
     }
 
+    /**
+     * Sets started time.
+     *
+     * @param startedTime the started time
+     */
     public void setStartedTime(long startedTime) {
         this.startedTime = startedTime;
     }

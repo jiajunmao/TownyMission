@@ -17,6 +17,7 @@ import java.util.List;
 public class MissionDatabase extends Database<MissionEntry> {
 
     private static MissionDatabase singleton = null;
+
     /**
      * Instantiates a new Task database.
      *
@@ -150,6 +151,11 @@ public class MissionDatabase extends Database<MissionEntry> {
         });
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MissionDatabase getInstance() {
         return singleton;
     }

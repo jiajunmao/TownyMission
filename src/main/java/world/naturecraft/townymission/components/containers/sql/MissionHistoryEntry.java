@@ -41,6 +41,7 @@ public class MissionHistoryEntry extends SqlEntry {
      * @param town          the town
      * @param startedPlayer the started player
      * @param completedTime the completed time
+     * @param claimed       the claimed
      * @param sprint        the sprint
      * @param season        the season
      */
@@ -61,6 +62,23 @@ public class MissionHistoryEntry extends SqlEntry {
         this.season = season;
     }
 
+    /**
+     * Instantiates a new Mission history entry.
+     *
+     * @param id            the id
+     * @param missionType   the mission type
+     * @param addedTime     the added time
+     * @param startedTime   the started time
+     * @param allowedTime   the allowed time
+     * @param missionJson   the mission json
+     * @param townName      the town name
+     * @param startedPlayer the started player
+     * @param completedTime the completed time
+     * @param claimed       the claimed
+     * @param sprint        the sprint
+     * @param season        the season
+     * @throws JsonProcessingException the json processing exception
+     */
     public MissionHistoryEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime,
                                String missionJson, String townName, String startedPlayer, long completedTime,
                                boolean claimed, int sprint, int season) throws JsonProcessingException {
@@ -68,6 +86,12 @@ public class MissionHistoryEntry extends SqlEntry {
         this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
     }
 
+    /**
+     * Instantiates a new Mission history entry.
+     *
+     * @param entry         the entry
+     * @param completedTime the completed time
+     */
     public MissionHistoryEntry(MissionEntry entry, long completedTime) {
         this(0, entry.getMissionType(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(),
                 entry.getMissionJson(), entry.getTown(), entry.getStartedPlayer(), completedTime, false, 0, 0);
@@ -253,10 +277,20 @@ public class MissionHistoryEntry extends SqlEntry {
         this.startedPlayer = startedPlayer;
     }
 
+    /**
+     * Is claimed boolean.
+     *
+     * @return the boolean
+     */
     public boolean isClaimed() {
         return claimed;
     }
 
+    /**
+     * Sets claimed.
+     *
+     * @param claimed the claimed
+     */
     public void setClaimed(boolean claimed) {
         this.claimed = claimed;
     }

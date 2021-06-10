@@ -133,6 +133,11 @@ public class CooldownDatabase extends Database<CooldownEntry> {
         });
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CooldownDatabase getInstance() {
         return singleton;
     }

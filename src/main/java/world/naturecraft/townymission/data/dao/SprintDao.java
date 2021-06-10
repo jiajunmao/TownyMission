@@ -10,11 +10,19 @@ import world.naturecraft.townymission.data.db.sql.SprintDatabase;
 
 import java.util.List;
 
+/**
+ * The type Sprint dao.
+ */
 public class SprintDao extends Dao<SprintEntry> {
 
     private static SprintDao singleton;
     private final SprintDatabase database;
 
+    /**
+     * Instantiates a new Sprint dao.
+     *
+     * @param database the database
+     */
     public SprintDao(SprintDatabase database) {
         this.database = database;
     }
@@ -43,6 +51,12 @@ public class SprintDao extends Dao<SprintEntry> {
         return database.getEntries();
     }
 
+    /**
+     * Get sprint entry.
+     *
+     * @param townUUID the town uuid
+     * @return the sprint entry
+     */
     public SprintEntry get(String townUUID) {
         if (database.getEntries() == null)
             return null;
@@ -56,6 +70,11 @@ public class SprintDao extends Dao<SprintEntry> {
         return null;
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SprintDao getInstance() {
         if (singleton == null) {
             singleton = new SprintDao(SprintDatabase.getInstance());

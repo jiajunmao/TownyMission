@@ -27,11 +27,20 @@ import world.naturecraft.townymission.utils.Util;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The type Mission manage gui.
+ */
 public class MissionManageGui extends TownyMissionGui {
 
     private TownyMission instance;
     private Player player;
 
+    /**
+     * Instantiates a new Mission manage gui.
+     *
+     * @param instance the instance
+     * @param player   the player
+     */
     public MissionManageGui(TownyMission instance, Player player) {
         this.instance = instance;
         this.player = player;
@@ -39,6 +48,9 @@ public class MissionManageGui extends TownyMissionGui {
         initializeItems();
     }
 
+    /**
+     * Initialize items.
+     */
     public void initializeItems() {
         Town town = TownyUtil.residentOf(player);
         MissionDao missionDao = MissionDao.getInstance();
@@ -79,6 +91,9 @@ public class MissionManageGui extends TownyMissionGui {
         placeFiller();
     }
 
+    /**
+     * Place filler.
+     */
     public void placeFiller() {
         ItemStack itemStack = new ItemStack(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         ItemMeta meta = itemStack.getItemMeta();
@@ -96,11 +111,19 @@ public class MissionManageGui extends TownyMissionGui {
         }
     }
 
+    /**
+     * Open inventory.
+     */
     public void openInventory() {
         player.openInventory(inv);
     }
 
-    // Check for clicks on items
+    /**
+     * On inventory click.
+     *
+     * @param e the e
+     */
+// Check for clicks on items
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
         if (e.getInventory() != inv) return;

@@ -9,11 +9,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 
+/**
+ * The type Towny mission gui.
+ */
 public abstract class TownyMissionGui implements Listener {
 
+    /**
+     * The Inv.
+     */
     protected Inventory inv;
 
-    // Cancel dragging in our inventory
+    /**
+     * On inventory click.
+     *
+     * @param e the e
+     */
+// Cancel dragging in our inventory
     @EventHandler
     public void onInventoryClick(final InventoryDragEvent e) {
         if (e.getInventory().equals(inv)) {

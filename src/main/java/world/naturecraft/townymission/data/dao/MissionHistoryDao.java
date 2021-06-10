@@ -14,6 +14,9 @@ import world.naturecraft.townymission.data.db.sql.MissionHistoryDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Mission history dao.
+ */
 public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
 
     private static MissionHistoryDao singleton;
@@ -28,6 +31,12 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
         this.db = db;
     }
 
+    /**
+     * Gets all unclaimed.
+     *
+     * @param town the town
+     * @return the all unclaimed
+     */
     public List<MissionHistoryEntry> getAllUnclaimed(Town town) {
         List<MissionHistoryEntry> list = db.getEntries();
         List<MissionHistoryEntry> result = new ArrayList<>();
@@ -87,6 +96,11 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
         return db.getEntries();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MissionHistoryDao getInstance() {
         if (singleton == null) {
             singleton = new MissionHistoryDao(MissionHistoryDatabase.getInstance());

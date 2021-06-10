@@ -4,5 +4,8 @@
 
 package world.naturecraft.townymission.config;
 
+/**
+ * The type Custom config validator.
+ */
 public class CustomConfigValidator {
 }

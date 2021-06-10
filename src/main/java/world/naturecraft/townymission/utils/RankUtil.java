@@ -12,12 +12,29 @@ import world.naturecraft.townymission.data.dao.Dao;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The type Rank util.
+ */
 public class RankUtil {
+    /**
+     * Sort list.
+     *
+     * @param list the list
+     * @return the list
+     */
     public static List<? extends Rankable> sort(List<? extends Rankable> list) {
         Collections.sort(list);
         return list;
     }
 
+    /**
+     * Gets rank.
+     *
+     * @param town the town
+     * @param dao  the dao
+     * @return the rank
+     * @throws NotFoundException the not found exception
+     */
     public static int getRank(Town town, Dao<? extends Rankable> dao) throws NotFoundException {
         List<Rankable> list = (List<Rankable>) dao.getEntries();
         Collections.sort(list);

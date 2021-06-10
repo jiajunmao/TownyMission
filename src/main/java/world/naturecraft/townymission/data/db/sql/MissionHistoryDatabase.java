@@ -170,6 +170,11 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
         });
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MissionHistoryDatabase getInstance() {
         return singleton;
     }

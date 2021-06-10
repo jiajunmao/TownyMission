@@ -106,9 +106,16 @@ public class Util {
         return (long) hr * 60 * 60 * 1000;
     }
 
+    /**
+     * Minute to ms long.
+     *
+     * @param minute the minute
+     * @return the long
+     */
     public static long minuteToMs(int minute) {
         return (long) minute * 60 * 1000;
     }
+
     /**
      * Classify task entry map.
      *
@@ -129,6 +136,13 @@ public class Util {
         return map;
     }
 
+    /**
+     * Is timed out boolean.
+     *
+     * @param entry the entry
+     * @return the boolean
+     * @throws NoStartedException the no started exception
+     */
     public static boolean isTimedOut(MissionEntry entry) throws NoStartedException {
         if (entry.getStartedTime() == 0) {
             throw new NoStartedException(entry);
@@ -138,6 +152,14 @@ public class Util {
         return entry.getStartedTime() + entry.getAllowedTime() < currentTime;
     }
 
+    /**
+     * Gets ranking points.
+     *
+     * @param numResident the num resident
+     * @param naturePoint the nature point
+     * @param instance    the instance
+     * @return the ranking points
+     */
     public static int getRankingPoints(int numResident, int naturePoint, TownyMission instance) {
         int baseline = instance.getConfig().getInt("participants.sprintRewardBaseline");
         int memberScale = instance.getConfig().getInt("participants.sprintRewardMemberScale");
@@ -149,6 +171,12 @@ public class Util {
         return (naturePoint-realBaseline)/numResident;
     }
 
+    /**
+     * Is int boolean.
+     *
+     * @param str the str
+     * @return the boolean
+     */
     public static boolean isInt(String str) {
         try {
             Integer.parseInt(str);
@@ -158,6 +186,12 @@ public class Util {
         }
     }
 
+    /**
+     * Is double boolean.
+     *
+     * @param str the str
+     * @return the boolean
+     */
     public static boolean isDouble(String str) {
         try {
             Double.parseDouble(str);
@@ -167,6 +201,12 @@ public class Util {
         }
     }
 
+    /**
+     * Capitalize first string.
+     *
+     * @param str the str
+     * @return the string
+     */
     public static String capitalizeFirst(String str) {
         str = str.toLowerCase(Locale.ROOT);
         str = str.substring(0,1).toUpperCase(Locale.ROOT) + str.substring(1);

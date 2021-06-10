@@ -24,6 +24,9 @@ import world.naturecraft.townymission.utils.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Towny mission claim.
+ */
 public class TownyMissionClaim extends TownyMissionCommand {
 
     /**

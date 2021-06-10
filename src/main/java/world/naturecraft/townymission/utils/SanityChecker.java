@@ -52,6 +52,12 @@ public class SanityChecker {
         return this;
     }
 
+    /**
+     * Silent sanity checker.
+     *
+     * @param isSilent the is silent
+     * @return the sanity checker
+     */
     public SanityChecker silent(boolean isSilent) {
         this.isSilent = isSilent;
         return this;
@@ -99,6 +105,12 @@ public class SanityChecker {
         return this;
     }
 
+    /**
+     * Has permission sanity checker.
+     *
+     * @param permission the permission
+     * @return the sanity checker
+     */
     public SanityChecker hasPermission(String permission) {
         permissions.add(permission);
         return this;

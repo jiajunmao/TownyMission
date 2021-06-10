@@ -12,11 +12,19 @@ import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type Cooldown dao.
+ */
 public class CooldownDao extends Dao<CooldownEntry> {
 
     private static CooldownDao singleton;
     private final CooldownDatabase db;
 
+    /**
+     * Instantiates a new Cooldown dao.
+     *
+     * @param db the db
+     */
     public CooldownDao(CooldownDatabase db) {
         this.db = db;
     }
@@ -41,6 +49,12 @@ public class CooldownDao extends Dao<CooldownEntry> {
         db.remove(data.getId());
     }
 
+    /**
+     * Get cooldown entry.
+     *
+     * @param town the town
+     * @return the cooldown entry
+     */
     public CooldownEntry get(Town town) {
         for(CooldownEntry entry : getEntries()) {
             if (entry.getTown().equals(town)) {
@@ -51,6 +65,12 @@ public class CooldownDao extends Dao<CooldownEntry> {
         return null;
     }
 
+    /**
+     * Is still in cooldown boolean.
+     *
+     * @param town the town
+     * @return the boolean
+     */
     public boolean isStillInCooldown(Town town) {
         Date date = new Date();
         if (get(town) == null)
@@ -58,6 +78,12 @@ public class CooldownDao extends Dao<CooldownEntry> {
         return get(town).getStartedTime() + get(town).getCooldown() >= date.getTime();
     }
 
+    /**
+     * Gets remaining.
+     *
+     * @param town the town
+     * @return the remaining
+     */
     public long getRemaining(Town town) {
         Date date = new Date();
         if (get(town) == null)
@@ -65,6 +91,12 @@ public class CooldownDao extends Dao<CooldownEntry> {
         return get(town).getStartedTime() + get(town).getCooldown() - date.getTime();
     }
 
+    /**
+     * Start cooldown.
+     *
+     * @param town     the town
+     * @param cooldown the cooldown
+     */
     public void startCooldown(Town town, long cooldown) {
         Date date = new Date();
         System.out.println("Starting cooldown for town: " + town.getName());
@@ -80,6 +112,11 @@ public class CooldownDao extends Dao<CooldownEntry> {
         }
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CooldownDao getInstance() {
         if (singleton == null) {
             singleton = new CooldownDao(CooldownDatabase.getInstance());

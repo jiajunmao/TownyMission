@@ -86,6 +86,7 @@ public abstract class MissionJson {
 
     /**
      * Get the item lore if using GUI
+     *
      * @return The lore in a list of string
      */
     @JsonIgnore
@@ -127,6 +128,11 @@ public abstract class MissionJson {
         this.completed = completed;
     }
 
+    /**
+     * Add completed.
+     *
+     * @param amount the amount
+     */
     public void addCompleted(int amount) {
         this.completed += amount;
     }

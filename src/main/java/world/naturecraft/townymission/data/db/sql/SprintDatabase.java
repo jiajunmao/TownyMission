@@ -135,6 +135,11 @@ public class SprintDatabase extends Database<SprintEntry> {
         });
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SprintDatabase getInstance() {
         return singleton;
     }

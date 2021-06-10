@@ -20,14 +20,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type Mission service.
+ */
 public class MissionService extends TownyMissionService {
 
     private static MissionService singleton;
 
+    /**
+     * Instantiates a new Mission service.
+     *
+     * @param instance the instance
+     */
     public MissionService(TownyMission instance) {
         super(instance);
     }
 
+    /**
+     * Can start mission boolean.
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public boolean canStartMission(Player player) {
         return new SanityChecker(instance).target(player)
                 .hasTown()
@@ -64,10 +78,22 @@ public class MissionService extends TownyMissionService {
                 }).check();
     }
 
+    /**
+     * Has started boolean.
+     *
+     * @param town the town
+     * @return the boolean
+     */
     public boolean hasStarted(Town town) {
         return MissionDao.getInstance().getStartedMission(town) == null;
     }
 
+    /**
+     * Start mission.
+     *
+     * @param player the player
+     * @param choice the choice
+     */
     public void startMission(Player player, int choice) {
         Town town = TownyUtil.residentOf(player);
 
@@ -90,6 +116,11 @@ public class MissionService extends TownyMissionService {
         }
     }
 
+    /**
+     * Abort mission.
+     *
+     * @param town the town
+     */
     public void abortMission(Town town) {
         if (!hasStarted(town)) {
             throw new NoStartedException(town);
@@ -100,6 +131,11 @@ public class MissionService extends TownyMissionService {
         CooldownDao.getInstance().startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }
 
+    /**
+     * Complete mission.
+     *
+     * @param town the town
+     */
     public void completeMission(Town town) {
         if (!hasStarted(town)) {
             throw new NoStartedException(town);
@@ -112,6 +148,11 @@ public class MissionService extends TownyMissionService {
         CooldownDao.getInstance().startCooldown(missionEntry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MissionService getInstance() {
         return singleton;
     }

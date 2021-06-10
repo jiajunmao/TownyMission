@@ -16,6 +16,7 @@ import java.util.List;
 public class SeasonDatabase extends Database<SeasonEntry> {
 
     private static SeasonDatabase singleton = null;
+
     /**
      * Instantiates a new Season database.
      *
@@ -126,6 +127,11 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         });
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SeasonDatabase getInstance() {
         return singleton;
     }

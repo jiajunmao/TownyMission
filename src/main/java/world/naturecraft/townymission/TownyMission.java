@@ -85,6 +85,9 @@ public class TownyMission extends JavaPlugin {
         dbList.put(DbType.COOLDOWN, new CooldownDatabase(db, Util.getDbName(DbType.COOLDOWN)));
     }
 
+    /**
+     * Register service.
+     */
     public void registerService() {
         serviceList.put(DbType.MISSION, new MissionService(this));
     }
@@ -160,6 +163,12 @@ public class TownyMission extends JavaPlugin {
         return customConfigLoader;
     }
 
+    /**
+     * Gets lang entry.
+     *
+     * @param path the path
+     * @return the lang entry
+     */
     public String getLangEntry(String path) {
         String finalString = "";
         finalString += getCustomConfig().getLangConfig().getString("prefix") + " ";

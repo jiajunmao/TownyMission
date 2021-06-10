@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type Towny mission info.
+ */
 public class TownyMissionInfo extends TownyMissionCommand {
 
     /**

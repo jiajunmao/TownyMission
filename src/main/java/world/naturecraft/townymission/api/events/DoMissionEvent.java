@@ -25,8 +25,9 @@ public class DoMissionEvent extends Event implements Cancellable {
     /**
      * Instantiates a new Do mission event.
      *
-     * @param player the player
-     * @param entry  the entry
+     * @param player  the player
+     * @param entry   the entry
+     * @param isAsync the is async
      */
     public DoMissionEvent(Player player, MissionEntry entry, boolean isAsync) {
         super(isAsync);

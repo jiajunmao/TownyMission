@@ -36,6 +36,9 @@ public abstract class TownyMissionListener implements Listener {
      */
     protected PluginManager pluginManager;
 
+    /**
+     * The Logger.
+     */
     protected Logger logger;
 
     /**

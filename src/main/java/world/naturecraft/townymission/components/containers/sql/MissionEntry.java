@@ -191,6 +191,11 @@ public class MissionEntry extends SqlEntry {
         }
     }
 
+    /**
+     * Gets gui item.
+     *
+     * @return the gui item
+     */
     public ItemStack getGuiItem() {
         ItemStack stack = new ItemStack(getGuiItemMaterial(), 1);
 

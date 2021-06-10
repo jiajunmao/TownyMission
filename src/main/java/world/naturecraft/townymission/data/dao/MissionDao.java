@@ -145,6 +145,11 @@ public class MissionDao extends Dao<MissionEntry> {
         return db.getEntries();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MissionDao getInstance() {
         if (singleton == null) {
             singleton = new MissionDao(MissionDatabase.getInstance());

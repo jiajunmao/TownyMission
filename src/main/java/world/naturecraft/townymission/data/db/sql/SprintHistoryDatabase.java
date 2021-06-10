@@ -123,6 +123,11 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
         });
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SprintHistoryDatabase getInstance() {
         return singleton;
     }
