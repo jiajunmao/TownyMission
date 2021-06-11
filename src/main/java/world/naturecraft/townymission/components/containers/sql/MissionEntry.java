@@ -227,15 +227,30 @@ public class MissionEntry extends SqlEntry {
         return stack;
     }
 
+    /**
+     * Is started boolean.
+     *
+     * @return the boolean
+     */
     public boolean isStarted() {
         return startedTime != 0;
     }
 
+    /**
+     * Is timedout boolean.
+     *
+     * @return the boolean
+     */
     public boolean isTimedout() {
         Date date = new Date();
         return startedTime + allowedTime < date.getTime();
     }
 
+    /**
+     * Is completed boolean.
+     *
+     * @return the boolean
+     */
     public boolean isCompleted() {
         return missionJson.getCompleted() > missionJson.getAmount();
     }
