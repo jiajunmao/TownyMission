@@ -50,6 +50,8 @@ public class MissionManageGui extends TownyMissionGui {
 
     /**
      * Initialize items.
+     *
+     * @param player the player
      */
     public void initializeItems(Player player) {
         inv.clear();
@@ -130,6 +132,8 @@ public class MissionManageGui extends TownyMissionGui {
 
     /**
      * Open inventory.
+     *
+     * @param player the player
      */
     public void openInventory(Player player) {
         initializeItems(player);
@@ -255,6 +259,11 @@ public class MissionManageGui extends TownyMissionGui {
         }
     }
 
+    /**
+     * Gets first empty start region slot.
+     *
+     * @return the first empty start region slot
+     */
     public Integer getFirstEmptyStartRegionSlot() {
         for (int i = 0; i < 28; i += 9) {
             if (inv.getItem(i) == null || inv.getItem(i).getType() == Material.AIR) {

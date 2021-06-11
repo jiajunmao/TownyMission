@@ -119,6 +119,7 @@ public class MissionService extends TownyMissionService {
      *
      * @param player the player
      * @param choice the choice
+     * @return the boolean
      */
     public boolean startMission(Player player, int choice) {
         if (!canStartMission(player))
@@ -151,6 +152,8 @@ public class MissionService extends TownyMissionService {
     /**
      * Abort mission.
      *
+     * @param player the player
+     * @param entry  the entry
      */
     public void abortMission(Player player, MissionEntry entry) {
         if (!canAbortMission(player, entry))
@@ -162,6 +165,9 @@ public class MissionService extends TownyMissionService {
 
     /**
      * Complete mission.
+     *
+     * @param player the player
+     * @param entry  the entry
      */
     public void completeMission(Player player, MissionEntry entry) {
         if (entry.isTimedout() && !entry.isCompleted()) return;
@@ -172,6 +178,12 @@ public class MissionService extends TownyMissionService {
         CooldownDao.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }
 
+    /**
+     * Gets started missions.
+     *
+     * @param town the town
+     * @return the started missions
+     */
     public List<MissionEntry> getStartedMissions(Town town) {
         List<MissionEntry> entryList = new ArrayList<>();
         for (MissionEntry e : MissionDao.getInstance().getEntries()) {
@@ -182,6 +194,13 @@ public class MissionService extends TownyMissionService {
         return entryList;
     }
 
+    /**
+     * Gets started missions.
+     *
+     * @param town        the town
+     * @param missionType the mission type
+     * @return the started missions
+     */
     public List<MissionEntry> getStartedMissions(Town town, MissionType missionType) {
         List<MissionEntry> missionEntries = getStartedMissions(town);
         List<MissionEntry> finalList = new ArrayList<>();
@@ -196,7 +215,7 @@ public class MissionService extends TownyMissionService {
     /**
      * This returns the indexed MissionEntry from 1 to mission.amount
      *
-     * @param town The town for the index mission
+     * @param town  The town for the index mission
      * @param index The index
      * @return The corresponding MissionEntry
      */

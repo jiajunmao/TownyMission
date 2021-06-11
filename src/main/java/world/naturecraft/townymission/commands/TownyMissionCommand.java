@@ -57,5 +57,12 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
         Util.sendMsg(sender, "&c You do not have the permission to execute this command");
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param player the player
+     * @param args   the args
+     * @return the boolean
+     */
     public abstract boolean sanityCheck(@NotNull Player player, @NotNull String[] args);
 }
