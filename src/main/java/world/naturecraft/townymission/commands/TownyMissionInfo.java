@@ -40,6 +40,21 @@ public class TownyMissionInfo extends TownyMissionCommand {
         super(instance);
     }
 
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return new SanityChecker(instance).target(player)
+                .hasTown()
+                .customCheck(() -> {
+                    if (args.length == 1) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                }).check();
+
+    }
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -58,19 +73,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
         // /tms info <town_name>
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
-            boolean sane = new SanityChecker(instance).target(player)
-                    .hasTown()
-                    .customCheck(() -> {
-                        if (args.length == 1) {
-                            return true;
-                        } else {
-                            Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                            return false;
-                        }
-                    }).check();
-
-            if (sane) {
+            if (sanityCheck(player, args)) {
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Overview&7------");
                 Town town = TownyUtil.residentOf(player);
                 MissionEntry taskEntry;
@@ -103,7 +106,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                     builder.add("&eAllowed Time: &f" + display);
 
                     try {
-                        if (Util.isTimedOut(taskEntry)) {
+                        if (taskEntry.isTimedout()) {
                             builder.add("&Remaining Time: &cTimed Out");
                         } else {
                             Date dateNow = new Date();

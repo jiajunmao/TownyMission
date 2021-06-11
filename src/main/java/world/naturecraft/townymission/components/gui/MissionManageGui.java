@@ -5,14 +5,18 @@
 package world.naturecraft.townymission.components.gui;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
@@ -48,6 +52,7 @@ public class MissionManageGui extends TownyMissionGui {
      * Initialize items.
      */
     public void initializeItems(Player player) {
+        inv.clear();
         Town town = TownyUtil.residentOf(player);
         MissionDao missionDao = MissionDao.getInstance();
 
@@ -158,19 +163,105 @@ public class MissionManageGui extends TownyMissionGui {
             return;
         }
 
-        // This means that the player is clicking on the unstarted missions
+        // This means that the player is clicking on the UNSTARTED missions, starting a mission
         if ((slot >= 11 && slot <= 17) || (slot >= 20 && slot <= 26)) {
             // Map the slot numbers to mission number
-            slot = (slot >= 11 && slot <= 17) ? slot - 10 : slot;
-            slot = (slot >= 20 && slot <= 26) ? slot - 12 : slot;
-            if (MissionService.getInstance().canStartMission(player)) {
-                MissionService.getInstance().startMission(player, slot);
-            }
+            int missionIdx = (slot >= 11 && slot <= 17) ? slot - 10 : slot;
+            missionIdx = (slot >= 20 && slot <= 26) ? slot - 12 : slot;
 
-            Town town = TownyUtil.residentOf(player);
-            initializeItems(player);
-            player.updateInventory();
-            player.setItemOnCursor(null);
+            // Things to make the GUI work and better UX
+
+            // This is the actual logic of storing into db
+            if (MissionService.getInstance().startMission(player, missionIdx)) {
+                int firstEmpty = getFirstEmptyStartRegionSlot();
+                player.setItemOnCursor(null);
+                initializeItems(player);
+                inv.setItem(missionIdx, null);
+                inv.setItem(firstEmpty, clickedItem);
+                player.openInventory(inv);
+                Town town = TownyUtil.residentOf(player);
+
+                final int missionIdxFinal = missionIdx;
+                BukkitRunnable r = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        MissionEntry entry = MissionService.getInstance().getIndexedMission(town, missionIdxFinal);
+
+                        try {
+                            Util.sendMsg(player, instance.getLangEntry("commands.start.onSuccess")
+                                    .replace("%type%", entry.getMissionType().name())
+                                    .replace("%details%", entry.getDisplayLine()));
+                        } catch (JsonProcessingException exception) {
+                            exception.printStackTrace();
+                        }
+                    }
+                };
+
+                r.runTaskAsynchronously(instance);
+            } else {
+                player.setItemOnCursor(null);
+                initializeItems(player);
+                inv.setItem(slot, clickedItem);
+                player.openInventory(inv);
+            }
         }
+
+        // This means that the player is clicking on a STARTED mission
+        if (slot == 0 || slot == 9 || slot == 18 || slot == 27) {
+            Town town = TownyUtil.residentOf(player);
+            List<MissionEntry> startedList = MissionService.getInstance().getStartedMissions(town);
+            int index = slot / 9;
+            MissionEntry entry = startedList.get(index);
+
+            // This means abort mission
+            if (entry.isTimedout() && !entry.isCompleted() && entry.isStarted()) {
+                player.setItemOnCursor(null);
+                initializeItems(player);
+                inv.setItem(slot, null);
+                player.openInventory(inv);
+                BukkitRunnable runnable = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        MissionService.getInstance().abortMission(player, entry);
+                        Util.sendMsg(player, instance.getLangEntry("commands.abort.onSuccess"));
+                    }
+                };
+                runnable.runTaskAsynchronously(instance);
+            }
+            // This means complete the mission
+            else if (entry.isCompleted() && entry.isStarted()) {
+                player.setItemOnCursor(null);
+                initializeItems(player);
+                inv.setItem(slot, null);
+                player.openInventory(inv);
+                BukkitRunnable runnable = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        MissionService.getInstance().completeMission(player, entry);
+                        Util.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess").replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
+                    }
+                };
+                runnable.runTaskAsynchronously(instance);
+            }
+            // If on going, and right click, that means abort
+            else if (entry.isStarted() && e.getClick().equals(ClickType.RIGHT)) {
+                player.setItemOnCursor(null);
+                initializeItems(player);
+                inv.setItem(slot, null);
+                player.openInventory(inv);
+                MissionService.getInstance().abortMission(player, entry);
+                Util.sendMsg(player, instance.getLangEntry("commands.abort.onSuccess"));
+            }
+        }
+    }
+
+    public Integer getFirstEmptyStartRegionSlot() {
+        for (int i = 0; i < 28; i += 9) {
+            if (inv.getItem(i) == null || inv.getItem(i).getType() == Material.AIR) {
+                return i;
+            }
+        }
+
+        return null;
     }
 }

@@ -38,6 +38,27 @@ public class TownyMissionClaim extends TownyMissionCommand {
         super(instance);
     }
 
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return new SanityChecker(instance).target(player)
+                .hasTown()
+                .customCheck(() -> {
+                            if (args.length == 1
+                                    || (args.length == 2
+                                    && Util.isInt(args[1])
+                                    && Integer.parseInt(args[1]) >= 1
+                                    && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
+                                    || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
+                                return true;
+                            } else {
+                                Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                                return false;
+                            }
+                        }
+                ).check();
+
+    }
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -65,24 +86,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                     SprintDao sprintDao = SprintDao.getInstance();
                     MissionHistoryDao missionHistoryDao = MissionHistoryDao.getInstance();
 
-                    boolean sane = new SanityChecker(instance).target(player)
-                            .hasTown()
-                            .customCheck(() -> {
-                                        if (args.length == 1
-                                                || (args.length == 2
-                                                && Util.isInt(args[1])
-                                                && Integer.parseInt(args[1]) >= 1
-                                                && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
-                                                || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
-                                            return true;
-                                        } else {
-                                            Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                                            return false;
-                                        }
-                                    }
-                            ).check();
-
-                    if (sane) {
+                    if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
                         List<MissionHistoryEntry> list = missionHistoryDao.getAllUnclaimed(town);
 

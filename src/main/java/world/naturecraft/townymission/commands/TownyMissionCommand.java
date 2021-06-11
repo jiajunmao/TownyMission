@@ -7,7 +7,10 @@ package world.naturecraft.townymission.commands;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.logging.Logger;
@@ -53,4 +56,6 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
     public void onNoPermission(CommandSender sender) {
         Util.sendMsg(sender, "&c You do not have the permission to execute this command");
     }
+
+    public abstract boolean sanityCheck(@NotNull Player player, @NotNull String[] args);
 }

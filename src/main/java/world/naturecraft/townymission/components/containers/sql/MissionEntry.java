@@ -17,6 +17,7 @@ import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -208,16 +209,19 @@ public class MissionEntry extends SqlEntry {
         String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
         meta.setDisplayName(Util.translateColor(displayName));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        if (startedTime != 0) {
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            List<String> loreList = new ArrayList<>();
-            loreList.add(Util.translateColor("&eStatus: &aStarted"));
-            loreList.addAll(missionJson.getLore());
-            meta.setLore(loreList);
-        } else {
-            meta.setLore(missionJson.getLore());
+        // Setting lores
+        List<String> loreList = new ArrayList<>();
+        if (isTimedout() && !isCompleted() && isStarted()) {
+            loreList.add(Util.translateColor("&eStatus: {#DD3322}Timed Out"));
+        } else if (isCompleted() && isStarted()) {
+            loreList.add(Util.translateColor("&eStatus: &aCompleted"));
+        } else if (!isTimedout() && !isCompleted() && isStarted()) {
+            loreList.add(Util.translateColor("&eStatus: {#39DBF3}Started"));
         }
+        loreList.addAll(missionJson.getLore());
+        meta.setLore(loreList);
 
         stack.setItemMeta(meta);
         return stack;
@@ -225,5 +229,14 @@ public class MissionEntry extends SqlEntry {
 
     public boolean isStarted() {
         return startedTime != 0;
+    }
+
+    public boolean isTimedout() {
+        Date date = new Date();
+        return startedTime + allowedTime < date.getTime();
+    }
+
+    public boolean isCompleted() {
+        return missionJson.getCompleted() > missionJson.getAmount();
     }
 }

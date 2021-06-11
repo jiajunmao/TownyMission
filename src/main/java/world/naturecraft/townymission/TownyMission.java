@@ -149,6 +149,10 @@ public class TownyMission extends JavaPlugin {
         db.addDataSourceProperty("databaseName", dbName);
         db.addDataSourceProperty("user", dbUsername);
         db.addDataSourceProperty("password", dbPassword);
+        db.setMinimumIdle(5);
+        db.setConnectionTimeout(10000);
+        db.setIdleTimeout(600000);
+        db.setMaxLifetime(1800000);
     }
 
     /**

@@ -127,7 +127,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
      * @param args   the args
      * @return the boolean
      */
-    public boolean sanityCheck(Player player, String[] args) {
+    public boolean sanityCheck(@NotNull Player player, String[] args) {
         MissionDao missionDao = MissionDao.getInstance();
         return new SanityChecker(instance)
                 .target(player)
@@ -149,7 +149,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .customCheck(() -> {
                     MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     try {
-                        if (Util.isTimedOut(resourceEntry)) {
+                        if (resourceEntry.isTimedout()) {
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));
                             return false;
                         }

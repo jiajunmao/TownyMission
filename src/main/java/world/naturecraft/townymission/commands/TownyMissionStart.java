@@ -61,6 +61,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                         Town town = TownyUtil.residentOf(player);
                         MissionEntry entry = MissionDao.getInstance().getStartedMission(town);
                         MissionService.getInstance().startMission(player, Integer.parseInt(args[1]));
+
                         try {
                             Util.sendMsg(sender, instance.getLangEntry("commands.start.onSuccess")
                                     .replace("%type%", entry.getMissionType().name())
@@ -85,6 +86,7 @@ public class TownyMissionStart extends TownyMissionCommand {
      * @param args   the args
      * @return the boolean
      */
+    @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tm start <num>
         return new SanityChecker(instance).target(player)
@@ -97,7 +99,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                         return false;
                     }
                     return true;
-                }).customCheck(() -> MissionService.getInstance().canStartMission(player)).check();
+                }).check();
     }
 
     /**

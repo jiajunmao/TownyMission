@@ -14,6 +14,7 @@ import world.naturecraft.townymission.components.containers.json.MissionJson;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.CustomConfigParser;
 import world.naturecraft.townymission.utils.MultilineBuilder;
+import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
@@ -35,6 +36,13 @@ public class TownyMissionListAll extends TownyMissionCommand {
         super(instance);
     }
 
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return new SanityChecker(instance).target(player)
+                .hasPermission("townymission.admin")
+                .hasPermission("townymission.commands.listall").check();
+    }
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -51,7 +59,7 @@ public class TownyMissionListAll extends TownyMissionCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (player.hasPermission("townymission.admin") || player.hasPermission("townymission.commands.listall")) {
+            if (sanityCheck(player, args)) {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
                 MissionType missionType = MissionType.valueOf(args[1].toUpperCase(Locale.ROOT));

@@ -34,16 +34,5 @@ public class DoMissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onDoMission(DoMissionEvent e) {
-        MissionEntry missionEntry = e.getTaskEntry();
-        MissionJson missionjson = missionEntry.getMissionJson();
-
-        // If a task is not started, or have already timed out, ignore do mission event
-        if (missionEntry.getStartedTime() == 0 || Util.isTimedOut(missionEntry)) {
-            return;
-        }
-
-        if (missionjson.getCompleted() >= missionjson.getAmount()) {
-            MissionService.getInstance().completeMission(missionEntry.getTown());
-        }
     }
 }

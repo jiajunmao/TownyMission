@@ -32,6 +32,11 @@ public class TownyMissionList extends TownyMissionCommand {
         super(instance);
     }
 
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return false;
+    }
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -47,21 +52,13 @@ public class TownyMissionList extends TownyMissionCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-//            BukkitRunnable r = new BukkitRunnable() {
-//                @Override
-//                public void run() {
             Player player = (Player) sender;
-            Town town;
-            if ((town = TownyUtil.residentOf(player)) != null) {
+            if (TownyUtil.residentOf(player) != null) {
                 MissionManageGui gui = new MissionManageGui(instance);
                 gui.openInventory(player);
             } else {
                 Util.sendMsg(sender, "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
             }
-//                }
-//            };
-
-//            r.runTaskAsynchronously(instance);
         }
 
         return true;

@@ -137,22 +137,6 @@ public class Util {
     }
 
     /**
-     * Is timed out boolean.
-     *
-     * @param entry the entry
-     * @return the boolean
-     * @throws NoStartedException the no started exception
-     */
-    public static boolean isTimedOut(MissionEntry entry) throws NoStartedException {
-        if (entry.getStartedTime() == 0) {
-            throw new NoStartedException(entry);
-        }
-
-        long currentTime = new Date().getTime();
-        return entry.getStartedTime() + entry.getAllowedTime() < currentTime;
-    }
-
-    /**
      * Gets ranking points.
      *
      * @param numResident the num resident
