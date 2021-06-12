@@ -4,8 +4,6 @@
 
 package world.naturecraft.townymission.api.exceptions;
 
-import javax.xml.crypto.Data;
-
 /**
  * The type Data process exception.
  */

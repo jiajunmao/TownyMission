@@ -3,6 +3,8 @@ package world.naturecraft.townymission.components.containers.sql;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.enums.DbType;
 
+import java.util.UUID;
+
 /**
  * The type Season entry.
  */
@@ -21,7 +23,7 @@ public class SeasonEntry extends SqlEntry implements Rankable {
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public SeasonEntry(int id, String townID, String townName, int seasonPoint, int season) {
+    public SeasonEntry(UUID id, String townID, String townName, int seasonPoint, int season) {
         super(id, DbType.SEASON);
         this.townID = townID;
         this.townName = townName;

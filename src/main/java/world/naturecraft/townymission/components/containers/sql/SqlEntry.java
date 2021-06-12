@@ -6,12 +6,14 @@ package world.naturecraft.townymission.components.containers.sql;
 
 import world.naturecraft.townymission.components.enums.DbType;
 
+import java.util.UUID;
+
 /**
  * The type Sql entry.
  */
 public abstract class SqlEntry {
-    private int id;
     private final DbType type;
+    private UUID id;
 
     /**
      * Instantiates a new Sql entry.
@@ -19,7 +21,7 @@ public abstract class SqlEntry {
      * @param id   the id
      * @param type the type
      */
-    public SqlEntry(int id, DbType type) {
+    public SqlEntry(UUID id, DbType type) {
         this.id = id;
         this.type = type;
     }
@@ -29,7 +31,7 @@ public abstract class SqlEntry {
      *
      * @return the id
      */
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -38,7 +40,15 @@ public abstract class SqlEntry {
      *
      * @param id the id
      */
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof SqlEntry)) return false;
+
+        SqlEntry entry = (SqlEntry) object;
+        return id.equals(entry.getId());
     }
 }

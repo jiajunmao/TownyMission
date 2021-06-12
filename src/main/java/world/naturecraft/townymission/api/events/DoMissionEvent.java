@@ -17,10 +17,10 @@ import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 public class DoMissionEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private boolean isCanceled;
     private final Player player;
     // !!IMPORTANT!! this entry contains the **updated** info
     private final MissionEntry taskEntry;
+    private boolean isCanceled;
 
     /**
      * Instantiates a new Do mission event.

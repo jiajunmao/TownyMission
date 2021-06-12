@@ -14,8 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.Rankable;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
-import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.RankUtil;
@@ -23,7 +21,6 @@ import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +35,19 @@ public class TownyMissionRank extends TownyMissionCommand {
      */
     public TownyMissionRank(TownyMission instance) {
         super(instance);
+    }
+
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return new SanityChecker(instance).target(player)
+            .customCheck(() -> {
+                if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
+                    return true;
+                } else {
+                    Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                    return false;
+                }
+            }).check();
     }
 
     /**
@@ -58,18 +68,7 @@ public class TownyMissionRank extends TownyMissionCommand {
         // /tms rank season
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
-            boolean sane = new SanityChecker(instance).target(player)
-                .customCheck(() -> {
-                    if (args.length == 1 || args.length == 2) {
-                        return true;
-                    } else {
-                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                        return false;
-                    }
-                }).check();
-
-            if (sane && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
+            if (sanityCheck(player, args)) {
                 List<Rankable> entryList;
                 if (args[1].equalsIgnoreCase("sprint"))
                     entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());

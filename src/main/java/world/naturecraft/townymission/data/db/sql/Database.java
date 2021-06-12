@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.data.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.TownyMission;
 
 import java.sql.Connection;
 import java.sql.SQLException;

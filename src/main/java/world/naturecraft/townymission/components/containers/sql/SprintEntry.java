@@ -3,6 +3,8 @@ package world.naturecraft.townymission.components.containers.sql;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.enums.DbType;
 
+import java.util.UUID;
+
 /**
  * The type Sprint entry.
  */
@@ -23,7 +25,7 @@ public class SprintEntry extends SqlEntry implements Rankable {
      * @param sprint       the sprint
      * @param season       the season
      */
-    public SprintEntry(int id, String townID, String townName, int naturepoints, int sprint, int season) {
+    public SprintEntry(UUID id, String townID, String townName, int naturepoints, int sprint, int season) {
         super(id, DbType.SPRINT);
         this.townID = townID;
         this.townName = townName;

@@ -87,7 +87,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             resourceJson.addCompleted(total);
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(total)
-                                    .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
+                                            .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         } else {
                             int number = player.getItemInHand().getAmount();
                             resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
@@ -95,7 +95,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             player.setItemInHand(null);
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
                                     .replace("%number", String.valueOf(number)
-                                    .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
+                                            .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
                         }
 
                         try {
@@ -127,7 +127,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
      * @param args   the args
      * @return the boolean
      */
-    public boolean sanityCheck(Player player, String[] args) {
+    public boolean sanityCheck(@NotNull Player player, String[] args) {
         MissionDao missionDao = MissionDao.getInstance();
         return new SanityChecker(instance)
                 .target(player)
@@ -149,7 +149,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .customCheck(() -> {
                     MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
                     try {
-                        if (Util.isTimedOut(resourceEntry)) {
+                        if (resourceEntry.isTimedout()) {
                             Util.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));
                             return false;
                         }

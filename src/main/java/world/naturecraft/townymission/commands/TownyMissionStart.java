@@ -13,12 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.NotFoundException;
-import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
-import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
-import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -26,9 +21,7 @@ import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The type Towny mission start.
@@ -68,6 +61,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                         Town town = TownyUtil.residentOf(player);
                         MissionEntry entry = MissionDao.getInstance().getStartedMission(town);
                         MissionService.getInstance().startMission(player, Integer.parseInt(args[1]));
+
                         try {
                             Util.sendMsg(sender, instance.getLangEntry("commands.start.onSuccess")
                                     .replace("%type%", entry.getMissionType().name())
@@ -92,6 +86,7 @@ public class TownyMissionStart extends TownyMissionCommand {
      * @param args   the args
      * @return the boolean
      */
+    @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tm start <num>
         return new SanityChecker(instance).target(player)
@@ -104,7 +99,7 @@ public class TownyMissionStart extends TownyMissionCommand {
                         return false;
                     }
                     return true;
-                }).customCheck(() -> MissionService.getInstance().canStartMission(player)).check();
+                }).check();
     }
 
     /**

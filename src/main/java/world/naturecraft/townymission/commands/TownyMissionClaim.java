@@ -12,8 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionHistoryDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.MultilineBuilder;
@@ -23,6 +23,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Towny mission claim.
@@ -36,6 +37,27 @@ public class TownyMissionClaim extends TownyMissionCommand {
      */
     public TownyMissionClaim(TownyMission instance) {
         super(instance);
+    }
+
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return new SanityChecker(instance).target(player)
+                .hasTown()
+                .customCheck(() -> {
+                            if (args.length == 1
+                                    || (args.length == 2
+                                    && Util.isInt(args[1])
+                                    && Integer.parseInt(args[1]) >= 1
+                                    && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
+                                    || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
+                                return true;
+                            } else {
+                                Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                                return false;
+                            }
+                        }
+                ).check();
+
     }
 
     /**
@@ -65,24 +87,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                     SprintDao sprintDao = SprintDao.getInstance();
                     MissionHistoryDao missionHistoryDao = MissionHistoryDao.getInstance();
 
-                    boolean sane = new SanityChecker(instance).target(player)
-                            .hasTown()
-                            .customCheck(() -> {
-                                        if (args.length == 1
-                                                || (args.length == 2
-                                                    && Util.isInt(args[1])
-                                                    && Integer.parseInt(args[1]) >= 1
-                                                    && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
-                                                || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
-                                            return true;
-                                        } else {
-                                            Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                                            return false;
-                                        }
-                                    }
-                            ).check();
-
-                    if (sane) {
+                    if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
                         List<MissionHistoryEntry> list = missionHistoryDao.getAllUnclaimed(town);
 
@@ -114,7 +119,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 // This means that sprint database does not contain the town info yet, adding
                                 SprintEntry sprintEntry;
                                 if ((sprintEntry = sprintDao.get(town.getUUID().toString())) == null) {
-                                    SprintEntry newSprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, 0, 0);
+                                    SprintEntry newSprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, 0, 0);
                                     sprintDao.add(newSprintEntry);
                                     sprintEntry = sprintDao.get(town.getUUID().toString());
                                 }
@@ -131,13 +136,12 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 //TODO: command format sanity check in sanity checker
 
                                 if (sprintDao.get(town.getUUID().toString()) == null) {
-                                    SprintEntry newSprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, 0, 0);
+                                    SprintEntry newSprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, 0, 0);
                                     sprintDao.add(newSprintEntry);
                                 }
 
                                 int totalPoints = 0;
                                 SprintEntry sprintEntry = sprintDao.get(town.getUUID().toString());
-                                System.out.println("Sprint entry id: " + sprintEntry.getId());
 
                                 for (MissionHistoryEntry taskHistoryEntry : list) {
                                     totalPoints += taskHistoryEntry.getMissionJson().getReward();

@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
-import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 import world.naturecraft.townymission.data.db.sql.SeasonDatabase;
 
 import java.util.List;
@@ -20,11 +19,21 @@ public class SeasonDao extends Dao<SeasonEntry> {
 
     /**
      * Instantiates a new Season dao.
-     *
-     * @param database the database
      */
-    public SeasonDao(SeasonDatabase database) {
-        this.database = database;
+    public SeasonDao() {
+        this.database = SeasonDatabase.getInstance();
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonDao getInstance() {
+        if (singleton == null) {
+            singleton = new SeasonDao();
+        }
+        return singleton;
     }
 
     public void update(SeasonEntry entry) {
@@ -67,17 +76,5 @@ public class SeasonDao extends Dao<SeasonEntry> {
             }
         }
         return null;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonDao getInstance() {
-        if (singleton == null) {
-            singleton = new SeasonDao(SeasonDatabase.getInstance());
-        }
-        return singleton;
     }
 }

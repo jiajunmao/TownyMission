@@ -16,6 +16,9 @@ import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -42,7 +45,7 @@ public class MissionEntry extends SqlEntry {
      * @param town          the town
      * @param startedPlayer the started player
      */
-    public MissionEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, Town town, Player startedPlayer) {
+    public MissionEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, Town town, Player startedPlayer) {
         super(id, DbType.MISSION);
         this.missionType = missionType;
         this.addedTime = addedTime;
@@ -66,7 +69,7 @@ public class MissionEntry extends SqlEntry {
      * @param startedPlayerUUID the started player name
      * @throws JsonProcessingException the json processing exception
      */
-    public MissionEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
+    public MissionEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
         this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), (startedPlayerUUID == null || startedPlayerUUID.equals("null")) ? null : Bukkit.getPlayer(UUID.fromString(startedPlayerUUID)));
 
         //TODO: replace with polymorphism
@@ -179,7 +182,7 @@ public class MissionEntry extends SqlEntry {
             case RESOURCE:
                 return Material.WHEAT;
             case MOB:
-                return Material.ZOMBIE_HEAD;
+                return Material.NETHERITE_SWORD;
             case EXPANSION:
                 return Material.GRASS_PATH;
             case VOTE:
@@ -198,19 +201,57 @@ public class MissionEntry extends SqlEntry {
      */
     public ItemStack getGuiItem() {
         ItemStack stack = new ItemStack(getGuiItemMaterial(), 1);
+        if (startedTime != 0)
+            stack.addUnsafeEnchantment(Enchantment.LUCK, 1);
 
         ItemMeta meta = stack.getItemMeta();
 
         String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
         meta.setDisplayName(Util.translateColor(displayName));
-        meta.setLore(missionJson.getLore());
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        if (startedTime != 0) {
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        // Setting lores
+        List<String> loreList = new ArrayList<>();
+        if (isTimedout() && !isCompleted() && isStarted()) {
+            loreList.add(Util.translateColor("&eStatus: {#DD3322}Timed Out"));
+        } else if (isCompleted() && isStarted()) {
+            loreList.add(Util.translateColor("&eStatus: &aCompleted"));
+        } else if (!isTimedout() && !isCompleted() && isStarted()) {
+            loreList.add(Util.translateColor("&eStatus: {#39DBF3}Started"));
         }
+        loreList.addAll(missionJson.getLore());
+        meta.setLore(loreList);
 
         stack.setItemMeta(meta);
         return stack;
+    }
+
+    /**
+     * Is started boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isStarted() {
+        return startedTime != 0;
+    }
+
+    /**
+     * Is timedout boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isTimedout() {
+        Date date = new Date();
+        return startedTime + allowedTime < date.getTime();
+    }
+
+    /**
+     * Is completed boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isCompleted() {
+        return missionJson.getCompleted() > missionJson.getAmount();
     }
 }

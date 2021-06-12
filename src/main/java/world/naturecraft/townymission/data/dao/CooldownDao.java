@@ -11,6 +11,7 @@ import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Cooldown dao.
@@ -22,11 +23,21 @@ public class CooldownDao extends Dao<CooldownEntry> {
 
     /**
      * Instantiates a new Cooldown dao.
-     *
-     * @param db the db
      */
-    public CooldownDao(CooldownDatabase db) {
-        this.db = db;
+    public CooldownDao() {
+        this.db = CooldownDatabase.getInstance();
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static CooldownDao getInstance() {
+        if (singleton == null) {
+            singleton = new CooldownDao();
+        }
+        return singleton;
     }
 
     @Override
@@ -56,7 +67,7 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * @return the cooldown entry
      */
     public CooldownEntry get(Town town) {
-        for(CooldownEntry entry : getEntries()) {
+        for (CooldownEntry entry : getEntries()) {
             if (entry.getTown().equals(town)) {
                 return entry;
             }
@@ -99,28 +110,13 @@ public class CooldownDao extends Dao<CooldownEntry> {
      */
     public void startCooldown(Town town, long cooldown) {
         Date date = new Date();
-        System.out.println("Starting cooldown for town: " + town.getName());
         if (get(town) == null) {
-            System.out.println("Town does not exist, creating cooldown");
-            add(new CooldownEntry(0, town, date.getTime(), cooldown));
+            add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), cooldown));
         } else {
-            System.out.println("Town eixsts, updating cooldown");
             CooldownEntry entry = get(town);
             entry.setStartedTime(date.getTime());
             entry.setCooldown(cooldown);
             update(entry);
         }
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownDao getInstance() {
-        if (singleton == null) {
-            singleton = new CooldownDao(CooldownDatabase.getInstance());
-        }
-        return singleton;
     }
 }

@@ -32,6 +32,11 @@ public class TownyMissionList extends TownyMissionCommand {
         super(instance);
     }
 
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return false;
+    }
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -47,71 +52,13 @@ public class TownyMissionList extends TownyMissionCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-//            BukkitRunnable r = new BukkitRunnable() {
-//                @Override
-//                public void run() {
-                    Player player = (Player) sender;
-                    Town town;
-                    if ((town = TownyUtil.residentOf(player)) != null) {
-                        MissionManageGui gui = new MissionManageGui(instance, player);
-                        gui.openInventory();
-
-//                        int diff = 15 - taskDao.getNumAdded(town);
-//                        List<MissionJson> missions = CustomConfigParser.parseAll(instance);
-//                        int size = missions.size();
-//                        Random rand = new Random();
-//
-//                        for (int i = 0; i < diff; i++) {
-//                            //TODO: Prevent duplicates
-//                            int index = rand.nextInt(size);
-//                            MissionJson mission = missions.get(index);
-//                            try {
-//                                TaskEntry entry = new TaskEntry(0,
-//                                        mission.getMissionType().name(),
-//                                        Util.currentTime(),
-//                                        0,
-//                                        Util.hrToMs(mission.getHrAllowed()),
-//                                        mission.toJson(),
-//                                        town.getName(),
-//                                        null);
-//                                taskDao.add(entry);
-//                            } catch (JsonProcessingException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Current Assignments&7------");
-//                        int index = 1;
-//
-//                        for (TaskEntry e : taskDao.getTownTasks(town)) {
-//                            try {
-//                                try {
-//                                    if (Util.isTimedOut(e)) {
-//                                        builder.add("&c" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-//                                    } else if (e.getStartedTime() != 0) {
-//                                        builder.add("&3" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-//                                    } else {
-//                                        builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-//                                    }
-//                                } catch (NotStartedException notStartedException) {
-//                                    builder.add("&e" + index + ". Type&f: " + e.getMissionType() + " " + e.getDisplayLine());
-//                                }
-//                            } catch (JsonProcessingException exp) {
-//                                logger.severe("Json parsing error when parsing " + e.getMissionJson());
-//                                exp.printStackTrace();
-//                            }
-//                            index++;
-//                        }
-//
-//                        Util.sendMsg(sender, Util.translateColor(builder.toString()));
-
-                    } else {
-                        Util.sendMsg(sender, "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
-                    }
-//                }
-//            };
-
-//            r.runTaskAsynchronously(instance);
+            Player player = (Player) sender;
+            if (TownyUtil.residentOf(player) != null) {
+                MissionManageGui gui = new MissionManageGui(instance);
+                gui.openInventory(player);
+            } else {
+                Util.sendMsg(sender, "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
+            }
         }
 
         return true;

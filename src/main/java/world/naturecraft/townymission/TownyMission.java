@@ -4,10 +4,11 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
+import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.gui.MissionManageGui;
 import world.naturecraft.townymission.config.CustomConfigLoader;
-import world.naturecraft.townymission.data.dao.*;
 import world.naturecraft.townymission.data.db.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
@@ -107,15 +108,20 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("claim", new TownyMissionClaim(this));
         rootCmd.registerCommand("info", new TownyMissionInfo(this));
         rootCmd.registerCommand("rank", new TownyMissionRank(this));
+        rootCmd.registerCommand("reload", new TownyMissionReload(this));
     }
 
     /**
      * Register listeners.
      */
     public void registerListeners() {
+        // Event listeners
         getServer().getPluginManager().registerEvents(new MissionListener(this), this);
         getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
         getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
+
+        // GUI listeners
+        getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
     }
 
     /**
@@ -145,6 +151,10 @@ public class TownyMission extends JavaPlugin {
         db.addDataSourceProperty("databaseName", dbName);
         db.addDataSourceProperty("user", dbUsername);
         db.addDataSourceProperty("password", dbPassword);
+        db.setMinimumIdle(5);
+        db.setConnectionTimeout(10000);
+        db.setIdleTimeout(600000);
+        db.setMaxLifetime(1800000);
     }
 
     /**
@@ -174,5 +184,14 @@ public class TownyMission extends JavaPlugin {
         finalString += getCustomConfig().getLangConfig().getString("prefix") + " ";
         finalString += getCustomConfig().getLangConfig().getString(path);
         return finalString;
+    }
+
+    public void reloadConfigs() {
+        this.reloadConfig();
+        try {
+            customConfigLoader = new CustomConfigLoader(this);
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new ConfigLoadingError(e);
+        }
     }
 }

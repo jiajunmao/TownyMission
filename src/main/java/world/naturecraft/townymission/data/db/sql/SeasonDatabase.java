@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.data.db.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 
 import java.sql.PreparedStatement;
@@ -9,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Season database.
@@ -28,11 +28,20 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         singleton = this;
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonDatabase getInstance() {
+        return singleton;
+    }
+
     @Override
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` INT NOT NULL AUTO_INCREMENT ," +
+                    "`id` VARCHAR(255) NOT NULL ," +
                     "`town_id` VARCHAR(255) NOT NULL ," +
                     "`town_name` VARCHAR(255) NOT NULL, " +
                     "`seasonpoints` INT NOT NULL, " +
@@ -53,7 +62,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
             try {
                 ResultSet result = p.executeQuery();
                 while (result.next()) {
-                    list.add(new SeasonEntry(result.getInt("id"),
+                    list.add(new SeasonEntry(UUID.fromString(result.getString("id")),
                             result.getString("town_id"),
                             result.getString("town_name"),
                             result.getInt("seasonpoints"),
@@ -78,7 +87,8 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      */
     public void add(String townUUID, String townName, int seasonPoint, int season) {
         execute(conn -> {
-            String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
+            UUID uuid = UUID.randomUUID();
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
                     townUUID + "', '" +
                     townName + "', '" +
                     seasonPoint + "', '" +
@@ -94,7 +104,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      *
      * @param id the id
      */
-    public void remove(int id) {
+    public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "id='" + id + "');";
@@ -113,7 +123,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public void update(int id, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(UUID id, String townUUID, String townName, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +
@@ -125,14 +135,5 @@ public class SeasonDatabase extends Database<SeasonEntry> {
             p.executeUpdate();
             return null;
         });
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonDatabase getInstance() {
-        return singleton;
     }
 }

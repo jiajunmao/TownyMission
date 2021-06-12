@@ -40,6 +40,21 @@ public class TownyMissionInfo extends TownyMissionCommand {
         super(instance);
     }
 
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return new SanityChecker(instance).target(player)
+                .hasTown()
+                .customCheck(() -> {
+                    if (args.length == 1) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                }).check();
+
+    }
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -58,20 +73,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
         // /tms info <town_name>
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
-            boolean sane = new SanityChecker(instance).target(player)
-                    .hasTown()
-                    .customCheck(() -> {
-                        if (args.length == 1) {
-                            return true;
-                        }
-                        else {
-                            Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                            return false;
-                        }
-                    }).check();
-
-            if (sane) {
+            if (sanityCheck(player, args)) {
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Overview&7------");
                 Town town = TownyUtil.residentOf(player);
                 MissionEntry taskEntry;
@@ -100,11 +102,11 @@ public class TownyMissionInfo extends TownyMissionCommand {
                     String display = String.format("%02d:%02d",
                             TimeUnit.MILLISECONDS.toHours(allowedTime),
                             TimeUnit.MILLISECONDS.toMinutes(allowedTime) -
-                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(allowedTime)));
+                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(allowedTime)));
                     builder.add("&eAllowed Time: &f" + display);
 
                     try {
-                        if (Util.isTimedOut(taskEntry)) {
+                        if (taskEntry.isTimedout()) {
                             builder.add("&Remaining Time: &cTimed Out");
                         } else {
                             Date dateNow = new Date();
@@ -129,7 +131,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                 int baselineCap = instance.getConfig().getInt("participants.sprintRewardBaselineCap");
                 int baselineIncrement = instance.getConfig().getInt("participants.sprintBaselineIncrement");
 
-                int realBaseline = baseline + (town.getNumResidents()-1)*memberScale + (currentSprint - 1)*baselineIncrement;
+                int realBaseline = baseline + (town.getNumResidents() - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
                 realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
                 int naturepoints = SprintDao.getInstance().get(town.getUUID().toString()).getNaturepoints();
@@ -137,7 +139,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                 builder.add("&eTotal Points: &f" + naturepoints);
                 builder.add("&eBaseline: &f" + realBaseline);
 
-                int rankingPoints = (naturepoints - realBaseline)/town.getNumResidents();
+                int rankingPoints = (naturepoints - realBaseline) / town.getNumResidents();
                 rankingPoints = Math.max(rankingPoints, 0);
                 builder.add("&eRanking Points: &f" + rankingPoints);
 

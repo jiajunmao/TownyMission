@@ -27,6 +27,7 @@ public abstract class TownyMissionGui implements Listener {
 // Cancel dragging in our inventory
     @EventHandler
     public void onInventoryClick(final InventoryDragEvent e) {
+        System.out.println("Inventory drag registered");
         if (e.getInventory().equals(inv)) {
             e.setCancelled(true);
         }

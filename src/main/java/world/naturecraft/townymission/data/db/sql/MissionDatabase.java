@@ -2,7 +2,6 @@ package world.naturecraft.townymission.data.db.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 
 import java.sql.PreparedStatement;
@@ -10,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Task database.
@@ -29,11 +29,20 @@ public class MissionDatabase extends Database<MissionEntry> {
         singleton = this;
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionDatabase getInstance() {
+        return singleton;
+    }
+
     @Override
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` INT NOT NULL AUTO_INCREMENT ," +
+                    "`id` VARCHAR(255) NOT NULL ," +
                     "`task_type` VARCHAR(255) NOT NULL ," +
                     "`added_time` BIGINT NOT NULL, " +
                     "`started_time` BIGINT NOT NULL, " +
@@ -59,7 +68,7 @@ public class MissionDatabase extends Database<MissionEntry> {
 
                 while (result.next()) {
                     try {
-                        list.add(new MissionEntry(result.getInt("id"),
+                        list.add(new MissionEntry(UUID.fromString(result.getString("id")),
                                 result.getString("task_type"),
                                 result.getLong("added_time"),
                                 result.getLong("started_time"),
@@ -93,7 +102,8 @@ public class MissionDatabase extends Database<MissionEntry> {
      */
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         execute(conn -> {
-            String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
+            UUID uuid = UUID.randomUUID();
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
                     missionType + "', '" +
                     addedTime + "', '" +
                     startedTime + "', '" +
@@ -112,7 +122,7 @@ public class MissionDatabase extends Database<MissionEntry> {
      *
      * @param id the id
      */
-    public void remove(int id) {
+    public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "id='" + id + "');";
@@ -134,7 +144,7 @@ public class MissionDatabase extends Database<MissionEntry> {
      * @param townName          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void update(int id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
+    public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET task_type='" + missionType +
@@ -149,14 +159,5 @@ public class MissionDatabase extends Database<MissionEntry> {
             p.executeUpdate();
             return null;
         });
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionDatabase getInstance() {
-        return singleton;
     }
 }

@@ -2,6 +2,7 @@ package world.naturecraft.townymission.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
@@ -84,5 +85,10 @@ public class TownyMissionRoot extends TownyMissionCommand {
      */
     public TownyMissionCommand getExecutor(String name) {
         return commands.getOrDefault(name, null);
+    }
+
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return false;
     }
 }
