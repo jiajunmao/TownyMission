@@ -6,12 +6,11 @@ package world.naturecraft.townymission.data.db;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
+import world.naturecraft.townymission.components.containers.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.CooldownDatabase;
 import world.naturecraft.townymission.data.yaml.CooldownYaml;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.UUID;
 

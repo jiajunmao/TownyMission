@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.components.containers.sql;
+package world.naturecraft.townymission.components.containers.entity;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * The type Cooldown entry.
  */
-public class CooldownEntry extends SqlEntry {
+public class CooldownEntry extends DataEntity {
 
     private Town town;
     private long startedTime;

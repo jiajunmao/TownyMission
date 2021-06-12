@@ -4,30 +4,39 @@
 
 package world.naturecraft.townymission.components.containers.json;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.components.enums.RankType;
+
+import java.beans.ConstructorProperties;
 
 /**
  * The type Season rank.
  */
-public class Rank {
+public class RankJson {
 
-    private final MissionType missionType;
+    @JsonProperty("rankType")
+    private final RankType rankType;
+    @JsonProperty("townId")
     private final String townId;
+    @JsonProperty("townName")
     private final String townName;
+    @JsonProperty("points")
     private final int points;
 
     /**
      * Instantiates a new Season rank.
      *
-     * @param missionType the mission type
+     * @param rankType the rank type
      * @param townId      the town id
      * @param townName    the town name
      * @param points      the points
      */
-    public Rank(MissionType missionType, String townId, String townName, int points) {
-        this.missionType = missionType;
+    @ConstructorProperties({"rankType", "townId", "townName", "points"})
+    public RankJson(RankType rankType, String townId, String townName, int points) {
+        this.rankType = rankType;
         this.townId = townId;
         this.townName = townName;
         this.points = points;
@@ -40,8 +49,8 @@ public class Rank {
      * @return the rank
      * @throws JsonProcessingException the json processing exception
      */
-    public static Rank parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, Rank.class);
+    public static RankJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, RankJson.class);
     }
 
     /**

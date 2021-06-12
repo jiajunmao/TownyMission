@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.db;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.containers.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.MissionDatabase;
 import world.naturecraft.townymission.data.yaml.MissionYaml;

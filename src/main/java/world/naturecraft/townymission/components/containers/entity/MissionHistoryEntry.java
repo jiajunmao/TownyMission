@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.components.containers.sql;
+package world.naturecraft.townymission.components.containers.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * The type Task history entry.
  */
-public class MissionHistoryEntry extends SqlEntry {
+public class MissionHistoryEntry extends DataEntity {
 
     private MissionType missionType;
     private long addedTime;

@@ -5,9 +5,8 @@
 package world.naturecraft.townymission.data.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
-import world.naturecraft.townymission.components.containers.sql.SprintEntry;
+import world.naturecraft.townymission.components.containers.entity.SprintEntry;
 import world.naturecraft.townymission.data.db.SprintStorage;
-import world.naturecraft.townymission.data.sql.SprintDatabase;
 
 import java.util.List;
 

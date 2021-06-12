@@ -5,11 +5,9 @@
 package world.naturecraft.townymission.components.gui;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;
@@ -19,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.json.MissionJson;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.containers.entity.MissionEntry;
 import world.naturecraft.townymission.config.CustomConfigParser;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;

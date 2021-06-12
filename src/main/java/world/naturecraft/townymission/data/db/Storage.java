@@ -4,12 +4,12 @@
 
 package world.naturecraft.townymission.data.db;
 
-import world.naturecraft.townymission.components.containers.sql.SqlEntry;
+import world.naturecraft.townymission.components.containers.entity.DataEntity;
 
 /**
  * The type Storage.
  *
  * @param <T> the type parameter
  */
-public abstract class Storage<T extends SqlEntry> {
+public abstract class Storage<T extends DataEntity> {
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.components.containers.sql;
+package world.naturecraft.townymission.components.containers.entity;
 
 import world.naturecraft.townymission.components.enums.DbType;
 
@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * The type Sql entry.
  */
-public abstract class SqlEntry {
+public abstract class DataEntity {
     private final DbType type;
     private UUID id;
 
@@ -21,7 +21,7 @@ public abstract class SqlEntry {
      * @param id   the id
      * @param type the type
      */
-    public SqlEntry(UUID id, DbType type) {
+    public DataEntity(UUID id, DbType type) {
         this.id = id;
         this.type = type;
     }
@@ -46,9 +46,9 @@ public abstract class SqlEntry {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof SqlEntry)) return false;
+        if (!(object instanceof DataEntity)) return false;
 
-        SqlEntry entry = (SqlEntry) object;
+        DataEntity entry = (DataEntity) object;
         return id.equals(entry.getId());
     }
 }

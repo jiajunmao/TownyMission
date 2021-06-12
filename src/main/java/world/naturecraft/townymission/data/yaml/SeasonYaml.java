@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.yaml;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.containers.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.ArrayList;

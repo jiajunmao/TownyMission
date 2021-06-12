@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.ConfiguParsingException;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.containers.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.components.containers.sql;
+package world.naturecraft.townymission.components.containers.entity;
 
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * The type Season entry.
  */
-public class SeasonEntry extends SqlEntry implements Rankable {
+public class SeasonEntry extends DataEntity implements Rankable {
     private String townID;
     private String townName;
     private int seasonPoint;

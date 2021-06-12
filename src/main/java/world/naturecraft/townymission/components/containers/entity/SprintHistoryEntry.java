@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.components.containers.sql;
+package world.naturecraft.townymission.components.containers.entity;
 
 import world.naturecraft.townymission.components.enums.DbType;
 
@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * The type Sprint history entry.
  */
-public class SprintHistoryEntry extends SqlEntry {
+public class SprintHistoryEntry extends DataEntity {
     private int season;
     private int sprint;
     private long startedTime;
