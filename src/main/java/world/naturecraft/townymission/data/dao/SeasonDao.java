@@ -4,8 +4,8 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.components.containers.entity.SeasonEntry;
-import world.naturecraft.townymission.components.containers.json.TownRankJson;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.db.SeasonStorage;
 
 import java.util.ArrayList;

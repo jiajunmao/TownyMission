@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.config;
+package world.naturecraft.townymission.config.mission;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * The type Custom config loader.
  */
-public class CustomConfigLoader {
+public class MissionConfigLoader {
 
     private final TownyMission instance;
     private final Map<MissionType, FileConfiguration> customConfigs;
@@ -34,7 +34,7 @@ public class CustomConfigLoader {
      * @throws IOException                   the io exception
      * @throws InvalidConfigurationException the invalid configuration exception
      */
-    public CustomConfigLoader(TownyMission instance) throws IOException, InvalidConfigurationException {
+    public MissionConfigLoader(TownyMission instance) throws IOException, InvalidConfigurationException {
         this.instance = instance;
         this.customConfigs = new HashMap<>();
 

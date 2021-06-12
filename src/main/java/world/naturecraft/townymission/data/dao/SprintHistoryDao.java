@@ -4,7 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.components.containers.entity.SprintHistoryEntry;
+import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.data.db.SprintHistoryStorage;
 
 import java.util.List;

@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.sql;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.components.containers.entity.CooldownEntry;
+import world.naturecraft.townymission.components.entity.CooldownEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

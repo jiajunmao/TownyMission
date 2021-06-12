@@ -9,7 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.entity.MissionEntry;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
 

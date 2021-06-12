@@ -8,9 +8,9 @@ package world.naturecraft.townymission.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.components.containers.entity.*;
-import world.naturecraft.townymission.components.containers.json.RankJson;
-import world.naturecraft.townymission.components.containers.json.TownRankJson;
+import world.naturecraft.townymission.components.entity.*;
+import world.naturecraft.townymission.components.json.rank.RankJson;
+import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.*;
 import world.naturecraft.townymission.utils.RankUtil;

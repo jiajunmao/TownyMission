@@ -5,7 +5,7 @@
 package world.naturecraft.townymission.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.components.containers.json.*;
+import world.naturecraft.townymission.components.json.mission.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 /**
@@ -21,15 +21,15 @@ public class MissionJsonFactory {
     public static Class<? extends MissionJson> toClass(MissionType type) {
         switch (type.name()) {
             case "VOTE":
-                return VoteJson.class;
+                return VoteMissionJson.class;
             case "MONEY":
-                return MoneyJson.class;
+                return MoneyMissionJson.class;
             case "EXPANSION":
-                return ExpansionJson.class;
+                return ExpansionMissionJson.class;
             case "MOB":
-                return MobJson.class;
+                return MobMissionJson.class;
             case "RESOURCE":
-                return ResourceJson.class;
+                return ResourceMissionJson.class;
             default:
                 return null;
         }
@@ -46,15 +46,15 @@ public class MissionJsonFactory {
     public static MissionJson getJson(String missionJson, MissionType missionType) throws JsonProcessingException {
         switch (missionType.name()) {
             case "VOTE":
-                return (VoteJson.parse(missionJson));
+                return (VoteMissionJson.parse(missionJson));
             case "MONEY":
-                return (MoneyJson.parse(missionJson));
+                return (MoneyMissionJson.parse(missionJson));
             case "MOB":
-                return (MobJson.parse(missionJson));
+                return (MobMissionJson.parse(missionJson));
             case "EXPANSION":
-                return (ExpansionJson.parse(missionJson));
+                return (ExpansionMissionJson.parse(missionJson));
             case "RESOURCE":
-                return (ResourceJson.parse(missionJson));
+                return (ResourceMissionJson.parse(missionJson));
             default:
                 return null;
         }

@@ -2,7 +2,7 @@ package world.naturecraft.townymission.data.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.components.containers.entity.MissionEntry;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

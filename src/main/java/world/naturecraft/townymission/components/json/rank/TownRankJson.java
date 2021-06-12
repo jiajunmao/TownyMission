@@ -2,15 +2,15 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.components.containers.json;
+package world.naturecraft.townymission.components.json.rank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.components.containers.entity.Rankable;
-import world.naturecraft.townymission.components.containers.entity.SeasonEntry;
-import world.naturecraft.townymission.components.containers.entity.SprintEntry;
+import world.naturecraft.townymission.components.entity.Rankable;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.entity.SprintEntry;
 
 import java.beans.ConstructorProperties;
 

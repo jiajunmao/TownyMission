@@ -1,4 +1,8 @@
-package world.naturecraft.townymission.components.containers.json;
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
+
+package world.naturecraft.townymission.components.json.mission;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +20,7 @@ import java.util.Map;
 /**
  * The type Resource.
  */
-public class ResourceJson extends MissionJson {
+public class ResourceMissionJson extends MissionJson {
 
     @JsonProperty("mi")
     private final boolean isMi;
@@ -35,7 +39,7 @@ public class ResourceJson extends MissionJson {
      * @param contributions the contributions
      */
     @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "contributions"})
-    public ResourceJson(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    public ResourceMissionJson(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         super(MissionType.RESOURCE, amount, completed, hrAllowed, reward, contributions);
         this.isMi = isMi;
         this.type = type;
@@ -49,7 +53,7 @@ public class ResourceJson extends MissionJson {
      * @throws JsonProcessingException the json processing exception
      */
     public static MissionJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, ResourceJson.class);
+        return new ObjectMapper().readValue(json, ResourceMissionJson.class);
     }
 
     /**

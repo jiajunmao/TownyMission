@@ -9,7 +9,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.components.containers.entity.MissionEntry;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 
 /**
  * The type Do mission event.

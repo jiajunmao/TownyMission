@@ -4,7 +4,7 @@
 
 package world.naturecraft.townymission.data.db;
 
-import world.naturecraft.townymission.components.containers.entity.DataEntity;
+import world.naturecraft.townymission.components.entity.DataEntity;
 
 /**
  * The type Storage.

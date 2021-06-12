@@ -1,4 +1,8 @@
-package world.naturecraft.townymission.components.containers.json;
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
+
+package world.naturecraft.townymission.components.json.mission;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +20,7 @@ import java.util.Map;
 /**
  * The type Mob.
  */
-public class MobJson extends MissionJson {
+public class MobMissionJson extends MissionJson {
 
     @JsonProperty("entityType")
     private final EntityType entityType;
@@ -32,7 +36,7 @@ public class MobJson extends MissionJson {
      * @param contributions the contributions
      */
     @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward", "contributions"})
-    public MobJson(EntityType entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    public MobMissionJson(EntityType entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         super(MissionType.MOB, amount, completed, hrAllowed, reward, contributions);
         this.entityType = entityType;
     }
@@ -45,7 +49,7 @@ public class MobJson extends MissionJson {
      * @throws JsonProcessingException the json processing exception
      */
     public static MissionJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, MobJson.class);
+        return new ObjectMapper().readValue(json, MobMissionJson.class);
     }
 
     /**

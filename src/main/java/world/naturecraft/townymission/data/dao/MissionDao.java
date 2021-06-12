@@ -7,7 +7,7 @@ package world.naturecraft.townymission.data.dao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
-import world.naturecraft.townymission.components.containers.entity.MissionEntry;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.db.MissionStorage;
 

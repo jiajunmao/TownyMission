@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.components.containers.json;
+package world.naturecraft.townymission.components.json.mission;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * The type Expansion.
  */
-public class ExpansionJson extends MissionJson {
+public class ExpansionMissionJson extends MissionJson {
 
     @JsonProperty("world")
     private final String world;
@@ -35,7 +35,7 @@ public class ExpansionJson extends MissionJson {
      * @param contributions the contributions
      */
     @ConstructorProperties({"world", "amount", "completed", "hrAllowed", "reward", "contributions"})
-    public ExpansionJson(String world, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    public ExpansionMissionJson(String world, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         super(MissionType.EXPANSION, amount, completed, hrAllowed, reward, contributions);
         this.world = world;
     }
@@ -48,7 +48,7 @@ public class ExpansionJson extends MissionJson {
      * @throws JsonProcessingException the json processing exception
      */
     public static MissionJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, ExpansionJson.class);
+        return new ObjectMapper().readValue(json, ExpansionMissionJson.class);
     }
 
     /**

@@ -49,15 +49,15 @@ sprint:
     #     (sum of individual contribution)/(number of mission)
     # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
     #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
-    method: CONTRIBUTIONS
+    method: contributions
     # There are only three types, RESOURCE, MONEY, and COMMAND
     # Please use the exact format as the shown in the following default config
     # Placeholders
     #   - %player%: the name of the player, only works in COMMAND type
     rewards:
-      - '{"type": "RESOURCE", "resourceType": "DIAMOND", "amount": 100}'
-      - '{"type": "MONEY", "amount": 50000}'
-      - '{"type": "COMMAND", "command": "cmi msg %player% wow you are amazing"}'
+      - 'resource{"type": "DIAMOND", "amount": 100}'
+      - 'money{"amount": 50000}'
+      - 'command{"command": "cmi msg %player% wow you are amazing"}'
 
 season:
   # The current season, do not touch unless you know what you are doing
@@ -78,12 +78,12 @@ season:
     #     (sum of individual contribution)/(number of mission)
     # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
     #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
-    method: CONTRIBUTIONS
+    method: contributions
     # There are only three types, RESOURCE, MONEY, and COMMAND
     # Please use the exact format as the shown in the following default config
     # Placeholders
     #   - %player%: the name of the player, only works in COMMAND type
     rewards:
-      - '{"type": "RESOURCE", "resourceType": "DIAMOND", "amount": 100}'
-      - '{"type": "MONEY", "amount": 50000}'
-      - '{"type": "COMMAND", "command": "cmi msg %player% wow you are amazing"}'
+      - 'resource{"type": "DIAMOND", "amount": 100}'
+      - 'money{"amount": 50000}'
+      - 'command{"command": "cmi msg %player% wow you are amazing"}'

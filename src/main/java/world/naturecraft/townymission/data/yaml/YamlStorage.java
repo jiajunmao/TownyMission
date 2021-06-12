@@ -9,7 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
-import world.naturecraft.townymission.components.containers.entity.DataEntity;
+import world.naturecraft.townymission.components.entity.DataEntity;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.io.File;

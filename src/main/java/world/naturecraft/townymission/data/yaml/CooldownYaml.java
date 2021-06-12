@@ -7,7 +7,7 @@ package world.naturecraft.townymission.data.yaml;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.entity.CooldownEntry;
+import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.ArrayList;

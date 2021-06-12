@@ -18,9 +18,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import teozfrank.ultimatevotes.events.VoteRewardEvent;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
-import world.naturecraft.townymission.components.containers.entity.MissionEntry;
-import world.naturecraft.townymission.components.containers.json.MissionJson;
-import world.naturecraft.townymission.components.containers.json.MobJson;
+import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
+import world.naturecraft.townymission.components.json.mission.MobMissionJson;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
@@ -118,8 +118,8 @@ public class MissionListener extends TownyMissionListener {
                     .isMissionType(MissionType.MOB)
                     .customCheck(() -> {
                         MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(killer), MissionType.MOB);
-                        MobJson mobJson = (MobJson) taskEntry.getMissionJson();
-                        return mobJson.getEntityType().equals(dead.getType());
+                        MobMissionJson mobMissionJson = (MobMissionJson) taskEntry.getMissionJson();
+                        return mobMissionJson.getEntityType().equals(dead.getType());
                     });
 
             doLogic(checker, MissionType.MOB, killer, 1);

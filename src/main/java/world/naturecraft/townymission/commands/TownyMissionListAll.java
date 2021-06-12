@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.json.MissionJson;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.config.CustomConfigParser;
+import world.naturecraft.townymission.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
@@ -76,7 +76,7 @@ public class TownyMissionListAll extends TownyMissionCommand {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
                 MissionType missionType = MissionType.valueOf(args[1].toUpperCase(Locale.ROOT));
-                Collection<MissionJson> collection = CustomConfigParser.parse(missionType, instance);
+                Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
                 builder.add("&eMission Type&f: " + missionType.name());
                 builder.add(" ");
                 for (MissionJson json : collection) {

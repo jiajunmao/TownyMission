@@ -1,10 +1,10 @@
-package world.naturecraft.townymission.components.containers.entity;
+package world.naturecraft.townymission.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import world.naturecraft.townymission.components.containers.json.MissionJson;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.utils.MissionJsonFactory;

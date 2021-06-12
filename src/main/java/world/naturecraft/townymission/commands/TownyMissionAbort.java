@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.entity.MissionEntry;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.SanityChecker;

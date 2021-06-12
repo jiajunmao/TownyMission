@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.components.containers.entity;
+package world.naturecraft.townymission.components.entity;
 
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.enums.DbType;

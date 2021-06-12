@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
-import world.naturecraft.townymission.components.containers.entity.CooldownEntry;
+import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.data.db.CooldownStorage;
 
 import java.util.Date;

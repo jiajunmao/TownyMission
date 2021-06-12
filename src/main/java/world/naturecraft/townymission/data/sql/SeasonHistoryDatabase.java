@@ -1,7 +1,7 @@
 package world.naturecraft.townymission.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.components.containers.entity.SeasonHistoryEntry;
+import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

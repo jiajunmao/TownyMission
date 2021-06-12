@@ -4,7 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.components.containers.entity.SeasonHistoryEntry;
+import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.data.db.SeasonHistoryStorage;
 
 import java.util.List;

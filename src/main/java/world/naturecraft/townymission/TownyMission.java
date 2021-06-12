@@ -9,7 +9,7 @@ import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.components.gui.MissionManageGui;
-import world.naturecraft.townymission.config.CustomConfigLoader;
+import world.naturecraft.townymission.config.mission.MissionConfigLoader;
 import world.naturecraft.townymission.data.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
@@ -31,7 +31,7 @@ public class TownyMission extends JavaPlugin {
     private final Logger logger = getLogger();
     private Map<DbType, Database> dbList;
     private HikariDataSource db;
-    private CustomConfigLoader customConfigLoader;
+    private MissionConfigLoader missionConfigLoader;
     private TownyMissionRoot rootCmd;
     private StorageType storageType;
     private boolean enabled = true;
@@ -54,7 +54,7 @@ public class TownyMission extends JavaPlugin {
          */
         this.saveDefaultConfig();
         try {
-            customConfigLoader = new CustomConfigLoader(this);
+            missionConfigLoader = new MissionConfigLoader(this);
         } catch (IOException | InvalidConfigurationException e) {
             logger.severe("IO operation fault during custom config initialization");
             e.printStackTrace();
@@ -195,8 +195,8 @@ public class TownyMission extends JavaPlugin {
      *
      * @return the custom config
      */
-    public CustomConfigLoader getCustomConfig() {
-        return customConfigLoader;
+    public MissionConfigLoader getCustomConfig() {
+        return missionConfigLoader;
     }
 
     /**
@@ -218,7 +218,7 @@ public class TownyMission extends JavaPlugin {
     public void reloadConfigs() {
         this.reloadConfig();
         try {
-            customConfigLoader = new CustomConfigLoader(this);
+            missionConfigLoader = new MissionConfigLoader(this);
         } catch (IOException | InvalidConfigurationException e) {
             throw new ConfigLoadingError(e);
         }

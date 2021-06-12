@@ -16,9 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.entity.MissionEntry;
-import world.naturecraft.townymission.components.containers.json.MissionJson;
-import world.naturecraft.townymission.config.CustomConfigParser;
+import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
+import world.naturecraft.townymission.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -59,7 +59,7 @@ public class MissionManageGui extends TownyMissionGui {
 
         // Figure out how many missions the town is missing
         int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
-        List<MissionJson> missions = CustomConfigParser.parseAll(instance);
+        List<MissionJson> missions = MissionConfigParser.parseAll(instance);
         System.out.println("Number of entries to be added: " + diff);
         int size = missions.size();
         Random rand = new Random();

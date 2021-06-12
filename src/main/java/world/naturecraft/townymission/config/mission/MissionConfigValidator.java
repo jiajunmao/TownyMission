@@ -2,10 +2,10 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.config;
+package world.naturecraft.townymission.config.mission;
 
 /**
  * The type Custom config validator.
  */
-public class CustomConfigValidator {
+public class MissionConfigValidator {
 }

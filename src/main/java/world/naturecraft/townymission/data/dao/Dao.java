@@ -4,7 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.components.containers.entity.DataEntity;
+import world.naturecraft.townymission.components.entity.DataEntity;
 
 import java.util.List;
 

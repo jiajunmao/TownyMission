@@ -5,8 +5,8 @@
 package world.naturecraft.townymission.data.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
-import world.naturecraft.townymission.components.containers.entity.SprintEntry;
-import world.naturecraft.townymission.components.containers.json.TownRankJson;
+import world.naturecraft.townymission.components.entity.SprintEntry;
+import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.db.SprintStorage;
 
 import java.util.ArrayList;

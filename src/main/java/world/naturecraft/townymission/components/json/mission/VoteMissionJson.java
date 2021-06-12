@@ -1,4 +1,8 @@
-package world.naturecraft.townymission.components.containers.json;
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
+
+package world.naturecraft.townymission.components.json.mission;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,7 +18,7 @@ import java.util.Map;
 /**
  * The type Vote.
  */
-public class VoteJson extends MissionJson {
+public class VoteMissionJson extends MissionJson {
 
     /**
      * Instantiates a new Vote.
@@ -26,7 +30,7 @@ public class VoteJson extends MissionJson {
      * @param contributions the contributions
      */
     @ConstructorProperties({"amount", "completed", "hrAllowed", "reward", "contributions"})
-    public VoteJson(int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    public VoteMissionJson(int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         super(MissionType.VOTE, amount, completed, hrAllowed, reward, contributions);
     }
 
@@ -38,7 +42,7 @@ public class VoteJson extends MissionJson {
      * @throws JsonProcessingException the json processing exception
      */
     public static MissionJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, VoteJson.class);
+        return new ObjectMapper().readValue(json, VoteMissionJson.class);
     }
 
     /**
