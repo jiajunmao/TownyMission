@@ -110,10 +110,13 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * @param cooldown the cooldown
      */
     public void startCooldown(Town town, long cooldown) {
+        System.out.println("Starting " + town.getName() + "'s cooldown for " + cooldown);
         Date date = new Date();
         if (get(town) == null) {
+            System.out.println("Entry not found, adding");
             add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), cooldown));
         } else {
+            System.out.println("Entry found, updating");
             CooldownEntry entry = get(town);
             entry.setStartedTime(date.getTime());
             entry.setCooldown(cooldown);

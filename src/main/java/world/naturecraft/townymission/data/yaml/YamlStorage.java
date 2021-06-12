@@ -46,7 +46,7 @@ public abstract class YamlStorage<T extends SqlEntry> {
      * @param instance the instance
      * @param dbType   the db type
      */
-    protected YamlStorage(TownyMission instance, DbType dbType) {
+    public YamlStorage(TownyMission instance, DbType dbType) {
         this.instance = instance;
         this.dbType = dbType;
         createConfig();

@@ -27,7 +27,7 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
      *
      * @param instance the instance
      */
-    protected MissionHistoryYaml(TownyMission instance) {
+    public MissionHistoryYaml(TownyMission instance) {
         super(instance, DbType.MISSION_HISTORY);
         singleton = this;
     }

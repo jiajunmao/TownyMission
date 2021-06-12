@@ -25,7 +25,7 @@ public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
      *
      * @param instance the instance
      */
-    protected SprintHistoryYaml(TownyMission instance) {
+    public SprintHistoryYaml(TownyMission instance) {
         super(instance, DbType.SPRINT_HISTORY);
         singleton = this;
     }

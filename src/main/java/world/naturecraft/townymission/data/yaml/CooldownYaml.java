@@ -26,7 +26,7 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
      *
      * @param instance the instance
      */
-    protected CooldownYaml(TownyMission instance) {
+    public CooldownYaml(TownyMission instance) {
         super(instance, DbType.COOLDOWN);
         singleton = this;
     }

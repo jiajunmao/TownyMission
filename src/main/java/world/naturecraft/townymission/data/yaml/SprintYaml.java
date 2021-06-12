@@ -25,7 +25,7 @@ public class SprintYaml extends YamlStorage<SprintEntry> {
      *
      * @param instance the instance
      */
-    protected SprintYaml(TownyMission instance) {
+    public SprintYaml(TownyMission instance) {
         super(instance, DbType.SPRINT);
         singleton = this;
     }

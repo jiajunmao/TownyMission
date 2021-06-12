@@ -25,7 +25,7 @@ public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
      *
      * @param instance the instance
      */
-    protected SeasonHistoryYaml(TownyMission instance) {
+    public SeasonHistoryYaml(TownyMission instance) {
         super(instance, DbType.SEASON_HISTORY);
         singleton = this;
     }

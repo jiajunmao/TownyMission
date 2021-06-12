@@ -172,8 +172,13 @@ public class MissionManageGui extends TownyMissionGui {
         // This means that the player is clicking on the UNSTARTED missions, starting a mission
         if ((slot >= 11 && slot <= 17) || (slot >= 20 && slot <= 26)) {
             // Map the slot numbers to mission number
-            int missionIdx = (slot >= 11 && slot <= 17) ? slot - 10 : slot;
-            missionIdx = (slot >= 20 && slot <= 26) ? slot - 12 : slot;
+            int missionIdx;
+
+            if (slot >= 11 && slot <= 17) {
+                missionIdx = slot - 10;
+            } else {
+                missionIdx = slot - 12;
+            }
 
             // Things to make the GUI work and better UX
 

@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
+import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.data.db.SprintStorage;
 import world.naturecraft.townymission.data.sql.SprintDatabase;
@@ -61,6 +62,14 @@ public class SprintDao extends Dao<SprintEntry> {
         return database.getEntries();
     }
 
+    public boolean contains(Town town) {
+        for (SprintEntry entry : getEntries()) {
+            if (entry.getTownID().equalsIgnoreCase(town.getUUID().toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Get sprint entry.
      *

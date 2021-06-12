@@ -177,6 +177,18 @@ public class MissionService extends TownyMissionService {
         MissionDao.getInstance().remove(entry);
         MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, Util.currentTime());
         MissionHistoryDao.getInstance().add(missionHistoryEntry);
+        if (SprintDao.getInstance().contains(missionHistoryEntry.getTown())) {
+            SprintEntry sprintEntry = SprintDao.getInstance().get(missionHistoryEntry.getTown().getUUID().toString());
+            sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() + missionHistoryEntry.getMissionJson().getReward());
+            SprintDao.getInstance().update(sprintEntry);
+        } else {
+            SprintDao.getInstance().add(new SprintEntry(UUID.randomUUID(),
+                    missionHistoryEntry.getTown().getUUID().toString(),
+                    missionHistoryEntry.getTown().getName(),
+                    missionHistoryEntry.getMissionJson().getReward(),
+                    instance.getConfig().getInt("sprint.current"),
+                    instance.getConfig().getInt("season.current")));
+        }
         CooldownDao.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }
 
