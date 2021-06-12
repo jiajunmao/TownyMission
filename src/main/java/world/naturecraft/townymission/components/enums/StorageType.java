@@ -4,7 +4,16 @@
 
 package world.naturecraft.townymission.components.enums;
 
+/**
+ * The enum Storage type.
+ */
 public enum StorageType {
+    /**
+     * Mysql storage type.
+     */
     MYSQL,
+    /**
+     * Yaml storage type.
+     */
     YAML
 }

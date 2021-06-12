@@ -11,11 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.containers.entity.Rankable;
 import world.naturecraft.townymission.components.containers.entity.SeasonEntry;
 import world.naturecraft.townymission.components.containers.entity.SprintEntry;
-import world.naturecraft.townymission.components.enums.RankType;
 
 import java.beans.ConstructorProperties;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * The type Season rank.
@@ -32,9 +29,9 @@ public class TownRankJson implements Rankable {
     /**
      * Instantiates a new Season rank.
      *
-     * @param townId      the town id
-     * @param townName    the town name
-     * @param points      the points
+     * @param townId   the town id
+     * @param townName the town name
+     * @param points   the points
      */
     @ConstructorProperties({"townId", "townName", "points"})
     public TownRankJson(String townId, String townName, int points) {
@@ -43,12 +40,22 @@ public class TownRankJson implements Rankable {
         this.points = points;
     }
 
+    /**
+     * Instantiates a new Town rank json.
+     *
+     * @param sprintEntry the sprint entry
+     */
     public TownRankJson(SprintEntry sprintEntry) {
         this.townId = sprintEntry.getTownID();
         this.townName = sprintEntry.getTownName();
         this.points = sprintEntry.getNaturepoints();
     }
 
+    /**
+     * Instantiates a new Town rank json.
+     *
+     * @param seasonEntry the season entry
+     */
     public TownRankJson(SeasonEntry seasonEntry) {
         this.townId = seasonEntry.getTownID();
         this.townName = seasonEntry.getTownName();

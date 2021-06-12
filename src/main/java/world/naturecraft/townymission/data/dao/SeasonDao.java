@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.containers.entity.SeasonEntry;
-import world.naturecraft.townymission.components.containers.entity.SprintEntry;
 import world.naturecraft.townymission.components.containers.json.TownRankJson;
 import world.naturecraft.townymission.data.db.SeasonStorage;
 
@@ -81,6 +80,11 @@ public class SeasonDao extends Dao<SeasonEntry> {
         return null;
     }
 
+    /**
+     * Gets entries as json.
+     *
+     * @return the entries as json
+     */
     public List<TownRankJson> getEntriesAsJson() {
         List<TownRankJson> rankJsons = new ArrayList<>();
         for (SeasonEntry entry : getEntries()) {

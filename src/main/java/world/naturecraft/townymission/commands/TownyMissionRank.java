@@ -40,14 +40,14 @@ public class TownyMissionRank extends TownyMissionCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new SanityChecker(instance).target(player)
-            .customCheck(() -> {
-                if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
-                    return true;
-                } else {
-                    Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                    return false;
-                }
-            }).check();
+                .customCheck(() -> {
+                    if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                }).check();
     }
 
     /**

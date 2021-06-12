@@ -4,6 +4,9 @@
 
 package world.naturecraft.townymission.services;
 
+/**
+ * The type Cooldown service.
+ */
 public class CooldownService {
 
 }

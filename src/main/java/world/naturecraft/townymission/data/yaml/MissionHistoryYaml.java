@@ -33,6 +33,19 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
     }
 
     /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionHistoryYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new MissionHistoryYaml(townyMission);
+        }
+        return singleton;
+    }
+
+    /**
      * Add.
      *
      * @param missionType       the mission type
@@ -122,18 +135,5 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
         }
 
         return entryList;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionHistoryYaml getInstance() {
-        if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new MissionHistoryYaml(townyMission);
-        }
-        return singleton;
     }
 }

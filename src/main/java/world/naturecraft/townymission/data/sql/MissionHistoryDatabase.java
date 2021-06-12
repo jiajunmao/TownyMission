@@ -109,7 +109,7 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     missionType + "', '" +
                     addedTime + "', '" +
                     startedTime + "', '" +

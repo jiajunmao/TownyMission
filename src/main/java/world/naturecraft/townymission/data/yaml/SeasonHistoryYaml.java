@@ -31,6 +31,19 @@ public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
     }
 
     /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonHistoryYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new SeasonHistoryYaml(townyMission);
+        }
+        return singleton;
+    }
+
+    /**
      * Add.
      *
      * @param season      the season
@@ -76,18 +89,5 @@ public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
         }
 
         return entryList;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonHistoryYaml getInstance() {
-        if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SeasonHistoryYaml(townyMission);
-        }
-        return singleton;
     }
 }

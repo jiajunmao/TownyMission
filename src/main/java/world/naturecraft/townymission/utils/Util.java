@@ -115,6 +115,12 @@ public class Util {
         return (long) minute * 60 * 1000;
     }
 
+    /**
+     * Ms to ticks long.
+     *
+     * @param milliseconds the milliseconds
+     * @return the long
+     */
     public static long msToTicks(long milliseconds) {
         return milliseconds / 1000 * 20;
     }

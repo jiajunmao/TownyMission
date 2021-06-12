@@ -20,7 +20,7 @@ import java.util.UUID;
 public class CooldownStorage extends Storage<CooldownEntry> {
 
     private static CooldownStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Cooldown storage.
@@ -30,6 +30,19 @@ public class CooldownStorage extends Storage<CooldownEntry> {
     public CooldownStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static CooldownStorage getInstance() {
+        if (singleton == null) {
+            new CooldownStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -99,19 +112,6 @@ public class CooldownStorage extends Storage<CooldownEntry> {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownStorage getInstance() {
-        if (singleton == null) {
-            new CooldownStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 
 }

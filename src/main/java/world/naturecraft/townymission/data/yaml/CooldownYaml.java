@@ -32,6 +32,19 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
     }
 
     /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static CooldownYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new CooldownYaml(townyMission);
+        }
+        return singleton;
+    }
+
+    /**
      * Add.
      *
      * @param townUUID    the town uuid
@@ -81,18 +94,5 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
         }
 
         return entryList;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownYaml getInstance() {
-        if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new CooldownYaml(townyMission);
-        }
-        return singleton;
     }
 }

@@ -10,7 +10,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.logging.Logger;

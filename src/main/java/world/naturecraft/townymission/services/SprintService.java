@@ -4,5 +4,8 @@
 
 package world.naturecraft.townymission.services;
 
+/**
+ * The type Sprint service.
+ */
 public class SprintService {
 }

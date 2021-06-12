@@ -31,6 +31,19 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
     }
 
     /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new SeasonYaml(townyMission);
+        }
+        return singleton;
+    }
+
+    /**
      * Add.
      *
      * @param townUUID    the town uuid
@@ -81,18 +94,5 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
         }
 
         return entryList;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonYaml getInstance() {
-        if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SeasonYaml(townyMission);
-        }
-        return singleton;
     }
 }

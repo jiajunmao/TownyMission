@@ -31,6 +31,19 @@ public class SprintYaml extends YamlStorage<SprintEntry> {
     }
 
     /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new SprintYaml(townyMission);
+        }
+        return singleton;
+    }
+
+    /**
      * Add.
      *
      * @param townUUID     the town uuid
@@ -85,18 +98,5 @@ public class SprintYaml extends YamlStorage<SprintEntry> {
         }
 
         return entryList;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintYaml getInstance() {
-        if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SprintYaml(townyMission);
-        }
-        return singleton;
     }
 }

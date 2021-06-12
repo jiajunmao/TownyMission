@@ -9,15 +9,26 @@ import world.naturecraft.townymission.data.db.SprintHistoryStorage;
 
 import java.util.List;
 
+/**
+ * The type Sprint history dao.
+ */
 public class SprintHistoryDao extends Dao<SprintHistoryEntry> {
 
     private static SprintHistoryDao singleton;
     private final SprintHistoryStorage db;
 
+    /**
+     * Instantiates a new Sprint history dao.
+     */
     public SprintHistoryDao() {
         this.db = SprintHistoryStorage.getInstance();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SprintHistoryDao getInstance() {
         if (singleton == null) {
             singleton = new SprintHistoryDao();

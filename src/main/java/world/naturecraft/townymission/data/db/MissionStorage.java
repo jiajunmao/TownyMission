@@ -18,9 +18,9 @@ import java.util.UUID;
  * The type Mission storage.
  */
 public class MissionStorage {
-    
+
     private static MissionStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Mission storage.
@@ -30,6 +30,19 @@ public class MissionStorage {
     public MissionStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionStorage getInstance() {
+        if (singleton == null) {
+            new MissionStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -107,18 +120,5 @@ public class MissionStorage {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionStorage getInstance() {
-        if (singleton == null) {
-            new MissionStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 }

@@ -15,10 +15,11 @@ import world.naturecraft.townymission.data.yaml.*;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
-import javax.swing.*;
 import java.util.List;
-import java.util.Locale;
 
+/**
+ * The type Towny mission reload.
+ */
 public class TownyMissionReload extends TownyMissionCommand {
 
     /**

@@ -1,7 +1,5 @@
 package world.naturecraft.townymission.components.containers.entity;
 
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.UUID;

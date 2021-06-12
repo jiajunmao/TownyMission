@@ -31,6 +31,19 @@ public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
     }
 
     /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintHistoryYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new SprintHistoryYaml(townyMission);
+        }
+        return singleton;
+    }
+
+    /**
      * Add.
      *
      * @param season      the season
@@ -80,18 +93,5 @@ public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
         }
 
         return entryList;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintHistoryYaml getInstance() {
-        if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SprintHistoryYaml(townyMission);
-        }
-        return singleton;
     }
 }

@@ -84,7 +84,7 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
     public void add(int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     season + "' , '" +
                     sprint + "' , '" +
                     startedTime + "' , '" +

@@ -139,6 +139,9 @@ public class TownyMission extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
     }
 
+    /**
+     * Register timers.
+     */
     public void registerTimers() {
         TimerService timerService = TimerService.getInstance();
         logger.info("Started sprint timer");
@@ -209,6 +212,9 @@ public class TownyMission extends JavaPlugin {
         return finalString;
     }
 
+    /**
+     * Reload configs.
+     */
     public void reloadConfigs() {
         this.reloadConfig();
         try {
@@ -218,6 +224,11 @@ public class TownyMission extends JavaPlugin {
         }
     }
 
+    /**
+     * Gets storage type.
+     *
+     * @return the storage type
+     */
     public StorageType getStorageType() {
         return storageType;
     }

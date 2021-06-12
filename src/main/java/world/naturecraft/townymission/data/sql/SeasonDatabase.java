@@ -88,7 +88,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     public void add(String townUUID, String townName, int seasonPoint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
                     townName + "', '" +
                     seasonPoint + "', '" +

@@ -8,7 +8,6 @@ package world.naturecraft.townymission.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.entity.*;
 import world.naturecraft.townymission.components.containers.json.RankJson;
 import world.naturecraft.townymission.components.containers.json.TownRankJson;
@@ -19,13 +18,20 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
 import java.util.UUID;
 
+/**
+ * The type Timer service.
+ */
 public class TimerService extends TownyMissionService {
 
     private static TimerService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static TimerService getInstance() {
         if (singleton == null) {
             singleton = new TimerService();
@@ -34,6 +40,9 @@ public class TimerService extends TownyMissionService {
         return singleton;
     }
 
+    /**
+     * Start season.
+     */
     public void startSeason() {
         // Save started time in the config.yml
         Date date = new Date();
@@ -41,6 +50,9 @@ public class TimerService extends TownyMissionService {
         instance.saveConfig();
     }
 
+    /**
+     * Start sprint timer.
+     */
     public void startSprintTimer() {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
@@ -49,8 +61,8 @@ public class TimerService extends TownyMissionService {
                 long timeNow = date.getTime();
 
                 // Get some numbers, do some math
-                long sprintDuration = Util.hrToMs(instance.getConfig().getInt("sprint.duration")*24);
-                long sprintIntervalDuration = Util.hrToMs(instance.getConfig().getInt("sprint.interval")*24);
+                long sprintDuration = Util.hrToMs(instance.getConfig().getInt("sprint.duration") * 24);
+                long sprintIntervalDuration = Util.hrToMs(instance.getConfig().getInt("sprint.interval") * 24);
                 int currentSprint = instance.getConfig().getInt("sprint.current");
                 long seasonStartedTime = instance.getConfig().getLong("season.startedTime");
 
@@ -113,6 +125,9 @@ public class TimerService extends TownyMissionService {
         r.runTaskTimerAsynchronously(instance, 0, Util.msToTicks(Util.minuteToMs(1)));
     }
 
+    /**
+     * Start season timer.
+     */
     public void startSeasonTimer() {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
@@ -121,7 +136,7 @@ public class TimerService extends TownyMissionService {
                 long timeNow = date.getTime();
 
                 long numSprints = instance.getConfig().getInt("season.sprintsPerSeason");
-                long sprintDuration = Util.hrToMs((instance.getConfig().getInt("sprint.duration") + instance.getConfig().getInt("sprint.interval"))*24);
+                long sprintDuration = Util.hrToMs((instance.getConfig().getInt("sprint.duration") + instance.getConfig().getInt("sprint.interval")) * 24);
                 long seasonIntervalDuration = Util.hrToMs(instance.getConfig().getInt("season.interval") * 24);
                 long seasonStartedTime = instance.getConfig().getLong("season.startedTime");
                 long seasonDuration = numSprints * sprintDuration;

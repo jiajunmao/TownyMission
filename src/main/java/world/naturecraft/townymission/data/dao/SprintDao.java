@@ -63,6 +63,11 @@ public class SprintDao extends Dao<SprintEntry> {
         return database.getEntries();
     }
 
+    /**
+     * Gets entries as json.
+     *
+     * @return the entries as json
+     */
     public List<TownRankJson> getEntriesAsJson() {
         List<TownRankJson> rankJsons = new ArrayList<>();
         for (SprintEntry entry : getEntries()) {
@@ -72,6 +77,12 @@ public class SprintDao extends Dao<SprintEntry> {
         return rankJsons;
     }
 
+    /**
+     * Contains boolean.
+     *
+     * @param town the town
+     * @return the boolean
+     */
     public boolean contains(Town town) {
         for (SprintEntry entry : getEntries()) {
             if (entry.getTownID().equalsIgnoreCase(town.getUUID().toString())) {
@@ -80,6 +91,7 @@ public class SprintDao extends Dao<SprintEntry> {
         }
         return false;
     }
+
     /**
      * Get sprint entry.
      *

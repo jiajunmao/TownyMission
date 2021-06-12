@@ -4,5 +4,8 @@
 
 package world.naturecraft.townymission.services;
 
+/**
+ * The type Season service.
+ */
 public class SeasonService {
 }

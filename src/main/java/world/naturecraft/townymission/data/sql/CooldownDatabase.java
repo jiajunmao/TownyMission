@@ -96,7 +96,7 @@ public class CooldownDatabase extends Database<CooldownEntry> {
     public void add(String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
                     startedTime + "', '" +
                     cooldown + "');";

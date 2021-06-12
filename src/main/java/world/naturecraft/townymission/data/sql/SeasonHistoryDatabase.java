@@ -81,7 +81,7 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
     public void add(int season, long startedTime, String rankJson) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     season + "', '" +
                     startedTime + "', '" +
                     rankJson + "');";

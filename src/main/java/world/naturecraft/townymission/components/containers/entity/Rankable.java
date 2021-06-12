@@ -4,8 +4,6 @@
 
 package world.naturecraft.townymission.components.containers.entity;
 
-import java.util.List;
-
 /**
  * The interface Rankable.
  */

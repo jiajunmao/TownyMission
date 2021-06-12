@@ -9,15 +9,26 @@ import world.naturecraft.townymission.data.db.SeasonHistoryStorage;
 
 import java.util.List;
 
+/**
+ * The type Season history dao.
+ */
 public class SeasonHistoryDao extends Dao<SeasonHistoryEntry> {
 
     private static SeasonHistoryDao singleton;
     private final SeasonHistoryStorage db;
 
+    /**
+     * Instantiates a new Season history dao.
+     */
     public SeasonHistoryDao() {
         this.db = SeasonHistoryStorage.getInstance();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SeasonHistoryDao getInstance() {
         if (singleton == null) {
             singleton = new SeasonHistoryDao();

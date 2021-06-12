@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 public class SprintStorage extends Storage<SprintEntry> {
     private static SprintStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Sprint storage.
@@ -29,6 +29,19 @@ public class SprintStorage extends Storage<SprintEntry> {
     public SprintStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintStorage getInstance() {
+        if (singleton == null) {
+            new SprintStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -102,18 +115,5 @@ public class SprintStorage extends Storage<SprintEntry> {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintStorage getInstance() {
-        if (singleton == null) {
-            new SprintStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 }
