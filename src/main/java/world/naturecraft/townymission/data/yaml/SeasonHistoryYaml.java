@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.yaml;
 
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -61,9 +62,13 @@ public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
     @Override
     public List<SeasonHistoryEntry> getEntries() {
         List<SeasonHistoryEntry> entryList = new ArrayList<>();
+
+        if (file.getConfigurationSection("") == null)
+            return entryList;
+
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             entryList.add(new SeasonHistoryEntry(
-                    UUID.fromString(file.getString(key + ".uuid")),
+                    UUID.fromString(key),
                     file.getInt(key + ".season"),
                     file.getLong(key + ".startedTime"),
                     file.getString(key + ".rankJson")
@@ -79,6 +84,10 @@ public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
      * @return the instance
      */
     public static SeasonHistoryYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new SeasonHistoryYaml(townyMission);
+        }
         return singleton;
     }
 }

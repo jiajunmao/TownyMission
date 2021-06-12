@@ -62,6 +62,7 @@ public class MissionManageGui extends TownyMissionGui {
         // Figure out how many missions the town is missing
         int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
         List<MissionJson> missions = CustomConfigParser.parseAll(instance);
+        System.out.println("Number of entries to be added: " + diff);
         int size = missions.size();
         Random rand = new Random();
 

@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.ConfiguParsingException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
@@ -79,10 +80,14 @@ public class MissionYaml extends YamlStorage<MissionEntry> {
     @Override
     public List<MissionEntry> getEntries() {
         List<MissionEntry> entryList = new ArrayList<>();
+
+        if (file.getConfigurationSection("") == null)
+            return entryList;
+
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             try {
                 entryList.add(new MissionEntry(
-                        UUID.fromString(file.getString(key + ".uuid")),
+                        UUID.fromString(key),
                         file.getString(key + ".missionType"),
                         file.getLong(key + ".addedTime"),
                         file.getLong(key + ".startedTime"),
@@ -105,6 +110,10 @@ public class MissionYaml extends YamlStorage<MissionEntry> {
      * @return the instance
      */
     public static MissionYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new MissionYaml(townyMission);
+        }
         return singleton;
     }
 }

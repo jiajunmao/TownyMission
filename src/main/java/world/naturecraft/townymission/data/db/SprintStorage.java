@@ -112,7 +112,7 @@ public class SprintStorage extends Storage<SprintEntry> {
      */
     public static SprintStorage getInstance() {
         if (singleton == null) {
-            new SprintStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownySprint"));
+            new SprintStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
         }
 
         return singleton;

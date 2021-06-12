@@ -11,7 +11,6 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.components.containers.sql.SqlEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.db.Storage;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +38,8 @@ public abstract class YamlStorage<T extends SqlEntry> {
      */
     protected FileConfiguration file;
 
+    private File customConfig;
+
     /**
      * Instantiates a new Yaml storage.
      *
@@ -58,8 +59,8 @@ public abstract class YamlStorage<T extends SqlEntry> {
      */
     protected void createConfig() throws ConfigLoadingError {
         String fileName = dbType.toString().toLowerCase(Locale.ROOT) + ".yml";
-        String filePath = "data/" + fileName;
-        File customConfig = new File(instance.getDataFolder(), filePath);
+        String filePath = "datastore" + File.separator + fileName;
+        customConfig = new File(instance.getDataFolder(), filePath);
         if (!customConfig.exists()) {
             customConfig.getParentFile().getParentFile().mkdirs();
             customConfig.getParentFile().mkdirs();
@@ -82,7 +83,12 @@ public abstract class YamlStorage<T extends SqlEntry> {
      */
     public void add(String path, Object content) {
         file.createSection(path);
-        file.set(path, String.valueOf(content));
+        file.set(path, content);
+        try {
+            file.save(customConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -102,6 +108,11 @@ public abstract class YamlStorage<T extends SqlEntry> {
      */
     public void set(String path, Object content) {
         file.set(path, content);
+        try {
+            file.save(customConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

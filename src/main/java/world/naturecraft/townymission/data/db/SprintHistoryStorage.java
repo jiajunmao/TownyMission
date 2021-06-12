@@ -111,7 +111,7 @@ public class SprintHistoryStorage extends Storage<SprintHistoryEntry> {
      */
     public static SprintHistoryStorage getInstance() {
         if (singleton == null) {
-            new SprintHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownySprintHistory"));
+            new SprintHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
         }
 
         return singleton;

@@ -20,6 +20,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -39,18 +40,17 @@ public class TownyMission extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        String loadingHeader = "\n" +
-                "  _______                        __  __ _         _             \n" +
-                " |__   __|                      |  \\/  (_)       (_)            \n" +
-                "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  \n" +
-                "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ \n" +
-                "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |\n" +
-                "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|\n" +
-                "                            __/ |                               \n" +
-                "                           |___/                                \n";
-
-        logger.info(Util.translateColor("{#22DDBA}" + loadingHeader));
+        logger.info(Util.translateColor("{#22DDBA}" + "  _______                        __  __ _         _             "));
+        logger.info(Util.translateColor("{#22DDBA}" + " |__   __|                      |  \\/  (_)       (_)            "));
+        logger.info(Util.translateColor("{#22DDBA}" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));
+        logger.info(Util.translateColor("{#22DDBA}" + "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ "));
+        logger.info(Util.translateColor("{#22DDBA}" + "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |"));
+        logger.info(Util.translateColor("{#22DDBA}" + "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|"));
+        logger.info(Util.translateColor("{#22DDBA}" + "                            __/ |                               "));
+        logger.info(Util.translateColor("{#22DDBA}" + "                           |___/                                "));
         logger.info("-----------------------------------------------------------------");
+
+
         this.saveDefaultConfig();
         try {
             customConfigLoader = new CustomConfigLoader(this);
@@ -62,16 +62,16 @@ public class TownyMission extends JavaPlugin {
 
         logger.info("===> Connecting to database");
         String storage = getConfig().getString("storage");
-        StorageType storageType = StorageType.valueOf(storage);
-        if (storageType.equals(StorageType.YAML)) {
+        storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
 
+        if (storageType.equals(StorageType.MYSQL)) {
+            dbList = new HashMap<>();
+            connect();
+            registerDatabases();
+            initializeDatabases();
         }
 
-        dbList = new HashMap<>();
         serviceList = new HashMap<>();
-        connect();
-        registerDatabases();
-        initializeDatabases();
         registerService();
 
         logger.info("===> Registering commands");
@@ -87,7 +87,9 @@ public class TownyMission extends JavaPlugin {
     @Override
     public void onDisable() {
         logger.info("=========   TOWNYMISSION DISABLING   =========");
-        close();
+        if (storageType.equals(StorageType.MYSQL)) {
+            close();
+        }
     }
 
     /**

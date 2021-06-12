@@ -108,7 +108,7 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
      */
     public static SeasonHistoryStorage getInstance() {
         if (singleton == null) {
-            new SeasonHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownySeasonHistory"));
+            new SeasonHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
         }
 
         return singleton;

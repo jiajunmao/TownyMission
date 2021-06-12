@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.data.yaml;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -62,10 +63,14 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
     @Override
     public List<CooldownEntry> getEntries() {
         List<CooldownEntry> entryList = new ArrayList<>();
+
+        if (file.getConfigurationSection("") == null)
+            return entryList;
+
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             try {
                 entryList.add(new CooldownEntry(
-                        UUID.fromString(file.getString(key + ".uuid")),
+                        UUID.fromString(key),
                         file.getString(key + ".townUUID"),
                         file.getLong(key + ".startedTime"),
                         file.getLong(key + ".cooldown")
@@ -84,6 +89,10 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
      * @return the instance
      */
     public static CooldownYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new CooldownYaml(townyMission);
+        }
         return singleton;
     }
 }

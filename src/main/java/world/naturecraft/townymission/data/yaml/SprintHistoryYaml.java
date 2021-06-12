@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.yaml;
 
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -65,9 +66,12 @@ public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
     @Override
     public List<SprintHistoryEntry> getEntries() {
         List<SprintHistoryEntry> entryList = new ArrayList<>();
+        if (file.getConfigurationSection("") == null)
+            return entryList;
+
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             entryList.add(new SprintHistoryEntry(
-                    UUID.fromString(file.getString(key + ".uuid")),
+                    UUID.fromString(key),
                     file.getInt(key + ".season"),
                     file.getInt(key + ".sprint"),
                     file.getLong(key + ".startedTime"),
@@ -84,6 +88,10 @@ public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
      * @return the instance
      */
     public static SprintHistoryYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new SprintHistoryYaml(townyMission);
+        }
         return singleton;
     }
 }
