@@ -5,7 +5,7 @@
 package world.naturecraft.townymission.api.exceptions;
 
 import com.palmergames.bukkit.towny.object.Town;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.containers.entity.MissionEntry;
 
 /**
  * The type No started exception.

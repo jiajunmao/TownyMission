@@ -3,6 +3,7 @@ package world.naturecraft.townymission.components.containers.entity;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.enums.DbType;
 
+import java.util.List;
 import java.util.UUID;
 
 /**

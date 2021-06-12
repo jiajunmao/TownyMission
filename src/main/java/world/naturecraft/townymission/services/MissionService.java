@@ -7,9 +7,8 @@ package world.naturecraft.townymission.services;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
-import world.naturecraft.townymission.components.containers.sql.*;
+import world.naturecraft.townymission.components.containers.entity.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.*;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -29,15 +28,6 @@ public class MissionService extends TownyMissionService {
 
     private static MissionService singleton;
 
-    /**
-     * Instantiates a new Mission service.
-     *
-     * @param instance the instance
-     */
-    public MissionService(TownyMission instance) {
-        super(instance);
-        singleton = this;
-    }
 
     /**
      * Gets instance.
@@ -45,6 +35,9 @@ public class MissionService extends TownyMissionService {
      * @return the instance
      */
     public static MissionService getInstance() {
+        if (singleton == null) {
+            singleton = new MissionService();
+        }
         return singleton;
     }
 

@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.services;
 
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 
 /**
@@ -18,10 +19,8 @@ public abstract class TownyMissionService {
 
     /**
      * Instantiates a new Towny mission service.
-     *
-     * @param instance the instance
      */
-    public TownyMissionService(TownyMission instance) {
-        this.instance = instance;
+    public TownyMissionService() {
+        this.instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
     }
 }

@@ -4,61 +4,61 @@
 
 package world.naturecraft.townymission.components.containers.json;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.enums.RankType;
 
 import java.beans.ConstructorProperties;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-/**
- * The type Season rank.
- */
 public class RankJson {
 
     @JsonProperty("rankType")
-    private final RankType rankType;
-    @JsonProperty("townId")
-    private final String townId;
-    @JsonProperty("townName")
-    private final String townName;
-    @JsonProperty("points")
-    private final int points;
+    private RankType rankType;
+    @JsonProperty("ranks")
+    private Map<Integer, TownRankJson> ranks;
 
-    /**
-     * Instantiates a new Season rank.
-     *
-     * @param rankType the rank type
-     * @param townId      the town id
-     * @param townName    the town name
-     * @param points      the points
-     */
-    @ConstructorProperties({"rankType", "townId", "townName", "points"})
-    public RankJson(RankType rankType, String townId, String townName, int points) {
+    @ConstructorProperties({"rankType", "ranks"})
+    public RankJson(RankType rankType, Map<Integer, TownRankJson> ranks) {
         this.rankType = rankType;
-        this.townId = townId;
-        this.townName = townName;
-        this.points = points;
+        this.ranks = ranks;
     }
 
     /**
-     * Parse rank.
+     * Construct the SprintRankJson from the sorted RankableList
+     * The list MUST BE sorted
      *
-     * @param json the json
-     * @return the rank
-     * @throws JsonProcessingException the json processing exception
+     * @param rankedList the sorted RankableList
      */
+    @JsonIgnore
+    public RankJson(RankType rankType, List<TownRankJson> rankedList) {
+        this.rankType = rankType;
+        for(int i = 0; i < rankedList.size(); i++) {
+            ranks.put(i, rankedList.get(i));
+        }
+    }
+
+    public void addTown(int rank, TownRankJson townRankJson) {
+        ranks.put(rank, townRankJson);
+    }
+
+    public TownRankJson getTownRankJson(int rank) {
+        return ranks.get(rank);
+    }
+
+    public List<TownRankJson> getTownRankJsons() {
+        return List.copyOf(ranks.values());
+    }
+
     public static RankJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, RankJson.class);
     }
 
-    /**
-     * To json string.
-     *
-     * @return the string
-     * @throws JsonProcessingException the json processing exception
-     */
     public String toJson() throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(this);
     }

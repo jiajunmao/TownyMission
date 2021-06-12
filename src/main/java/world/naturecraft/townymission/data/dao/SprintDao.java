@@ -6,8 +6,10 @@ package world.naturecraft.townymission.data.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.components.containers.entity.SprintEntry;
+import world.naturecraft.townymission.components.containers.json.TownRankJson;
 import world.naturecraft.townymission.data.db.SprintStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,6 +61,15 @@ public class SprintDao extends Dao<SprintEntry> {
     @Override
     public List<SprintEntry> getEntries() {
         return database.getEntries();
+    }
+
+    public List<TownRankJson> getEntriesAsJson() {
+        List<TownRankJson> rankJsons = new ArrayList<>();
+        for (SprintEntry entry : getEntries()) {
+            rankJsons.add(new TownRankJson(entry));
+        }
+
+        return rankJsons;
     }
 
     public boolean contains(Town town) {

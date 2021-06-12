@@ -46,13 +46,10 @@ season:
   # The current season, do not touch unless you know what you are doing
   current: 1
   # Number of sprints that a season will have
-  sprintsPerSeason:
+  sprintsPerSeason: 4
+  # Interval between two season, in days
+  interval: 7
   # The started time of this season, do not touch unless you know what you are doing
   # Changing this might corrupt database and interfere with normal sprint/season progression
   # In Java millisecond datetime format
-  startedTime:
-  # Interval between two season, in days
-  interval: 7
-
-# Interval to check whether a town has timeouted on this current mission, in minutes
-checkTimeOutInterval: 60
+  startedTime: 0

@@ -14,8 +14,7 @@ import world.naturecraft.townymission.data.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
-import world.naturecraft.townymission.services.MissionService;
-import world.naturecraft.townymission.services.TownyMissionService;
+import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -31,7 +30,6 @@ public class TownyMission extends JavaPlugin {
 
     private final Logger logger = getLogger();
     private Map<DbType, Database> dbList;
-    private Map<DbType, TownyMissionService> serviceList;
     private HikariDataSource db;
     private CustomConfigLoader customConfigLoader;
     private TownyMissionRoot rootCmd;
@@ -51,6 +49,9 @@ public class TownyMission extends JavaPlugin {
         logger.info("-----------------------------------------------------------------");
 
 
+        /**
+         * This is saving the config.yml (Default config)
+         */
         this.saveDefaultConfig();
         try {
             customConfigLoader = new CustomConfigLoader(this);
@@ -60,6 +61,9 @@ public class TownyMission extends JavaPlugin {
             enabled = false;
         }
 
+        /**
+         * Configure data storage, yaml, or mysql
+         */
         logger.info("===> Connecting to database");
         String storage = getConfig().getString("storage");
         storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
@@ -71,13 +75,12 @@ public class TownyMission extends JavaPlugin {
             initializeDatabases();
         }
 
-        serviceList = new HashMap<>();
-        registerService();
-
         logger.info("===> Registering commands");
         registerCommands();
         logger.info("===> Registering listeners");
         registerListeners();
+        logger.info("===> Registering timers");
+        registerTimers();
 
         if (!enabled) {
             Bukkit.getPluginManager().disablePlugin(this);
@@ -103,13 +106,6 @@ public class TownyMission extends JavaPlugin {
         dbList.put(DbType.SEASON, new SeasonDatabase(db, Util.getDbName(DbType.SEASON)));
         dbList.put(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(db, Util.getDbName(DbType.SEASON_HISTORY)));
         dbList.put(DbType.COOLDOWN, new CooldownDatabase(db, Util.getDbName(DbType.COOLDOWN)));
-    }
-
-    /**
-     * Register service.
-     */
-    public void registerService() {
-        serviceList.put(DbType.MISSION, new MissionService(this));
     }
 
     /**
@@ -141,6 +137,14 @@ public class TownyMission extends JavaPlugin {
 
         // GUI listeners
         getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
+    }
+
+    public void registerTimers() {
+        TimerService timerService = TimerService.getInstance();
+        logger.info("Started sprint timer");
+        timerService.startSprintTimer();
+        logger.info("Started season timer");
+        timerService.startSeasonTimer();
     }
 
     /**

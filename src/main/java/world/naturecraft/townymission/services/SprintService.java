@@ -4,6 +4,5 @@
 
 package world.naturecraft.townymission.services;
 
-public class CooldownService {
-
+public class SprintService {
 }

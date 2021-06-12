@@ -17,7 +17,7 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.containers.json.ResourceJson;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.containers.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.utils.SanityChecker;
