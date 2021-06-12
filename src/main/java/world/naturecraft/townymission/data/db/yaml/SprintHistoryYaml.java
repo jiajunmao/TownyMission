@@ -14,12 +14,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Sprint history yaml.
+ */
 public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
 
+    /**
+     * Instantiates a new Sprint history yaml.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     protected SprintHistoryYaml(TownyMission instance, DbType dbType) {
         super(instance, dbType);
     }
 
+    /**
+     * Add.
+     *
+     * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void add(int season, int sprint, long startedTime, String rankJson) {
         String uuid = UUID.randomUUID().toString();
 
@@ -29,6 +46,15 @@ public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
         add(uuid + ".rankJson", rankJson);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid        the uuid
+     * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void update(String uuid, int season, int sprint, long startedTime, String rankJson) {
         set(uuid + ".season", season);
         set(uuid + ".sprint", sprint);

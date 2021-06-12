@@ -14,12 +14,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Sprint yaml.
+ */
 public class SprintYaml extends YamlStorage<SprintEntry> {
 
+    /**
+     * Instantiates a new Sprint yaml.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     protected SprintYaml(TownyMission instance, DbType dbType) {
         super(instance, dbType);
     }
 
+    /**
+     * Add.
+     *
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
+     */
     public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
         String uuid = UUID.randomUUID().toString();
 
@@ -30,6 +48,16 @@ public class SprintYaml extends YamlStorage<SprintEntry> {
         add(uuid + ".season", season);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid         the uuid
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
+     */
     public void update(String uuid, String townUUID, String townName, int naturePoints, int sprint, int season) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".townName", townName);

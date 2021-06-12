@@ -16,12 +16,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Season yaml.
+ */
 public class SeasonYaml extends YamlStorage<SeasonEntry> {
 
+    /**
+     * Instantiates a new Season yaml.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     protected SeasonYaml(TownyMission instance, DbType dbType) {
         super(instance, dbType);
     }
 
+    /**
+     * Add.
+     *
+     * @param townUUID    the town uuid
+     * @param townName    the town name
+     * @param seasonPoint the season point
+     * @param season      the season
+     */
     public void add(String townUUID, String townName, int seasonPoint, int season) {
         String uuid = UUID.randomUUID().toString();
 
@@ -31,6 +48,15 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
         add(uuid + ".season", season);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid        the uuid
+     * @param townUUID    the town uuid
+     * @param townName    the town name
+     * @param seasonPoint the season point
+     * @param season      the season
+     */
     public void update(String uuid, String townUUID, String townName, int seasonPoint, int season) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".townName", townName);

@@ -22,18 +22,43 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * The type Yaml storage.
+ *
+ * @param <T> the type parameter
+ */
 public abstract class YamlStorage<T> {
 
+    /**
+     * The Instance.
+     */
     protected TownyMission instance;
+    /**
+     * The Db type.
+     */
     protected DbType dbType;
+    /**
+     * The File.
+     */
     protected FileConfiguration file;
 
+    /**
+     * Instantiates a new Yaml storage.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     protected YamlStorage(TownyMission instance, DbType dbType) {
         this.instance = instance;
         this.dbType = dbType;
         createConfig();
     }
 
+    /**
+     * Create config.
+     *
+     * @throws ConfigLoadingError the config loading error
+     */
     protected void createConfig() throws ConfigLoadingError {
         String fileName = dbType.toString().toLowerCase(Locale.ROOT) + ".yml";
         String filePath = "data/" + fileName;
@@ -52,18 +77,40 @@ public abstract class YamlStorage<T> {
         }
     }
 
+    /**
+     * Add.
+     *
+     * @param path    the path
+     * @param content the content
+     */
     protected void add(String path, Object content) {
         file.createSection(path);
         file.set(path, String.valueOf(content));
     }
 
+    /**
+     * Remove.
+     *
+     * @param uuid the uuid
+     */
     public void remove(String uuid) {
         set(uuid, null);
     }
 
+    /**
+     * Set.
+     *
+     * @param path    the path
+     * @param content the content
+     */
     protected void set(String path, Object content) {
         file.set(path, content);
     }
 
+    /**
+     * Gets entries.
+     *
+     * @return the entries
+     */
     protected abstract List<T> getEntries();
 }

@@ -15,12 +15,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Mission history yaml.
+ */
 public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
 
+    /**
+     * Instantiates a new Mission history yaml.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     protected MissionHistoryYaml(TownyMission instance, DbType dbType) {
         super(instance, dbType);
     }
 
+    /**
+     * Add.
+     *
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townName          the town name
+     * @param startedPlayerUUID the started player uuid
+     * @param completedTime     the completed time
+     * @param isClaimed         the is claimed
+     * @param sprint            the sprint
+     * @param season            the season
+     */
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         String uuid = UUID.randomUUID().toString();
 
@@ -37,6 +61,22 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
         add(uuid + ".season", season);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid              the uuid
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townName          the town name
+     * @param startedPlayerUUID the started player uuid
+     * @param completedTime     the completed time
+     * @param isClaimed         the is claimed
+     * @param sprint            the sprint
+     * @param season            the season
+     */
     public void update(String uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);

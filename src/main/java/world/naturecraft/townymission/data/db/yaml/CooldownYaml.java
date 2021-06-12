@@ -15,12 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Cooldown yaml.
+ */
 public class CooldownYaml extends YamlStorage<CooldownEntry> {
 
+    /**
+     * Instantiates a new Cooldown yaml.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     protected CooldownYaml(TownyMission instance, DbType dbType) {
         super(instance, dbType);
     }
 
+    /**
+     * Add.
+     *
+     * @param townUUID    the town uuid
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     */
     public void add(String townUUID, long startedTime, long cooldown) {
         String uuid = UUID.randomUUID().toString();
 
@@ -29,6 +45,14 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
         add(uuid + ".cooldown", cooldown);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid        the uuid
+     * @param townUUID    the town uuid
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     */
     public void update(String uuid, String townUUID, long startedTime, long cooldown) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".startedTime", startedTime);

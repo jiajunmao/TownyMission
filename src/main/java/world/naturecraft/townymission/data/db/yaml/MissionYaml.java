@@ -25,12 +25,32 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+/**
+ * The type Mission yaml.
+ */
 public class MissionYaml extends YamlStorage<MissionEntry> {
 
+    /**
+     * Instantiates a new Mission yaml.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     public MissionYaml(TownyMission instance, DbType dbType) {
         super(instance, dbType);
     }
 
+    /**
+     * Add.
+     *
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townName          the town name
+     * @param startedPlayerUUID the started player uuid
+     */
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         String uuid = UUID.randomUUID().toString();
 
@@ -43,6 +63,18 @@ public class MissionYaml extends YamlStorage<MissionEntry> {
         add(uuid + ".startedPlayerUUID", startedPlayerUUID);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid              the uuid
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townName          the town name
+     * @param startedPlayerUUID the started player uuid
+     */
     public void update(String uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);

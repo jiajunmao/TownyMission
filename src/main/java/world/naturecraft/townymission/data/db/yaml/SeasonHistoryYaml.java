@@ -14,12 +14,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Season history yaml.
+ */
 public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
 
+    /**
+     * Instantiates a new Season history yaml.
+     *
+     * @param instance the instance
+     * @param dbType   the db type
+     */
     protected SeasonHistoryYaml(TownyMission instance, DbType dbType) {
         super(instance, dbType);
     }
 
+    /**
+     * Add.
+     *
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void add(int season, long startedTime, String rankJson) {
         String uuid = UUID.randomUUID().toString();
 
@@ -28,6 +44,14 @@ public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
         add(uuid + ".rankJson", rankJson);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid        the uuid
+     * @param season      the season
+     * @param startedTime the started time
+     * @param rankJson    the rank json
+     */
     public void update(String uuid, int season, long startedTime, String rankJson) {
         set(uuid + ".season", season);
         set(uuid + ".startedTime", startedTime);
