@@ -5,7 +5,7 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
-import world.naturecraft.townymission.data.db.sql.SprintDatabase;
+import world.naturecraft.townymission.data.sql.SprintDatabase;
 
 import java.util.List;
 

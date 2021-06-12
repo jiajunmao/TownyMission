@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
-import world.naturecraft.townymission.data.db.sql.MissionHistoryDatabase;
+import world.naturecraft.townymission.data.sql.MissionHistoryDatabase;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.data.db.sql;
+package world.naturecraft.townymission.data.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;

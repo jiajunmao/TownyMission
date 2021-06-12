@@ -2,13 +2,12 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.db.yaml;
+package world.naturecraft.townymission.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.ConfiguParsingException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
-import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.ArrayList;
@@ -16,18 +15,20 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Mission history yaml.
+ * The type Mission yaml.
  */
-public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
+public class MissionYaml extends YamlStorage<MissionEntry> {
+
+    private static MissionYaml singleton;
 
     /**
-     * Instantiates a new Mission history yaml.
+     * Instantiates a new Mission yaml.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    protected MissionHistoryYaml(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    public MissionYaml(TownyMission instance) {
+        super(instance, DbType.MISSION);
+        singleton = this;
     }
 
     /**
@@ -40,12 +41,8 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
      * @param missionJson       the mission json
      * @param townName          the town name
      * @param startedPlayerUUID the started player uuid
-     * @param completedTime     the completed time
-     * @param isClaimed         the is claimed
-     * @param sprint            the sprint
-     * @param season            the season
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".missionType", missionType);
@@ -55,10 +52,6 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
         add(uuid + ".missionJson", missionJson);
         add(uuid + ".townName", townName);
         add(uuid + ".startedPlayerUUID", startedPlayerUUID);
-        add(uuid + ".completedTime", completedTime);
-        add(uuid + ".isClaimed", isClaimed);
-        add(uuid + ".sprint", sprint);
-        add(uuid + ".season", season);
     }
 
     /**
@@ -72,12 +65,8 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
      * @param missionJson       the mission json
      * @param townName          the town name
      * @param startedPlayerUUID the started player uuid
-     * @param completedTime     the completed time
-     * @param isClaimed         the is claimed
-     * @param sprint            the sprint
-     * @param season            the season
      */
-    public void update(String uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);
@@ -85,18 +74,14 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
         set(uuid + ".missionJson", missionJson);
         set(uuid + ".townName", townName);
         set(uuid + ".startedPlayerUUID", startedPlayerUUID);
-        set(uuid + ".completedTime", completedTime);
-        set(uuid + ".isClaimed", isClaimed);
-        set(uuid + ".sprint", sprint);
-        set(uuid + ".season", season);
     }
 
     @Override
-    protected List getEntries() {
-        List<MissionHistoryEntry> entryList = new ArrayList<>();
+    public List<MissionEntry> getEntries() {
+        List<MissionEntry> entryList = new ArrayList<>();
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             try {
-                entryList.add(new MissionHistoryEntry(
+                entryList.add(new MissionEntry(
                         UUID.fromString(file.getString(key + ".uuid")),
                         file.getString(key + ".missionType"),
                         file.getLong(key + ".addedTime"),
@@ -104,11 +89,7 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
                         file.getLong(key + ".allowedTime"),
                         file.getString(key + ".missionJson"),
                         file.getString(key + ".townName"),
-                        file.getString(key + ".startedPlayerUUID"),
-                        file.getLong(key + ".completedTime"),
-                        file.getBoolean(key + ".isClaimed"),
-                        file.getInt(key + ".sprint"),
-                        file.getInt(key + ".season")
+                        file.getString(key + ".startedPlayerUUID")
                 ));
             } catch (JsonProcessingException e) {
                 throw new ConfiguParsingException(e);
@@ -116,5 +97,14 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
         }
 
         return entryList;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionYaml getInstance() {
+        return singleton;
     }
 }

@@ -2,16 +2,12 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.db.yaml;
+package world.naturecraft.townymission.data.yaml;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.ConfiguParsingException;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,14 +17,16 @@ import java.util.UUID;
  */
 public class SeasonYaml extends YamlStorage<SeasonEntry> {
 
+    private static SeasonYaml singleton;
+
     /**
      * Instantiates a new Season yaml.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    protected SeasonYaml(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    protected SeasonYaml(TownyMission instance) {
+        super(instance, DbType.SEASON_HISTORY);
+        singleton = null;
     }
 
     /**
@@ -57,7 +55,7 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public void update(String uuid, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(UUID uuid, String townUUID, String townName, int seasonPoint, int season) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".townName", townName);
         set(uuid + ".seasonPoint", seasonPoint);
@@ -65,7 +63,7 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
     }
 
     @Override
-    protected List<SeasonEntry> getEntries() {
+    public List<SeasonEntry> getEntries() {
         List<SeasonEntry> entryList = new ArrayList<>();
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             entryList.add(new SeasonEntry(
@@ -78,5 +76,14 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
         }
 
         return entryList;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonYaml getInstance() {
+        return singleton;
     }
 }

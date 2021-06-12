@@ -2,44 +2,46 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.db.yaml;
+package world.naturecraft.townymission.data.yaml;
 
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
-import world.naturecraft.townymission.components.containers.sql.SeasonHistoryEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Season history yaml.
+ * The type Sprint history yaml.
  */
-public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
+public class SprintHistoryYaml extends YamlStorage<SprintHistoryEntry> {
+
+    private static SprintHistoryYaml singleton;
 
     /**
-     * Instantiates a new Season history yaml.
+     * Instantiates a new Sprint history yaml.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    protected SeasonHistoryYaml(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    protected SprintHistoryYaml(TownyMission instance) {
+        super(instance, DbType.SPRINT_HISTORY);
+        singleton = this;
     }
 
     /**
      * Add.
      *
      * @param season      the season
+     * @param sprint      the sprint
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void add(int season, long startedTime, String rankJson) {
+    public void add(int season, int sprint, long startedTime, String rankJson) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".season", season);
+        add(uuid + ".sprint", sprint);
         add(uuid + ".startedTime", startedTime);
         add(uuid + ".rankJson", rankJson);
     }
@@ -49,27 +51,39 @@ public class SeasonHistoryYaml extends YamlStorage<SeasonHistoryEntry> {
      *
      * @param uuid        the uuid
      * @param season      the season
+     * @param sprint      the sprint
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void update(String uuid, int season, long startedTime, String rankJson) {
+    public void update(UUID uuid, int season, int sprint, long startedTime, String rankJson) {
         set(uuid + ".season", season);
+        set(uuid + ".sprint", sprint);
         set(uuid + ".startedTime", startedTime);
         set(uuid + ".rankJson", rankJson);
     }
 
     @Override
-    protected List<SeasonHistoryEntry> getEntries() {
-        List<SeasonHistoryEntry> entryList = new ArrayList<>();
+    public List<SprintHistoryEntry> getEntries() {
+        List<SprintHistoryEntry> entryList = new ArrayList<>();
         for (String key : file.getConfigurationSection("").getKeys(false)) {
-            entryList.add(new SeasonHistoryEntry(
+            entryList.add(new SprintHistoryEntry(
                     UUID.fromString(file.getString(key + ".uuid")),
                     file.getInt(key + ".season"),
+                    file.getInt(key + ".sprint"),
                     file.getLong(key + ".startedTime"),
                     file.getString(key + ".rankJson")
             ));
         }
 
         return entryList;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintHistoryYaml getInstance() {
+        return singleton;
     }
 }

@@ -2,14 +2,12 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.db.yaml;
+package world.naturecraft.townymission.data.yaml;
 
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,14 +17,16 @@ import java.util.UUID;
  */
 public class SprintYaml extends YamlStorage<SprintEntry> {
 
+    private static SprintYaml singleton;
+
     /**
      * Instantiates a new Sprint yaml.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    protected SprintYaml(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    protected SprintYaml(TownyMission instance) {
+        super(instance, DbType.SPRINT);
+        singleton = this;
     }
 
     /**
@@ -58,7 +58,7 @@ public class SprintYaml extends YamlStorage<SprintEntry> {
      * @param sprint       the sprint
      * @param season       the season
      */
-    public void update(String uuid, String townUUID, String townName, int naturePoints, int sprint, int season) {
+    public void update(UUID uuid, String townUUID, String townName, int naturePoints, int sprint, int season) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".townName", townName);
         set(uuid + ".naturePoints", naturePoints);
@@ -67,7 +67,7 @@ public class SprintYaml extends YamlStorage<SprintEntry> {
     }
 
     @Override
-    protected List<SprintEntry> getEntries() {
+    public List<SprintEntry> getEntries() {
         List<SprintEntry> entryList = new ArrayList<>();
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             entryList.add(new SprintEntry(
@@ -81,5 +81,14 @@ public class SprintYaml extends YamlStorage<SprintEntry> {
         }
 
         return entryList;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintYaml getInstance() {
+        return singleton;
     }
 }

@@ -7,9 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.components.gui.MissionManageGui;
 import world.naturecraft.townymission.config.CustomConfigLoader;
-import world.naturecraft.townymission.data.db.sql.*;
+import world.naturecraft.townymission.data.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
@@ -33,25 +34,39 @@ public class TownyMission extends JavaPlugin {
     private HikariDataSource db;
     private CustomConfigLoader customConfigLoader;
     private TownyMissionRoot rootCmd;
+    private StorageType storageType;
     private boolean enabled = true;
 
     @Override
     public void onEnable() {
-        logger.info("=========   TOWNYMISSION LOADING   =========");
+        String loadingHeader = "\n" +
+                "  _______                        __  __ _         _             \n" +
+                " |__   __|                      |  \\/  (_)       (_)            \n" +
+                "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  \n" +
+                "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ \n" +
+                "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |\n" +
+                "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|\n" +
+                "                            __/ |                               \n" +
+                "                           |___/                                \n";
+
+        logger.info(Util.translateColor("{#22DDBA}" + loadingHeader));
+        logger.info("-----------------------------------------------------------------");
         this.saveDefaultConfig();
         try {
             customConfigLoader = new CustomConfigLoader(this);
-        } catch (IOException e) {
+        } catch (IOException | InvalidConfigurationException e) {
             logger.severe("IO operation fault during custom config initialization");
-            e.printStackTrace();
-            enabled = false;
-        } catch (InvalidConfigurationException e) {
-            logger.severe("Invalid configuration during custom config initialization");
             e.printStackTrace();
             enabled = false;
         }
 
-        logger.info("=========   CONNECTING TO TOWNYMISSION DATABASE   =========");
+        logger.info("===> Connecting to database");
+        String storage = getConfig().getString("storage");
+        StorageType storageType = StorageType.valueOf(storage);
+        if (storageType.equals(StorageType.YAML)) {
+
+        }
+
         dbList = new HashMap<>();
         serviceList = new HashMap<>();
         connect();
@@ -59,7 +74,9 @@ public class TownyMission extends JavaPlugin {
         initializeDatabases();
         registerService();
 
+        logger.info("===> Registering commands");
         registerCommands();
+        logger.info("===> Registering listeners");
         registerListeners();
 
         if (!enabled) {
@@ -193,5 +210,9 @@ public class TownyMission extends JavaPlugin {
         } catch (IOException | InvalidConfigurationException e) {
             throw new ConfigLoadingError(e);
         }
+    }
+
+    public StorageType getStorageType() {
+        return storageType;
     }
 }
