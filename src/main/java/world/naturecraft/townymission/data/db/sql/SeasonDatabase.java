@@ -41,7 +41,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` INT NOT NULL AUTO_INCREMENT ," +
+                    "`id` VARCHAR(255) NOT NULL ," +
                     "`town_id` VARCHAR(255) NOT NULL ," +
                     "`town_name` VARCHAR(255) NOT NULL, " +
                     "`seasonpoints` INT NOT NULL, " +

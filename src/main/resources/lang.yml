@@ -29,6 +29,8 @@ commands:
     onNoPermission: "&cYou do not have the '%permission%' permission!"
   complete:
     onSuccess: "&fYou have successfully completed the mission!"
+  reload:
+    onSuccess: "&fYou have successfully reloaded config!"
 
 universal:
   onCommandNotFound: "&cCommand not found!"

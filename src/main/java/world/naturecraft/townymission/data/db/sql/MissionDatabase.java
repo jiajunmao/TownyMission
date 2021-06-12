@@ -42,7 +42,7 @@ public class MissionDatabase extends Database<MissionEntry> {
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` INT NOT NULL AUTO_INCREMENT ," +
+                    "`id` VARCHAR(255) NOT NULL ," +
                     "`task_type` VARCHAR(255) NOT NULL ," +
                     "`added_time` BIGINT NOT NULL, " +
                     "`started_time` BIGINT NOT NULL, " +

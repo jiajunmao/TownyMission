@@ -40,7 +40,7 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` INT NOT NULL AUTO_INCREMENT ," +
+                    "`id` VARCHAR(255) NOT NULL ," +
                     "`season` INT NOT NULL ," +
                     "`sprint` INT NOT NULL, " +
                     "`started_time` BIGINT NOT NULL, " +

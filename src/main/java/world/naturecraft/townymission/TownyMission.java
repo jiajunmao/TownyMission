@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
+import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.gui.MissionManageGui;
@@ -107,6 +108,7 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("claim", new TownyMissionClaim(this));
         rootCmd.registerCommand("info", new TownyMissionInfo(this));
         rootCmd.registerCommand("rank", new TownyMissionRank(this));
+        rootCmd.registerCommand("reload", new TownyMissionReload(this));
     }
 
     /**
@@ -182,5 +184,14 @@ public class TownyMission extends JavaPlugin {
         finalString += getCustomConfig().getLangConfig().getString("prefix") + " ";
         finalString += getCustomConfig().getLangConfig().getString(path);
         return finalString;
+    }
+
+    public void reloadConfigs() {
+        this.reloadConfig();
+        try {
+            customConfigLoader = new CustomConfigLoader(this);
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new ConfigLoadingError(e);
+        }
     }
 }
