@@ -2,15 +2,14 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.db.yaml;
+package world.naturecraft.townymission.data.yaml;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,14 +19,16 @@ import java.util.UUID;
  */
 public class CooldownYaml extends YamlStorage<CooldownEntry> {
 
+    private static CooldownYaml singleton;
+
     /**
      * Instantiates a new Cooldown yaml.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    protected CooldownYaml(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    public CooldownYaml(TownyMission instance) {
+        super(instance, DbType.COOLDOWN);
+        singleton = this;
     }
 
     /**
@@ -53,19 +54,23 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
      * @param startedTime the started time
      * @param cooldown    the cooldown
      */
-    public void update(String uuid, String townUUID, long startedTime, long cooldown) {
+    public void update(UUID uuid, String townUUID, long startedTime, long cooldown) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".startedTime", startedTime);
         set(uuid + ".cooldown", cooldown);
     }
 
     @Override
-    protected List<CooldownEntry> getEntries() {
+    public List<CooldownEntry> getEntries() {
         List<CooldownEntry> entryList = new ArrayList<>();
+
+        if (file.getConfigurationSection("") == null)
+            return entryList;
+
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             try {
                 entryList.add(new CooldownEntry(
-                        UUID.fromString(file.getString(key + ".uuid")),
+                        UUID.fromString(key),
                         file.getString(key + ".townUUID"),
                         file.getLong(key + ".startedTime"),
                         file.getLong(key + ".cooldown")
@@ -76,5 +81,18 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
         }
 
         return entryList;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static CooldownYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new CooldownYaml(townyMission);
+        }
+        return singleton;
     }
 }

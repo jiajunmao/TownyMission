@@ -2,12 +2,12 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.db.yaml;
+package world.naturecraft.townymission.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.exceptions.ConfiguParsingException;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
@@ -20,14 +20,16 @@ import java.util.UUID;
  */
 public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
 
+    private static MissionHistoryYaml singleton;
+
     /**
      * Instantiates a new Mission history yaml.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    protected MissionHistoryYaml(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    public MissionHistoryYaml(TownyMission instance) {
+        super(instance, DbType.MISSION_HISTORY);
+        singleton = this;
     }
 
     /**
@@ -77,7 +79,7 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
      * @param sprint            the sprint
      * @param season            the season
      */
-    public void update(String uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);
@@ -92,12 +94,16 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
     }
 
     @Override
-    protected List getEntries() {
+    public List getEntries() {
         List<MissionHistoryEntry> entryList = new ArrayList<>();
+
+        if (file.getConfigurationSection("") == null)
+            return entryList;
+
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             try {
                 entryList.add(new MissionHistoryEntry(
-                        UUID.fromString(file.getString(key + ".uuid")),
+                        UUID.fromString(key),
                         file.getString(key + ".missionType"),
                         file.getLong(key + ".addedTime"),
                         file.getLong(key + ".startedTime"),
@@ -116,5 +122,18 @@ public class MissionHistoryYaml extends YamlStorage<MissionHistoryEntry> {
         }
 
         return entryList;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionHistoryYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new MissionHistoryYaml(townyMission);
+        }
+        return singleton;
     }
 }

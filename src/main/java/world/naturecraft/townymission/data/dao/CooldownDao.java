@@ -7,7 +7,8 @@ package world.naturecraft.townymission.data.dao;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
-import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
+import world.naturecraft.townymission.data.db.CooldownStorage;
+import world.naturecraft.townymission.data.sql.CooldownDatabase;
 
 import java.util.Date;
 import java.util.List;
@@ -19,13 +20,13 @@ import java.util.UUID;
 public class CooldownDao extends Dao<CooldownEntry> {
 
     private static CooldownDao singleton;
-    private final CooldownDatabase db;
+    private final CooldownStorage db;
 
     /**
      * Instantiates a new Cooldown dao.
      */
     public CooldownDao() {
-        this.db = CooldownDatabase.getInstance();
+        this.db = CooldownStorage.getInstance();
     }
 
     /**
@@ -109,10 +110,13 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * @param cooldown the cooldown
      */
     public void startCooldown(Town town, long cooldown) {
+        System.out.println("Starting " + town.getName() + "'s cooldown for " + cooldown);
         Date date = new Date();
         if (get(town) == null) {
+            System.out.println("Entry not found, adding");
             add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), cooldown));
         } else {
+            System.out.println("Entry found, updating");
             CooldownEntry entry = get(town);
             entry.setStartedTime(date.getTime());
             entry.setCooldown(cooldown);

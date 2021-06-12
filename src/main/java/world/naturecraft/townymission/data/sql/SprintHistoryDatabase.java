@@ -1,29 +1,28 @@
-package world.naturecraft.townymission.data.db.sql;
+package world.naturecraft.townymission.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.containers.sql.SprintHistoryEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Season database.
+ * The type Sprint history database.
  */
-public class SeasonDatabase extends Database<SeasonEntry> {
+public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
 
-    private static SeasonDatabase singleton = null;
+    private static SprintHistoryDatabase singleton;
 
     /**
-     * Instantiates a new Season database.
+     * Instantiates a new Sprint history database.
      *
      * @param db        the db
      * @param tableName the table name
      */
-    public SeasonDatabase(HikariDataSource db, String tableName) {
+    public SprintHistoryDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
         singleton = this;
     }
@@ -33,7 +32,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      *
      * @return the instance
      */
-    public static SeasonDatabase getInstance() {
+    public static SprintHistoryDatabase getInstance() {
         return singleton;
     }
 
@@ -42,10 +41,10 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`id` VARCHAR(255) NOT NULL ," +
-                    "`town_id` VARCHAR(255) NOT NULL ," +
-                    "`town_name` VARCHAR(255) NOT NULL, " +
-                    "`seasonpoints` INT NOT NULL, " +
                     "`season` INT NOT NULL ," +
+                    "`sprint` INT NOT NULL, " +
+                    "`started_time` BIGINT NOT NULL, " +
+                    "`rank_json` VARCHAR(255) NOT NULL ," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -54,25 +53,22 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     }
 
     @Override
-    public List<SeasonEntry> getEntries() {
-        List<SeasonEntry> list = new ArrayList<>();
+    public List<SprintHistoryEntry> getEntries() {
+        List<SprintHistoryEntry> list = new ArrayList<>();
         execute(conn -> {
-            String sql = "SELECT * FROM " + tableName + ";";
+            String sql = "SELECT * FROM " + tableName;
             PreparedStatement p = conn.prepareStatement(sql);
-            try {
-                ResultSet result = p.executeQuery();
-                while (result.next()) {
-                    list.add(new SeasonEntry(UUID.fromString(result.getString("id")),
-                            result.getString("town_id"),
-                            result.getString("town_name"),
-                            result.getInt("seasonpoints"),
-                            result.getInt("season")));
-                }
-                return null;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return null;
+            ResultSet result = p.executeQuery();
+
+            while (result.next()) {
+                list.add(new SprintHistoryEntry(UUID.fromString(result.getString("id")),
+                        result.getInt("season"),
+                        result.getInt("sprint"),
+                        result.getLong("started_time"),
+                        result.getString("rank_json")));
             }
+
+            return null;
         });
         return list;
     }
@@ -80,19 +76,19 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     /**
      * Add.
      *
-     * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
      * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
      */
-    public void add(String townUUID, String townName, int seasonPoint, int season) {
+    public void add(int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
-                    townUUID + "', '" +
-                    townName + "', '" +
-                    seasonPoint + "', '" +
-                    season + "');";
+                    season + "' , '" +
+                    sprint + "' , '" +
+                    startedTime + "' , '" +
+                    rankJson + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -118,18 +114,18 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      * Update.
      *
      * @param id          the id
-     * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
      * @param season      the season
+     * @param sprint      the sprint
+     * @param startedTime the started time
+     * @param rankJson    the rank json
      */
-    public void update(UUID id, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(UUID id, int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET town_id='" + townUUID +
-                    "', town_name='" + townName +
-                    "', seasonpoints='" + seasonPoint +
-                    "', season='" + season +
+                    " SET season='" + season +
+                    "', sprint='" + sprint +
+                    "', started_time='" + startedTime +
+                    "', rank_json='" + rankJson +
                     "' WHERE id='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();

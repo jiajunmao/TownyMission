@@ -46,7 +46,7 @@ public class CustomConfigLoader {
     private void createMissionConfig() throws IOException, InvalidConfigurationException {
         for (MissionType missionType : MissionType.values()) {
             String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
-            String filePath = "missions/" + fileName;
+            String filePath = "missions" + File.separator + fileName;
             File customConfig = new File(instance.getDataFolder(), filePath);
             if (!customConfig.exists()) {
                 customConfig.getParentFile().getParentFile().mkdirs();

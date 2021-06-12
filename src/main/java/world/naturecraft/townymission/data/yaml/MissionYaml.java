@@ -2,27 +2,17 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.db.yaml;
+package world.naturecraft.townymission.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.yaml.snakeyaml.Yaml;
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.api.exceptions.ConfiguParsingException;
 import world.naturecraft.townymission.components.containers.sql.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.components.enums.MissionType;
 
-import javax.print.attribute.PrintJobAttributeSet;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -30,14 +20,16 @@ import java.util.UUID;
  */
 public class MissionYaml extends YamlStorage<MissionEntry> {
 
+    private static MissionYaml singleton;
+
     /**
      * Instantiates a new Mission yaml.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    public MissionYaml(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    public MissionYaml(TownyMission instance) {
+        super(instance, DbType.MISSION);
+        singleton = this;
     }
 
     /**
@@ -75,7 +67,7 @@ public class MissionYaml extends YamlStorage<MissionEntry> {
      * @param townName          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void update(String uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);
@@ -88,10 +80,14 @@ public class MissionYaml extends YamlStorage<MissionEntry> {
     @Override
     public List<MissionEntry> getEntries() {
         List<MissionEntry> entryList = new ArrayList<>();
+
+        if (file.getConfigurationSection("") == null)
+            return entryList;
+
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             try {
                 entryList.add(new MissionEntry(
-                        UUID.fromString(file.getString(key + ".uuid")),
+                        UUID.fromString(key),
                         file.getString(key + ".missionType"),
                         file.getLong(key + ".addedTime"),
                         file.getLong(key + ".startedTime"),
@@ -106,5 +102,18 @@ public class MissionYaml extends YamlStorage<MissionEntry> {
         }
 
         return entryList;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new MissionYaml(townyMission);
+        }
+        return singleton;
     }
 }

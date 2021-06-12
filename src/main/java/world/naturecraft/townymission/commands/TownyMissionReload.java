@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.components.enums.StorageType;
+import world.naturecraft.townymission.data.yaml.*;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
@@ -69,6 +71,17 @@ public class TownyMissionReload extends TownyMissionCommand {
             if (!sanityCheck(player, args)) return false;
 
             instance.reloadConfigs();
+
+            if (instance.getStorageType().equals(StorageType.YAML)) {
+                new CooldownYaml(instance);
+                new MissionHistoryYaml(instance);
+                new MissionYaml(instance);
+                new SeasonYaml(instance);
+                new SeasonHistoryYaml(instance);
+                new SprintYaml(instance);
+                new SprintHistoryYaml(instance);
+            }
+
             Util.sendMsg(player, instance.getLangEntry("commands.reload.onSuccess"));
         }
 

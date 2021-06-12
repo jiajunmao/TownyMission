@@ -7,9 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.components.gui.MissionManageGui;
 import world.naturecraft.townymission.config.CustomConfigLoader;
-import world.naturecraft.townymission.data.db.sql.*;
+import world.naturecraft.townymission.data.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
@@ -19,6 +20,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -33,33 +35,48 @@ public class TownyMission extends JavaPlugin {
     private HikariDataSource db;
     private CustomConfigLoader customConfigLoader;
     private TownyMissionRoot rootCmd;
+    private StorageType storageType;
     private boolean enabled = true;
 
     @Override
     public void onEnable() {
-        logger.info("=========   TOWNYMISSION LOADING   =========");
+        logger.info(Util.translateColor("{#22DDBA}" + "  _______                        __  __ _         _             "));
+        logger.info(Util.translateColor("{#22DDBA}" + " |__   __|                      |  \\/  (_)       (_)            "));
+        logger.info(Util.translateColor("{#22DDBA}" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));
+        logger.info(Util.translateColor("{#22DDBA}" + "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ "));
+        logger.info(Util.translateColor("{#22DDBA}" + "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |"));
+        logger.info(Util.translateColor("{#22DDBA}" + "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|"));
+        logger.info(Util.translateColor("{#22DDBA}" + "                            __/ |                               "));
+        logger.info(Util.translateColor("{#22DDBA}" + "                           |___/                                "));
+        logger.info("-----------------------------------------------------------------");
+
+
         this.saveDefaultConfig();
         try {
             customConfigLoader = new CustomConfigLoader(this);
-        } catch (IOException e) {
+        } catch (IOException | InvalidConfigurationException e) {
             logger.severe("IO operation fault during custom config initialization");
-            e.printStackTrace();
-            enabled = false;
-        } catch (InvalidConfigurationException e) {
-            logger.severe("Invalid configuration during custom config initialization");
             e.printStackTrace();
             enabled = false;
         }
 
-        logger.info("=========   CONNECTING TO TOWNYMISSION DATABASE   =========");
-        dbList = new HashMap<>();
+        logger.info("===> Connecting to database");
+        String storage = getConfig().getString("storage");
+        storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
+
+        if (storageType.equals(StorageType.MYSQL)) {
+            dbList = new HashMap<>();
+            connect();
+            registerDatabases();
+            initializeDatabases();
+        }
+
         serviceList = new HashMap<>();
-        connect();
-        registerDatabases();
-        initializeDatabases();
         registerService();
 
+        logger.info("===> Registering commands");
         registerCommands();
+        logger.info("===> Registering listeners");
         registerListeners();
 
         if (!enabled) {
@@ -70,7 +87,9 @@ public class TownyMission extends JavaPlugin {
     @Override
     public void onDisable() {
         logger.info("=========   TOWNYMISSION DISABLING   =========");
-        close();
+        if (storageType.equals(StorageType.MYSQL)) {
+            close();
+        }
     }
 
     /**
@@ -193,5 +212,9 @@ public class TownyMission extends JavaPlugin {
         } catch (IOException | InvalidConfigurationException e) {
             throw new ConfigLoadingError(e);
         }
+    }
+
+    public StorageType getStorageType() {
+        return storageType;
     }
 }
