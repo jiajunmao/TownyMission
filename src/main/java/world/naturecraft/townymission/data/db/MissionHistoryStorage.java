@@ -123,7 +123,7 @@ public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
      *
      * @return the instance
      */
-    public MissionHistoryStorage getInstance() {
+    public static MissionHistoryStorage getInstance() {
         if (singleton == null) {
             new MissionHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
         }

@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.containers.sql.SprintEntry;
+import world.naturecraft.townymission.data.db.SprintStorage;
 import world.naturecraft.townymission.data.sql.SprintDatabase;
 
 import java.util.List;
@@ -15,13 +16,13 @@ import java.util.List;
 public class SprintDao extends Dao<SprintEntry> {
 
     private static SprintDao singleton;
-    private final SprintDatabase database;
+    private final SprintStorage database;
 
     /**
      * Instantiates a new Sprint dao.
      */
     public SprintDao() {
-        this.database = SprintDatabase.getInstance();
+        this.database = SprintStorage.getInstance();
     }
 
     /**

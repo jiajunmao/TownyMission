@@ -109,7 +109,7 @@ public class SeasonStorage extends Storage<SeasonEntry> {
      *
      * @return the instance
      */
-    public SeasonStorage getInstance() {
+    public static SeasonStorage getInstance() {
         if (singleton == null) {
             new SeasonStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownySeason"));
         }

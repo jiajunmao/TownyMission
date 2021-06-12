@@ -107,7 +107,7 @@ public class CooldownStorage extends Storage<CooldownEntry> {
      *
      * @return the instance
      */
-    public CooldownStorage getInstance() {
+    public static CooldownStorage getInstance() {
         if (singleton == null) {
             new CooldownStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
         }

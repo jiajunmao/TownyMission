@@ -7,6 +7,7 @@ package world.naturecraft.townymission.data.dao;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
+import world.naturecraft.townymission.data.db.CooldownStorage;
 import world.naturecraft.townymission.data.sql.CooldownDatabase;
 
 import java.util.Date;
@@ -19,13 +20,13 @@ import java.util.UUID;
 public class CooldownDao extends Dao<CooldownEntry> {
 
     private static CooldownDao singleton;
-    private final CooldownDatabase db;
+    private final CooldownStorage db;
 
     /**
      * Instantiates a new Cooldown dao.
      */
     public CooldownDao() {
-        this.db = CooldownDatabase.getInstance();
+        this.db = CooldownStorage.getInstance();
     }
 
     /**

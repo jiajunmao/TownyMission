@@ -114,7 +114,7 @@ public class MissionStorage {
      *
      * @return the instance
      */
-    public MissionStorage getInstance() {
+    public static MissionStorage getInstance() {
         if (singleton == null) {
             new MissionStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
         }
