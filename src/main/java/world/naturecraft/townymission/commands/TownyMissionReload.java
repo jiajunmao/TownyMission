@@ -39,7 +39,7 @@ public class TownyMissionReload extends TownyMissionCommand {
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new SanityChecker(instance).target(player)
                 .customCheck(() -> new SanityChecker(instance).target(player).hasPermission("tms.admin").check()
-                        || new SanityChecker(instance).target(player).hasPermission("tms.command.reload").check())
+                        || new SanityChecker(instance).target(player).hasPermission("tms.commands.reload").check())
                 .customCheck(() -> {
                     if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
                         return true;
