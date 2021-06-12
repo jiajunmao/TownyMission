@@ -9,7 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.json.*;
+import world.naturecraft.townymission.components.json.mission.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.util.ArrayList;
@@ -37,19 +37,19 @@ public class CustomConfigParser {
 
             if (type.equals(MissionType.EXPANSION)) {
                 String world = section.getString("world");
-                list.add(new ExpansionJson(world, amount, 0, hrAllowed, reward, null));
+                list.add(new ExpansionMissionJson(world, amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.MOB)) {
                 String mobType = section.getString("type");
-                MobJson mobJson = new MobJson(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward, null);
-                list.add(mobJson);
+                MobMissionJson mobMissionJson = new MobMissionJson(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward, null);
+                list.add(mobMissionJson);
             } else if (type.equals(MissionType.MONEY)) {
-                list.add(new MoneyJson(amount, 0, hrAllowed, reward, null));
+                list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.RESOURCE)) {
                 boolean isMi = section.getBoolean("isMi");
                 String resourceType = section.getString("type");
-                list.add(new ResourceJson(isMi, Material.valueOf(resourceType), amount, 0, hrAllowed, reward, null));
+                list.add(new ResourceMissionJson(isMi, Material.valueOf(resourceType), amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.VOTE)) {
-                list.add(new VoteJson(amount, 0, hrAllowed, reward, null));
+                list.add(new VoteMissionJson(amount, 0, hrAllowed, reward, null));
             }
         }
 
