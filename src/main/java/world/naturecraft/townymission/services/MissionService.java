@@ -19,6 +19,7 @@ import world.naturecraft.townymission.utils.Util;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -83,7 +84,8 @@ public class MissionService extends TownyMissionService {
                         }
                     } catch (NotFoundException e) {
                         Date date = new Date();
-                        CooldownDao.getInstance().add(new CooldownEntry(0, town, date.getTime(), 0));
+                        // Not starting, only putting them into the db
+                        CooldownDao.getInstance().add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), 0));
                         return true;
                     }
                 }).check();
@@ -137,12 +139,12 @@ public class MissionService extends TownyMissionService {
         MissionDao.getInstance().update(entry);
 
         if (SprintDao.getInstance().get(town.getUUID().toString()) == null) {
-            SprintEntry sprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("sprint.current"), instance.getConfig().getInt("season.current"));
+            SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("sprint.current"), instance.getConfig().getInt("season.current"));
             SprintDao.getInstance().add(sprintEntry);
         }
 
         if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
-            SeasonEntry seasonEntry = new SeasonEntry(0, town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("season.current"));
+            SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("season.current"));
             SeasonDao.getInstance().add(seasonEntry);
         }
 

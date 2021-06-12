@@ -1,3 +1,6 @@
+# Choose mysql and yaml, MySql is recommended for best compatibility
+storage: mysql
+
 # Database settings
 database:
   # The address of the database, in IP or domain name

@@ -11,6 +11,7 @@ import world.naturecraft.townymission.data.db.sql.CooldownDatabase;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Cooldown dao.
@@ -110,7 +111,7 @@ public class CooldownDao extends Dao<CooldownEntry> {
     public void startCooldown(Town town, long cooldown) {
         Date date = new Date();
         if (get(town) == null) {
-            add(new CooldownEntry(0, town, date.getTime(), cooldown));
+            add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), cooldown));
         } else {
             CooldownEntry entry = get(town);
             entry.setStartedTime(date.getTime());

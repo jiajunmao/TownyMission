@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Season history database.
@@ -59,7 +60,7 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
             ResultSet result = p.executeQuery();
 
             while (result.next()) {
-                list.add(new SeasonHistoryEntry(result.getInt("id"),
+                list.add(new SeasonHistoryEntry(UUID.fromString(result.getString("id")),
                         result.getInt("season"),
                         result.getLong("started_time"),
                         result.getString("rank_json")));
@@ -79,7 +80,8 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
      */
     public void add(int season, long startedTime, String rankJson) {
         execute(conn -> {
-            String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
+            UUID uuid = UUID.randomUUID();
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
                     season + "', '" +
                     startedTime + "', '" +
                     rankJson + "');";
@@ -94,7 +96,7 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
      *
      * @param id the id
      */
-    public void remove(int id) {
+    public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "id='" + id + "');";
@@ -112,7 +114,7 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void update(int id, int season, long startedTime, String rankJson) {
+    public void update(UUID id, int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + season +

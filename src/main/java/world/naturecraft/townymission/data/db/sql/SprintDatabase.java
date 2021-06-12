@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Sprint database.
@@ -63,7 +64,7 @@ public class SprintDatabase extends Database<SprintEntry> {
                 ResultSet result = p.executeQuery();
 
                 while (result.next()) {
-                    SprintEntry entry = new SprintEntry(result.getInt("id"),
+                    SprintEntry entry = new SprintEntry(UUID.fromString(result.getString("id")),
                             result.getString("town_id"),
                             result.getString("town_name"),
                             result.getInt("naturepoints"),
@@ -91,7 +92,8 @@ public class SprintDatabase extends Database<SprintEntry> {
      */
     public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
-            String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
+            UUID uuid = UUID.randomUUID();
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
                     townName + "', '" +
                     naturePoints + "', '" +
@@ -108,7 +110,7 @@ public class SprintDatabase extends Database<SprintEntry> {
      *
      * @param id the id
      */
-    public void remove(int id) {
+    public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "id='" + id + "');";
@@ -128,7 +130,7 @@ public class SprintDatabase extends Database<SprintEntry> {
      * @param sprint       the sprint
      * @param season       the season
      */
-    public void update(int id, String townUUID, String townName, int naturePoints, int sprint, int season) {
+    public void update(UUID id, String townUUID, String townName, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +

@@ -23,6 +23,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Towny mission claim.
@@ -118,7 +119,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 // This means that sprint database does not contain the town info yet, adding
                                 SprintEntry sprintEntry;
                                 if ((sprintEntry = sprintDao.get(town.getUUID().toString())) == null) {
-                                    SprintEntry newSprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, 0, 0);
+                                    SprintEntry newSprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, 0, 0);
                                     sprintDao.add(newSprintEntry);
                                     sprintEntry = sprintDao.get(town.getUUID().toString());
                                 }
@@ -135,7 +136,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 //TODO: command format sanity check in sanity checker
 
                                 if (sprintDao.get(town.getUUID().toString()) == null) {
-                                    SprintEntry newSprintEntry = new SprintEntry(0, town.getUUID().toString(), town.getName(), 0, 0, 0);
+                                    SprintEntry newSprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, 0, 0);
                                     sprintDao.add(newSprintEntry);
                                 }
 

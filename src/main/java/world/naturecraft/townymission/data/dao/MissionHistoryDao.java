@@ -23,8 +23,6 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
 
     /**
      * Instantiates a new Task dao.
-     *
-     * @param db the db
      */
     public MissionHistoryDao() {
         this.db = MissionHistoryDatabase.getInstance();
