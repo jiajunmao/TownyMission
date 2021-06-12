@@ -39,8 +39,21 @@ public class TownyMissionListAll extends TownyMissionCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new SanityChecker(instance).target(player)
-                .hasPermission("townymission.admin")
-                .hasPermission("townymission.commands.listall").check();
+                .customCheck(() -> {
+                    return new SanityChecker(instance).target(player).hasPermission("townymission.admin").check()
+                            || new SanityChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
+                }).customCheck(() -> {
+                    if (args.length == 2) {
+                        for (MissionType missionType : MissionType.values()) {
+                            if (args[1].equalsIgnoreCase(missionType.name())) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                    return false;
+                }).check();
     }
 
     /**
