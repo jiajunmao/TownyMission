@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Sprint history database.
@@ -60,7 +61,7 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
             ResultSet result = p.executeQuery();
 
             while (result.next()) {
-                list.add(new SprintHistoryEntry(result.getInt("id"),
+                list.add(new SprintHistoryEntry(UUID.fromString(result.getString("id")),
                         result.getInt("season"),
                         result.getInt("sprint"),
                         result.getLong("started_time"),
@@ -82,7 +83,8 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
      */
     public void add(int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
-            String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
+            UUID uuid = UUID.randomUUID();
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
                     season + "' , '" +
                     sprint + "' , '" +
                     startedTime + "' , '" +
@@ -98,7 +100,7 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
      *
      * @param id the id
      */
-    public void remove(int id) {
+    public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "id='" + id + "');";
@@ -117,7 +119,7 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void update(int id, int season, int sprint, long startedTime, String rankJson) {
+    public void update(UUID id, int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + season +

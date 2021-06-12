@@ -28,6 +28,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * The type Mission manage gui.
@@ -69,7 +70,7 @@ public class MissionManageGui extends TownyMissionGui {
             int index = rand.nextInt(size);
             MissionJson mission = missions.get(index);
             try {
-                MissionEntry entry = new MissionEntry(0,
+                MissionEntry entry = new MissionEntry(UUID.randomUUID(),
                         mission.getMissionType().name(),
                         Util.currentTime(),
                         0,

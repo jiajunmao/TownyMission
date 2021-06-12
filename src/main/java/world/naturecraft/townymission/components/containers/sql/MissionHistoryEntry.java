@@ -45,7 +45,7 @@ public class MissionHistoryEntry extends SqlEntry {
      * @param sprint        the sprint
      * @param season        the season
      */
-    public MissionHistoryEntry(int id, MissionType missionType, long addedTime, long startedTime, long allowedTime,
+    public MissionHistoryEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime,
                                MissionJson missionJson, Town town, Player startedPlayer, long completedTime, boolean claimed,
                                int sprint, int season) {
         super(id, DbType.MISSION_HISTORY);
@@ -79,7 +79,7 @@ public class MissionHistoryEntry extends SqlEntry {
      * @param season        the season
      * @throws JsonProcessingException the json processing exception
      */
-    public MissionHistoryEntry(int id, String missionType, long addedTime, long startedTime, long allowedTime,
+    public MissionHistoryEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime,
                                String missionJson, String townName, String startedPlayer, long completedTime,
                                boolean claimed, int sprint, int season) throws JsonProcessingException {
         this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), Bukkit.getPlayer(UUID.fromString(startedPlayer)), completedTime, claimed, sprint, season);
@@ -93,7 +93,7 @@ public class MissionHistoryEntry extends SqlEntry {
      * @param completedTime the completed time
      */
     public MissionHistoryEntry(MissionEntry entry, long completedTime) {
-        this(0, entry.getMissionType(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(),
+        this(UUID.randomUUID(), entry.getMissionType(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(),
                 entry.getMissionJson(), entry.getTown(), entry.getStartedPlayer(), completedTime, false, 0, 0);
     }
 

@@ -28,7 +28,7 @@ public class CooldownEntry extends SqlEntry {
      * @param startedTime the started time
      * @param cooldown    the cooldown
      */
-    public CooldownEntry(int id, Town town, long startedTime, long cooldown) {
+    public CooldownEntry(UUID id, Town town, long startedTime, long cooldown) {
         super(id, DbType.COOLDOWN);
         this.town = town;
         this.startedTime = startedTime;
@@ -44,7 +44,7 @@ public class CooldownEntry extends SqlEntry {
      * @param cooldown    the cooldown
      * @throws NotRegisteredException the not registered exception
      */
-    public CooldownEntry(int id, String townUUID, long startedTime, long cooldown) throws NotRegisteredException {
+    public CooldownEntry(UUID id, String townUUID, long startedTime, long cooldown) throws NotRegisteredException {
         this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)), startedTime, cooldown);
     }
 

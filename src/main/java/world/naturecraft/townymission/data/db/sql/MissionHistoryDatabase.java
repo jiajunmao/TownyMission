@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Task history database.
@@ -69,7 +70,7 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
 
             while (result.next()) {
                 try {
-                    list.add(new MissionHistoryEntry(result.getInt("id"),
+                    list.add(new MissionHistoryEntry(UUID.fromString(result.getString("id")),
                             result.getString("task_type"),
                             result.getLong("added_time"),
                             result.getLong("started_time"),
@@ -107,7 +108,8 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
      */
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         execute(conn -> {
-            String sql = "INSERT INTO " + tableName + " VALUES(NULL, '" +
+            UUID uuid = UUID.randomUUID();
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
                     missionType + "', '" +
                     addedTime + "', '" +
                     startedTime + "', '" +
@@ -130,7 +132,7 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
      *
      * @param id the id
      */
-    public void remove(int id) {
+    public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "id='" + id + "');";
@@ -156,7 +158,7 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
      * @param sprint            the sprint
      * @param season            the season
      */
-    public void update(int id, String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET task_type='" + missionType +
