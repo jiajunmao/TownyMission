@@ -26,27 +26,4 @@ public class RankUtil {
         Collections.sort(list);
         return list;
     }
-
-    /**
-     * Gets rank.
-     *
-     * @param town the town
-     * @param dao  the dao
-     * @return the rank
-     * @throws NotFoundException the not found exception
-     */
-    public static int getRank(Town town, Dao<? extends Rankable> dao) throws NotFoundException {
-        List<Rankable> list = (List<Rankable>) dao.getEntries();
-        Collections.sort(list);
-        int index = 1;
-        for (Rankable rankable : list) {
-            if (rankable.getID().equalsIgnoreCase(town.getUUID().toString())) {
-                return index;
-            }
-            index++;
-        }
-
-        throw new NotFoundException();
-    }
-
 }

@@ -14,12 +14,5 @@ public interface Rankable extends Comparable<Rankable> {
      *
      * @return the point
      */
-    int getPoint();
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    String getID();
+    int getRankingFactor();
 }

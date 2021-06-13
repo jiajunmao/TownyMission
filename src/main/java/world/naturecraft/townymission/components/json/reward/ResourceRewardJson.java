@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.components.json.reward;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,14 +27,17 @@ public class ResourceRewardJson extends RewardJson {
         this.amount = amount;
     }
 
+    @JsonIgnore
     public static RewardJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, ResourceRewardJson.class);
     }
 
+    @JsonProperty("type")
     public Material getType() {
         return type;
     }
 
+    @JsonProperty("amount")
     public int getAmount() {
         return amount;
     }

@@ -49,25 +49,29 @@ sprint:
     #     (sum of individual contribution)/(number of mission)
     # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
     #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
+    # ** points{} reward category is added to the town directly. It is not affected by this setting
     method: contributions
-    # These are the points that are rewarded to the ranking towns to gain the season reward
-    # The format is '#rank:#season_points'
-    # If an others entry is specified, all non-specified towns passing the baseline will receive the specified amount
-    #     If no others entry is specified, that means all towns other than the rank-specified ones will receive 0 season points
-    seasonPointsReward:
-      - '1:3'
-      - '2:2'
-      - '3:1'
-      - 'others:1'
-
-    # There are only three types, RESOURCE, MONEY, and COMMAND
+    # There are only four types, RESOURCE, MONEY, COMMAND, and POINTS
+    # Points are the season points used to calculate season rewards below
+    # ***---> The numbering for the list means RANK, so the highest ranking town would receive rewards under 1:
+    # ***---> If no other: exists, non-rank-specified town would receive nothing fdsd
     # Please use the exact format as the shown in the following default config
     # Placeholders
     #   - %player%: the name of the player, only works in COMMAND type
     rewards:
-      - 'resource{"type": "DIAMOND", "amount": 100}'
-      - 'money{"amount": 50000}'
-      - 'command{"command": "cmi msg %player% wow you are amazing"}'
+      1:
+        - 'resource{"type": "DIAMOND", "amount": 100}'
+        - 'money{"amount": 50000}'
+        - 'command{"command": "cmi msg %player% wow you are amazing"}'
+        - 'points{"amount":5}'
+      2:
+        - 'resource{"type": "DIAMOND", "amount": 100}'
+        - 'money{"amount": 50000}'
+        - 'command{"command": "cmi msg %player% wow you are amazing"}'
+        - 'points{"amount":5}'
+      others:
+        - 'points{"amount": 1}'
+
 
 season:
   # The current season, do not touch unless you know what you are doing
@@ -94,6 +98,20 @@ season:
     # Placeholders
     #   - %player%: the name of the player, only works in COMMAND type
     rewards:
-      - 'resource{"type": "DIAMOND", "amount": 100}'
-      - 'money{"amount": 50000}'
-      - 'command{"command": "cmi msg %player% wow you are amazing"}'
+      1:
+        - 'resource{"type": "DIAMOND", "amount": 100}'
+        - 'money{"amount": 50000}'
+        - 'command{"command": "cmi msg %player% wow you are amazing"}'
+      others:
+        - 'resource{"type": "DIAMOND", "amount": 100}'
+        - 'money{"amount": 50000}'
+        - 'command{"command": "cmi msg %player% wow you are amazing"}'
+# The hooks that enable certain mission types
+# In each section, one hook must be enabled to enable the mission type
+hooks:
+  money:
+    CMI: true
+  expansion:
+    Towny: true
+  vote:
+    UltimateVotes: true

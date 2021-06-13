@@ -1,25 +1,27 @@
-/*
- * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
- */
-
 package world.naturecraft.townymission.components.json.reward;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import org.jetbrains.annotations.NotNull;
+import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RewardType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.beans.ConstructorProperties;
 
-public class MoneyRewardJson extends RewardJson {
+
+// Well technically this is not a json, but I guess I will put it here
+public class PointRewardJson extends RewardJson {
 
     @JsonProperty("amount")
     private int amount;
 
     @ConstructorProperties({"amount"})
-    public MoneyRewardJson(int amount) {
-        super(RewardType.MONEY);
+    public PointRewardJson(int amount) {
+        super(RewardType.POINTS);
         this.amount = amount;
     }
 
@@ -30,7 +32,6 @@ public class MoneyRewardJson extends RewardJson {
 
     @JsonIgnore
     public static RewardJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, MoneyRewardJson.class);
+        return new ObjectMapper().readValue(json, PointRewardJson.class);
     }
-
 }

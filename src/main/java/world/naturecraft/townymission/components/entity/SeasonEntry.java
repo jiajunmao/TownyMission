@@ -104,17 +104,13 @@ public class SeasonEntry extends DataEntity implements Rankable {
     }
 
     @Override
-    public int getPoint() {
+    public int getRankingFactor() {
         return getSeasonPoint();
     }
 
-    @Override
-    public String getID() {
-        return townID;
-    }
 
     @Override
     public int compareTo(@NotNull Rankable rankable) {
-        return this.getPoint() - rankable.getPoint();
+        return this.getRankingFactor() - rankable.getRankingFactor();
     }
 }

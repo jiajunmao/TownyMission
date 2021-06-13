@@ -7,20 +7,24 @@ package world.naturecraft.townymission.services;
 // This service is mainly here to check the progress of sprint and season
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.components.entity.*;
+import world.naturecraft.townymission.components.enums.RewardMethod;
+import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.components.json.rank.RankJson;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.components.enums.RankType;
-import world.naturecraft.townymission.components.json.reward.SeasonPointRewardJson;
+import world.naturecraft.townymission.components.json.reward.RewardJson;
+import world.naturecraft.townymission.components.json.reward.PointRewardJson;
 import world.naturecraft.townymission.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.data.dao.*;
 import world.naturecraft.townymission.utils.RankUtil;
+import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The type Timer service.
@@ -112,47 +116,40 @@ public class TimerService extends TownyMissionService {
                         CooldownDao.getInstance().remove(cooldownEntry);
                     }
 
-                    // Get sprint ranking, award season points according to the ranking [Rewards will be issued at the end]
+                    // Issue rewards
                     List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
-                    List<SeasonPointRewardJson> rewardList = RewardConfigParser.parseAllSeasonPointReward();
-                    int othersReward = 0;
-                    for (SeasonPointRewardJson rewardJson : rewardList) {
-                        int rankIdx = rewardJson.getRank() - 1;
-                        int reward = rewardJson.getAmount();
+                    Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
 
-                        if (rewardJson.isOthers()) {
-                            othersReward = rewardJson.getAmount();
-                        }
+                    for (Integer currentRank : rewardsMap.keySet()) {
+                        List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
+                        if (currentRank - 1 < sprintEntries.size()) {
+                            SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
+                            Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
+                            RewardMethod rewardMethod = RewardConfigParser.getRewardMethods(RankType.SPRINT);
 
-                        if (!rewardJson.isOthers() && rankIdx < sprintEntries.size()) {
-                            try {
-                                SprintEntry sprintEntry = sprintEntries.get(rankIdx);
-
-                                if (SeasonDao.getInstance().get(sprintEntry.getTownID()) == null) {
-                                    SeasonDao.getInstance().add(new SeasonEntry(UUID.randomUUID(), sprintEntry.getTownID(), sprintEntry.getTownName(), reward, instance.getConfig().getInt("season.current")));
+                            for (RewardJson rewardJson : rewardJsonList) {
+                                if (rewardJson.getRewardType().equals(RewardType.POINTS)) {
+                                    // This is reward season point. Ignore RewardMethod.
+                                    if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
+                                        SeasonDao.getInstance().add(
+                                                new SeasonEntry(
+                                                        UUID.randomUUID(),
+                                                        town.getUUID().toString(),
+                                                        town.getName(),
+                                                        rewardJson.getAmount(),
+                                                        instance.getConfig().getInt("season.current")));
+                                    } else {
+                                        SeasonEntry seasonEntry = SeasonDao.getInstance().get(town.getUUID().toString());
+                                        seasonEntry.setSeasonPoint(seasonEntry.getSeasonPoint() + rewardJson.getAmount());
+                                    }
                                 } else {
-                                    SeasonEntry seasonEntry = SeasonDao.getInstance().get(sprintEntry.getTownID());
-                                    seasonEntry.setSeasonPoint(seasonEntry.getSeasonPoint() + reward);
-                                    SeasonDao.getInstance().update(seasonEntry);
+                                    // Giving individual reward. Count in RewardMethod
+                                    switch (rewardMethod) {
+
+                                        // TODO: Reward
+                                        // TODO: Reward others
+                                    }
                                 }
-
-                                // If reward already given, remove the entry from the list
-                                sprintEntries.remove(sprintEntry);
-                            } catch (IndexOutOfBoundsException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    // Applying others reward, if defined, and if there are still towns outside of the ranked ones
-                    if (sprintEntries.size() > 0) {
-                        for (SprintEntry sprintEntry : sprintEntries) {
-                            if (SeasonDao.getInstance().get(sprintEntry.getTownID()) == null) {
-                                SeasonDao.getInstance().add(new SeasonEntry(UUID.randomUUID(), sprintEntry.getTownID(), sprintEntry.getTownName(), othersReward, instance.getConfig().getInt("season.current")));
-                            } else {
-                                SeasonEntry seasonEntry = SeasonDao.getInstance().get(sprintEntry.getTownID());
-                                seasonEntry.setSeasonPoint(seasonEntry.getSeasonPoint() + othersReward);
-                                SeasonDao.getInstance().update(seasonEntry);
                             }
                         }
                     }
@@ -178,8 +175,6 @@ public class TimerService extends TownyMissionService {
                     for (SprintEntry sprintEntry : SprintDao.getInstance().getEntries()) {
                         SprintDao.getInstance().remove(sprintEntry);
                     }
-
-                    //TODO: Issue rewards
                 }
             }
         };
