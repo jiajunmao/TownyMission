@@ -2,7 +2,11 @@ package world.naturecraft.townymission.data.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
+import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +20,7 @@ import java.util.UUID;
  */
 public class MissionDatabase extends Database<MissionEntry> {
 
-    private static MissionDatabase singleton = null;
+    private static MissionDatabase singleton;
 
     /**
      * Instantiates a new Task database.
@@ -26,7 +30,6 @@ public class MissionDatabase extends Database<MissionEntry> {
      */
     public MissionDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
-        singleton = this;
     }
 
     /**
@@ -35,6 +38,10 @@ public class MissionDatabase extends Database<MissionEntry> {
      * @return the instance
      */
     public static MissionDatabase getInstance() {
+        if (singleton == null) {
+            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            singleton = new MissionDatabase(instance.getDatasource(), Util.getDbName(DbType.MISSION));
+        }
         return singleton;
     }
 

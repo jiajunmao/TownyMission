@@ -2,7 +2,11 @@ package world.naturecraft.townymission.data.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
+import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +19,7 @@ import java.util.UUID;
  */
 public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
 
-    private static MissionHistoryDatabase singleton = null;
+    private static MissionHistoryDatabase singleton;
 
     /**
      * Instantiates a new Task history database.
@@ -25,7 +29,6 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
      */
     public MissionHistoryDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
-        singleton = this;
     }
 
     /**
@@ -34,6 +37,10 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
      * @return the instance
      */
     public static MissionHistoryDatabase getInstance() {
+        if (singleton == null) {
+            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            singleton = new MissionHistoryDatabase(instance.getDatasource(), Util.getDbName(DbType.MISSION_HISTORY));
+        }
         return singleton;
     }
 

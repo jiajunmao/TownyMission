@@ -6,7 +6,11 @@ package world.naturecraft.townymission.data.sql;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
+import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +23,7 @@ import java.util.UUID;
  */
 public class CooldownDatabase extends Database<CooldownEntry> {
 
-    private static CooldownDatabase singleton = null;
+    private static CooldownDatabase singleton;
 
     /**
      * Instantiates a new Database.
@@ -29,7 +33,6 @@ public class CooldownDatabase extends Database<CooldownEntry> {
      */
     public CooldownDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
-        singleton = this;
     }
 
     /**
@@ -38,6 +41,10 @@ public class CooldownDatabase extends Database<CooldownEntry> {
      * @return the instance
      */
     public static CooldownDatabase getInstance() {
+        if (singleton == null) {
+            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            singleton = new CooldownDatabase(instance.getDatasource(), Util.getDbName(DbType.COOLDOWN));
+        }
         return singleton;
     }
 

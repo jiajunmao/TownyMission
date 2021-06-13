@@ -29,6 +29,7 @@ public abstract class Database<T extends DataEntity> {
     public Database(HikariDataSource db, String tableName) {
         this.db = db;
         this.tableName = tableName;
+        createTable();
     }
 
     /**
