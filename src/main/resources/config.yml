@@ -69,7 +69,7 @@ season:
   # The started time of this season, do not touch unless you know what you are doing
   # Changing this might corrupt database and interfere with normal sprint/season progression
   # In Java millisecond datetime format
-  startedTime: 0
+  startedTime: -1
   rewards:
     # EQUAL, CONTRIBUTIONS, INDIVIDUAL
     # EQUALS means that the reward is distributed evenly among all town members,

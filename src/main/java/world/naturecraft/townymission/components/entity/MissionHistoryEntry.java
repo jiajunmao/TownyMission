@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -95,6 +96,9 @@ public class MissionHistoryEntry extends DataEntity {
     public MissionHistoryEntry(MissionEntry entry, long completedTime) {
         this(UUID.randomUUID(), entry.getMissionType(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(),
                 entry.getMissionJson(), entry.getTown(), entry.getStartedPlayer(), completedTime, false, 0, 0);
+        TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+        setSprint(instance.getConfig().getInt("sprint.current"));
+        setSeason(instance.getConfig().getInt("season.current"));
     }
 
     /**

@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.commands;
+package world.naturecraft.townymission.commands.admin;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,46 +10,44 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.json.mission.MissionJson;
-import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.config.mission.MissionConfigParser;
-import world.naturecraft.townymission.utils.MultilineBuilder;
+import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.components.enums.StorageType;
+import world.naturecraft.townymission.data.yaml.*;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 /**
- * The type Towny mission list all.
+ * The type Towny mission reload.
  */
-public class TownyMissionListAll extends TownyMissionCommand {
+public class TownyMissionAdminReload extends TownyMissionAdminCommand {
 
     /**
      * Instantiates a new Towny mission command.
      *
      * @param instance the instance
      */
-    public TownyMissionListAll(TownyMission instance) {
+    public TownyMissionAdminReload(TownyMission instance) {
         super(instance);
     }
 
+    /**
+     * Sanity check boolean.
+     *
+     * @param player the player
+     * @param args   the args
+     * @return the boolean
+     */
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new SanityChecker(instance).target(player)
+                .customCheck(() -> new SanityChecker(instance).target(player).hasPermission("tms.admin").check()
+                        || new SanityChecker(instance).target(player).hasPermission("tms.commands.reload").check())
                 .customCheck(() -> {
-                    return new SanityChecker(instance).target(player).hasPermission("townymission.admin").check()
-                            || new SanityChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
-                }).customCheck(() -> {
-                    if (args.length == 2) {
-                        for (MissionType missionType : MissionType.values()) {
-                            if (args[1].equalsIgnoreCase(missionType.name())) {
-                                return true;
-                            }
-                        }
-                    }
+                    // /tms admin reload
+                    if (args.length == 2 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("reload"))
+                        return true;
 
                     Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                     return false;
@@ -70,22 +68,26 @@ public class TownyMissionListAll extends TownyMissionCommand {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        // /tms reload
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (sanityCheck(player, args)) {
-                MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
+            if (!sanityCheck(player, args)) return false;
 
-                MissionType missionType = MissionType.valueOf(args[1].toUpperCase(Locale.ROOT));
-                Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
-                builder.add("&eMission Type&f: " + missionType.name());
-                builder.add(" ");
-                for (MissionJson json : collection) {
-                    builder.add(" " + json.getDisplayLine());
-                }
+            instance.reloadConfigs();
 
-                Util.sendMsg(sender, Util.translateColor(builder.toString()));
+            if (instance.getStorageType().equals(StorageType.YAML)) {
+                new CooldownYaml(instance);
+                new MissionHistoryYaml(instance);
+                new MissionYaml(instance);
+                new SeasonYaml(instance);
+                new SeasonHistoryYaml(instance);
+                new SprintYaml(instance);
+                new SprintHistoryYaml(instance);
             }
+
+            Util.sendMsg(player, instance.getLangEntry("commands.reload.onSuccess"));
         }
+
         return true;
     }
 
@@ -105,24 +107,6 @@ public class TownyMissionListAll extends TownyMissionCommand {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        List<String> tabList = new ArrayList<>();
-
-        if (args.length == 1) {
-            tabList.add("listAll");
-        } else if (args.length == 2) {
-            if (!args[1].equals("")) {
-                for (MissionType e : MissionType.values()) {
-                    if (e.name().contains(args[1].toUpperCase(Locale.ROOT))) {
-                        tabList.add(e.name().toUpperCase(Locale.ROOT));
-                    }
-                }
-            } else {
-                for (MissionType e : MissionType.values()) {
-                    tabList.add(e.name().toUpperCase(Locale.ROOT));
-                }
-            }
-        }
-
-        return tabList;
+        return null;
     }
 }

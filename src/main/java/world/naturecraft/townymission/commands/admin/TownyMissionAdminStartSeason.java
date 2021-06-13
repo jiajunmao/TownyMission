@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.commands;
+package world.naturecraft.townymission.commands.admin;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,24 +10,20 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.yaml.*;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.Date;
 import java.util.List;
 
-/**
- * The type Towny mission reload.
- */
-public class TownyMissionReload extends TownyMissionCommand {
+public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
 
     /**
      * Instantiates a new Towny mission command.
      *
      * @param instance the instance
      */
-    public TownyMissionReload(TownyMission instance) {
+    public TownyMissionAdminStartSeason(TownyMission instance) {
         super(instance);
     }
 
@@ -41,14 +37,13 @@ public class TownyMissionReload extends TownyMissionCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new SanityChecker(instance).target(player)
-                .customCheck(() -> new SanityChecker(instance).target(player).hasPermission("tms.admin").check()
-                        || new SanityChecker(instance).target(player).hasPermission("tms.commands.reload").check())
                 .customCheck(() -> {
-                    if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
-                        return true;
-
-                    Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                    return false;
+                    return new SanityChecker(instance).target(player).hasPermission("townymission.admin").check()
+                            || new SanityChecker(instance).target(player).hasPermission("townymission.commands.admin.reload").check();
+                })
+                .customCheck(() -> {
+                    // /tms admin startSeason
+                    return (args.length == 2 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("startSeason"));
                 }).check();
     }
 
@@ -66,24 +61,21 @@ public class TownyMissionReload extends TownyMissionCommand {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        // /tms reload
-        if (sender instanceof Player) {
+        if (sender instanceof  Player) {
             Player player = (Player) sender;
+
             if (!sanityCheck(player, args)) return false;
 
-            instance.reloadConfigs();
-
-            if (instance.getStorageType().equals(StorageType.YAML)) {
-                new CooldownYaml(instance);
-                new MissionHistoryYaml(instance);
-                new MissionYaml(instance);
-                new SeasonYaml(instance);
-                new SeasonHistoryYaml(instance);
-                new SprintYaml(instance);
-                new SprintHistoryYaml(instance);
+            if (instance.getConfig().getInt("season.startedTime") == -1) {
+                Date date = new Date();
+                instance.getConfig().set("season.startedTime", date.getTime());
+                instance.saveConfig();
+                Util.sendMsg(player, instance.getLangEntry("commands.startSeason.onSuccess"));
+                return true;
+            } else {
+                Util.sendMsg(player, instance.getLangEntry("commands.startSeason.onAlreadyStarted"));
+                return false;
             }
-
-            Util.sendMsg(player, instance.getLangEntry("commands.reload.onSuccess"));
         }
 
         return true;

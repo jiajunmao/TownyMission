@@ -60,6 +60,9 @@ public class TimerService extends TownyMissionService {
                 Date date = new Date();
                 long timeNow = date.getTime();
 
+                // This means that season is not started
+                if (instance.getConfig().getInt("season.startedTime") == -1) return;
+
                 // Get some numbers, do some math
                 long sprintDuration = Util.hrToMs(instance.getConfig().getInt("sprint.duration") * 24);
                 long sprintIntervalDuration = Util.hrToMs(instance.getConfig().getInt("sprint.interval") * 24);
@@ -135,20 +138,15 @@ public class TimerService extends TownyMissionService {
                 Date date = new Date();
                 long timeNow = date.getTime();
 
-                long numSprints = instance.getConfig().getInt("season.sprintsPerSeason");
-                long sprintDuration = Util.hrToMs((instance.getConfig().getInt("sprint.duration") + instance.getConfig().getInt("sprint.interval")) * 24);
-                long seasonIntervalDuration = Util.hrToMs(instance.getConfig().getInt("season.interval") * 24);
-                long seasonStartedTime = instance.getConfig().getLong("season.startedTime");
-                long seasonDuration = numSprints * sprintDuration;
-                long seasonEndTime = seasonStartedTime + seasonDuration;
-                long seasonInterEndTime = seasonEndTime + seasonIntervalDuration;
+                // This means that season is not started
+                if (instance.getConfig().getInt("season.startedTime") == -1) return;
 
-                if (timeNow > seasonInterEndTime) {
+                if (timeNow > getTotalEndTime(RankType.SEASON)) {
                     // This means we are entering next season
                     instance.getConfig().set("season.current", instance.getConfig().getInt("season.current") + 1);
                     instance.getConfig().set("sprint.current", 1);
                     instance.saveConfig();
-                } else if (timeNow < seasonInterEndTime && timeNow > seasonEndTime) {
+                } else if (timeNow < getTotalEndTime(RankType.SEASON) && timeNow > getActiveEndTime(RankType.SEASON)) {
                     // This means we are in the interval time, do clean up job and issue rewards
                     // Since reaching this point means the sprint has ended, and sprint cleanup job has been done
                     //     - Mission has been moved to MissionHistory
@@ -165,7 +163,7 @@ public class TimerService extends TownyMissionService {
                                 new SeasonHistoryEntry(
                                         UUID.randomUUID(),
                                         instance.getConfig().getInt("season.current"),
-                                        seasonStartedTime,
+                                        getStartTime(RankType.SEASON),
                                         rankJson.toJson()
                                 );
 
@@ -184,5 +182,73 @@ public class TimerService extends TownyMissionService {
         };
 
         r.runTaskTimerAsynchronously(instance, 0, Util.msToTicks(Util.minuteToMs(1)));
+    }
+
+    public boolean canStart() {
+        Date date = new Date();
+        long timeNow = date.getTime();
+
+        // This means that season is not started
+        if (instance.getConfig().getInt("season.startedTime") == -1) return false;
+
+        return timeNow < getActiveEndTime(RankType.SEASON) && timeNow < getActiveEndTime(RankType.SPRINT);
+    }
+
+    public long getStartTime(RankType rankType) {
+        switch (rankType) {
+            case SPRINT:
+                long seasonStartedTime = instance.getConfig().getLong("season.startedTime");
+                int currentSprint = instance.getConfig().getInt("sprint.current");
+                long sprintDuration = getDuration(RankType.SPRINT);
+                long sprintIntervalDuration = getIntervalDuration(RankType.SPRINT);
+                return seasonStartedTime + (currentSprint - 1) * (sprintDuration + sprintIntervalDuration);
+            case SEASON:
+                return instance.getConfig().getLong("season.startedTime");
+        }
+
+        throw new IllegalStateException();
+    }
+
+    public long getDuration(RankType rankType) {
+        switch (rankType) {
+            case SPRINT:
+                return Util.hrToMs(instance.getConfig().getInt("sprint.duration") * 24);
+            case SEASON:
+                long numSprints = instance.getConfig().getInt("season.sprintsPerSeason");
+                long sprintDura = Util.hrToMs(instance.getConfig().getInt("sprint.duration") * 24);
+                long sprintInterDura = getIntervalDuration(RankType.SPRINT);
+                return numSprints * (sprintDura + sprintInterDura);
+        }
+
+        throw new IllegalStateException();
+    }
+
+    public long getIntervalDuration(RankType rankType) {
+        switch (rankType) {
+            case SPRINT:
+                return Util.hrToMs(instance.getConfig().getInt("sprint.interval") * 24);
+            case SEASON:
+                return Util.hrToMs(instance.getConfig().getInt("season.interval") * 24);
+        }
+
+        throw new IllegalStateException();
+    }
+
+    public long getActiveEndTime(RankType rankType) {
+        switch (rankType) {
+            case SPRINT:
+                long seasonStartedTime = getStartTime(RankType.SEASON);
+                int currentSprint = instance.getConfig().getInt("sprint.current");
+                long sprintDuration = getDuration(RankType.SPRINT);
+                return seasonStartedTime + currentSprint * sprintDuration;
+            case SEASON:
+                return getStartTime(RankType.SEASON) + getDuration(RankType.SEASON);
+        }
+
+        throw new IllegalStateException();
+    }
+
+    public long getTotalEndTime(RankType rankType) {
+        return getActiveEndTime(rankType) + getIntervalDuration(rankType);
     }
 }

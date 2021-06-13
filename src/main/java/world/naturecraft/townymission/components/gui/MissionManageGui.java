@@ -21,9 +21,11 @@ import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
+import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -60,51 +62,75 @@ public class MissionManageGui extends TownyMissionGui {
         // Figure out how many missions the town is missing
         int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
         List<MissionJson> missions = MissionConfigParser.parseAll(instance);
-        System.out.println("Number of entries to be added: " + diff);
         int size = missions.size();
         Random rand = new Random();
 
-        for (int i = 0; i < diff; i++) {
-            //TODO: Prevent duplicates
-            int index = rand.nextInt(size);
-            MissionJson mission = missions.get(index);
-            try {
-                MissionEntry entry = new MissionEntry(UUID.randomUUID(),
-                        mission.getMissionType().name(),
-                        Util.currentTime(),
-                        0,
-                        Util.hrToMs(mission.getHrAllowed()),
-                        mission.toJson(),
-                        town.getName(),
-                        null);
-                missionDao.add(entry);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Get and place all town missions
-        // TODO: Kinda wasteful, should be combined with adding logic above
-        List<MissionEntry> missionList = missionDao.getTownMissions(town);
-        int placingIndex = 11;
-        for (MissionEntry entry : missionList) {
-            if (placingIndex % 9 == 0) {
-                placingIndex += 2;
+        System.out.println("TimerService.canStart() result: " + TimerService.getInstance().canStart());
+        // This means that we are not in recess
+        if (TimerService.getInstance().canStart()) {
+            for (int i = 0; i < diff; i++) {
+                //TODO: Prevent duplicates
+                int index = rand.nextInt(size);
+                MissionJson mission = missions.get(index);
+                try {
+                    MissionEntry entry = new MissionEntry(UUID.randomUUID(),
+                            mission.getMissionType().name(),
+                            Util.currentTime(),
+                            0,
+                            Util.hrToMs(mission.getHrAllowed()),
+                            mission.toJson(),
+                            town.getName(),
+                            null);
+                    missionDao.add(entry);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
             }
 
-            if (!entry.isStarted()) {
-                inv.setItem(placingIndex, entry.getGuiItem());
+            // Get and place all town missions
+            // TODO: Kinda wasteful, should be combined with adding logic above
+            List<MissionEntry> missionList = missionDao.getTownMissions(town);
+            int placingIndex = 11;
+            for (MissionEntry entry : missionList) {
+                if (placingIndex % 9 == 0) {
+                    placingIndex += 2;
+                }
+
+                if (!entry.isStarted()) {
+                    inv.setItem(placingIndex, entry.getGuiItem());
+                    placingIndex++;
+                }
+            }
+
+            // Put in all started missions
+            missionList = MissionService.getInstance().getStartedMissions(town);
+            placingIndex = 0;
+            for (MissionEntry entry : missionList) {
+                inv.setItem(0, entry.getGuiItem());
+                placingIndex += 9;
+            }
+        } else {
+            int placingIndex = 11;
+            for (int i = 0; i < instance.getConfig().getInt("mission.amount"); i++) {
+                if (placingIndex % 9 == 0) {
+                    placingIndex += 2;
+                }
+
+                ItemStack itemStack = new ItemStack(Material.FIREWORK_STAR, 1);
+                ItemMeta meta = itemStack.getItemMeta();
+                meta.setDisplayName(Util.translateColor("&cIn Recess"));
+
+                List<String> lore = new ArrayList<>();
+                lore.add(Util.translateColor("&r&7We are currently in recess"));
+                lore.add(Util.translateColor("&r&7Please wait for the sprint to start"));
+
+                meta.setLore(lore);
+                itemStack.setItemMeta(meta);
+                inv.setItem(placingIndex, itemStack);
                 placingIndex++;
             }
         }
 
-        // Put in all started missions
-        missionList = MissionService.getInstance().getStartedMissions(town);
-        placingIndex = 0;
-        for (MissionEntry entry : missionList) {
-            inv.setItem(0, entry.getGuiItem());
-            placingIndex += 9;
-        }
 
         // Place filler glass panes
         placeFiller();
@@ -148,6 +174,7 @@ public class MissionManageGui extends TownyMissionGui {
 // Check for clicks on items
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
+        // This means the opened inv is not this inv
         if (!e.getView().getTitle().equalsIgnoreCase(guiTitle)) return;
 
         e.setCancelled(true);
@@ -159,6 +186,12 @@ public class MissionManageGui extends TownyMissionGui {
 
         final Player player = (Player) e.getWhoClicked();
         int slot = e.getSlot();
+
+        // This means that if the its recess time, nothing will happen if you click
+        if (!TimerService.getInstance().canStart()) {
+            Util.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
+            return;
+        }
 
         // This means the player is clicking on the fillers
         if ((slot >= 1 && slot <= 8) || (slot >= 28 && slot <= 35) || slot == 10 || slot == 19) {

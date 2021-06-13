@@ -13,22 +13,37 @@ default:
     - docker
 
 stages:
+  - test
   - build
   - deploy
   - release
   - notification
 
+test:
+  stage: test
+  script:
+    - 'mvn -s ci_settings.xml test'
+  artifacts:
+    when: always
+    reports:
+      junit: target/surefire-reports/**/TEST-*.xml
+
 build:
   stage: build
+  dependencies:
+    - test
   script:
     - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml install'
   artifacts:
     paths:
       - target/TownyMission*.jar
     expire_in: 1 week
+  when: on_success
 
 release:
   stage: release
+  dependencies:
+    - build
   only:
     - master
   script:
@@ -37,6 +52,7 @@ release:
     paths:
       - target/TownyMission*.jar
     expire_in: 1 week
+  when: on_success
 
 success_notification:
   stage: notification
