@@ -95,19 +95,8 @@ public class TownRankJson implements Rankable {
      */
     @Override
     @JsonProperty("points")
-    public int getPoint() {
+    public int getRankingFactor() {
         return points;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    @Override
-    @JsonProperty("townId")
-    public String getID() {
-        return townId;
     }
 
     @JsonProperty("townName")
@@ -115,9 +104,14 @@ public class TownRankJson implements Rankable {
         return townName;
     }
 
+    @JsonProperty("townId")
+    public String getTownId() {
+        return townId;
+    }
+
     @Override
     @JsonIgnore
     public int compareTo(@NotNull Rankable rankable) {
-        return points - rankable.getPoint();
+        return points - rankable.getRankingFactor();
     }
 }
