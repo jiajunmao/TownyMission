@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 public class TownyMission extends JavaPlugin {
 
     private final Logger logger = getLogger();
-    private Map<DbType, Database> dbList;
     private HikariDataSource db;
     private MissionConfigLoader missionConfigLoader;
     private TownyMissionRoot rootCmd;
@@ -68,22 +67,22 @@ public class TownyMission extends JavaPlugin {
         /**
          * Configure data storage, yaml, or mysql
          */
-        logger.info("===> Connecting to database");
+        logger.info(Util.translateColor("{#1FA63B}===> Connecting to datastore"));
         String storage = getConfig().getString("storage");
         storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
 
         if (storageType.equals(StorageType.MYSQL)) {
-            dbList = new HashMap<>();
+            logger.info("Using MYSQL as storage backend");
             connect();
-            registerDatabases();
-            initializeDatabases();
+        } else {
+            logger.info("Using YAML flat file as storage backend");
         }
 
-        logger.info("===> Registering commands");
+        logger.info(Util.translateColor("{#1FA63B}===> Registering commands"));
         registerCommands();
-        logger.info("===> Registering listeners");
+        logger.info(Util.translateColor("{#1FA63B}===> Registering listeners"));
         registerListeners();
-        logger.info("===> Registering timers");
+        logger.info(Util.translateColor("{#1FA63B}===> Registering timers"));
         registerTimers();
 
         if (!enabled) {
@@ -97,19 +96,6 @@ public class TownyMission extends JavaPlugin {
         if (storageType.equals(StorageType.MYSQL)) {
             close();
         }
-    }
-
-    /**
-     * Register databases.
-     */
-    public void registerDatabases() {
-        dbList.put(DbType.MISSION, new MissionDatabase(db, Util.getDbName(DbType.MISSION)));
-        dbList.put(DbType.MISSION_HISTORY, new MissionHistoryDatabase(db, Util.getDbName(DbType.MISSION_HISTORY)));
-        dbList.put(DbType.SPRINT, new SprintDatabase(db, Util.getDbName(DbType.SPRINT)));
-        dbList.put(DbType.SPRINT_HISTORY, new SprintHistoryDatabase(db, Util.getDbName(DbType.SPRINT_HISTORY)));
-        dbList.put(DbType.SEASON, new SeasonDatabase(db, Util.getDbName(DbType.SEASON)));
-        dbList.put(DbType.SEASON_HISTORY, new SeasonHistoryDatabase(db, Util.getDbName(DbType.SEASON_HISTORY)));
-        dbList.put(DbType.COOLDOWN, new CooldownDatabase(db, Util.getDbName(DbType.COOLDOWN)));
     }
 
     /**
@@ -158,15 +144,6 @@ public class TownyMission extends JavaPlugin {
         timerService.startSprintTimer();
         logger.info("Started season timer");
         timerService.startSeasonTimer();
-    }
-
-    /**
-     * Initialize databases.
-     */
-    public void initializeDatabases() {
-        for (Database db : dbList.values()) {
-            db.createTable();
-        }
     }
 
     /**
@@ -241,5 +218,9 @@ public class TownyMission extends JavaPlugin {
      */
     public StorageType getStorageType() {
         return storageType;
+    }
+
+    public HikariDataSource getDatasource() {
+        return db;
     }
 }

@@ -1,7 +1,11 @@
 package world.naturecraft.townymission.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
+import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.SprintEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +29,6 @@ public class SprintDatabase extends Database<SprintEntry> {
      */
     public SprintDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
-        singleton = this;
     }
 
     /**
@@ -34,6 +37,10 @@ public class SprintDatabase extends Database<SprintEntry> {
      * @return the instance
      */
     public static SprintDatabase getInstance() {
+        if (singleton == null) {
+            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            singleton = new SprintDatabase(instance.getDatasource(), Util.getDbName(DbType.SPRINT));
+        }
         return singleton;
     }
 

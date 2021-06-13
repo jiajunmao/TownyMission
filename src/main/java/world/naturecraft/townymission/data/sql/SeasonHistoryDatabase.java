@@ -1,7 +1,11 @@
 package world.naturecraft.townymission.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
+import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +28,6 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
      */
     public SeasonHistoryDatabase(HikariDataSource db, String tableName) {
         super(db, tableName);
-        singleton = this;
     }
 
     /**
@@ -33,6 +36,10 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
      * @return the instance
      */
     public static SeasonHistoryDatabase getInstance() {
+        if (singleton == null) {
+            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            singleton = new SeasonHistoryDatabase(instance.getDatasource(), Util.getDbName(DbType.SEASON_HISTORY));
+        }
         return singleton;
     }
 
