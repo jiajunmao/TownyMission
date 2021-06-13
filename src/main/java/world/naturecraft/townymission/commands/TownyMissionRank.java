@@ -13,8 +13,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.Rankable;
+import world.naturecraft.townymission.components.entity.Rankable;
+import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SprintDao;
+import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.RankUtil;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -40,14 +42,21 @@ public class TownyMissionRank extends TownyMissionCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new SanityChecker(instance).target(player)
-            .customCheck(() -> {
-                if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
+                .customCheck(() -> {
+                    if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
+                        return true;
+                    } else {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                })
+                .customCheck(() -> {
+                    if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
+                        return false;
+                    }
                     return true;
-                } else {
-                    Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
-                    return false;
-                }
-            }).check();
+                }).check();
     }
 
     /**

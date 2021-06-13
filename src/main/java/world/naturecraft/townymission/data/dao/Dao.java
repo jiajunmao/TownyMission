@@ -4,7 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.components.containers.sql.SqlEntry;
+import world.naturecraft.townymission.components.entity.DataEntity;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @param <T> the type parameter
  */
-public abstract class Dao<T extends SqlEntry> {
+public abstract class Dao<T extends DataEntity> {
 
     /**
      * Gets entries.

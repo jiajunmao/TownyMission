@@ -4,8 +4,16 @@
 
 package world.naturecraft.townymission.api.exceptions;
 
-public class ConfigLoadingError extends RuntimeException{
+/**
+ * The type Config loading error.
+ */
+public class ConfigLoadingError extends RuntimeException {
 
+    /**
+     * Instantiates a new Config loading error.
+     *
+     * @param e the e
+     */
     public ConfigLoadingError(Exception e) {
         super(e);
     }

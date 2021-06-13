@@ -16,10 +16,12 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
-import world.naturecraft.townymission.components.containers.json.ResourceJson;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.enums.RankType;
+import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -64,53 +66,52 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 @Override
                 public void run() {
                     MissionDao missionDao = MissionDao.getInstance();
-                    boolean sane = sanityCheck(player, args);
 
-                    if (sane) {
-                        MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
-                        ResourceJson resourceJson;
+                    if (!sanityCheck(player, args)) return;
 
-                        resourceJson = (ResourceJson) resourceEntry.getMissionJson();
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    ResourceMissionJson resourceMissionJson;
 
-                        if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
-                            int total = 0;
-                            int index = 0;
-                            for (ItemStack itemStack : player.getInventory().getContents()) {
-                                if (itemStack != null && itemStack.getType().equals(resourceJson.getType())) {
-                                    total += itemStack.getAmount();
-                                    player.getInventory().setItem(index, null);
-                                }
-                                index++;
+                    resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
+
+                    if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
+                        int total = 0;
+                        int index = 0;
+                        for (ItemStack itemStack : player.getInventory().getContents()) {
+                            if (itemStack != null && itemStack.getType().equals(resourceMissionJson.getType())) {
+                                total += itemStack.getAmount();
+                                player.getInventory().setItem(index, null);
                             }
-
-                            resourceJson.addContribution(player.getUniqueId().toString(), total);
-                            resourceJson.addCompleted(total);
-                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
-                                    .replace("%number", String.valueOf(total)
-                                            .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
-                        } else {
-                            int number = player.getItemInHand().getAmount();
-                            resourceJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
-                            resourceJson.addCompleted(number);
-                            player.setItemInHand(null);
-                            Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
-                                    .replace("%number", String.valueOf(number)
-                                            .replace("%type%", resourceJson.getType().name().toLowerCase(Locale.ROOT))));
+                            index++;
                         }
 
-                        try {
-                            resourceEntry.setMissionJson(resourceJson);
+                        resourceMissionJson.addContribution(player.getUniqueId().toString(), total);
+                        resourceMissionJson.addCompleted(total);
+                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
+                                .replace("%number", String.valueOf(total)
+                                        .replace("%type%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT))));
+                    } else {
+                        int number = player.getItemInHand().getAmount();
+                        resourceMissionJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
+                        resourceMissionJson.addCompleted(number);
+                        player.setItemInHand(null);
+                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
+                                .replace("%number", String.valueOf(number)
+                                        .replace("%type%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT))));
+                    }
 
-                            DoMissionEvent missionEvent = new DoMissionEvent(player, resourceEntry, true);
-                            Bukkit.getPluginManager().callEvent(missionEvent);
+                    try {
+                        resourceEntry.setMissionJson(resourceMissionJson);
 
-                            if (!missionEvent.isCanceled()) {
-                                missionDao.update(resourceEntry);
-                            }
-                        } catch (JsonProcessingException exception) {
-                            exception.printStackTrace();
-                            //Util.sendMsg(player, "Something went wrong during depositing");
+                        DoMissionEvent missionEvent = new DoMissionEvent(player, resourceEntry, true);
+                        Bukkit.getPluginManager().callEvent(missionEvent);
+
+                        if (!missionEvent.isCanceled()) {
+                            missionDao.update(resourceEntry);
                         }
+                    } catch (JsonProcessingException exception) {
+                        exception.printStackTrace();
+                        //Util.sendMsg(player, "Something went wrong during depositing");
                     }
                 }
             };
@@ -136,12 +137,12 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
                     MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
-                    ResourceJson resourceJson = (ResourceJson) resourceEntry.getMissionJson();
-                    if (player.getItemInHand().getType().equals(resourceJson.getType())) {
+                    ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
+                    if (player.getItemInHand().getType().equals(resourceMissionJson.getType())) {
                         return true;
                     } else {
                         Util.sendMsg(player, instance.getLangEntry("commands.deposit.onNotMatch"));
-                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceJson.getType().name().toLowerCase(Locale.ROOT)));
+                        Util.sendMsg(player, instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT)));
                         Util.sendMsg(player, "&cIn-hand type: " + instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         return false;
                     }
@@ -169,6 +170,13 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
+                })
+                .customCheck(() -> {
+                    if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
+                        return false;
+                    }
+                    return true;
                 }).check();
     }
 

@@ -5,10 +5,11 @@
 package world.naturecraft.townymission.data.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
-import world.naturecraft.townymission.components.containers.sql.SprintEntry;
+import world.naturecraft.townymission.components.entity.SprintEntry;
+import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.db.SprintStorage;
-import world.naturecraft.townymission.data.sql.SprintDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,6 +63,26 @@ public class SprintDao extends Dao<SprintEntry> {
         return database.getEntries();
     }
 
+    /**
+     * Gets entries as json.
+     *
+     * @return the entries as json
+     */
+    public List<TownRankJson> getEntriesAsJson() {
+        List<TownRankJson> rankJsons = new ArrayList<>();
+        for (SprintEntry entry : getEntries()) {
+            rankJsons.add(new TownRankJson(entry));
+        }
+
+        return rankJsons;
+    }
+
+    /**
+     * Contains boolean.
+     *
+     * @param town the town
+     * @return the boolean
+     */
     public boolean contains(Town town) {
         for (SprintEntry entry : getEntries()) {
             if (entry.getTownID().equalsIgnoreCase(town.getUUID().toString())) {
@@ -70,6 +91,7 @@ public class SprintDao extends Dao<SprintEntry> {
         }
         return false;
     }
+
     /**
      * Get sprint entry.
      *

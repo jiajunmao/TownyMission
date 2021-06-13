@@ -2,7 +2,7 @@ package world.naturecraft.townymission.data.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
+import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -109,7 +109,7 @@ public class MissionHistoryDatabase extends Database<MissionHistoryEntry> {
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     missionType + "', '" +
                     addedTime + "', '" +
                     startedTime + "', '" +

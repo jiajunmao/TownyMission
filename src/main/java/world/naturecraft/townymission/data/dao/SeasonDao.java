@@ -4,10 +4,11 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.db.SeasonStorage;
-import world.naturecraft.townymission.data.sql.SeasonDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,11 +50,8 @@ public class SeasonDao extends Dao<SeasonEntry> {
     }
 
     public void add(SeasonEntry entry) {
-        if (get(entry.getTownID()) == null) {
-            database.add(entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
-        } else {
-            update(entry);
-        }
+        System.out.println("SeasonDao.add called with " + entry.getTownName());
+        database.add(entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
     }
 
     @Override
@@ -77,5 +75,19 @@ public class SeasonDao extends Dao<SeasonEntry> {
             }
         }
         return null;
+    }
+
+    /**
+     * Gets entries as json.
+     *
+     * @return the entries as json
+     */
+    public List<TownRankJson> getEntriesAsJson() {
+        List<TownRankJson> rankJsons = new ArrayList<>();
+        for (SeasonEntry entry : getEntries()) {
+            rankJsons.add(new TownRankJson(entry));
+        }
+
+        return rankJsons;
     }
 }

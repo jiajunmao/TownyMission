@@ -6,21 +6,21 @@ prefix: "&6[TownyMission]"
 
 commands:
   abort:
-    onSuccess: "&cThe mission has been aborted"
+    onSuccess: "&fThe mission has been aborted"
     onNotMayorOrStarter: "&cYou either need to be the mayor or started the mission yourself to abort!"
   claim:
     onNotFound: "&cYour town does not have unclaimed missions!"
-    onSuccess: "&cYou have successfully claimed your rewards. Your have claimed %points% points."
+    onSuccess: "&fYou have successfully claimed your rewards. Your have claimed %points% points."
   deposit:
     onNotMatch: "&cThe item you are holding does not match the mission's resource type!"
     onMissionTimedOut: "&cYour mission has timed out! Please abort the current mission and start a new one!"
     onSuccess: "&fYou have successfully deposited %number% of %type%!"
-    requiredItem: "&cRequired type: %item%"
-    inHandItem: "&cIn-hand type: %item%"
+    requiredItem: "&fRequired type: %item%"
+    inHandItem: "&fIn-hand type: %item%"
   start:
     onAlreadyStarted: "&cYour town already has a started mission!"
     onStillInCooldown: "&cYour town is still in cooldown for claiming mission! Please wait %time%"
-    onSuccess: "&f You have started %type% %details%"
+    onSuccess: "&fYou have started %type% %details%"
   sanityChecker:
     onNoTown: "&cYou do not belong to a town!"
     onNotMayor: "&cYou are not the mayor!"
@@ -31,8 +31,12 @@ commands:
     onSuccess: "&fYou have successfully completed the mission!"
   reload:
     onSuccess: "&fYou have successfully reloaded config!"
+  startSeason:
+    onSuccess: "&fYou have successfully started season!"
+    onAlreadyStarted: "&cYou have already strated season(s)! You cannot start it again!"
 
 universal:
   onCommandNotFound: "&cCommand not found!"
   onCommandFormatError: "&cCommand format error!"
+  onClickDuringRecess: "&cWe are currently in recess! Please wait for the next sprint/season to start!"
 

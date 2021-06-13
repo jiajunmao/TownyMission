@@ -41,18 +41,59 @@ sprint:
   duration: 5
   # Interval between two springs, in days
   interval: 2
+  rewards:
+    # EQUAL, CONTRIBUTIONS, INDIVIDUAL
+    # EQUALS means that the reward is distributed evenly among all town members,
+    #     whether they actually contributed or not
+    # CONTRIBUTIONS means that the reward is distributed according to average contribution
+    #     (sum of individual contribution)/(number of mission)
+    # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
+    #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
+    method: contributions
+    # These are the points that are rewarded to the ranking towns to gain the season reward
+    # The format is '#rank:#season_points'
+    # If an others entry is specified, all non-specified towns passing the baseline will receive the specified amount
+    #     If no others entry is specified, that means all towns other than the rank-specified ones will receive 0 season points
+    seasonPointsReward:
+      - '1:3'
+      - '2:2'
+      - '3:1'
+      - 'others:1'
+
+    # There are only three types, RESOURCE, MONEY, and COMMAND
+    # Please use the exact format as the shown in the following default config
+    # Placeholders
+    #   - %player%: the name of the player, only works in COMMAND type
+    rewards:
+      - 'resource{"type": "DIAMOND", "amount": 100}'
+      - 'money{"amount": 50000}'
+      - 'command{"command": "cmi msg %player% wow you are amazing"}'
 
 season:
   # The current season, do not touch unless you know what you are doing
   current: 1
   # Number of sprints that a season will have
-  sprintsPerSeason:
+  sprintsPerSeason: 4
+  # Interval between two season, in days
+  interval: 7
   # The started time of this season, do not touch unless you know what you are doing
   # Changing this might corrupt database and interfere with normal sprint/season progression
   # In Java millisecond datetime format
-  startedTime:
-  # Interval between two season, in days
-  interval: 7
-
-# Interval to check whether a town has timeouted on this current mission, in minutes
-checkTimeOutInterval: 60
+  startedTime: -1
+  rewards:
+    # EQUAL, CONTRIBUTIONS, INDIVIDUAL
+    # EQUALS means that the reward is distributed evenly among all town members,
+    #     whether they actually contributed or not
+    # CONTRIBUTIONS means that the reward is distributed according to average contribution
+    #     (sum of individual contribution)/(number of mission)
+    # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
+    #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
+    method: contributions
+    # There are only three types, RESOURCE, MONEY, and COMMAND
+    # Please use the exact format as the shown in the following default config
+    # Placeholders
+    #   - %player%: the name of the player, only works in COMMAND type
+    rewards:
+      - 'resource{"type": "DIAMOND", "amount": 100}'
+      - 'money{"amount": 50000}'
+      - 'command{"command": "cmi msg %player% wow you are amazing"}'

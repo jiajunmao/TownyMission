@@ -6,8 +6,7 @@ package world.naturecraft.townymission.data.db;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
-import world.naturecraft.townymission.components.containers.sql.MissionHistoryEntry;
+import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.MissionHistoryDatabase;
 import world.naturecraft.townymission.data.yaml.MissionHistoryYaml;
@@ -19,9 +18,9 @@ import java.util.UUID;
  * The type Mission history storage.
  */
 public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
-    
+
     private static MissionHistoryStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Mission history storage.
@@ -31,6 +30,19 @@ public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
     public MissionHistoryStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static MissionHistoryStorage getInstance() {
+        if (singleton == null) {
+            new MissionHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -116,18 +128,5 @@ public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionHistoryStorage getInstance() {
-        if (singleton == null) {
-            new MissionHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 }

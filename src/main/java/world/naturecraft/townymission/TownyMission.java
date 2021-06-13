@@ -6,16 +6,19 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.commands.*;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminListMissions;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminStartSeason;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.components.gui.MissionManageGui;
-import world.naturecraft.townymission.config.CustomConfigLoader;
+import world.naturecraft.townymission.config.mission.MissionConfigLoader;
 import world.naturecraft.townymission.data.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
-import world.naturecraft.townymission.services.MissionService;
-import world.naturecraft.townymission.services.TownyMissionService;
+import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
@@ -31,9 +34,8 @@ public class TownyMission extends JavaPlugin {
 
     private final Logger logger = getLogger();
     private Map<DbType, Database> dbList;
-    private Map<DbType, TownyMissionService> serviceList;
     private HikariDataSource db;
-    private CustomConfigLoader customConfigLoader;
+    private MissionConfigLoader missionConfigLoader;
     private TownyMissionRoot rootCmd;
     private StorageType storageType;
     private boolean enabled = true;
@@ -51,15 +53,21 @@ public class TownyMission extends JavaPlugin {
         logger.info("-----------------------------------------------------------------");
 
 
+        /**
+         * This is saving the config.yml (Default config)
+         */
         this.saveDefaultConfig();
         try {
-            customConfigLoader = new CustomConfigLoader(this);
+            missionConfigLoader = new MissionConfigLoader(this);
         } catch (IOException | InvalidConfigurationException e) {
             logger.severe("IO operation fault during custom config initialization");
             e.printStackTrace();
             enabled = false;
         }
 
+        /**
+         * Configure data storage, yaml, or mysql
+         */
         logger.info("===> Connecting to database");
         String storage = getConfig().getString("storage");
         storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
@@ -71,13 +79,12 @@ public class TownyMission extends JavaPlugin {
             initializeDatabases();
         }
 
-        serviceList = new HashMap<>();
-        registerService();
-
         logger.info("===> Registering commands");
         registerCommands();
         logger.info("===> Registering listeners");
         registerListeners();
+        logger.info("===> Registering timers");
+        registerTimers();
 
         if (!enabled) {
             Bukkit.getPluginManager().disablePlugin(this);
@@ -106,20 +113,13 @@ public class TownyMission extends JavaPlugin {
     }
 
     /**
-     * Register service.
-     */
-    public void registerService() {
-        serviceList.put(DbType.MISSION, new MissionService(this));
-    }
-
-    /**
      * Register commands.
      */
     public void registerCommands() {
         this.rootCmd = new TownyMissionRoot(this);
         this.getCommand("townymission").setExecutor(rootCmd);
 
-        rootCmd.registerCommand("listAll", new TownyMissionListAll(this));
+        // User commands
         rootCmd.registerCommand("list", new TownyMissionList(this));
         rootCmd.registerCommand("start", new TownyMissionStart(this));
         rootCmd.registerCommand("abort", new TownyMissionAbort(this));
@@ -127,7 +127,13 @@ public class TownyMission extends JavaPlugin {
         rootCmd.registerCommand("claim", new TownyMissionClaim(this));
         rootCmd.registerCommand("info", new TownyMissionInfo(this));
         rootCmd.registerCommand("rank", new TownyMissionRank(this));
-        rootCmd.registerCommand("reload", new TownyMissionReload(this));
+
+        // Admin commands
+        TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
+        rootCmd.registerCommand("admin", rootAdminCmd);
+        rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminListMissions(this));
+        rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
+        rootAdminCmd.registerAdminCommand("startSeason", new TownyMissionAdminStartSeason(this));
     }
 
     /**
@@ -141,6 +147,17 @@ public class TownyMission extends JavaPlugin {
 
         // GUI listeners
         getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
+    }
+
+    /**
+     * Register timers.
+     */
+    public void registerTimers() {
+        TimerService timerService = TimerService.getInstance();
+        logger.info("Started sprint timer");
+        timerService.startSprintTimer();
+        logger.info("Started season timer");
+        timerService.startSeasonTimer();
     }
 
     /**
@@ -188,8 +205,8 @@ public class TownyMission extends JavaPlugin {
      *
      * @return the custom config
      */
-    public CustomConfigLoader getCustomConfig() {
-        return customConfigLoader;
+    public MissionConfigLoader getCustomConfig() {
+        return missionConfigLoader;
     }
 
     /**
@@ -205,15 +222,23 @@ public class TownyMission extends JavaPlugin {
         return finalString;
     }
 
+    /**
+     * Reload configs.
+     */
     public void reloadConfigs() {
         this.reloadConfig();
         try {
-            customConfigLoader = new CustomConfigLoader(this);
+            missionConfigLoader = new MissionConfigLoader(this);
         } catch (IOException | InvalidConfigurationException e) {
             throw new ConfigLoadingError(e);
         }
     }
 
+    /**
+     * Gets storage type.
+     *
+     * @return the storage type
+     */
     public StorageType getStorageType() {
         return storageType;
     }

@@ -4,8 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.NoStartedException;
-import world.naturecraft.townymission.components.containers.sql.MissionEntry;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 
@@ -114,6 +113,16 @@ public class Util {
      */
     public static long minuteToMs(int minute) {
         return (long) minute * 60 * 1000;
+    }
+
+    /**
+     * Ms to ticks long.
+     *
+     * @param milliseconds the milliseconds
+     * @return the long
+     */
+    public static long msToTicks(long milliseconds) {
+        return milliseconds / 1000 * 20;
     }
 
     /**

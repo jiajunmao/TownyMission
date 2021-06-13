@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.sql;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
+import world.naturecraft.townymission.components.entity.CooldownEntry;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,7 +96,7 @@ public class CooldownDatabase extends Database<CooldownEntry> {
     public void add(String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
                     startedTime + "', '" +
                     cooldown + "');";

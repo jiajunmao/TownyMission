@@ -6,8 +6,7 @@ package world.naturecraft.townymission.data.db;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SprintHistoryEntry;
-import world.naturecraft.townymission.components.containers.sql.SprintHistoryEntry;
+import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.SprintHistoryDatabase;
 import world.naturecraft.townymission.data.yaml.SprintHistoryYaml;
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class SprintHistoryStorage extends Storage<SprintHistoryEntry> {
 
     private static SprintHistoryStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Sprint history storage.
@@ -31,6 +30,19 @@ public class SprintHistoryStorage extends Storage<SprintHistoryEntry> {
     public SprintHistoryStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SprintHistoryStorage getInstance() {
+        if (singleton == null) {
+            new SprintHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -102,18 +114,5 @@ public class SprintHistoryStorage extends Storage<SprintHistoryEntry> {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintHistoryStorage getInstance() {
-        if (singleton == null) {
-            new SprintHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 }

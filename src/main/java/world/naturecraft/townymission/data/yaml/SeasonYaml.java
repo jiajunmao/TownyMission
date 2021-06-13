@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.yaml;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.ArrayList;
@@ -26,8 +26,21 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
      * @param instance the instance
      */
     public SeasonYaml(TownyMission instance) {
-        super(instance, DbType.SEASON_HISTORY);
+        super(instance, DbType.SEASON);
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonYaml getInstance() {
+        if (singleton == null) {
+            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            new SeasonYaml(townyMission);
+        }
+        return singleton;
     }
 
     /**
@@ -39,6 +52,7 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
      * @param season      the season
      */
     public void add(String townUUID, String townName, int seasonPoint, int season) {
+        System.out.println("SeasonDao.add called with " + townName);
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".townUUID", townUUID);
@@ -81,18 +95,5 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
         }
 
         return entryList;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonYaml getInstance() {
-        if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SeasonYaml(townyMission);
-        }
-        return singleton;
     }
 }

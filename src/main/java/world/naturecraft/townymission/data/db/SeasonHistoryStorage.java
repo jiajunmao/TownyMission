@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.db;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SeasonHistoryEntry;
+import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.SeasonHistoryDatabase;
 import world.naturecraft.townymission.data.yaml.SeasonHistoryYaml;
@@ -20,7 +20,7 @@ import java.util.UUID;
 public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
 
     private static SeasonHistoryStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Season history storage.
@@ -30,6 +30,19 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
     public SeasonHistoryStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonHistoryStorage getInstance() {
+        if (singleton == null) {
+            new SeasonHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -75,7 +88,7 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
      * @param rankJson    the rank json
      */
     public void update(UUID id, int season, long startedTime, String rankJson) {
-       switch (storageType) {
+        switch (storageType) {
             case YAML:
                 SeasonHistoryYaml.getInstance().update(id, season, startedTime, rankJson);
                 break;
@@ -99,18 +112,5 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonHistoryStorage getInstance() {
-        if (singleton == null) {
-            new SeasonHistoryStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 }

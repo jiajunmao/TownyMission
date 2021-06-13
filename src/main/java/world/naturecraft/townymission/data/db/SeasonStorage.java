@@ -6,8 +6,7 @@ package world.naturecraft.townymission.data.db;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
-import world.naturecraft.townymission.components.containers.sql.SeasonEntry;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.SeasonDatabase;
 import world.naturecraft.townymission.data.yaml.SeasonYaml;
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class SeasonStorage extends Storage<SeasonEntry> {
 
     private static SeasonStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Season storage.
@@ -31,6 +30,19 @@ public class SeasonStorage extends Storage<SeasonEntry> {
     public SeasonStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static SeasonStorage getInstance() {
+        if (singleton == null) {
+            new SeasonStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -102,18 +114,5 @@ public class SeasonStorage extends Storage<SeasonEntry> {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonStorage getInstance() {
-        if (singleton == null) {
-            new SeasonStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 }

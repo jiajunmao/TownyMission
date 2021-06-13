@@ -6,12 +6,11 @@ package world.naturecraft.townymission.data.db;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.containers.sql.CooldownEntry;
+import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.CooldownDatabase;
 import world.naturecraft.townymission.data.yaml.CooldownYaml;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class CooldownStorage extends Storage<CooldownEntry> {
 
     private static CooldownStorage singleton;
-    private StorageType storageType;
+    private final StorageType storageType;
 
     /**
      * Instantiates a new Cooldown storage.
@@ -31,6 +30,19 @@ public class CooldownStorage extends Storage<CooldownEntry> {
     public CooldownStorage(TownyMission instance) {
         storageType = instance.getStorageType();
         singleton = this;
+    }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static CooldownStorage getInstance() {
+        if (singleton == null) {
+            new CooldownStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
+        }
+
+        return singleton;
     }
 
     /**
@@ -100,19 +112,6 @@ public class CooldownStorage extends Storage<CooldownEntry> {
         }
 
         throw new IllegalStateException();
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownStorage getInstance() {
-        if (singleton == null) {
-            new CooldownStorage((TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission"));
-        }
-
-        return singleton;
     }
 
 }

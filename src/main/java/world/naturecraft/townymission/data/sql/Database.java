@@ -1,8 +1,7 @@
 package world.naturecraft.townymission.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import world.naturecraft.townymission.components.containers.sql.SqlEntry;
-import world.naturecraft.townymission.data.db.Storage;
+import world.naturecraft.townymission.components.entity.DataEntity;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ import java.util.List;
  *
  * @param <T> the type parameter
  */
-public abstract class Database<T extends SqlEntry> {
+public abstract class Database<T extends DataEntity> {
 
     /**
      * The Table name.
