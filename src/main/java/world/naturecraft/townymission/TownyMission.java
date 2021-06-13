@@ -1,5 +1,6 @@
 package world.naturecraft.townymission;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -67,7 +68,7 @@ public class TownyMission extends JavaPlugin {
         /**
          * Configure data storage, yaml, or mysql
          */
-        logger.info(Util.translateColor("{#1FA63B}===> Connecting to datastore"));
+        logger.info(Util.translateColor("{#E9B728}===> Connecting to datastore"));
         String storage = getConfig().getString("storage");
         storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
 
@@ -78,11 +79,11 @@ public class TownyMission extends JavaPlugin {
             logger.info("Using YAML flat file as storage backend");
         }
 
-        logger.info(Util.translateColor("{#1FA63B}===> Registering commands"));
+        logger.info(Util.translateColor("{#E9B728}===> Registering commands"));
         registerCommands();
-        logger.info(Util.translateColor("{#1FA63B}===> Registering listeners"));
+        logger.info(Util.translateColor("{#E9B728}===> Registering listeners"));
         registerListeners();
-        logger.info(Util.translateColor("{#1FA63B}===> Registering timers"));
+        logger.info(Util.translateColor("{#E9B728}===> Registering timers"));
         registerTimers();
 
         if (!enabled) {
@@ -156,18 +157,23 @@ public class TownyMission extends JavaPlugin {
         String dbUsername = getConfig().getString("database.username");
         String dbPassword = getConfig().getString("database.password");
 
-        db = new HikariDataSource();
-        db.setMaximumPoolSize(5);
-        db.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        db.addDataSourceProperty("serverName", dbAddress);
-        db.addDataSourceProperty("port", dbPort);
-        db.addDataSourceProperty("databaseName", dbName);
-        db.addDataSourceProperty("user", dbUsername);
-        db.addDataSourceProperty("password", dbPassword);
-        db.setMinimumIdle(5);
-        db.setConnectionTimeout(10000);
-        db.setIdleTimeout(600000);
-        db.setMaxLifetime(1800000);
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl( dbAddress );
+        config.addDataSourceProperty("port", dbPort);
+        config.addDataSourceProperty("databaseName", dbName);
+        config.setUsername( dbUsername );
+        config.setPassword( dbPassword );
+        config.addDataSourceProperty( "cachePrepStmts" , "true" );
+        config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
+        config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+        config.setMaximumPoolSize(5);
+        config.setMinimumIdle(5);
+        config.setConnectionTimeout(10000);
+        config.setIdleTimeout(600000);
+        config.setMaxLifetime(1800000);
+
+
+        db = new HikariDataSource(config);
     }
 
     /**
