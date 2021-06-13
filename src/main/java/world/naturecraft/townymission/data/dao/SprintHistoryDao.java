@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
+import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.data.db.SprintHistoryStorage;
 
@@ -46,6 +47,17 @@ public class SprintHistoryDao extends Dao<SprintHistoryEntry> {
     @Override
     public List<SprintHistoryEntry> getEntries() {
         return db.getEntries();
+    }
+
+    public SprintHistoryEntry get(int season, int sprint) {
+        List<SprintHistoryEntry> entries = getEntries();
+        for(SprintHistoryEntry e : entries) {
+            if (e.getSprint() == sprint && e.getSeason() == season) {
+                return e;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -50,6 +50,16 @@ sprint:
     # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
     #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
     method: contributions
+    # These are the points that are rewarded to the ranking towns to gain the season reward
+    # The format is '#rank:#season_points'
+    # If an others entry is specified, all non-specified towns passing the baseline will receive the specified amount
+    #     If no others entry is specified, that means all towns other than the rank-specified ones will receive 0 season points
+    seasonPointsReward:
+      - '1:3'
+      - '2:2'
+      - '3:1'
+      - 'others:1'
+
     # There are only three types, RESOURCE, MONEY, and COMMAND
     # Please use the exact format as the shown in the following default config
     # Placeholders

@@ -50,11 +50,8 @@ public class SeasonDao extends Dao<SeasonEntry> {
     }
 
     public void add(SeasonEntry entry) {
-        if (get(entry.getTownID()) == null) {
-            database.add(entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
-        } else {
-            update(entry);
-        }
+        System.out.println("SeasonDao.add called with " + entry.getTownName());
+        database.add(entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
     }
 
     @Override

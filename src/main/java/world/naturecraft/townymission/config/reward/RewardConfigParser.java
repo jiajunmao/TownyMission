@@ -13,6 +13,7 @@ import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.components.json.reward.CommandRewardJson;
 import world.naturecraft.townymission.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.components.json.reward.RewardJson;
+import world.naturecraft.townymission.components.json.reward.SeasonPointRewardJson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.Locale;
 
 public class RewardConfigParser {
 
-    public static List<RewardJson> parseAll(RankType rankType) {
+    public static List<RewardJson> parseAllRewards(RankType rankType) {
         TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
         List<String> rewardList;
         if (rankType.equals(RankType.SPRINT)) {
@@ -42,7 +43,7 @@ public class RewardConfigParser {
         return rewardJsonList;
     }
 
-    public static RewardMethod getRewardMethod(RankType rankType) {
+    public static RewardMethod getRewardMethods(RankType rankType) {
         TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
         if (rankType.equals(RankType.SEASON)) {
             return RewardMethod.valueOf(instance.getConfig().getString("season.rewards.method"));
@@ -51,9 +52,21 @@ public class RewardConfigParser {
         }
     }
 
-    private static RewardType getRewardType(String rewardString) {
+    public static RewardType getRewardType(String rewardString) {
         int endIdx = rewardString.indexOf("{");
         String type = rewardString.substring(0, endIdx);
         return RewardType.valueOf(type.toUpperCase(Locale.ROOT));
+    }
+
+    public static List<SeasonPointRewardJson> parseAllSeasonPointReward() {
+        TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+        List<String> seasonPointRewardStrings = instance.getConfig().getStringList("sprint.rewards.seasonPointsReward");
+        List<SeasonPointRewardJson> seasonPointReward = new ArrayList<>();
+        for (String str : seasonPointRewardStrings) {
+            SeasonPointRewardJson rewardJson = new SeasonPointRewardJson(str);
+            seasonPointReward.add(rewardJson);
+        }
+
+        return seasonPointReward;
     }
 }

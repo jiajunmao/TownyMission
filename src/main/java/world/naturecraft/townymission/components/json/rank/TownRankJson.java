@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.components.json.rank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +46,7 @@ public class TownRankJson implements Rankable {
      *
      * @param sprintEntry the sprint entry
      */
+    @JsonIgnore
     public TownRankJson(SprintEntry sprintEntry) {
         this.townId = sprintEntry.getTownID();
         this.townName = sprintEntry.getTownName();
@@ -56,6 +58,7 @@ public class TownRankJson implements Rankable {
      *
      * @param seasonEntry the season entry
      */
+    @JsonIgnore
     public TownRankJson(SeasonEntry seasonEntry) {
         this.townId = seasonEntry.getTownID();
         this.townName = seasonEntry.getTownName();
@@ -69,6 +72,7 @@ public class TownRankJson implements Rankable {
      * @return the rank
      * @throws JsonProcessingException the json processing exception
      */
+    @JsonIgnore
     public static TownRankJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, TownRankJson.class);
     }
@@ -79,6 +83,7 @@ public class TownRankJson implements Rankable {
      * @return the string
      * @throws JsonProcessingException the json processing exception
      */
+    @JsonIgnore
     public String toJson() throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(this);
     }
@@ -89,6 +94,7 @@ public class TownRankJson implements Rankable {
      * @return the point
      */
     @Override
+    @JsonProperty("points")
     public int getPoint() {
         return points;
     }
@@ -99,11 +105,18 @@ public class TownRankJson implements Rankable {
      * @return the id
      */
     @Override
+    @JsonProperty("townId")
     public String getID() {
         return townId;
     }
 
+    @JsonProperty("townName")
+    public String getTownName() {
+        return townName;
+    }
+
     @Override
+    @JsonIgnore
     public int compareTo(@NotNull Rankable rankable) {
         return points - rankable.getPoint();
     }

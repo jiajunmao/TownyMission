@@ -65,7 +65,6 @@ public class MissionManageGui extends TownyMissionGui {
         int size = missions.size();
         Random rand = new Random();
 
-        System.out.println("TimerService.canStart() result: " + TimerService.getInstance().canStart());
         // This means that we are not in recess
         if (TimerService.getInstance().canStart()) {
             for (int i = 0; i < diff; i++) {

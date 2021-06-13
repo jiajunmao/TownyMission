@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.RankType;
 
 import java.beans.ConstructorProperties;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ public class RankJson {
     @JsonIgnore
     public RankJson(RankType rankType, List<TownRankJson> rankedList) {
         this.rankType = rankType;
+        this.ranks = new HashMap<>();
         for (int i = 0; i < rankedList.size(); i++) {
             ranks.put(i, rankedList.get(i));
         }
@@ -58,6 +60,7 @@ public class RankJson {
      * @return the rank json
      * @throws JsonProcessingException the json processing exception
      */
+    @JsonIgnore
     public static RankJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, RankJson.class);
     }
@@ -78,6 +81,7 @@ public class RankJson {
      * @param rank the rank
      * @return the town rank json
      */
+    @JsonIgnore
     public TownRankJson getTownRankJson(int rank) {
         return ranks.get(rank);
     }
@@ -87,6 +91,7 @@ public class RankJson {
      *
      * @return the town rank jsons
      */
+    @JsonIgnore
     public List<TownRankJson> getTownRankJsons() {
         return List.copyOf(ranks.values());
     }
@@ -97,7 +102,18 @@ public class RankJson {
      * @return the string
      * @throws JsonProcessingException the json processing exception
      */
+    @JsonIgnore
     public String toJson() throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(this);
+    }
+
+    @JsonProperty("rankType")
+    public RankType getRankType() {
+        return rankType;
+    }
+
+    @JsonProperty("ranks")
+    public Map<Integer, TownRankJson> getRanks() {
+        return ranks;
     }
 }

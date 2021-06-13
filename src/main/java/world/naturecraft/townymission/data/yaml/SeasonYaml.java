@@ -26,7 +26,7 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
      * @param instance the instance
      */
     public SeasonYaml(TownyMission instance) {
-        super(instance, DbType.SEASON_HISTORY);
+        super(instance, DbType.SEASON);
         singleton = this;
     }
 
@@ -52,6 +52,7 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
      * @param season      the season
      */
     public void add(String townUUID, String townName, int seasonPoint, int season) {
+        System.out.println("SeasonDao.add called with " + townName);
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".townUUID", townUUID);
