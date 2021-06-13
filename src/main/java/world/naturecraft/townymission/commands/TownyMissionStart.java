@@ -14,8 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.MissionService;
+import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -96,6 +98,12 @@ public class TownyMissionStart extends TownyMissionCommand {
                     if (args.length == 1 ||
                             (Integer.parseInt(args[1]) > instance.getConfig().getInt("mission.amount") || Integer.parseInt(args[1]) < 1)) {
                         Util.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                    return true;
+                }).customCheck(() -> {
+                    if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
+                        Util.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
                         return false;
                     }
                     return true;
