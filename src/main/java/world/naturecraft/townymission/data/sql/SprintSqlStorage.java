@@ -17,9 +17,9 @@ import java.util.UUID;
 /**
  * The type Sprint database.
  */
-public class SprintDatabase extends Database<SprintEntry> {
+public class SprintSqlStorage extends SqlStorage<SprintEntry> {
 
-    private static SprintDatabase singleton;
+    private static SprintSqlStorage singleton;
 
     /**
      * Instantiates a new Sprint database.
@@ -27,7 +27,7 @@ public class SprintDatabase extends Database<SprintEntry> {
      * @param db        the db
      * @param tableName the table name
      */
-    public SprintDatabase(HikariDataSource db, String tableName) {
+    public SprintSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
     }
 
@@ -36,10 +36,10 @@ public class SprintDatabase extends Database<SprintEntry> {
      *
      * @return the instance
      */
-    public static SprintDatabase getInstance() {
+    public static SprintSqlStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new SprintDatabase(instance.getDatasource(), Util.getDbName(DbType.SPRINT));
+            singleton = new SprintSqlStorage(instance.getDatasource(), Util.getDbName(DbType.SPRINT));
         }
         return singleton;
     }

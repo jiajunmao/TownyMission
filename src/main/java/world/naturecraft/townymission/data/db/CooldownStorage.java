@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.sql.CooldownDatabase;
-import world.naturecraft.townymission.data.yaml.CooldownYaml;
+import world.naturecraft.townymission.data.sql.CooldownSqlStorage;
+import world.naturecraft.townymission.data.yaml.CooldownYamlStorage;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,10 +55,10 @@ public class CooldownStorage extends Storage<CooldownEntry> {
     public void add(String townUUID, long startedTime, long cooldown) {
         switch (storageType) {
             case YAML:
-                CooldownYaml.getInstance().add(townUUID, startedTime, cooldown);
+                CooldownYamlStorage.getInstance().add(townUUID, startedTime, cooldown);
                 break;
             case MYSQL:
-                CooldownDatabase.getInstance().add(townUUID, startedTime, cooldown);
+                CooldownSqlStorage.getInstance().add(townUUID, startedTime, cooldown);
                 break;
         }
     }
@@ -71,10 +71,10 @@ public class CooldownStorage extends Storage<CooldownEntry> {
     public void remove(UUID id) {
         switch (storageType) {
             case YAML:
-                CooldownYaml.getInstance().remove(id);
+                CooldownYamlStorage.getInstance().remove(id);
                 break;
             case MYSQL:
-                CooldownDatabase.getInstance().remove(id);
+                CooldownSqlStorage.getInstance().remove(id);
                 break;
         }
     }
@@ -90,10 +90,10 @@ public class CooldownStorage extends Storage<CooldownEntry> {
     public void update(UUID id, String townUUID, long startedTime, long cooldown) {
         switch (storageType) {
             case YAML:
-                CooldownYaml.getInstance().update(id, townUUID, startedTime, cooldown);
+                CooldownYamlStorage.getInstance().update(id, townUUID, startedTime, cooldown);
                 break;
             case MYSQL:
-                CooldownDatabase.getInstance().update(id, townUUID, startedTime, cooldown);
+                CooldownSqlStorage.getInstance().update(id, townUUID, startedTime, cooldown);
                 break;
         }
     }
@@ -106,9 +106,9 @@ public class CooldownStorage extends Storage<CooldownEntry> {
     public List<CooldownEntry> getEntries() {
         switch (storageType) {
             case YAML:
-                return CooldownYaml.getInstance().getEntries();
+                return CooldownYamlStorage.getInstance().getEntries();
             case MYSQL:
-                return CooldownDatabase.getInstance().getEntries();
+                return CooldownSqlStorage.getInstance().getEntries();
         }
 
         throw new IllegalStateException();

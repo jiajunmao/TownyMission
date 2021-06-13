@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.yaml;
 
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.ArrayList;
@@ -14,19 +14,19 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Season yaml.
+ * The type Sprint yaml.
  */
-public class SeasonYaml extends YamlStorage<SeasonEntry> {
+public class SprintYamlStorage extends YamlStorage<SprintEntry> {
 
-    private static SeasonYaml singleton;
+    private static SprintYamlStorage singleton;
 
     /**
-     * Instantiates a new Season yaml.
+     * Instantiates a new Sprint yaml.
      *
      * @param instance the instance
      */
-    public SeasonYaml(TownyMission instance) {
-        super(instance, DbType.SEASON);
+    public SprintYamlStorage(TownyMission instance) {
+        super(instance, DbType.SPRINT);
         singleton = this;
     }
 
@@ -35,10 +35,10 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
      *
      * @return the instance
      */
-    public static SeasonYaml getInstance() {
+    public static SprintYamlStorage getInstance() {
         if (singleton == null) {
             TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SeasonYaml(townyMission);
+            new SprintYamlStorage(townyMission);
         }
         return singleton;
     }
@@ -46,50 +46,53 @@ public class SeasonYaml extends YamlStorage<SeasonEntry> {
     /**
      * Add.
      *
-     * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
-     * @param season      the season
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
      */
-    public void add(String townUUID, String townName, int seasonPoint, int season) {
-        System.out.println("SeasonDao.add called with " + townName);
+    public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".townUUID", townUUID);
         add(uuid + ".townName", townName);
-        add(uuid + ".seasonPoint", seasonPoint);
+        add(uuid + ".naturePoints", naturePoints);
+        add(uuid + ".sprint", sprint);
         add(uuid + ".season", season);
     }
 
     /**
      * Update.
      *
-     * @param uuid        the uuid
-     * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
-     * @param season      the season
+     * @param uuid         the uuid
+     * @param townUUID     the town uuid
+     * @param townName     the town name
+     * @param naturePoints the nature points
+     * @param sprint       the sprint
+     * @param season       the season
      */
-    public void update(UUID uuid, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(UUID uuid, String townUUID, String townName, int naturePoints, int sprint, int season) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".townName", townName);
-        set(uuid + ".seasonPoint", seasonPoint);
+        set(uuid + ".naturePoints", naturePoints);
+        set(uuid + ".sprint", sprint);
         set(uuid + ".season", season);
     }
 
     @Override
-    public List<SeasonEntry> getEntries() {
-        List<SeasonEntry> entryList = new ArrayList<>();
-
+    public List<SprintEntry> getEntries() {
+        List<SprintEntry> entryList = new ArrayList<>();
         if (file.getConfigurationSection("") == null)
             return entryList;
 
         for (String key : file.getConfigurationSection("").getKeys(false)) {
-            entryList.add(new SeasonEntry(
+            entryList.add(new SprintEntry(
                     UUID.fromString(key),
                     file.getString(key + ".townUUID"),
                     file.getString(key + ".townName"),
-                    file.getInt(key + ".seasonPoint"),
+                    file.getInt(key + ".naturePoints"),
+                    file.getInt(key + ".sprint"),
                     file.getInt(key + ".season")
             ));
         }

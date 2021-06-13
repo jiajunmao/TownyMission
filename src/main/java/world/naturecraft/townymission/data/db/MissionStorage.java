@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.sql.MissionDatabase;
-import world.naturecraft.townymission.data.yaml.MissionYaml;
+import world.naturecraft.townymission.data.sql.MissionSqlStorage;
+import world.naturecraft.townymission.data.yaml.MissionYamlStorage;
 
 import java.util.List;
 import java.util.UUID;
@@ -59,10 +59,10 @@ public class MissionStorage {
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         switch (storageType) {
             case YAML:
-                MissionYaml.getInstance().add(missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
+                MissionYamlStorage.getInstance().add(missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
                 break;
             case MYSQL:
-                MissionDatabase.getInstance().add(missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
+                MissionSqlStorage.getInstance().add(missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
                 break;
         }
     }
@@ -75,10 +75,10 @@ public class MissionStorage {
     public void remove(UUID id) {
         switch (storageType) {
             case YAML:
-                MissionYaml.getInstance().remove(id);
+                MissionYamlStorage.getInstance().remove(id);
                 break;
             case MYSQL:
-                MissionDatabase.getInstance().remove(id);
+                MissionSqlStorage.getInstance().remove(id);
                 break;
         }
     }
@@ -98,10 +98,10 @@ public class MissionStorage {
     public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
         switch (storageType) {
             case YAML:
-                MissionYaml.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
+                MissionYamlStorage.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
                 break;
             case MYSQL:
-                MissionDatabase.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
+                MissionSqlStorage.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, missionJson, townName, startedPlayerUUID);
                 break;
         }
     }
@@ -114,9 +114,9 @@ public class MissionStorage {
     public List<MissionEntry> getEntries() {
         switch (storageType) {
             case YAML:
-                return MissionYaml.getInstance().getEntries();
+                return MissionYamlStorage.getInstance().getEntries();
             case MYSQL:
-                return MissionDatabase.getInstance().getEntries();
+                return MissionSqlStorage.getInstance().getEntries();
         }
 
         throw new IllegalStateException();

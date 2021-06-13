@@ -1,33 +1,37 @@
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
+
 package world.naturecraft.townymission.data.sql;
 
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Season database.
+ * The type Cooldown database.
  */
-public class SeasonDatabase extends Database<SeasonEntry> {
+public class CooldownSqlStorage extends SqlStorage<CooldownEntry> {
 
-    private static SeasonDatabase singleton;
+    private static CooldownSqlStorage singleton;
 
     /**
-     * Instantiates a new Season database.
+     * Instantiates a new Database.
      *
      * @param db        the db
      * @param tableName the table name
      */
-    public SeasonDatabase(HikariDataSource db, String tableName) {
+    public CooldownSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
     }
 
@@ -36,23 +40,25 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      *
      * @return the instance
      */
-    public static SeasonDatabase getInstance() {
+    public static CooldownSqlStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new SeasonDatabase(instance.getDatasource(), Util.getDbName(DbType.SEASON));
+            singleton = new CooldownSqlStorage(instance.getDatasource(), Util.getDbName(DbType.COOLDOWN));
         }
         return singleton;
     }
 
+    /**
+     * Create table.
+     */
     @Override
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL ," +
-                    "`town_id` VARCHAR(255) NOT NULL ," +
-                    "`town_name` VARCHAR(255) NOT NULL, " +
-                    "`seasonpoints` INT NOT NULL, " +
-                    "`season` INT NOT NULL ," +
+                    "`id` VARCHAR(255) NOT NULL," +
+                    "`town_uuid` VARCHAR(255) NOT NULL ," +
+                    "`started_time` BIGINT NOT NULL," +
+                    "`cooldown` BIGINT NOT NULL," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -60,26 +66,29 @@ public class SeasonDatabase extends Database<SeasonEntry> {
         });
     }
 
+    /**
+     * Gets entries.
+     *
+     * @return the entries
+     */
     @Override
-    public List<SeasonEntry> getEntries() {
-        List<SeasonEntry> list = new ArrayList<>();
+    public List<CooldownEntry> getEntries() {
+        List<CooldownEntry> list = new ArrayList<>();
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
-            try {
-                ResultSet result = p.executeQuery();
-                while (result.next()) {
-                    list.add(new SeasonEntry(UUID.fromString(result.getString("id")),
-                            result.getString("town_id"),
-                            result.getString("town_name"),
-                            result.getInt("seasonpoints"),
-                            result.getInt("season")));
+            ResultSet result = p.executeQuery();
+            while (result.next()) {
+                try {
+                    list.add(new CooldownEntry(UUID.fromString(result.getString("id")),
+                            result.getString("town_uuid"),
+                            result.getLong("started_time"),
+                            result.getLong("cooldown")));
+                } catch (NotRegisteredException e) {
+                    e.printStackTrace();
                 }
-                return null;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return null;
             }
+            return null;
         });
         return list;
     }
@@ -88,18 +97,16 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      * Add.
      *
      * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
-     * @param season      the season
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
      */
-    public void add(String townUUID, String townName, int seasonPoint, int season) {
+    public void add(String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
-                    townName + "', '" +
-                    seasonPoint + "', '" +
-                    season + "');";
+                    startedTime + "', '" +
+                    cooldown + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -114,7 +121,7 @@ public class SeasonDatabase extends Database<SeasonEntry> {
     public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id + "');";
+                    "id='" + id.toString() + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -126,18 +133,16 @@ public class SeasonDatabase extends Database<SeasonEntry> {
      *
      * @param id          the id
      * @param townUUID    the town uuid
-     * @param townName    the town name
-     * @param seasonPoint the season point
-     * @param season      the season
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
      */
-    public void update(UUID id, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(UUID id, String townUUID, long startedTime, long cooldown) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET town_id='" + townUUID +
-                    "', town_name='" + townName +
-                    "', seasonpoints='" + seasonPoint +
-                    "', season='" + season +
-                    "' WHERE id='" + id + "';";
+                    " SET town_uuid='" + townUUID +
+                    "', started_time='" + startedTime +
+                    "', cooldown='" + cooldown +
+                    "' WHERE id='" + id.toString() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

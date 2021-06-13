@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.sql.SeasonHistoryDatabase;
-import world.naturecraft.townymission.data.yaml.SeasonHistoryYaml;
+import world.naturecraft.townymission.data.sql.SeasonHistorySqlStorage;
+import world.naturecraft.townymission.data.yaml.SeasonHistoryYamlStorage;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,10 +55,10 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
     public void add(int season, long startedTime, String rankJson) {
         switch (storageType) {
             case YAML:
-                SeasonHistoryYaml.getInstance().add(season, startedTime, rankJson);
+                SeasonHistoryYamlStorage.getInstance().add(season, startedTime, rankJson);
                 break;
             case MYSQL:
-                SeasonHistoryDatabase.getInstance().add(season, startedTime, rankJson);
+                SeasonHistorySqlStorage.getInstance().add(season, startedTime, rankJson);
                 break;
         }
     }
@@ -71,10 +71,10 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
     public void remove(UUID id) {
         switch (storageType) {
             case YAML:
-                SeasonHistoryYaml.getInstance().remove(id);
+                SeasonHistoryYamlStorage.getInstance().remove(id);
                 break;
             case MYSQL:
-                SeasonHistoryDatabase.getInstance().remove(id);
+                SeasonHistorySqlStorage.getInstance().remove(id);
                 break;
         }
     }
@@ -90,10 +90,10 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
     public void update(UUID id, int season, long startedTime, String rankJson) {
         switch (storageType) {
             case YAML:
-                SeasonHistoryYaml.getInstance().update(id, season, startedTime, rankJson);
+                SeasonHistoryYamlStorage.getInstance().update(id, season, startedTime, rankJson);
                 break;
             case MYSQL:
-                SeasonHistoryDatabase.getInstance().update(id, season, startedTime, rankJson);
+                SeasonHistorySqlStorage.getInstance().update(id, season, startedTime, rankJson);
                 break;
         }
     }
@@ -106,9 +106,9 @@ public class SeasonHistoryStorage extends Storage<SeasonHistoryEntry> {
     public List<SeasonHistoryEntry> getEntries() {
         switch (storageType) {
             case YAML:
-                return SeasonHistoryYaml.getInstance().getEntries();
+                return SeasonHistoryYamlStorage.getInstance().getEntries();
             case MYSQL:
-                return SeasonHistoryDatabase.getInstance().getEntries();
+                return SeasonHistorySqlStorage.getInstance().getEntries();
         }
 
         throw new IllegalStateException();

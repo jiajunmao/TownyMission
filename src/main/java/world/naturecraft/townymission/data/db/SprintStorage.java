@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.sql.SprintDatabase;
-import world.naturecraft.townymission.data.yaml.SprintYaml;
+import world.naturecraft.townymission.data.sql.SprintSqlStorage;
+import world.naturecraft.townymission.data.yaml.SprintYamlStorage;
 
 import java.util.List;
 import java.util.UUID;
@@ -56,10 +56,10 @@ public class SprintStorage extends Storage<SprintEntry> {
     public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
         switch (storageType) {
             case YAML:
-                SprintYaml.getInstance().add(townUUID, townName, naturePoints, sprint, season);
+                SprintYamlStorage.getInstance().add(townUUID, townName, naturePoints, sprint, season);
                 break;
             case MYSQL:
-                SprintDatabase.getInstance().add(townUUID, townName, naturePoints, sprint, season);
+                SprintSqlStorage.getInstance().add(townUUID, townName, naturePoints, sprint, season);
                 break;
         }
     }
@@ -72,10 +72,10 @@ public class SprintStorage extends Storage<SprintEntry> {
     public void remove(UUID id) {
         switch (storageType) {
             case YAML:
-                SprintYaml.getInstance().remove(id);
+                SprintYamlStorage.getInstance().remove(id);
                 break;
             case MYSQL:
-                SprintDatabase.getInstance().remove(id);
+                SprintSqlStorage.getInstance().remove(id);
                 break;
         }
     }
@@ -93,10 +93,10 @@ public class SprintStorage extends Storage<SprintEntry> {
     public void update(UUID id, String townUUID, String townName, int naturePoints, int sprint, int season) {
         switch (storageType) {
             case YAML:
-                SprintYaml.getInstance().update(id, townUUID, townName, naturePoints, sprint, season);
+                SprintYamlStorage.getInstance().update(id, townUUID, townName, naturePoints, sprint, season);
                 break;
             case MYSQL:
-                SprintDatabase.getInstance().update(id, townUUID, townName, naturePoints, sprint, season);
+                SprintSqlStorage.getInstance().update(id, townUUID, townName, naturePoints, sprint, season);
                 break;
         }
     }
@@ -109,9 +109,9 @@ public class SprintStorage extends Storage<SprintEntry> {
     public List<SprintEntry> getEntries() {
         switch (storageType) {
             case YAML:
-                return SprintYaml.getInstance().getEntries();
+                return SprintYamlStorage.getInstance().getEntries();
             case MYSQL:
-                return SprintDatabase.getInstance().getEntries();
+                return SprintSqlStorage.getInstance().getEntries();
         }
 
         throw new IllegalStateException();

@@ -3,7 +3,7 @@ package world.naturecraft.townymission.data.sql;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
+import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.utils.Util;
 
@@ -14,19 +14,19 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Sprint history database.
+ * The type Season history database.
  */
-public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
+public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> {
 
-    private static SprintHistoryDatabase singleton;
+    private static SeasonHistorySqlStorage singleton;
 
     /**
-     * Instantiates a new Sprint history database.
+     * Instantiates a new Season history database.
      *
      * @param db        the db
      * @param tableName the table name
      */
-    public SprintHistoryDatabase(HikariDataSource db, String tableName) {
+    public SeasonHistorySqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
     }
 
@@ -35,10 +35,10 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
      *
      * @return the instance
      */
-    public static SprintHistoryDatabase getInstance() {
+    public static SeasonHistorySqlStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new SprintHistoryDatabase(instance.getDatasource(), Util.getDbName(DbType.SPRINT_HISTORY));
+            singleton = new SeasonHistorySqlStorage(instance.getDatasource(), Util.getDbName(DbType.SEASON_HISTORY));
         }
         return singleton;
     }
@@ -49,8 +49,7 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`id` VARCHAR(255) NOT NULL ," +
                     "`season` INT NOT NULL ," +
-                    "`sprint` INT NOT NULL, " +
-                    "`started_time` BIGINT NOT NULL, " +
+                    "`started_time` BIGINT NOT NULL ," +
                     "`rank_json` VARCHAR(255) NOT NULL ," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -60,17 +59,16 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
     }
 
     @Override
-    public List<SprintHistoryEntry> getEntries() {
-        List<SprintHistoryEntry> list = new ArrayList<>();
+    public List<SeasonHistoryEntry> getEntries() {
+        List<SeasonHistoryEntry> list = new ArrayList<>();
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName;
             PreparedStatement p = conn.prepareStatement(sql);
             ResultSet result = p.executeQuery();
 
             while (result.next()) {
-                list.add(new SprintHistoryEntry(UUID.fromString(result.getString("id")),
+                list.add(new SeasonHistoryEntry(UUID.fromString(result.getString("id")),
                         result.getInt("season"),
-                        result.getInt("sprint"),
                         result.getLong("started_time"),
                         result.getString("rank_json")));
             }
@@ -84,17 +82,15 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
      * Add.
      *
      * @param season      the season
-     * @param sprint      the sprint
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void add(int season, int sprint, long startedTime, String rankJson) {
+    public void add(int season, long startedTime, String rankJson) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
-                    season + "' , '" +
-                    sprint + "' , '" +
-                    startedTime + "' , '" +
+                    season + "', '" +
+                    startedTime + "', '" +
                     rankJson + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -122,15 +118,13 @@ public class SprintHistoryDatabase extends Database<SprintHistoryEntry> {
      *
      * @param id          the id
      * @param season      the season
-     * @param sprint      the sprint
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void update(UUID id, int season, int sprint, long startedTime, String rankJson) {
+    public void update(UUID id, int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + season +
-                    "', sprint='" + sprint +
                     "', started_time='" + startedTime +
                     "', rank_json='" + rankJson +
                     "' WHERE id='" + id + "';";
