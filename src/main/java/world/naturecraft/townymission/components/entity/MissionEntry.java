@@ -252,6 +252,6 @@ public class MissionEntry extends DataEntity {
      * @return the boolean
      */
     public boolean isCompleted() {
-        return missionJson.getCompleted() > missionJson.getAmount();
+        return missionJson.getCompleted() >= missionJson.getAmount();
     }
 }

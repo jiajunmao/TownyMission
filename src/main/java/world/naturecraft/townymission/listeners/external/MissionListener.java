@@ -141,6 +141,12 @@ public class MissionListener extends TownyMissionListener {
                 if (sanityChecker.check()) {
                     Town town = TownyUtil.residentOf(player);
                     MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town, missionType);
+
+                    System.out.println("Mission isCompleted: " + taskEntry.isCompleted());
+                    System.out.println("Completed: " + taskEntry.getMissionJson().getCompleted());
+                    System.out.println("Required: " + taskEntry.getMissionJson().getAmount());
+                    if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
+
                     MissionJson json = taskEntry.getMissionJson();
                     json.setCompleted(json.getCompleted() + amount);
                     json.addContribution(player.getUniqueId().toString(), amount);
