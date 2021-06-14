@@ -15,5 +15,10 @@ import java.util.List;
  */
 public abstract class Storage<T extends DataEntity> {
 
+    /**
+     * Gets entries.
+     *
+     * @return the entries
+     */
     public abstract List<T> getEntries();
 }

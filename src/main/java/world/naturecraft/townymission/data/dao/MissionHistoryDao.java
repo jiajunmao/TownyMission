@@ -6,13 +6,10 @@ package world.naturecraft.townymission.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.OfflinePlayer;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
-import world.naturecraft.townymission.data.db.CooldownStorage;
 import world.naturecraft.townymission.data.db.MissionHistoryStorage;
-import world.naturecraft.townymission.utils.BooleanChecker;
 import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.ArrayList;
@@ -108,6 +105,13 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
         }
     }
 
+    /**
+     * Gets average contributions.
+     *
+     * @param sprint the sprint
+     * @param season the season
+     * @return the average contributions
+     */
     public Map<String, Double> getAverageContributions(int sprint, int season) {
         List<MissionHistoryEntry> missionHistoryEntries = getEntries(new EntryFilter<MissionHistoryEntry>() {
             @Override
@@ -127,14 +131,14 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
 
                 if (!averageContribution.containsKey(player)) {
                     averageContribution.put(player, percent);
-                }  else {
+                } else {
                     averageContribution.put(player, averageContribution.get(player) + percent);
                 }
             }
         }
 
         int totalMissions = missionHistoryEntries.size();
-        for(String player : averageContribution.keySet()) {
+        for (String player : averageContribution.keySet()) {
             averageContribution.put(player, averageContribution.get(player) / totalMissions);
         }
 

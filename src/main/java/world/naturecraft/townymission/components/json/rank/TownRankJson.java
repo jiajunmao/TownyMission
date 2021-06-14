@@ -99,11 +99,21 @@ public class TownRankJson implements Rankable {
         return points;
     }
 
+    /**
+     * Gets town name.
+     *
+     * @return the town name
+     */
     @JsonProperty("townName")
     public String getTownName() {
         return townName;
     }
 
+    /**
+     * Gets town id.
+     *
+     * @return the town id
+     */
     @JsonProperty("townId")
     public String getTownId() {
         return townId;

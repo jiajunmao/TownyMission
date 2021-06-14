@@ -7,26 +7,20 @@ package world.naturecraft.townymission.services;
 // This service is mainly here to check the progress of sprint and season
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.components.entity.*;
+import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.enums.RewardMethod;
-import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.components.json.rank.RankJson;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
-import world.naturecraft.townymission.components.enums.RankType;
-import world.naturecraft.townymission.components.json.reward.RewardJson;
-import world.naturecraft.townymission.components.json.reward.PointRewardJson;
-import world.naturecraft.townymission.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.data.dao.*;
 import world.naturecraft.townymission.utils.RankUtil;
-import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 /**
  * The type Timer service.
@@ -86,7 +80,7 @@ public class TimerService extends TownyMissionService {
                     // Check if in season interval, if is, do nothing
                     if (SprintHistoryDao.getInstance().get(instance.getConfig().getInt("season.current"),
                             instance.getConfig().getInt("sprint.current")) != null) {
-                            return;
+                        return;
                     }
 
                     instance.getLogger().warning("Sprint interval reached, doing sprint recess clean up jobs");
@@ -205,6 +199,11 @@ public class TimerService extends TownyMissionService {
         r.runTaskTimerAsynchronously(instance, 0, 100);
     }
 
+    /**
+     * Can start boolean.
+     *
+     * @return the boolean
+     */
     public boolean canStart() {
         Date date = new Date();
         long timeNow = date.getTime();
@@ -215,11 +214,23 @@ public class TimerService extends TownyMissionService {
         return !isInInterval(RankType.SEASON) && !isInInterval(RankType.SPRINT);
     }
 
+    /**
+     * Is in interval boolean.
+     *
+     * @param rankType the rank type
+     * @return the boolean
+     */
     public boolean isInInterval(RankType rankType) {
         long timeNow = new Date().getTime();
         return timeNow < getTotalEndTime(rankType) && timeNow > getActiveEndTime(rankType);
     }
 
+    /**
+     * Gets start time.
+     *
+     * @param rankType the rank type
+     * @return the start time
+     */
     public long getStartTime(RankType rankType) {
         switch (rankType) {
             case SPRINT:
@@ -235,6 +246,12 @@ public class TimerService extends TownyMissionService {
         throw new IllegalStateException();
     }
 
+    /**
+     * Gets duration.
+     *
+     * @param rankType the rank type
+     * @return the duration
+     */
     public long getDuration(RankType rankType) {
         switch (rankType) {
             case SPRINT:
@@ -249,6 +266,12 @@ public class TimerService extends TownyMissionService {
         throw new IllegalStateException();
     }
 
+    /**
+     * Gets interval duration.
+     *
+     * @param rankType the rank type
+     * @return the interval duration
+     */
     public long getIntervalDuration(RankType rankType) {
         switch (rankType) {
             case SPRINT:
@@ -260,6 +283,12 @@ public class TimerService extends TownyMissionService {
         throw new IllegalStateException();
     }
 
+    /**
+     * Gets active end time.
+     *
+     * @param rankType the rank type
+     * @return the active end time
+     */
     public long getActiveEndTime(RankType rankType) {
         switch (rankType) {
             case SPRINT:
@@ -274,6 +303,12 @@ public class TimerService extends TownyMissionService {
         throw new IllegalStateException();
     }
 
+    /**
+     * Gets total end time.
+     *
+     * @param rankType the rank type
+     * @return the total end time
+     */
     public long getTotalEndTime(RankType rankType) {
         return getActiveEndTime(rankType) + getIntervalDuration(rankType);
     }

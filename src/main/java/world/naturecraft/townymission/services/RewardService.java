@@ -32,15 +32,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * The type Reward service.
+ */
 public class RewardService extends TownyMissionService {
 
     private static RewardService singleton;
-    private TownyMission instance;
+    private final TownyMission instance;
 
+    /**
+     * Instantiates a new Reward service.
+     *
+     * @param instance the instance
+     */
     public RewardService(TownyMission instance) {
         this.instance = instance;
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static RewardService getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
@@ -54,10 +67,10 @@ public class RewardService extends TownyMissionService {
      * Reward a player with the content in the RewarsJson
      * This assumes that the player is online
      *
-     * @param player The online player
+     * @param player     The online player
      * @param claimEntry The entry containing the reward
      */
-    // TODO: Grab stuff from the freaking DAO, you are a service!
+// TODO: Grab stuff from the freaking DAO, you are a service!
     public void claimEntry(Player player, ClaimEntry claimEntry) {
         RewardJson rewardJson = claimEntry.getRewardJson();
         RewardType rewardType = rewardJson.getRewardType();
@@ -81,7 +94,7 @@ public class RewardService extends TownyMissionService {
                 ResourceRewardJson resourceRewardJson = (ResourceRewardJson) rewardJson;
                 Material material = resourceRewardJson.getType();
                 int amount = resourceRewardJson.getAmount();
-                int slotsRequired = amount/64 + 1;
+                int slotsRequired = amount / 64 + 1;
 
                 if (Util.getNumEmptySlotsInInventory(player.getInventory()) >= slotsRequired) {
                     while (amount > 64) {
@@ -100,12 +113,25 @@ public class RewardService extends TownyMissionService {
         }
     }
 
+    /**
+     * Claim entry.
+     *
+     * @param player         the player
+     * @param rewardJsonList the reward json list
+     */
     public void claimEntry(Player player, List<ClaimEntry> rewardJsonList) {
         for (ClaimEntry entry : rewardJsonList) {
             claimEntry(player, entry);
         }
     }
 
+    /**
+     * Reward town.
+     *
+     * @param town         the town
+     * @param rewardMethod the reward method
+     * @param rewardJson   the reward json
+     */
     public void rewardTown(Town town, RewardMethod rewardMethod, RewardJson rewardJson) {
         if (rewardJson.getRewardType().equals(RewardType.POINTS)) {
             // This is reward season point. Ignore RewardMethod.
@@ -159,7 +185,7 @@ public class RewardService extends TownyMissionService {
                             instance.getConfig().getInt("season.current")
                     );
 
-                    for(String playerUUID : averageContribution.keySet()) {
+                    for (String playerUUID : averageContribution.keySet()) {
                         double percent = averageContribution.get(playerUUID);
                         RewardJson copyRewardJson = RewardJson.deepCopy(rewardJson);
                         copyRewardJson.setAmount((int) (copyRewardJson.getAmount() * percent + 1));
@@ -176,6 +202,11 @@ public class RewardService extends TownyMissionService {
         }
     }
 
+    /**
+     * Reward all towns.
+     *
+     * @param rewardMethod the reward method
+     */
     public void rewardAllTowns(RewardMethod rewardMethod) {
         List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
         Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);

@@ -1,12 +1,9 @@
 package world.naturecraft.townymission.data.sql;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.commands.admin.TownyMissionAdminCommand;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
-import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.utils.Util;
 
@@ -16,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Claim sql storage.
+ */
 public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
 
     private static ClaimSqlStorage singleton;
@@ -30,6 +30,11 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
         super(db, tableName);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ClaimSqlStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
@@ -38,6 +43,7 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
 
         return singleton;
     }
+
     /**
      * Create table.
      */
@@ -83,6 +89,14 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
         return list;
     }
 
+    /**
+     * Add.
+     *
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
+     */
     public void add(String playerUUID, String rewardJson, int season, int sprint) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
@@ -97,6 +111,11 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
         });
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
@@ -107,6 +126,15 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
         });
     }
 
+    /**
+     * Update.
+     *
+     * @param id         the id
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
+     */
     public void update(UUID id, String playerUUID, String rewardJson, int season, int sprint) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +

@@ -33,5 +33,8 @@ public enum DbType {
      * Cooldown db type.
      */
     COOLDOWN,
+    /**
+     * Claim db type.
+     */
     CLAIM
 }

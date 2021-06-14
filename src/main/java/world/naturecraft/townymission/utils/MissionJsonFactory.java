@@ -5,8 +5,8 @@
 package world.naturecraft.townymission.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.components.json.mission.*;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.components.json.mission.*;
 
 /**
  * The type Mission json factory.

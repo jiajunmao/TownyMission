@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionEntry;
@@ -209,6 +208,12 @@ public class Util {
         return str;
     }
 
+    /**
+     * Gets num empty slots in inventory.
+     *
+     * @param playerInventory the player inventory
+     * @return the num empty slots in inventory
+     */
     public static int getNumEmptySlotsInInventory(PlayerInventory playerInventory) {
         int num = 0;
         for (int i = 9; i < 44; i++) {

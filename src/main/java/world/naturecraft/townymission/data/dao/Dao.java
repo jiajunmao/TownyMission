@@ -18,11 +18,17 @@ import java.util.List;
  */
 public abstract class Dao<T extends DataEntity> {
 
-    private Storage<T> storage;
+    private final Storage<T> storage;
 
+    /**
+     * Instantiates a new Dao.
+     *
+     * @param storage the storage
+     */
     public Dao(Storage<T> storage) {
         this.storage = storage;
     }
+
     /**
      * Gets entries.
      *
@@ -32,6 +38,12 @@ public abstract class Dao<T extends DataEntity> {
         return storage.getEntries();
     }
 
+    /**
+     * Gets entries.
+     *
+     * @param filter the filter
+     * @return the entries
+     */
     public List<T> getEntries(EntryFilter<T> filter) {
         List<T> list = getEntries();
         List<T> finalList = new ArrayList<>();

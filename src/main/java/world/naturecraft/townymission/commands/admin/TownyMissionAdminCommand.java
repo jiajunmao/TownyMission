@@ -7,6 +7,9 @@ package world.naturecraft.townymission.commands.admin;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.commands.TownyMissionCommand;
 
+/**
+ * The type Towny mission admin command.
+ */
 public abstract class TownyMissionAdminCommand extends TownyMissionCommand {
     /**
      * Instantiates a new Towny mission command.

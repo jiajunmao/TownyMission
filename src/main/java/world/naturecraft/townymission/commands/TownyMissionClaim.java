@@ -14,7 +14,10 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.data.dao.ClaimDao;
 import world.naturecraft.townymission.services.RewardService;
-import world.naturecraft.townymission.utils.*;
+import world.naturecraft.townymission.utils.EntryFilter;
+import world.naturecraft.townymission.utils.MultilineBuilder;
+import world.naturecraft.townymission.utils.SanityChecker;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,8 +86,8 @@ public class TownyMissionClaim extends TownyMissionCommand {
                         @Override
                         public boolean include(ClaimEntry data) {
                             return (data.getPlayerUUID().equals(player.getUniqueId())
-                            && data.getSeason() == instance.getConfig().getInt("season.current")
-                            && data.getSprint() == instance.getConfig().getInt("sprint.current"));
+                                    && data.getSeason() == instance.getConfig().getInt("season.current")
+                                    && data.getSprint() == instance.getConfig().getInt("sprint.current"));
                         }
                     });
 

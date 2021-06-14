@@ -3,24 +3,34 @@ package world.naturecraft.townymission.data.db;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
-import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.sql.ClaimSqlStorage;
-import world.naturecraft.townymission.data.sql.CooldownSqlStorage;
 import world.naturecraft.townymission.data.yaml.ClaimYamlStorage;
-import world.naturecraft.townymission.data.yaml.CooldownYamlStorage;
 
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Claim storage.
+ */
 public class ClaimStorage extends Storage<ClaimEntry> {
     private static ClaimStorage singleton;
     private final StorageType storageType;
 
+    /**
+     * Instantiates a new Claim storage.
+     *
+     * @param instance the instance
+     */
     public ClaimStorage(TownyMission instance) {
         storageType = instance.getStorageType();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ClaimStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
@@ -30,6 +40,14 @@ public class ClaimStorage extends Storage<ClaimEntry> {
         return singleton;
     }
 
+    /**
+     * Add.
+     *
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
+     */
     public void add(String playerUUID, String rewardJson, int season, int sprint) {
         switch (storageType) {
             case YAML:
@@ -41,6 +59,15 @@ public class ClaimStorage extends Storage<ClaimEntry> {
         }
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid       the uuid
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
+     */
     public void update(UUID uuid, String playerUUID, String rewardJson, int season, int sprint) {
         switch (storageType) {
             case YAML:
@@ -52,6 +79,11 @@ public class ClaimStorage extends Storage<ClaimEntry> {
         }
     }
 
+    /**
+     * Remove.
+     *
+     * @param id the id
+     */
     public void remove(UUID id) {
         switch (storageType) {
             case YAML:

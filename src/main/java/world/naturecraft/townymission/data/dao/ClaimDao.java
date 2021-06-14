@@ -1,25 +1,31 @@
 package world.naturecraft.townymission.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.data.db.ClaimStorage;
-import world.naturecraft.townymission.data.db.CooldownStorage;
 
-import java.util.List;
-import java.util.UUID;
-
+/**
+ * The type Claim dao.
+ */
 public class ClaimDao extends Dao<ClaimEntry> {
 
     private static ClaimDao singleton;
     private final ClaimStorage db;
 
+    /**
+     * Instantiates a new Claim dao.
+     */
     public ClaimDao() {
         super(ClaimStorage.getInstance());
         db = ClaimStorage.getInstance();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ClaimDao getInstance() {
         if (singleton == null) {
             singleton = new ClaimDao();

@@ -8,31 +8,49 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RewardType;
 
 import java.beans.ConstructorProperties;
 
+/**
+ * The type Command reward json.
+ */
 public class CommandRewardJson extends RewardJson {
 
     @JsonProperty("command")
-    private String command;
+    private final String command;
 
+    /**
+     * Instantiates a new Command reward json.
+     *
+     * @param command the command
+     */
     @ConstructorProperties({"command"})
     public CommandRewardJson(String command) {
         super(RewardType.COMMAND);
         this.command = command;
     }
 
-    @JsonProperty("command")
-    public String getCommand() {
-        return command;
-    }
-
+    /**
+     * Parse reward json.
+     *
+     * @param json the json
+     * @return the reward json
+     * @throws JsonProcessingException the json processing exception
+     */
     @JsonIgnore
     public static RewardJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, CommandRewardJson.class);
+    }
+
+    /**
+     * Gets command.
+     *
+     * @return the command
+     */
+    @JsonProperty("command")
+    public String getCommand() {
+        return command;
     }
 
     public String getDisplayLine() {

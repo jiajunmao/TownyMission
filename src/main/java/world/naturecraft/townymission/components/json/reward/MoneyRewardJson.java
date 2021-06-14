@@ -12,15 +12,35 @@ import world.naturecraft.townymission.components.enums.RewardType;
 
 import java.beans.ConstructorProperties;
 
+/**
+ * The type Money reward json.
+ */
 public class MoneyRewardJson extends RewardJson {
 
     @JsonProperty("amount")
     private int amount;
 
+    /**
+     * Instantiates a new Money reward json.
+     *
+     * @param amount the amount
+     */
     @ConstructorProperties({"amount"})
     public MoneyRewardJson(int amount) {
         super(RewardType.MONEY);
         this.amount = amount;
+    }
+
+    /**
+     * Parse reward json.
+     *
+     * @param json the json
+     * @return the reward json
+     * @throws JsonProcessingException the json processing exception
+     */
+    @JsonIgnore
+    public static RewardJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, MoneyRewardJson.class);
     }
 
     @JsonProperty("amount")
@@ -35,10 +55,5 @@ public class MoneyRewardJson extends RewardJson {
 
     public String getDisplayLine() {
         return "Amount: " + amount;
-    }
-
-    @JsonIgnore
-    public static RewardJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, MoneyRewardJson.class);
     }
 }

@@ -23,7 +23,7 @@ public class RankJson {
     @JsonProperty("rankType")
     private final RankType rankType;
     @JsonProperty("ranks")
-    private Map<Integer, TownRankJson> ranks;
+    private final Map<Integer, TownRankJson> ranks;
 
     /**
      * Instantiates a new Rank json.
@@ -107,11 +107,21 @@ public class RankJson {
         return new ObjectMapper().writeValueAsString(this);
     }
 
+    /**
+     * Gets rank type.
+     *
+     * @return the rank type
+     */
     @JsonProperty("rankType")
     public RankType getRankType() {
         return rankType;
     }
 
+    /**
+     * Gets ranks.
+     *
+     * @return the ranks
+     */
     @JsonProperty("ranks")
     public Map<Integer, TownRankJson> getRanks() {
         return ranks;

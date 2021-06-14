@@ -16,8 +16,17 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.*;
 
+/**
+ * The type Reward config parser.
+ */
 public class RewardConfigParser {
 
+    /**
+     * Parse all rewards list.
+     *
+     * @param rankType the rank type
+     * @return the list
+     */
     public static List<RewardJson> parseAllRewards(RankType rankType) {
         TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
         List<String> rankList = instance.getConfig().getStringList(rankType.name().toLowerCase(Locale.ROOT) + ".rewards");
@@ -30,7 +39,7 @@ public class RewardConfigParser {
             for (String rankedReward : rankedRewardList) {
                 int middleIdx = rankedReward.indexOf("{");
                 RewardType rewardType = RewardType.valueOf(rankedReward.substring(0, middleIdx).toUpperCase(Locale.ROOT));
-                String actualRewardString = rankedReward.substring(middleIdx+1);
+                String actualRewardString = rankedReward.substring(middleIdx + 1);
 
                 try {
                     RewardJson rewardJson = RewardJsonFactory.getJson(actualRewardString, rewardType);
@@ -52,6 +61,12 @@ public class RewardConfigParser {
         return rewardJsonList;
     }
 
+    /**
+     * Gets rank rewards map.
+     *
+     * @param rankType the rank type
+     * @return the rank rewards map
+     */
     public static Map<Integer, List<RewardJson>> getRankRewardsMap(RankType rankType) {
         List<RewardJson> allRewards = parseAllRewards(rankType);
         Map<Integer, List<RewardJson>> rewardsMap = new HashMap<>();
@@ -68,17 +83,12 @@ public class RewardConfigParser {
         return rewardsMap;
     }
 
-    public int getNumDefinedRanks(RankType rankType) {
-        List<RewardJson> allRewards = parseAllRewards(rankType);
-        Set<Integer> ranks = new HashSet<>();
-
-        for (RewardJson rewardJson : allRewards) {
-            ranks.add(rewardJson.getRank());
-        }
-
-        return ranks.size();
-    }
-
+    /**
+     * Gets reward methods.
+     *
+     * @param rankType the rank type
+     * @return the reward methods
+     */
     public static RewardMethod getRewardMethods(RankType rankType) {
         TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
         if (rankType.equals(RankType.SEASON)) {
@@ -88,9 +98,32 @@ public class RewardConfigParser {
         }
     }
 
+    /**
+     * Gets reward type.
+     *
+     * @param rewardString the reward string
+     * @return the reward type
+     */
     public static RewardType getRewardType(String rewardString) {
         int endIdx = rewardString.indexOf("{");
         String type = rewardString.substring(0, endIdx);
         return RewardType.valueOf(type.toUpperCase(Locale.ROOT));
+    }
+
+    /**
+     * Gets num defined ranks.
+     *
+     * @param rankType the rank type
+     * @return the num defined ranks
+     */
+    public int getNumDefinedRanks(RankType rankType) {
+        List<RewardJson> allRewards = parseAllRewards(rankType);
+        Set<Integer> ranks = new HashSet<>();
+
+        for (RewardJson rewardJson : allRewards) {
+            ranks.add(rewardJson.getRank());
+        }
+
+        return ranks.size();
     }
 }

@@ -191,6 +191,11 @@ public abstract class MissionJson {
         contributions.remove(playerUUID);
     }
 
+    /**
+     * Gets contributions.
+     *
+     * @return the contributions
+     */
     public Map<String, Integer> getContributions() {
         return contributions;
     }

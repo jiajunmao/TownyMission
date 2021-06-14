@@ -16,6 +16,9 @@ import world.naturecraft.townymission.utils.Util;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type Towny mission admin start season.
+ */
 public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
 
     /**
@@ -61,7 +64,7 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof  Player) {
+        if (sender instanceof Player) {
             Player player = (Player) sender;
 
             if (!sanityCheck(player, args)) return false;

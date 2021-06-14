@@ -10,7 +10,6 @@ import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.data.db.CooldownStorage;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**

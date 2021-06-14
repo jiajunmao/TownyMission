@@ -1,19 +1,17 @@
 package world.naturecraft.townymission.data.yaml;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
-import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.components.json.reward.RewardJson;
-import world.naturecraft.townymission.data.sql.SqlStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Claim yaml storage.
+ */
 public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
 
     private static ClaimYamlStorage singleton;
@@ -28,6 +26,11 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
         super(instance, dbType);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ClaimYamlStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
@@ -37,6 +40,14 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
         return singleton;
     }
 
+    /**
+     * Add.
+     *
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
+     */
     public void add(String playerUUID, String rewardJson, int season, int sprint) {
         String uuid = UUID.randomUUID().toString();
 
@@ -46,6 +57,15 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
         add(uuid + ".sprint", sprint);
     }
 
+    /**
+     * Update.
+     *
+     * @param uuid       the uuid
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
+     */
     public void update(UUID uuid, String playerUUID, String rewardJson, int season, int sprint) {
         set(uuid + ".playerUUID", playerUUID);
         set(uuid + ".rewardJson", rewardJson);
