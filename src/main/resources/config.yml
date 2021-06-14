@@ -35,8 +35,6 @@ mission:
 
 # Sprint settings
 sprint:
-  # The current sprint, do not touch unless you know what you are doing
-  current: 1
   # Duration of the sprint, in days
   duration: 5
   # Interval between two springs, in days
@@ -74,16 +72,10 @@ sprint:
 
 
 season:
-  # The current season, do not touch unless you know what you are doing
-  current: 1
   # Number of sprints that a season will have
   sprintsPerSeason: 4
   # Interval between two season, in days
   interval: 7
-  # The started time of this season, do not touch unless you know what you are doing
-  # Changing this might corrupt database and interfere with normal sprint/season progression
-  # In Java millisecond datetime format
-  startedTime: -1
   rewards:
     # EQUAL, CONTRIBUTIONS, INDIVIDUAL
     # EQUALS means that the reward is distributed evenly among all town members,

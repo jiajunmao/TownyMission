@@ -1,2 +1,4 @@
-package world.naturecraft.townymission.services;public class FileService {
+package world.naturecraft.townymission.services;
+
+public class FileService {
 }

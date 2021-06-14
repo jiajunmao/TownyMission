@@ -47,8 +47,8 @@ public class SprintService {
             SprintHistoryEntry sprintHistoryEntry =
                     new SprintHistoryEntry(
                             UUID.randomUUID(),
-                            instance.getConfig().getInt("season.current"),
-                            instance.getConfig().getInt("sprint.current"),
+                            instance.getStatsConfig().getInt("season.current"),
+                            instance.getStatsConfig().getInt("sprint.current"),
                             TimerService.getInstance().getStartTime(RankType.SPRINT),
                             rankJson.toJson());
 

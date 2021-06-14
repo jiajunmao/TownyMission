@@ -142,7 +142,7 @@ public class RewardService extends TownyMissionService {
                                 town.getUUID().toString(),
                                 town.getName(),
                                 rewardJson.getAmount(),
-                                instance.getConfig().getInt("season.current")));
+                                instance.getStatsConfig().getInt("season.current")));
             } else {
                 SeasonEntry seasonEntry = SeasonDao.getInstance().get(town.getUUID().toString());
                 seasonEntry.setSeasonPoint(seasonEntry.getSeasonPoint() + rewardJson.getAmount());
@@ -158,8 +158,8 @@ public class RewardService extends TownyMissionService {
                                 UUID.randomUUID(),
                                 UUID.fromString(resident.getPlayer().getUniqueId().toString()),
                                 rewardJson,
-                                instance.getConfig().getInt("season.current"),
-                                instance.getConfig().getInt("sprint.current"));
+                                instance.getStatsConfig().getInt("season.current"),
+                                instance.getStatsConfig().getInt("sprint.current"));
                         ClaimDao.getInstance().add(entry);
                     }
                     break;
@@ -174,15 +174,15 @@ public class RewardService extends TownyMissionService {
                                 UUID.randomUUID(),
                                 UUID.fromString(resident.getPlayer().getUniqueId().toString()),
                                 copyRewardJseon,
-                                instance.getConfig().getInt("season.current"),
-                                instance.getConfig().getInt("sprint.current"));
+                                instance.getStatsConfig().getInt("season.current"),
+                                instance.getStatsConfig().getInt("sprint.current"));
                         ClaimDao.getInstance().add(entry);
                     }
                     break;
                 case CONTRIBUTIONS:
                     Map<String, Double> averageContribution = MissionService.getInstance().getAverageContributions(
-                            instance.getConfig().getInt("sprint.current"),
-                            instance.getConfig().getInt("season.current")
+                            instance.getStatsConfig().getInt("sprint.current"),
+                            instance.getStatsConfig().getInt("season.current")
                     );
 
                     for (String playerUUID : averageContribution.keySet()) {
@@ -194,8 +194,8 @@ public class RewardService extends TownyMissionService {
                                         UUID.randomUUID(),
                                         UUID.fromString(playerUUID),
                                         copyRewardJson,
-                                        instance.getConfig().getInt("season.current"),
-                                        instance.getConfig().getInt("sprint.current")));
+                                        instance.getStatsConfig().getInt("season.current"),
+                                        instance.getStatsConfig().getInt("sprint.current")));
 
                     }
             }

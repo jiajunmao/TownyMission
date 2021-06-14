@@ -13,6 +13,7 @@ import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminStartSeason;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.components.gui.MissionManageGui;
+import world.naturecraft.townymission.config.StatsConfigLoader;
 import world.naturecraft.townymission.config.mission.MissionConfigLoader;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
@@ -32,6 +33,7 @@ public class TownyMission extends JavaPlugin {
     private final Logger logger = getLogger();
     private HikariDataSource db;
     private MissionConfigLoader missionConfigLoader;
+    private StatsConfigLoader statsConfigLoader;
     private TownyMissionRoot rootCmd;
     private StorageType storageType;
     private boolean enabled = true;
@@ -48,13 +50,14 @@ public class TownyMission extends JavaPlugin {
         logger.info(Util.translateColor("{#22DDBA}" + "                           |___/                                "));
         logger.info("-----------------------------------------------------------------");
 
-
+        logger.info(Util.translateColor("{#E9B728}===> Parsing configuration"));
         /**
          * This is saving the config.yml (Default config)
          */
         this.saveDefaultConfig();
         try {
             missionConfigLoader = new MissionConfigLoader(this);
+            statsConfigLoader = new StatsConfigLoader(this);
         } catch (IOException | InvalidConfigurationException e) {
             logger.severe("IO operation fault during custom config initialization");
             e.printStackTrace();
@@ -208,6 +211,7 @@ public class TownyMission extends JavaPlugin {
         this.reloadConfig();
         try {
             missionConfigLoader = new MissionConfigLoader(this);
+            statsConfigLoader = new StatsConfigLoader(this);
         } catch (IOException | InvalidConfigurationException e) {
             throw new ConfigLoadingError(e);
         }
@@ -229,5 +233,9 @@ public class TownyMission extends JavaPlugin {
      */
     public HikariDataSource getDatasource() {
         return db;
+    }
+
+    public StatsConfigLoader getStatsConfig() {
+        return statsConfigLoader;
     }
 }
