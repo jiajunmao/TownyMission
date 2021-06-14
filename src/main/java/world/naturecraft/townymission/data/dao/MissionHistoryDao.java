@@ -104,44 +104,4 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
             throw new DataProcessException(e);
         }
     }
-
-    /**
-     * Gets average contributions.
-     *
-     * @param sprint the sprint
-     * @param season the season
-     * @return the average contributions
-     */
-    public Map<String, Double> getAverageContributions(int sprint, int season) {
-        List<MissionHistoryEntry> missionHistoryEntries = getEntries(new EntryFilter<MissionHistoryEntry>() {
-            @Override
-            public boolean include(MissionHistoryEntry data) {
-                return (data.getSeason() == season && data.getSprint() == sprint);
-            }
-        });
-
-        Map<String, Double> averageContribution = new HashMap<>();
-        for (MissionHistoryEntry missionHistoryEntry : missionHistoryEntries) {
-            MissionJson missionJson = missionHistoryEntry.getMissionJson();
-            Map<String, Integer> missionContribution = missionJson.getContributions();
-            int requiredAmount = missionJson.getAmount();
-            for (String player : missionContribution.keySet()) {
-                int contribution = missionContribution.get(player);
-                double percent = (double) contribution / requiredAmount;
-
-                if (!averageContribution.containsKey(player)) {
-                    averageContribution.put(player, percent);
-                } else {
-                    averageContribution.put(player, averageContribution.get(player) + percent);
-                }
-            }
-        }
-
-        int totalMissions = missionHistoryEntries.size();
-        for (String player : averageContribution.keySet()) {
-            averageContribution.put(player, averageContribution.get(player) / totalMissions);
-        }
-
-        return averageContribution;
-    }
 }

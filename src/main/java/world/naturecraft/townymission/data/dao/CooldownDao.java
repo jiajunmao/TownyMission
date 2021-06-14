@@ -8,8 +8,11 @@ import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.data.db.CooldownStorage;
+import world.naturecraft.townymission.services.CooldownService;
+import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -62,59 +65,24 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * @return the cooldown entry
      */
     public CooldownEntry get(Town town) {
-        for (CooldownEntry entry : getEntries()) {
-            if (entry.getTown().equals(town)) {
-                return entry;
+        List<CooldownEntry> list = getEntries(new EntryFilter<CooldownEntry>() {
+            @Override
+            public boolean include(CooldownEntry data) {
+                return (data.getTown().equals(town));
             }
-        }
+        });
 
-        return null;
-    }
-
-    /**
-     * Is still in cooldown boolean.
-     *
-     * @param town the town
-     * @return the boolean
-     */
-    public boolean isStillInCooldown(Town town) {
-        Date date = new Date();
-        if (get(town) == null)
-            throw new NotFoundException();
-        return get(town).getStartedTime() + get(town).getCooldown() >= date.getTime();
-    }
-
-    /**
-     * Gets remaining.
-     *
-     * @param town the town
-     * @return the remaining
-     */
-    public long getRemaining(Town town) {
-        Date date = new Date();
-        if (get(town) == null)
-            throw new NotFoundException();
-        return get(town).getStartedTime() + get(town).getCooldown() - date.getTime();
-    }
-
-    /**
-     * Start cooldown.
-     *
-     * @param town     the town
-     * @param cooldown the cooldown
-     */
-    public void startCooldown(Town town, long cooldown) {
-        System.out.println("Starting " + town.getName() + "'s cooldown for " + cooldown);
-        Date date = new Date();
-        if (get(town) == null) {
-            System.out.println("Entry not found, adding");
-            add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), cooldown));
+        if (list.size() != 0) {
+            return list.get(0);
         } else {
-            System.out.println("Entry found, updating");
-            CooldownEntry entry = get(town);
-            entry.setStartedTime(date.getTime());
-            entry.setCooldown(cooldown);
-            update(entry);
+            return null;
+        }
+    }
+
+    public void removeAllEntries() {
+        List<CooldownEntry> entries = getEntries();
+        for (CooldownEntry entry : entries) {
+            remove(entry);
         }
     }
 }

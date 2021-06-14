@@ -102,7 +102,7 @@ public class MissionManageGui extends TownyMissionGui {
             }
 
             // Put in all started missions
-            missionList = MissionService.getInstance().getStartedMissions(town);
+            missionList = MissionDao.getInstance().getStartedMissions(town);
             placingIndex = 0;
             for (MissionEntry entry : missionList) {
                 inv.setItem(0, entry.getGuiItem());
@@ -226,7 +226,7 @@ public class MissionManageGui extends TownyMissionGui {
                 BukkitRunnable r = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MissionEntry entry = MissionService.getInstance().getIndexedMission(town, missionIdxFinal);
+                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, missionIdxFinal);
 
                         try {
                             Util.sendMsg(player, instance.getLangEntry("commands.start.onSuccess")
@@ -250,7 +250,7 @@ public class MissionManageGui extends TownyMissionGui {
         // This means that the player is clicking on a STARTED mission
         if (slot == 0 || slot == 9 || slot == 18 || slot == 27) {
             Town town = TownyUtil.residentOf(player);
-            List<MissionEntry> startedList = MissionService.getInstance().getStartedMissions(town);
+            List<MissionEntry> startedList = MissionDao.getInstance().getStartedMissions(town);
             int index = slot / 9;
             MissionEntry entry = startedList.get(index);
 

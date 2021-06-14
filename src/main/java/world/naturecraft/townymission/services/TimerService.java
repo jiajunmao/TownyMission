@@ -74,6 +74,7 @@ public class TimerService extends TownyMissionService {
                     // This means that we are in the next sprint, change config.yml
                     instance.getConfig().set("sprint.current", instance.getConfig().getInt("sprint.current") + 1);
                     instance.saveConfig();
+
                 } else if (timeNow < getTotalEndTime(RankType.SPRINT) && timeNow > getActiveEndTime(RankType.SPRINT)) {
                     // This means that sprint is now in the interval, do clean up task before config changes
 
@@ -86,48 +87,17 @@ public class TimerService extends TownyMissionService {
                     instance.getLogger().warning("Sprint interval reached, doing sprint recess clean up jobs");
 
                     // Clear MissionStorage
-                    List<MissionEntry> entryList = MissionDao.getInstance().getEntries();
-                    for (MissionEntry entry : entryList) {
-                        if (entry.isStarted() && entry.isCompleted()) {
-                            // If it is already completed, but unmoved, move to MissionHistory, and give the reward
-                            MissionService.getInstance().completeMission(entry.getTown().getMayor().getPlayer(), entry);
-                        }
-
-                        // Remove the entry from MissionStorage
-                        MissionDao.getInstance().remove(entry);
-                    }
+                    MissionService.getInstance().sprintEndCleanUp();
 
                     // Clear CooldownStorage
-                    List<CooldownEntry> cooldownEntries = CooldownDao.getInstance().getEntries();
-                    for (CooldownEntry cooldownEntry : cooldownEntries) {
-                        CooldownDao.getInstance().remove(cooldownEntry);
-                    }
+                    CooldownDao.getInstance().removeAllEntries();
 
                     // Issue rewards
                     RewardMethod rewardMethod = RewardMethod.valueOf(instance.getConfig().getString("sprint.rewards.method").toUpperCase(Locale.ROOT));
-                    RewardService.getInstance().rewardAllTowns(rewardMethod);
+                    RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
-                    // Clear SprintStorage, move ranking to SprintHistoryStorage, reward the town based on config
-                    List<TownRankJson> townRankJsons = (List<TownRankJson>) RankUtil.sort(SprintDao.getInstance().getEntriesAsJson());
-                    RankJson rankJson = new RankJson(RankType.SPRINT, townRankJsons);
-
-                    try {
-                        SprintHistoryEntry sprintHistoryEntry =
-                                new SprintHistoryEntry(
-                                        UUID.randomUUID(),
-                                        instance.getConfig().getInt("season.current"),
-                                        instance.getConfig().getInt("sprint.current"),
-                                        getStartTime(RankType.SPRINT),
-                                        rankJson.toJson());
-
-                        SprintHistoryDao.getInstance().add(sprintHistoryEntry);
-                    } catch (JsonProcessingException exception) {
-                        exception.printStackTrace();
-                    }
-
-                    for (SprintEntry sprintEntry : SprintDao.getInstance().getEntries()) {
-                        SprintDao.getInstance().remove(sprintEntry);
-                    }
+                    // Clear SprintStorage, move ranking to SprintHistoryStorage
+                    SprintService.getInstance().sprintEndCleanUp();
                 }
             }
         };
@@ -170,22 +140,7 @@ public class TimerService extends TownyMissionService {
                     // We only need to do season only jobs
 
                     // Clean out SeasonStorage, move to SeasonHistoryStorage
-                    List<TownRankJson> townRankJsons = (List<TownRankJson>) RankUtil.sort(SeasonDao.getInstance().getEntriesAsJson());
-                    RankJson rankJson = new RankJson(RankType.SEASON, townRankJsons);
-
-                    try {
-                        SeasonHistoryEntry seasonHistoryEntry =
-                                new SeasonHistoryEntry(
-                                        UUID.randomUUID(),
-                                        instance.getConfig().getInt("season.current"),
-                                        getStartTime(RankType.SEASON),
-                                        rankJson.toJson()
-                                );
-
-                        SeasonHistoryDao.getInstance().add(seasonHistoryEntry);
-                    } catch (JsonProcessingException jsonProcessingException) {
-                        jsonProcessingException.printStackTrace();
-                    }
+                    SeasonService.getInstance().seasonEndCleanUp();
 
                     for (SeasonEntry seasonEntry : SeasonDao.getInstance().getEntries()) {
                         SeasonDao.getInstance().remove(seasonEntry);

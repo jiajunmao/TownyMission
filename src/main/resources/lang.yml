@@ -35,6 +35,9 @@ commands:
     onSuccess: "&fYou have successfully started season!"
     onAlreadyStarted: "&cYou have already strated season(s)! You cannot start it again!"
 
+services:
+
+
 universal:
   onCommandNotFound: "&cCommand not found!"
   onCommandFormatError: "&cCommand format error!"

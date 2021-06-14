@@ -70,7 +70,7 @@ public class RewardService extends TownyMissionService {
      * @param player     The online player
      * @param claimEntry The entry containing the reward
      */
-// TODO: Grab stuff from the freaking DAO, you are a service!
+    // TODO: Grab stuff from the freaking DAO, you are a service!
     public void claimEntry(Player player, ClaimEntry claimEntry) {
         RewardJson rewardJson = claimEntry.getRewardJson();
         RewardType rewardType = rewardJson.getRewardType();
@@ -180,7 +180,7 @@ public class RewardService extends TownyMissionService {
                     }
                     break;
                 case CONTRIBUTIONS:
-                    Map<String, Double> averageContribution = MissionHistoryDao.getInstance().getAverageContributions(
+                    Map<String, Double> averageContribution = MissionService.getInstance().getAverageContributions(
                             instance.getConfig().getInt("sprint.current"),
                             instance.getConfig().getInt("season.current")
                     );
@@ -207,7 +207,8 @@ public class RewardService extends TownyMissionService {
      *
      * @param rewardMethod the reward method
      */
-    public void rewardAllTowns(RewardMethod rewardMethod) {
+    public void rewardAllTowns(RankType rankType, RewardMethod rewardMethod) {
+        //TODO: Separate RankTypes
         List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
         Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
 
