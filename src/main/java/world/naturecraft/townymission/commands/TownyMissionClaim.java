@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.data.dao.ClaimDao;
 import world.naturecraft.townymission.services.RewardService;
@@ -113,7 +114,12 @@ public class TownyMissionClaim extends TownyMissionCommand {
                             }
 
                             ClaimEntry entry = claimEntries.get(choice);
-                            RewardService.getInstance().claimEntry(player, entry);
+                            try {
+                                RewardService.getInstance().claimEntry(player, entry);
+                            } catch (NotEnoughInvSlotException e) {
+                                Util.sendMsg(player, instance.getLangEntry("commands.claim.onNotEnoughSlot"));
+                                return;
+                            }
                             Util.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess"));
                         } else {
                             // Claim all rewards

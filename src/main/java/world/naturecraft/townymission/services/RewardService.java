@@ -9,7 +9,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;
@@ -30,6 +32,7 @@ import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -79,15 +82,24 @@ public class RewardService extends TownyMissionService {
             case COMMAND:
                 CommandRewardJson commandRewardJson = (CommandRewardJson) rewardJson;
                 String command = commandRewardJson.getCommand().replace("%player%", player.getName());
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                System.out.println("Dispatching command: " +  command);
+                BukkitRunnable r = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                    }
+                };
+                r.runTask(instance);
                 ClaimDao.getInstance().remove(claimEntry);
+                Util.sendMsg(player, instance.getLangEntry("services.reward.onRewardCommand"));
                 break;
             case POINTS:
                 throw new IllegalStateException("Season point reward CANNOT be rewarded to individual player");
             case MONEY:
                 MoneyRewardJson moneyRewardJson = (MoneyRewardJson) rewardJson;
-
+                EconomyService.getInstance().depositBalance(player, moneyRewardJson.getAmount());
                 ClaimDao.getInstance().remove(claimEntry);
+                Util.sendMsg(player, instance.getLangEntry("services.reward.onRewardMoney").replace("%amount%", String.valueOf(moneyRewardJson.getAmount())));
                 break;
             case RESOURCE:
                 ResourceRewardJson resourceRewardJson = (ResourceRewardJson) rewardJson;
@@ -106,8 +118,13 @@ public class RewardService extends TownyMissionService {
                     player.getInventory().addItem(itemStack);
                     ClaimDao.getInstance().remove(claimEntry);
                 } else {
-                    // Not enough slot
+                    throw new NotEnoughInvSlotException();
                 }
+
+                Util.sendMsg(player,
+                        instance.getLangEntry("services.reward.onRewardResource")
+                                .replace("%amount%", String.valueOf(resourceRewardJson.getAmount()))
+                                .replace("%type%", resourceRewardJson.getType().name().toLowerCase(Locale.ROOT)));
                 break;
         }
     }
