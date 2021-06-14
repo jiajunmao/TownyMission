@@ -130,12 +130,12 @@ public class MissionService extends TownyMissionService {
         MissionDao.getInstance().update(entry);
 
         if (SprintDao.getInstance().get(town.getUUID().toString()) == null) {
-            SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("sprint.current"), instance.getConfig().getInt("season.current"));
+            SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getStatsConfig().getInt("sprint.current"), instance.getStatsConfig().getInt("season.current"));
             SprintDao.getInstance().add(sprintEntry);
         }
 
         if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
-            SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getConfig().getInt("season.current"));
+            SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getStatsConfig().getInt("season.current"));
             SeasonDao.getInstance().add(seasonEntry);
         }
 
@@ -177,8 +177,8 @@ public class MissionService extends TownyMissionService {
                     missionHistoryEntry.getTown().getUUID().toString(),
                     missionHistoryEntry.getTown().getName(),
                     missionHistoryEntry.getMissionJson().getReward(),
-                    instance.getConfig().getInt("sprint.current"),
-                    instance.getConfig().getInt("season.current")));
+                    instance.getStatsConfig().getInt("sprint.current"),
+                    instance.getStatsConfig().getInt("season.current")));
         }
         CooldownService.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }

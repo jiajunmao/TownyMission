@@ -160,7 +160,7 @@ public class Util {
         int memberScale = instance.getConfig().getInt("participants.sprintRewardMemberScale");
         int baselineCap = instance.getConfig().getInt("participants.sprintRewardBaselineCap");
         int increment = instance.getConfig().getInt("participants.sprintBaselineIncrement");
-        int currentSprint = instance.getConfig().getInt("sprint.current");
+        int currentSprint = instance.getStatsConfig().getInt("sprint.current");
 
         int realBaseline = Math.min(baseline + memberScale * (numResident - 1), baselineCap) + increment * (currentSprint - 1);
         return (naturePoint - realBaseline) / numResident;

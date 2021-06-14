@@ -72,15 +72,15 @@ public class TimerService extends TownyMissionService {
                 if (timeNow > getTotalEndTime(RankType.SPRINT)) {
                     instance.getLogger().warning("Sprint interval ended, proceeding to the next interval");
                     // This means that we are in the next sprint, change config.yml
-                    instance.getConfig().set("sprint.current", instance.getConfig().getInt("sprint.current") + 1);
+                    instance.getConfig().set("sprint.current", instance.getStatsConfig().getInt("sprint.current") + 1);
                     instance.saveConfig();
 
                 } else if (timeNow < getTotalEndTime(RankType.SPRINT) && timeNow > getActiveEndTime(RankType.SPRINT)) {
                     // This means that sprint is now in the interval, do clean up task before config changes
 
                     // Check if in season interval, if is, do nothing
-                    if (SprintHistoryDao.getInstance().get(instance.getConfig().getInt("season.current"),
-                            instance.getConfig().getInt("sprint.current")) != null) {
+                    if (SprintHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current"),
+                            instance.getStatsConfig().getInt("sprint.current")) != null) {
                         return;
                     }
 
@@ -122,13 +122,13 @@ public class TimerService extends TownyMissionService {
                 if (timeNow > getTotalEndTime(RankType.SEASON)) {
                     instance.getLogger().warning("Season interval ended. Proceed to the next season.");
                     // This means we are entering next season
-                    instance.getConfig().set("season.current", instance.getConfig().getInt("season.current") + 1);
+                    instance.getConfig().set("season.current", instance.getStatsConfig().getInt("season.current") + 1);
                     instance.getConfig().set("sprint.current", 1);
                     instance.saveConfig();
                 } else if (timeNow < getTotalEndTime(RankType.SEASON) && timeNow > getActiveEndTime(RankType.SEASON)) {
 
                     // If the entry is already in there, do nothing
-                    if (SeasonHistoryDao.getInstance().get(instance.getConfig().getInt("season.current")) != null)
+                    if (SeasonHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current")) != null)
                         return;
 
                     instance.getLogger().warning("Season interval reached. Doing season clean up job");
@@ -192,7 +192,7 @@ public class TimerService extends TownyMissionService {
         switch (rankType) {
             case SPRINT:
                 long seasonStartedTime = instance.getConfig().getLong("season.startedTime");
-                int currentSprint = instance.getConfig().getInt("sprint.current");
+                int currentSprint = instance.getStatsConfig().getInt("sprint.current");
                 long sprintDuration = getDuration(RankType.SPRINT);
                 long sprintIntervalDuration = getIntervalDuration(RankType.SPRINT);
                 return seasonStartedTime + (currentSprint - 1) * (sprintDuration + sprintIntervalDuration);
@@ -250,7 +250,7 @@ public class TimerService extends TownyMissionService {
         switch (rankType) {
             case SPRINT:
                 long seasonStartedTime = getStartTime(RankType.SEASON);
-                int currentSprint = instance.getConfig().getInt("sprint.current");
+                int currentSprint = instance.getStatsConfig().getInt("sprint.current");
                 long sprintDuration = getDuration(RankType.SPRINT);
                 return seasonStartedTime + currentSprint * sprintDuration;
             case SEASON:

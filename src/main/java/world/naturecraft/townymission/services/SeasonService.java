@@ -47,7 +47,7 @@ public class SeasonService {
             SeasonHistoryEntry seasonHistoryEntry =
                     new SeasonHistoryEntry(
                             UUID.randomUUID(),
-                            instance.getConfig().getInt("season.current"),
+                            instance.getStatsConfig().getInt("season.current"),
                             TimerService.getInstance().getStartTime(RankType.SEASON),
                             rankJson.toJson()
                     );

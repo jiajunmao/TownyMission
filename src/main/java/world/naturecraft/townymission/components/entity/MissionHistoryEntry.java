@@ -97,8 +97,8 @@ public class MissionHistoryEntry extends DataEntity {
         this(UUID.randomUUID(), entry.getMissionType(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(),
                 entry.getMissionJson(), entry.getTown(), entry.getStartedPlayer(), completedTime, false, 0, 0);
         TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-        setSprint(instance.getConfig().getInt("sprint.current"));
-        setSeason(instance.getConfig().getInt("season.current"));
+        setSprint(instance.getStatsConfig().getInt("sprint.current"));
+        setSeason(instance.getStatsConfig().getInt("season.current"));
     }
 
     /**

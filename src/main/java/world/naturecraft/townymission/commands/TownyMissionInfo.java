@@ -80,8 +80,8 @@ public class TownyMissionInfo extends TownyMissionCommand {
 
                 // Server-wide section
                 builder.add("&5--Basic Info Section--");
-                int currentSeason = instance.getConfig().getInt("season.current");
-                int currentSprint = instance.getConfig().getInt("sprint.current");
+                int currentSeason = instance.getStatsConfig().getInt("season.current");
+                int currentSprint = instance.getStatsConfig().getInt("sprint.current");
                 builder.add("&eCurrent Season: &f" + currentSeason);
                 builder.add("&eCurrent Sprint: &f" + currentSprint);
                 builder.add("&eTown: &f" + town.getName());

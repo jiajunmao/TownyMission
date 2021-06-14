@@ -86,8 +86,8 @@ public class TownyMissionClaim extends TownyMissionCommand {
                         @Override
                         public boolean include(ClaimEntry data) {
                             return (data.getPlayerUUID().equals(player.getUniqueId())
-                                    && data.getSeason() == instance.getConfig().getInt("season.current")
-                                    && data.getSprint() == instance.getConfig().getInt("sprint.current"));
+                                    && data.getSeason() == instance.getStatsConfig().getInt("season.current")
+                                    && data.getSprint() == instance.getStatsConfig().getInt("sprint.current"));
                         }
                     });
 
