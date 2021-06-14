@@ -133,6 +133,7 @@ public class RewardService extends TownyMissionService {
      * @param rewardJson   the reward json
      */
     public void rewardTown(Town town, RewardMethod rewardMethod, RewardJson rewardJson) {
+        System.out.println("Rewarding town " + town.getName() + " with " + rewardJson.getDisplayLine() + " using " + rewardMethod);
         if (rewardJson.getRewardType().equals(RewardType.POINTS)) {
             // This is reward season point. Ignore RewardMethod.
             if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
@@ -213,10 +214,14 @@ public class RewardService extends TownyMissionService {
             case SPRINT:
                 List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
                 Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
-
+                System.out.println("SprintEntries length: " + sprintEntries.size());
+                System.out.println("RewardMap size: " + rewardsMap.keySet().size());
                 for (Integer currentRank : rewardsMap.keySet()) {
                     List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
-                    if (currentRank - 1 < sprintEntries.size()) {
+
+                    // This is rewarding ranked towns
+                    // TODO: Reward others
+                    if (currentRank != -1 && currentRank - 1 < sprintEntries.size()) {
                         SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
                         Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
 

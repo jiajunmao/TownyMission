@@ -48,13 +48,13 @@ public class ClaimStorage extends Storage<ClaimEntry> {
      * @param season     the season
      * @param sprint     the sprint
      */
-    public void add(String playerUUID, String rewardJson, int season, int sprint) {
+    public void add(String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
         switch (storageType) {
             case YAML:
-                ClaimYamlStorage.getInstance().add(playerUUID, rewardJson, season, sprint);
+                ClaimYamlStorage.getInstance().add(playerUUID, rewardType, rewardJson, season, sprint);
                 break;
             case MYSQL:
-                ClaimSqlStorage.getInstance().add(playerUUID, rewardJson, season, sprint);
+                ClaimSqlStorage.getInstance().add(playerUUID, rewardType, rewardJson, season, sprint);
                 break;
         }
     }
@@ -68,13 +68,13 @@ public class ClaimStorage extends Storage<ClaimEntry> {
      * @param season     the season
      * @param sprint     the sprint
      */
-    public void update(UUID uuid, String playerUUID, String rewardJson, int season, int sprint) {
+    public void update(UUID uuid, String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
         switch (storageType) {
             case YAML:
-                ClaimYamlStorage.getInstance().update(uuid, playerUUID, rewardJson, season, sprint);
+                ClaimYamlStorage.getInstance().update(uuid, playerUUID, rewardType, rewardJson, season, sprint);
                 break;
             case MYSQL:
-                ClaimSqlStorage.getInstance().update(uuid, playerUUID, rewardJson, season, sprint);
+                ClaimSqlStorage.getInstance().update(uuid, playerUUID, rewardType, rewardJson, season, sprint);
                 break;
         }
     }

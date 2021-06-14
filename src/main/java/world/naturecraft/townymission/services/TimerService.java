@@ -87,17 +87,20 @@ public class TimerService extends TownyMissionService {
                     instance.getLogger().warning("Sprint interval reached, doing sprint recess clean up jobs");
 
                     // Clear MissionStorage
+                    instance.getLogger().info(Util.translateColor("{#E9B728}===> Cleaning up mission storage"));
                     MissionService.getInstance().sprintEndCleanUp();
 
                     // Clear CooldownStorage
+                    instance.getLogger().info(Util.translateColor("{#E9B728}===> Cleaning up cooldown storage"));
                     CooldownDao.getInstance().removeAllEntries();
 
                     // Issue rewards
+                    instance.getLogger().info(Util.translateColor("{#E9B728}===> Issuing rewards"));
                     RewardMethod rewardMethod = RewardMethod.valueOf(instance.getConfig().getString("sprint.rewards.method").toUpperCase(Locale.ROOT));
                     RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
                     // Clear SprintStorage, move ranking to SprintHistoryStorage
-                    SprintService.getInstance().sprintEndCleanUp();
+//                    SprintService.getInstance().sprintEndCleanUp();
                 }
             }
         };

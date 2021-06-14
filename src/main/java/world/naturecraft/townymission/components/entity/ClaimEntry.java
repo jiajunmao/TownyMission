@@ -14,6 +14,7 @@ import java.util.UUID;
 public class ClaimEntry extends DataEntity {
 
     private UUID playerUUID;
+    private RewardType rewardType;
     private RewardJson rewardJson;
     private int sprint;
     private int season;
@@ -27,9 +28,10 @@ public class ClaimEntry extends DataEntity {
      * @param season     the season
      * @param sprint     the sprint
      */
-    public ClaimEntry(UUID id, UUID playerUUID, RewardJson rewardJson, int season, int sprint) {
+    public ClaimEntry(UUID id, UUID playerUUID, RewardType rewardType, RewardJson rewardJson, int season, int sprint) {
         super(id, DbType.CLAIM);
         this.playerUUID = playerUUID;
+        this.rewardType = rewardType;
         this.rewardJson = rewardJson;
         this.season = season;
         this.sprint = sprint;
@@ -44,12 +46,11 @@ public class ClaimEntry extends DataEntity {
      * @param season     the season
      * @param sprint     the sprint
      */
-    public ClaimEntry(String id, String playerUUID, String rewardJson, int season, int sprint) {
-        this(UUID.fromString(id), UUID.fromString(playerUUID), null, season, sprint);
+    public ClaimEntry(String id, String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
+        this(UUID.fromString(id), UUID.fromString(playerUUID), RewardType.valueOf(rewardType), null, season, sprint);
         try {
-            RewardJson temp = RewardJson.parse(rewardJson);
-            RewardType rewardType = temp.getRewardType();
-            switch (rewardType) {
+            RewardType rewardTypeEnum = RewardType.valueOf(rewardType);
+            switch (rewardTypeEnum) {
                 case RESOURCE:
                     setRewardJson(ResourceRewardJson.parse(rewardJson));
                     break;
@@ -138,5 +139,13 @@ public class ClaimEntry extends DataEntity {
      */
     public void setSeason(int season) {
         this.season = season;
+    }
+
+    public RewardType getRewardType() {
+        return rewardType;
+    }
+
+    public void setRewardType(RewardType rewardType) {
+        this.rewardType = rewardType;
     }
 }
