@@ -18,11 +18,12 @@ public class StatsConfigLoader {
 
     public StatsConfigLoader(TownyMission instance) {
         this.instance = instance;
+        createStatsConfig();
     }
 
     public void createStatsConfig() {
         String fileName = "stats.yml";
-        String filePath = "datastore/" + File.separator + fileName;
+        String filePath = "datastore" + File.separator + fileName;
         File customConfig = new File(instance.getDataFolder(), filePath);
         if (!customConfig.exists()) {
             customConfig.getParentFile().getParentFile().mkdirs();
@@ -57,5 +58,13 @@ public class StatsConfigLoader {
 
     public int getInt(String path) {
         return customFileConfig.getInt(path);
+    }
+
+    public void set(String path, Object content) {
+        customFileConfig.set(path, content);
+    }
+
+    public long getLong(String path) {
+        return customFileConfig.getLong(path);
     }
 }

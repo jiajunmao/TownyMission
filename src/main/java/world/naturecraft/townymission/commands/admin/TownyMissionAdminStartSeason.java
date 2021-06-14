@@ -69,9 +69,9 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
 
             if (!sanityCheck(player, args)) return false;
 
-            if (instance.getConfig().getInt("season.startedTime") == -1) {
+            if (instance.getStatsConfig().getLong("season.startedTime") == -1) {
                 Date date = new Date();
-                instance.getConfig().set("season.startedTime", date.getTime());
+                instance.getStatsConfig().set("season.startedTime", date.getTime());
                 instance.saveConfig();
                 Util.sendMsg(player, instance.getLangEntry("commands.startSeason.onSuccess"));
                 return true;
