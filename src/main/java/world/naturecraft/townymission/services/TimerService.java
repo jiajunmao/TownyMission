@@ -49,7 +49,7 @@ public class TimerService extends TownyMissionService {
         // Save started time in the config.yml
         Date date = new Date();
         instance.getStatsConfig().set("season.startedTime", date.getTime());
-        instance.saveConfig();
+        instance.getStatsConfig().save();
     }
 
     /**
@@ -73,7 +73,7 @@ public class TimerService extends TownyMissionService {
                     instance.getLogger().warning("Sprint interval ended, proceeding to the next interval");
                     // This means that we are in the next sprint, change config.yml
                     instance.getStatsConfig().set("sprint.current", instance.getStatsConfig().getInt("sprint.current") + 1);
-                    instance.saveConfig();
+                    instance.getStatsConfig().save();
 
                 } else if (timeNow < getTotalEndTime(RankType.SPRINT) && timeNow > getActiveEndTime(RankType.SPRINT)) {
                     // This means that sprint is now in the interval, do clean up task before config changes
@@ -124,7 +124,7 @@ public class TimerService extends TownyMissionService {
                     // This means we are entering next season
                     instance.getStatsConfig().set("season.current", instance.getStatsConfig().getInt("season.current") + 1);
                     instance.getStatsConfig().set("sprint.current", 1);
-                    instance.saveConfig();
+                    instance.getStatsConfig().save();
                 } else if (timeNow < getTotalEndTime(RankType.SEASON) && timeNow > getActiveEndTime(RankType.SEASON)) {
 
                     // If the entry is already in there, do nothing
