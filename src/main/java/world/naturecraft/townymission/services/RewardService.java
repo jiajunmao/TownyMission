@@ -208,20 +208,40 @@ public class RewardService extends TownyMissionService {
      * @param rewardMethod the reward method
      */
     public void rewardAllTowns(RankType rankType, RewardMethod rewardMethod) {
-        //TODO: Separate RankTypes
-        List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
-        Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
 
-        for (Integer currentRank : rewardsMap.keySet()) {
-            List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
-            if (currentRank - 1 < sprintEntries.size()) {
-                SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
-                Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
+        switch (rankType) {
+            case SPRINT:
+                List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
+                Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
 
-                for (RewardJson rewardJson : rewardJsonList) {
-                    rewardTown(town, rewardMethod, rewardJson);
+                for (Integer currentRank : rewardsMap.keySet()) {
+                    List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
+                    if (currentRank - 1 < sprintEntries.size()) {
+                        SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
+                        Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
+
+                        for (RewardJson rewardJson : rewardJsonList) {
+                            rewardTown(town, rewardMethod, rewardJson);
+                        }
+                    }
                 }
-            }
+                break;
+            case SEASON:
+                List<SeasonEntry> seasonEntries = (List<SeasonEntry>) RankUtil.sort(SeasonDao.getInstance().getEntries());
+                rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SEASON);
+
+                for (Integer currentRank : rewardsMap.keySet()) {
+                    List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
+                    if (currentRank - 1 < seasonEntries.size()) {
+                        SeasonEntry seasonEntry = seasonEntries.get(currentRank - 1);
+                        Town town = TownyUtil.getTownByName(seasonEntry.getTownName());
+
+                        for (RewardJson rewardJson : rewardJsonList) {
+                            rewardTown(town, rewardMethod, rewardJson);
+                        }
+                    }
+                }
         }
+
     }
 }

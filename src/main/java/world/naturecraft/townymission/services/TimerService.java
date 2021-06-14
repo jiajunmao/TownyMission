@@ -146,7 +146,9 @@ public class TimerService extends TownyMissionService {
                         SeasonDao.getInstance().remove(seasonEntry);
                     }
 
-                    //TODO: Grant reward
+                    // Reward all towns
+                    RewardMethod rewardMethod = RewardMethod.valueOf(instance.getConfig().getString("season.rewards.method").toUpperCase(Locale.ROOT));
+                    RewardService.getInstance().rewardAllTowns(RankType.SEASON, rewardMethod);
                 }
             }
         };
