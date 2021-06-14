@@ -8,14 +8,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingError;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminListMissions;
-import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminStartSeason;
-import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.components.gui.MissionManageGui;
 import world.naturecraft.townymission.config.mission.MissionConfigLoader;
-import world.naturecraft.townymission.data.sql.*;
 import world.naturecraft.townymission.listeners.external.MissionListener;
 import world.naturecraft.townymission.listeners.external.TownFallListener;
 import world.naturecraft.townymission.listeners.internal.DoMissionListener;
@@ -23,9 +21,7 @@ import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -158,14 +154,14 @@ public class TownyMission extends JavaPlugin {
         String dbPassword = getConfig().getString("database.password");
 
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl( dbAddress );
+        config.setJdbcUrl(dbAddress);
         config.addDataSourceProperty("port", dbPort);
         config.addDataSourceProperty("databaseName", dbName);
-        config.setUsername( dbUsername );
-        config.setPassword( dbPassword );
-        config.addDataSourceProperty( "cachePrepStmts" , "true" );
-        config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
-        config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+        config.setUsername(dbUsername);
+        config.setPassword(dbPassword);
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         config.setMaximumPoolSize(5);
         config.setMinimumIdle(5);
         config.setConnectionTimeout(10000);
@@ -226,6 +222,11 @@ public class TownyMission extends JavaPlugin {
         return storageType;
     }
 
+    /**
+     * Gets datasource.
+     *
+     * @return the datasource
+     */
     public HikariDataSource getDatasource() {
         return db;
     }

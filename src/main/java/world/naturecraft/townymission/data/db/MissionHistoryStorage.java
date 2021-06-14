@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.sql.MissionHistoryDatabase;
-import world.naturecraft.townymission.data.yaml.MissionHistoryYaml;
+import world.naturecraft.townymission.data.sql.MissionHistorySqlStorage;
+import world.naturecraft.townymission.data.yaml.MissionHistoryYamlStorage;
 
 import java.util.List;
 import java.util.UUID;
@@ -63,10 +63,10 @@ public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         switch (storageType) {
             case YAML:
-                MissionHistoryYaml.getInstance().add(missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+                MissionHistoryYamlStorage.getInstance().add(missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
                 break;
             case MYSQL:
-                MissionHistoryDatabase.getInstance().add(missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+                MissionHistorySqlStorage.getInstance().add(missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
                 break;
         }
     }
@@ -79,10 +79,10 @@ public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
     public void remove(UUID id) {
         switch (storageType) {
             case YAML:
-                MissionHistoryYaml.getInstance().remove(id);
+                MissionHistoryYamlStorage.getInstance().remove(id);
                 break;
             case MYSQL:
-                MissionHistoryDatabase.getInstance().remove(id);
+                MissionHistorySqlStorage.getInstance().remove(id);
                 break;
         }
     }
@@ -106,10 +106,10 @@ public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
     public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         switch (storageType) {
             case YAML:
-                MissionHistoryYaml.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+                MissionHistoryYamlStorage.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
                 break;
             case MYSQL:
-                MissionHistoryDatabase.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+                MissionHistorySqlStorage.getInstance().update(id, missionType, addedTime, startedTime, allowedTime, taskJson, townName, startedPlayerUUID, completedTime, isClaimed, sprint, season);
                 break;
         }
     }
@@ -122,9 +122,9 @@ public class MissionHistoryStorage extends Storage<MissionHistoryEntry> {
     public List<MissionHistoryEntry> getEntries() {
         switch (storageType) {
             case YAML:
-                return MissionHistoryYaml.getInstance().getEntries();
+                return MissionHistoryYamlStorage.getInstance().getEntries();
             case MYSQL:
-                return MissionHistoryDatabase.getInstance().getEntries();
+                return MissionHistorySqlStorage.getInstance().getEntries();
         }
 
         throw new IllegalStateException();

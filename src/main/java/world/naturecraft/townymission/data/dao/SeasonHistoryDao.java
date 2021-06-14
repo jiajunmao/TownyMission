@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
-import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.data.db.SeasonHistoryStorage;
 
 import java.util.List;
@@ -22,6 +21,7 @@ public class SeasonHistoryDao extends Dao<SeasonHistoryEntry> {
      * Instantiates a new Season history dao.
      */
     public SeasonHistoryDao() {
+        super(SeasonHistoryStorage.getInstance());
         this.db = SeasonHistoryStorage.getInstance();
     }
 
@@ -38,25 +38,21 @@ public class SeasonHistoryDao extends Dao<SeasonHistoryEntry> {
         return singleton;
     }
 
+    /**
+     * Get season history entry.
+     *
+     * @param season the season
+     * @return the season history entry
+     */
     public SeasonHistoryEntry get(int season) {
         List<SeasonHistoryEntry> entries = getEntries();
-        for(SeasonHistoryEntry e : entries) {
+        for (SeasonHistoryEntry e : entries) {
             if (e.getSeason() == season) {
                 return e;
             }
         }
 
         return null;
-    }
-
-    /**
-     * Gets entries.
-     *
-     * @return the entries
-     */
-    @Override
-    public List<SeasonHistoryEntry> getEntries() {
-        return db.getEntries();
     }
 
     /**

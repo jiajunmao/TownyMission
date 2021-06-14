@@ -23,6 +23,7 @@ public class SeasonDao extends Dao<SeasonEntry> {
      * Instantiates a new Season dao.
      */
     public SeasonDao() {
+        super(SeasonStorage.getInstance());
         this.database = SeasonStorage.getInstance();
     }
 
@@ -52,11 +53,6 @@ public class SeasonDao extends Dao<SeasonEntry> {
     public void add(SeasonEntry entry) {
         System.out.println("SeasonDao.add called with " + entry.getTownName());
         database.add(entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
-    }
-
-    @Override
-    public List<SeasonEntry> getEntries() {
-        return database.getEntries();
     }
 
     /**

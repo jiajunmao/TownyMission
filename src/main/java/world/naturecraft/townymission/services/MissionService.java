@@ -9,15 +9,14 @@ import org.bukkit.entity.Player;
 import world.naturecraft.townymission.api.exceptions.NotFoundException;
 import world.naturecraft.townymission.components.entity.*;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.data.dao.*;
+import world.naturecraft.townymission.utils.EntryFilter;
 import world.naturecraft.townymission.utils.SanityChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -63,8 +62,8 @@ public class MissionService extends TownyMissionService {
                     Town town = TownyUtil.residentOf(player);
 
                     try {
-                        if (CooldownDao.getInstance().isStillInCooldown(town)) {
-                            long remainingTime = CooldownDao.getInstance().getRemaining(town);
+                        if (CooldownService.getInstance().isStillInCooldown(town)) {
+                            long remainingTime = CooldownService.getInstance().getRemaining(town);
                             String display = String.format("%02d:%02d",
                                     TimeUnit.MILLISECONDS.toHours(remainingTime),
                                     TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
@@ -154,7 +153,7 @@ public class MissionService extends TownyMissionService {
             return;
 
         MissionDao.getInstance().remove(entry);
-        CooldownDao.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }
 
     /**
@@ -181,52 +180,59 @@ public class MissionService extends TownyMissionService {
                     instance.getConfig().getInt("sprint.current"),
                     instance.getConfig().getInt("season.current")));
         }
-        CooldownDao.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
     }
 
     /**
-     * Gets started missions.
+     * Gets average contributions.
      *
-     * @param town the town
-     * @return the started missions
+     * @param sprint the sprint
+     * @param season the season
+     * @return the average contributions
      */
-    public List<MissionEntry> getStartedMissions(Town town) {
-        List<MissionEntry> entryList = new ArrayList<>();
-        for (MissionEntry e : MissionDao.getInstance().getEntries()) {
-            if (e.isStarted()) {
-                entryList.add(e);
+    public Map<String, Double> getAverageContributions(int sprint, int season) {
+        List<MissionHistoryEntry> missionHistoryEntries = MissionHistoryDao.getInstance().getEntries(new EntryFilter<MissionHistoryEntry>() {
+            @Override
+            public boolean include(MissionHistoryEntry data) {
+                return (data.getSeason() == season && data.getSprint() == sprint);
+            }
+        });
+
+        Map<String, Double> averageContribution = new HashMap<>();
+        for (MissionHistoryEntry missionHistoryEntry : missionHistoryEntries) {
+            MissionJson missionJson = missionHistoryEntry.getMissionJson();
+            Map<String, Integer> missionContribution = missionJson.getContributions();
+            int requiredAmount = missionJson.getAmount();
+            for (String player : missionContribution.keySet()) {
+                int contribution = missionContribution.get(player);
+                double percent = (double) contribution / requiredAmount;
+
+                if (!averageContribution.containsKey(player)) {
+                    averageContribution.put(player, percent);
+                } else {
+                    averageContribution.put(player, averageContribution.get(player) + percent);
+                }
             }
         }
-        return entryList;
-    }
 
-    /**
-     * Gets started missions.
-     *
-     * @param town        the town
-     * @param missionType the mission type
-     * @return the started missions
-     */
-    public List<MissionEntry> getStartedMissions(Town town, MissionType missionType) {
-        List<MissionEntry> missionEntries = getStartedMissions(town);
-        List<MissionEntry> finalList = new ArrayList<>();
-        for (MissionEntry entry : missionEntries) {
-            if (entry.getMissionType().equals(missionType)) {
-                finalList.add(entry);
-            }
+        int totalMissions = missionHistoryEntries.size();
+        for (String player : averageContribution.keySet()) {
+            averageContribution.put(player, averageContribution.get(player) / totalMissions);
         }
-        return finalList;
+
+        return averageContribution;
     }
 
-    /**
-     * This returns the indexed MissionEntry from 1 to mission.amount
-     *
-     * @param town  The town for the index mission
-     * @param index The index
-     * @return The corresponding MissionEntry
-     */
-    public MissionEntry getIndexedMission(Town town, int index) {
-        List<MissionEntry> missionEntries = MissionDao.getInstance().getEntries();
-        return missionEntries.get(index - 1);
+    public void sprintEndCleanUp() {
+        List<MissionEntry> entryList = MissionDao.getInstance().getEntries();
+        for (MissionEntry entry : entryList) {
+            if (entry.isStarted() && entry.isCompleted()) {
+                // If it is already completed, but unmoved, move to MissionHistory, and give the reward
+                MissionService.getInstance().completeMission(entry.getTown().getMayor().getPlayer(), entry);
+            }
+
+            // Remove the entry from MissionStorage
+            MissionDao.getInstance().remove(entry);
+        }
     }
 }

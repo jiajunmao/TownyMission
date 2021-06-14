@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
- */
-
 package world.naturecraft.townymission.components.json.reward;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,22 +8,24 @@ import world.naturecraft.townymission.components.enums.RewardType;
 
 import java.beans.ConstructorProperties;
 
+
 /**
- * The type Money reward json.
+ * The type Point reward json.
  */
-public class MoneyRewardJson extends RewardJson {
+// Well technically this is not a json, but I guess I will put it here
+public class PointRewardJson extends RewardJson {
 
     @JsonProperty("amount")
     private int amount;
 
     /**
-     * Instantiates a new Money reward json.
+     * Instantiates a new Point reward json.
      *
      * @param amount the amount
      */
     @ConstructorProperties({"amount"})
-    public MoneyRewardJson(int amount) {
-        super(RewardType.MONEY);
+    public PointRewardJson(int amount) {
+        super(RewardType.POINTS);
         this.amount = amount;
     }
 
@@ -40,7 +38,7 @@ public class MoneyRewardJson extends RewardJson {
      */
     @JsonIgnore
     public static RewardJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, MoneyRewardJson.class);
+        return new ObjectMapper().readValue(json, PointRewardJson.class);
     }
 
     @JsonProperty("amount")

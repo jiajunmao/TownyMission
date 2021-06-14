@@ -4,8 +4,24 @@
 
 package world.naturecraft.townymission.components.enums;
 
+/**
+ * The enum Reward type.
+ */
 public enum RewardType {
+    /**
+     * Money reward type.
+     */
     MONEY,
+    /**
+     * Resource reward type.
+     */
     RESOURCE,
-    COMMAND
+    /**
+     * Command reward type.
+     */
+    COMMAND,
+    /**
+     * Points reward type.
+     */
+    POINTS
 }

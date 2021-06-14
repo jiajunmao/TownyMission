@@ -3,7 +3,7 @@ package world.naturecraft.townymission.data.sql;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
+import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.utils.Util;
 
@@ -14,19 +14,19 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Season history database.
+ * The type Claim sql storage.
  */
-public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
+public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
 
-    private static SeasonHistoryDatabase singleton;
+    private static ClaimSqlStorage singleton;
 
     /**
-     * Instantiates a new Season history database.
+     * Instantiates a new Database.
      *
      * @param db        the db
      * @param tableName the table name
      */
-    public SeasonHistoryDatabase(HikariDataSource db, String tableName) {
+    public ClaimSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
     }
 
@@ -35,22 +35,27 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
      *
      * @return the instance
      */
-    public static SeasonHistoryDatabase getInstance() {
+    public static ClaimSqlStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new SeasonHistoryDatabase(instance.getDatasource(), Util.getDbName(DbType.SEASON_HISTORY));
+            singleton = new ClaimSqlStorage(instance.getDatasource(), Util.getDbName(DbType.CLAIM));
         }
+
         return singleton;
     }
 
+    /**
+     * Create table.
+     */
     @Override
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL ," +
-                    "`season` INT NOT NULL ," +
-                    "`started_time` BIGINT NOT NULL ," +
-                    "`rank_json` VARCHAR(255) NOT NULL ," +
+                    "`id` VARCHAR(255) NOT NULL," +
+                    "`player_uuid` VARCHAR(255) NOT NULL ," +
+                    "`reward_json` VARCHAR(255) NOT NULL," +
+                    "`sprint` INT NOT NULL," +
+                    "`season` INT NOT NULL," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -58,21 +63,27 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
         });
     }
 
+    /**
+     * Gets entries.
+     *
+     * @return the entries
+     */
     @Override
-    public List<SeasonHistoryEntry> getEntries() {
-        List<SeasonHistoryEntry> list = new ArrayList<>();
+    public List<ClaimEntry> getEntries() {
+        List<ClaimEntry> list = new ArrayList<>();
         execute(conn -> {
-            String sql = "SELECT * FROM " + tableName;
+            String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
             ResultSet result = p.executeQuery();
-
             while (result.next()) {
-                list.add(new SeasonHistoryEntry(UUID.fromString(result.getString("id")),
+                list.add(new ClaimEntry(
+                        result.getString("id"),
+                        result.getString("player_uuid"),
+                        result.getString("reward_json"),
                         result.getInt("season"),
-                        result.getLong("started_time"),
-                        result.getString("rank_json")));
+                        result.getInt("sprint")
+                ));
             }
-
             return null;
         });
         return list;
@@ -81,17 +92,19 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
     /**
      * Add.
      *
-     * @param season      the season
-     * @param startedTime the started time
-     * @param rankJson    the rank json
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
      */
-    public void add(int season, long startedTime, String rankJson) {
+    public void add(String playerUUID, String rewardJson, int season, int sprint) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+                    playerUUID + "', '" +
+                    rewardJson + "', '" +
                     season + "', '" +
-                    startedTime + "', '" +
-                    rankJson + "');";
+                    sprint + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -106,7 +119,7 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
     public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id + "');";
+                    "id='" + id.toString() + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -116,18 +129,20 @@ public class SeasonHistoryDatabase extends Database<SeasonHistoryEntry> {
     /**
      * Update.
      *
-     * @param id          the id
-     * @param season      the season
-     * @param startedTime the started time
-     * @param rankJson    the rank json
+     * @param id         the id
+     * @param playerUUID the player uuid
+     * @param rewardJson the reward json
+     * @param season     the season
+     * @param sprint     the sprint
      */
-    public void update(UUID id, int season, long startedTime, String rankJson) {
+    public void update(UUID id, String playerUUID, String rewardJson, int season, int sprint) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
-                    " SET season='" + season +
-                    "', started_time='" + startedTime +
-                    "', rank_json='" + rankJson +
-                    "' WHERE id='" + id + "';";
+                    " SET player_uuid='" + playerUUID +
+                    "', reward_json='" + rewardJson +
+                    "', season='" + season +
+                    "', sprint='" + sprint +
+                    "' WHERE id='" + id.toString() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

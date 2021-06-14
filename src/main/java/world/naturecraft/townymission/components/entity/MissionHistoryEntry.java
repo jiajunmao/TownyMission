@@ -5,9 +5,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.TownyUtil;
 

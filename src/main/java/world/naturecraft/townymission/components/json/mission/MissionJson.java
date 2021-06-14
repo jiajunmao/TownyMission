@@ -190,4 +190,13 @@ public abstract class MissionJson {
     public void removeContributions(String playerUUID) {
         contributions.remove(playerUUID);
     }
+
+    /**
+     * Gets contributions.
+     *
+     * @return the contributions
+     */
+    public Map<String, Integer> getContributions() {
+        return contributions;
+    }
 }

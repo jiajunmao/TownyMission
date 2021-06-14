@@ -18,9 +18,9 @@ import java.util.UUID;
 /**
  * The type Task database.
  */
-public class MissionDatabase extends Database<MissionEntry> {
+public class MissionSqlStorage extends SqlStorage<MissionEntry> {
 
-    private static MissionDatabase singleton;
+    private static MissionSqlStorage singleton;
 
     /**
      * Instantiates a new Task database.
@@ -28,7 +28,7 @@ public class MissionDatabase extends Database<MissionEntry> {
      * @param db        the db
      * @param tableName the table name
      */
-    public MissionDatabase(HikariDataSource db, String tableName) {
+    public MissionSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
     }
 
@@ -37,10 +37,10 @@ public class MissionDatabase extends Database<MissionEntry> {
      *
      * @return the instance
      */
-    public static MissionDatabase getInstance() {
+    public static MissionSqlStorage getInstance() {
         if (singleton == null) {
             TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new MissionDatabase(instance.getDatasource(), Util.getDbName(DbType.MISSION));
+            singleton = new MissionSqlStorage(instance.getDatasource(), Util.getDbName(DbType.MISSION));
         }
         return singleton;
     }

@@ -11,6 +11,8 @@ import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.CooldownDao;
+import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.SanityChecker;
@@ -59,14 +61,14 @@ public class TownyMissionAbort extends TownyMissionCommand {
                     if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
                         if (Util.isInt(args[1])) {
-                            MissionEntry entry = MissionService.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
+                            MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
                             MissionService.getInstance().abortMission(player, entry);
                         } else {
-                            for (MissionEntry entry : MissionService.getInstance().getStartedMissions(town)) {
+                            for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town)) {
                                 MissionService.getInstance().abortMission(player, entry);
                             }
                         }
-                        CooldownDao.getInstance().startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+                        CooldownService.getInstance().startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
                     }
                 }
             };
@@ -105,7 +107,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                         return true;
 
                     if (Util.isInt(args[1])) {
-                        MissionEntry entry = MissionService.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
+                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
                         if (entry.getStartedPlayer().equals(player)) {
                             return true;
                         } else {
@@ -114,7 +116,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                         }
                     } else {
                         boolean result = true;
-                        for (MissionEntry entry : MissionService.getInstance().getStartedMissions(town)) {
+                        for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town)) {
                             result = result && entry.getStartedPlayer().equals(player);
                         }
 

@@ -17,16 +17,16 @@ import java.util.UUID;
 /**
  * The type Cooldown yaml.
  */
-public class CooldownYaml extends YamlStorage<CooldownEntry> {
+public class CooldownYamlStorage extends YamlStorage<CooldownEntry> {
 
-    private static CooldownYaml singleton;
+    private static CooldownYamlStorage singleton;
 
     /**
      * Instantiates a new Cooldown yaml.
      *
      * @param instance the instance
      */
-    public CooldownYaml(TownyMission instance) {
+    public CooldownYamlStorage(TownyMission instance) {
         super(instance, DbType.COOLDOWN);
         singleton = this;
     }
@@ -36,10 +36,10 @@ public class CooldownYaml extends YamlStorage<CooldownEntry> {
      *
      * @return the instance
      */
-    public static CooldownYaml getInstance() {
+    public static CooldownYamlStorage getInstance() {
         if (singleton == null) {
             TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new CooldownYaml(townyMission);
+            new CooldownYamlStorage(townyMission);
         }
         return singleton;
     }

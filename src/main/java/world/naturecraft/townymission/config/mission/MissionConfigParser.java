@@ -9,8 +9,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.components.json.mission.*;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.components.json.mission.*;
 
 import java.util.ArrayList;
 import java.util.List;

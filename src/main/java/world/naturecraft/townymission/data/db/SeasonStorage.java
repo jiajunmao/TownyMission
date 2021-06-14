@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.sql.SeasonDatabase;
-import world.naturecraft.townymission.data.yaml.SeasonYaml;
+import world.naturecraft.townymission.data.sql.SeasonSqlStorage;
+import world.naturecraft.townymission.data.yaml.SeasonYamlStorage;
 
 import java.util.List;
 import java.util.UUID;
@@ -56,10 +56,10 @@ public class SeasonStorage extends Storage<SeasonEntry> {
     public void add(String townUUID, String townName, int seasonPoint, int season) {
         switch (storageType) {
             case YAML:
-                SeasonYaml.getInstance().add(townUUID, townName, seasonPoint, season);
+                SeasonYamlStorage.getInstance().add(townUUID, townName, seasonPoint, season);
                 break;
             case MYSQL:
-                SeasonDatabase.getInstance().add(townUUID, townName, seasonPoint, season);
+                SeasonSqlStorage.getInstance().add(townUUID, townName, seasonPoint, season);
                 break;
         }
     }
@@ -72,10 +72,10 @@ public class SeasonStorage extends Storage<SeasonEntry> {
     public void remove(UUID id) {
         switch (storageType) {
             case YAML:
-                SeasonYaml.getInstance().remove(id);
+                SeasonYamlStorage.getInstance().remove(id);
                 break;
             case MYSQL:
-                SeasonDatabase.getInstance().remove(id);
+                SeasonSqlStorage.getInstance().remove(id);
                 break;
         }
     }
@@ -92,10 +92,10 @@ public class SeasonStorage extends Storage<SeasonEntry> {
     public void update(UUID id, String townUUID, String townName, int seasonPoint, int season) {
         switch (storageType) {
             case YAML:
-                SeasonYaml.getInstance().update(id, townUUID, townName, seasonPoint, season);
+                SeasonYamlStorage.getInstance().update(id, townUUID, townName, seasonPoint, season);
                 break;
             case MYSQL:
-                SeasonDatabase.getInstance().update(id, townUUID, townName, seasonPoint, season);
+                SeasonSqlStorage.getInstance().update(id, townUUID, townName, seasonPoint, season);
                 break;
         }
     }
@@ -108,9 +108,9 @@ public class SeasonStorage extends Storage<SeasonEntry> {
     public List<SeasonEntry> getEntries() {
         switch (storageType) {
             case YAML:
-                return SeasonYaml.getInstance().getEntries();
+                return SeasonYamlStorage.getInstance().getEntries();
             case MYSQL:
-                return SeasonDatabase.getInstance().getEntries();
+                return SeasonSqlStorage.getInstance().getEntries();
         }
 
         throw new IllegalStateException();

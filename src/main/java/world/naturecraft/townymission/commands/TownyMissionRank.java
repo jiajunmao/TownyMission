@@ -4,8 +4,6 @@
 
 package world.naturecraft.townymission.commands;
 
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,14 +15,10 @@ import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.TimerService;
-import world.naturecraft.townymission.utils.MultilineBuilder;
-import world.naturecraft.townymission.utils.RankUtil;
-import world.naturecraft.townymission.utils.SanityChecker;
-import world.naturecraft.townymission.utils.Util;
+import world.naturecraft.townymission.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The type Towny mission rank.
@@ -86,18 +80,13 @@ public class TownyMissionRank extends TownyMissionCommand {
                 MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Sprint Rank&7------");
                 int index = 1;
                 for (Rankable entry : entryList) {
-                    try {
-                        Town town = TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(entry.getID()));
-                        if (args[1].equalsIgnoreCase("sprint")) {
-                            builder.add("&e" + index + ". &f" + town.getName() + " : "
-                                    + Util.getRankingPoints(town.getNumResidents(), entry.getPoint(), instance)
-                                    + " points");
-                        } else {
-                            builder.add("&e" + index + ". &f" + town.getName() + " : " + entry.getPoint() + " points");
-                        }
-
-                    } catch (NotRegisteredException notRegisteredException) {
-                        notRegisteredException.printStackTrace();
+                    Town town = TownyUtil.residentOf(player);
+                    if (args[1].equalsIgnoreCase("sprint")) {
+                        builder.add("&e" + index + ". &f" + town.getName() + " : "
+                                + Util.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
+                                + " points");
+                    } else {
+                        builder.add("&e" + index + ". &f" + town.getName() + " : " + entry.getRankingFactor() + " points");
                     }
                 }
                 String finalString = builder.toString();

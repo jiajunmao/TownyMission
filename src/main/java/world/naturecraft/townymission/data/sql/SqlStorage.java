@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @param <T> the type parameter
  */
-public abstract class Database<T extends DataEntity> {
+public abstract class SqlStorage<T extends DataEntity> {
 
     /**
      * The Table name.
@@ -26,7 +26,7 @@ public abstract class Database<T extends DataEntity> {
      * @param db        the db
      * @param tableName the table name
      */
-    public Database(HikariDataSource db, String tableName) {
+    public SqlStorage(HikariDataSource db, String tableName) {
         this.db = db;
         this.tableName = tableName;
         createTable();

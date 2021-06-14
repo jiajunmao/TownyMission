@@ -4,8 +4,20 @@
 
 package world.naturecraft.townymission.components.enums;
 
+/**
+ * The enum Reward method.
+ */
 public enum RewardMethod {
+    /**
+     * Equal reward method.
+     */
     EQUAL,
+    /**
+     * Contributions reward method.
+     */
     CONTRIBUTIONS,
+    /**
+     * Individual reward method.
+     */
     INDIVIDUAL
 }

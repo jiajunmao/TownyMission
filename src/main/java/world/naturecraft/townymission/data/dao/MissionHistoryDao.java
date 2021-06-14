@@ -8,10 +8,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.data.db.MissionHistoryStorage;
+import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Mission history dao.
@@ -25,6 +29,7 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
      * Instantiates a new Task dao.
      */
     public MissionHistoryDao() {
+        super(MissionHistoryStorage.getInstance());
         this.db = MissionHistoryStorage.getInstance();
     }
 
@@ -98,10 +103,5 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);
         }
-    }
-
-    @Override
-    public List<MissionHistoryEntry> getEntries() {
-        return db.getEntries();
     }
 }

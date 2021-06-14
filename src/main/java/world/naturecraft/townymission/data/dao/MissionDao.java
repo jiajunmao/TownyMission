@@ -10,6 +10,7 @@ import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.db.MissionStorage;
+import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class MissionDao extends Dao<MissionEntry> {
      * Instantiates a new Task dao.
      */
     public MissionDao() {
+        super(MissionStorage.getInstance());
         this.db = MissionStorage.getInstance();
     }
 
@@ -115,6 +117,36 @@ public class MissionDao extends Dao<MissionEntry> {
     }
 
     /**
+     * Gets started missions.
+     *
+     * @param town the town
+     * @return the started missions
+     */
+    public List<MissionEntry> getStartedMissions(Town town) {
+        List<MissionEntry> list = getEntries(new EntryFilter<MissionEntry>() {
+            @Override
+            public boolean include(MissionEntry data) {
+                return (data.getTown().equals(town)
+                && data.isStarted());
+            }
+        });
+
+        return list;
+    }
+
+    /**
+     * This returns the indexed MissionEntry from 1 to mission.amount
+     *
+     * @param town  The town for the index mission
+     * @param index The index
+     * @return The corresponding MissionEntry
+     */
+    public MissionEntry getIndexedMission(Town town, int index) {
+        List<MissionEntry> missionEntries = MissionDao.getInstance().getTownMissions(town);
+        return missionEntries.get(index - 1);
+    }
+
+    /**
      * Add.
      *
      * @param entry the entry
@@ -149,10 +181,5 @@ public class MissionDao extends Dao<MissionEntry> {
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);
         }
-    }
-
-    @Override
-    public List<MissionEntry> getEntries() {
-        return db.getEntries();
     }
 }

@@ -24,6 +24,7 @@ public class SprintDao extends Dao<SprintEntry> {
      * Instantiates a new Sprint dao.
      */
     public SprintDao() {
+        super(SprintStorage.getInstance());
         this.database = SprintStorage.getInstance();
     }
 
@@ -56,11 +57,6 @@ public class SprintDao extends Dao<SprintEntry> {
         } else {
             update(entry);
         }
-    }
-
-    @Override
-    public List<SprintEntry> getEntries() {
-        return database.getEntries();
     }
 
     /**

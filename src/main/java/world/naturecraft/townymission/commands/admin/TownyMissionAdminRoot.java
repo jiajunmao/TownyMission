@@ -17,8 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Towny mission admin root.
+ */
 public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
 
+    /**
+     * The Commands.
+     */
     Map<String, TownyMissionAdminCommand> commands;
 
     /**
@@ -65,10 +71,22 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
         return tabList;
     }
 
+    /**
+     * Register admin command.
+     *
+     * @param name         the name
+     * @param adminCommand the admin command
+     */
     public void registerAdminCommand(String name, TownyMissionAdminCommand adminCommand) {
         commands.put(name, adminCommand);
     }
 
+    /**
+     * Gets executor.
+     *
+     * @param name the name
+     * @return the executor
+     */
     public TownyMissionAdminCommand getExecutor(String name) {
         return commands.getOrDefault(name, null);
     }
