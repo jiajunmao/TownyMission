@@ -6,12 +6,19 @@ package world.naturecraft.townymission.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.OfflinePlayer;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
+import world.naturecraft.townymission.components.json.mission.MissionJson;
+import world.naturecraft.townymission.data.db.CooldownStorage;
 import world.naturecraft.townymission.data.db.MissionHistoryStorage;
+import world.naturecraft.townymission.utils.BooleanChecker;
+import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Mission history dao.
@@ -25,6 +32,7 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
      * Instantiates a new Task dao.
      */
     public MissionHistoryDao() {
+        super(MissionHistoryStorage.getInstance());
         this.db = MissionHistoryStorage.getInstance();
     }
 
@@ -100,8 +108,36 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
         }
     }
 
-    @Override
-    public List<MissionHistoryEntry> getEntries() {
-        return db.getEntries();
+    public Map<String, Double> getAverageContributions(int sprint, int season) {
+        List<MissionHistoryEntry> missionHistoryEntries = getEntries(new EntryFilter<MissionHistoryEntry>() {
+            @Override
+            public boolean include(MissionHistoryEntry data) {
+                return (data.getSeason() == season && data.getSprint() == sprint);
+            }
+        });
+
+        Map<String, Double> averageContribution = new HashMap<>();
+        for (MissionHistoryEntry missionHistoryEntry : missionHistoryEntries) {
+            MissionJson missionJson = missionHistoryEntry.getMissionJson();
+            Map<String, Integer> missionContribution = missionJson.getContributions();
+            int requiredAmount = missionJson.getAmount();
+            for (String player : missionContribution.keySet()) {
+                int contribution = missionContribution.get(player);
+                double percent = (double) contribution / requiredAmount;
+
+                if (!averageContribution.containsKey(player)) {
+                    averageContribution.put(player, percent);
+                }  else {
+                    averageContribution.put(player, averageContribution.get(player) + percent);
+                }
+            }
+        }
+
+        int totalMissions = missionHistoryEntries.size();
+        for(String player : averageContribution.keySet()) {
+            averageContribution.put(player, averageContribution.get(player) / totalMissions);
+        }
+
+        return averageContribution;
     }
 }

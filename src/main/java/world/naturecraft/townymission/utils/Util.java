@@ -1,8 +1,11 @@
 package world.naturecraft.townymission.utils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -204,5 +207,17 @@ public class Util {
         str = str.toLowerCase(Locale.ROOT);
         str = str.substring(0, 1).toUpperCase(Locale.ROOT) + str.substring(1);
         return str;
+    }
+
+    public static int getNumEmptySlotsInInventory(PlayerInventory playerInventory) {
+        int num = 0;
+        for (int i = 9; i < 44; i++) {
+            if (playerInventory.getStorageContents()[i] == null
+                    || playerInventory.getStorageContents()[i].getType().equals(Material.AIR)) {
+                num++;
+            }
+        }
+
+        return num;
     }
 }

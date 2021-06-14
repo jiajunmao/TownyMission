@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import world.naturecraft.townymission.components.enums.RewardType;
 
 import java.beans.ConstructorProperties;
+import java.util.Locale;
 
 public class ResourceRewardJson extends RewardJson {
 
@@ -40,5 +41,15 @@ public class ResourceRewardJson extends RewardJson {
     @JsonProperty("amount")
     public int getAmount() {
         return amount;
+    }
+
+    public String getDisplayLine() {
+        return "ResourceType: " + type.name().toLowerCase(Locale.ROOT) +
+        ", Amount: " + amount;
+    }
+
+    @Override
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

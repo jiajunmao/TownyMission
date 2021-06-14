@@ -6,10 +6,14 @@ package world.naturecraft.townymission.data.db;
 
 import world.naturecraft.townymission.components.entity.DataEntity;
 
+import java.util.List;
+
 /**
  * The type Storage.
  *
  * @param <T> the type parameter
  */
 public abstract class Storage<T extends DataEntity> {
+
+    public abstract List<T> getEntries();
 }

@@ -35,7 +35,15 @@ public class CommandRewardJson extends RewardJson {
         return new ObjectMapper().readValue(json, CommandRewardJson.class);
     }
 
+    public String getDisplayLine() {
+        return "Command: " + command;
+    }
+
     public int getAmount() {
         return -1;
+    }
+
+    public void setAmount(int amount) {
+        // Do nothing
     }
 }

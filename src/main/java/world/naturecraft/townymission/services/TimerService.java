@@ -9,6 +9,8 @@ package world.naturecraft.townymission.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.components.entity.*;
 import world.naturecraft.townymission.components.enums.RewardMethod;
@@ -72,22 +74,13 @@ public class TimerService extends TownyMissionService {
                 // This means that we are in season interval
                 if (isInInterval(RankType.SEASON)) return;
 
-                // Get some numbers, do some math
-                long sprintDuration = Util.hrToMs(instance.getConfig().getInt("sprint.duration") * 24);
-                long sprintIntervalDuration = Util.hrToMs(instance.getConfig().getInt("sprint.interval") * 24);
-                int currentSprint = instance.getConfig().getInt("sprint.current");
-                long seasonStartedTime = instance.getConfig().getLong("season.startedTime");
 
-                long sprintStartedTime = seasonStartedTime + (currentSprint - 1) * (sprintDuration + sprintIntervalDuration);
-                long sprintEndTime = seasonStartedTime + currentSprint * sprintDuration;
-                long sprintInterEndTime = seasonStartedTime + currentSprint * (sprintDuration + sprintIntervalDuration);
-
-                if (timeNow > sprintInterEndTime) {
+                if (timeNow > getTotalEndTime(RankType.SPRINT)) {
                     instance.getLogger().warning("Sprint interval ended, proceeding to the next interval");
                     // This means that we are in the next sprint, change config.yml
-                    instance.getConfig().set("sprint.current", currentSprint + 1);
+                    instance.getConfig().set("sprint.current", instance.getConfig().getInt("sprint.current") + 1);
                     instance.saveConfig();
-                } else if (timeNow < sprintInterEndTime && timeNow > sprintEndTime) {
+                } else if (timeNow < getTotalEndTime(RankType.SPRINT) && timeNow > getActiveEndTime(RankType.SPRINT)) {
                     // This means that sprint is now in the interval, do clean up task before config changes
 
                     // Check if in season interval, if is, do nothing
@@ -117,42 +110,8 @@ public class TimerService extends TownyMissionService {
                     }
 
                     // Issue rewards
-                    List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
-                    Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
-
-                    for (Integer currentRank : rewardsMap.keySet()) {
-                        List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
-                        if (currentRank - 1 < sprintEntries.size()) {
-                            SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
-                            Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
-                            RewardMethod rewardMethod = RewardConfigParser.getRewardMethods(RankType.SPRINT);
-
-                            for (RewardJson rewardJson : rewardJsonList) {
-                                if (rewardJson.getRewardType().equals(RewardType.POINTS)) {
-                                    // This is reward season point. Ignore RewardMethod.
-                                    if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
-                                        SeasonDao.getInstance().add(
-                                                new SeasonEntry(
-                                                        UUID.randomUUID(),
-                                                        town.getUUID().toString(),
-                                                        town.getName(),
-                                                        rewardJson.getAmount(),
-                                                        instance.getConfig().getInt("season.current")));
-                                    } else {
-                                        SeasonEntry seasonEntry = SeasonDao.getInstance().get(town.getUUID().toString());
-                                        seasonEntry.setSeasonPoint(seasonEntry.getSeasonPoint() + rewardJson.getAmount());
-                                    }
-                                } else {
-                                    // Giving individual reward. Count in RewardMethod
-                                    switch (rewardMethod) {
-
-                                        // TODO: Reward
-                                        // TODO: Reward others
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    RewardMethod rewardMethod = RewardMethod.valueOf(instance.getConfig().getString("sprint.rewards.method").toUpperCase(Locale.ROOT));
+                    RewardService.getInstance().rewardAllTowns(rewardMethod);
 
                     // Clear SprintStorage, move ranking to SprintHistoryStorage, reward the town based on config
                     List<TownRankJson> townRankJsons = (List<TownRankJson>) RankUtil.sort(SprintDao.getInstance().getEntriesAsJson());
@@ -164,7 +123,7 @@ public class TimerService extends TownyMissionService {
                                         UUID.randomUUID(),
                                         instance.getConfig().getInt("season.current"),
                                         instance.getConfig().getInt("sprint.current"),
-                                        sprintStartedTime,
+                                        getStartTime(RankType.SPRINT),
                                         rankJson.toJson());
 
                         SprintHistoryDao.getInstance().add(sprintHistoryEntry);

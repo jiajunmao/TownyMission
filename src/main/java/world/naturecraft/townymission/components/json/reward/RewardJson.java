@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RewardType;
+import world.naturecraft.townymission.utils.RewardJsonFactory;
 
 public abstract class RewardJson implements Rankable {
 
@@ -77,4 +79,18 @@ public abstract class RewardJson implements Rankable {
     }
 
     public abstract int getAmount();
+
+    public abstract void setAmount(int amount);
+
+    public abstract String getDisplayLine();
+
+    @JsonIgnore
+    public static RewardJson deepCopy(RewardJson rewardJson) {
+        try {
+            String json = rewardJson.toJson();
+            return RewardJsonFactory.getJson(json, rewardJson.getRewardType());
+        } catch (JsonProcessingException e) {
+            throw new DataProcessException(e);
+        }
+    }
 }

@@ -25,6 +25,7 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * Instantiates a new Cooldown dao.
      */
     public CooldownDao() {
+        super(CooldownStorage.getInstance());
         this.db = CooldownStorage.getInstance();
     }
 
@@ -38,11 +39,6 @@ public class CooldownDao extends Dao<CooldownEntry> {
             singleton = new CooldownDao();
         }
         return singleton;
-    }
-
-    @Override
-    public List<CooldownEntry> getEntries() {
-        return db.getEntries();
     }
 
     @Override

@@ -1,11 +1,14 @@
 package world.naturecraft.townymission.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.bukkit.entity.Player;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.data.db.ClaimStorage;
+import world.naturecraft.townymission.data.db.CooldownStorage;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ClaimDao extends Dao<ClaimEntry> {
 
@@ -13,6 +16,7 @@ public class ClaimDao extends Dao<ClaimEntry> {
     private final ClaimStorage db;
 
     public ClaimDao() {
+        super(ClaimStorage.getInstance());
         db = ClaimStorage.getInstance();
     }
 
@@ -25,16 +29,6 @@ public class ClaimDao extends Dao<ClaimEntry> {
     }
 
     /**
-     * Gets entries.
-     *
-     * @return the entries
-     */
-    @Override
-    public List<ClaimEntry> getEntries() {
-        return db.getEntries();
-    }
-
-    /**
      * Add.
      *
      * @param data the data
@@ -42,7 +36,7 @@ public class ClaimDao extends Dao<ClaimEntry> {
     @Override
     public void add(ClaimEntry data) {
         try {
-            db.add(data.getPlayer().getUniqueId().toString(),
+            db.add(data.getPlayerUUID().toString(),
                     data.getRewardJson().toJson(),
                     data.getSeason(),
                     data.getSprint());
@@ -59,7 +53,7 @@ public class ClaimDao extends Dao<ClaimEntry> {
     @Override
     public void update(ClaimEntry data) {
         try {
-            db.update(data.getId(), data.getPlayer().getUniqueId().toString(),
+            db.update(data.getId(), data.getPlayerUUID().toString(),
                     data.getRewardJson().toJson(), data.getSeason(), data.getSprint());
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);

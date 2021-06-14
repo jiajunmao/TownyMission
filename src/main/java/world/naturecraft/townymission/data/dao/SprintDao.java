@@ -7,6 +7,7 @@ package world.naturecraft.townymission.data.dao;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
+import world.naturecraft.townymission.data.db.CooldownStorage;
 import world.naturecraft.townymission.data.db.SprintStorage;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class SprintDao extends Dao<SprintEntry> {
      * Instantiates a new Sprint dao.
      */
     public SprintDao() {
+        super(SprintStorage.getInstance());
         this.database = SprintStorage.getInstance();
     }
 
@@ -56,11 +58,6 @@ public class SprintDao extends Dao<SprintEntry> {
         } else {
             update(entry);
         }
-    }
-
-    @Override
-    public List<SprintEntry> getEntries() {
-        return database.getEntries();
     }
 
     /**

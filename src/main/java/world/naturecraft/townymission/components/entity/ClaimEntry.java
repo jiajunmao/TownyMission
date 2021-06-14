@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class ClaimEntry extends DataEntity {
 
-    private Player player;
+    private UUID playerUUID;
     private RewardJson rewardJson;
     private int sprint;
     private int season;
@@ -21,16 +21,16 @@ public class ClaimEntry extends DataEntity {
      *
      * @param id   the id
      */
-    public ClaimEntry(UUID id, Player player, RewardJson rewardJson, int season, int sprint) {
+    public ClaimEntry(UUID id, UUID playerUUID, RewardJson rewardJson, int season, int sprint) {
         super(id, DbType.CLAIM);
-        this.player = player;
+        this.playerUUID = playerUUID;
         this.rewardJson = rewardJson;
         this.season = season;
         this.sprint = sprint;
     }
 
     public ClaimEntry(String id, String playerUUID, String rewardJson, int season, int sprint) {
-        this(UUID.fromString(id), Bukkit.getPlayer(UUID.fromString(playerUUID)), null, season, sprint);
+        this(UUID.fromString(id), UUID.fromString(playerUUID), null, season, sprint);
         try {
             RewardJson temp = RewardJson.parse(rewardJson);
             RewardType rewardType = temp.getRewardType();
@@ -53,12 +53,12 @@ public class ClaimEntry extends DataEntity {
         }
     }
 
-    public Player getPlayer() {
-        return player;
+    public UUID getPlayerUUID() {
+        return playerUUID;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayerUUID(Player player) {
+        this.playerUUID = playerUUID;
     }
 
     public RewardJson getRewardJson() {

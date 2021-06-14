@@ -5,7 +5,10 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.entity.DataEntity;
+import world.naturecraft.townymission.data.db.Storage;
+import world.naturecraft.townymission.utils.EntryFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,12 +18,31 @@ import java.util.List;
  */
 public abstract class Dao<T extends DataEntity> {
 
+    private Storage<T> storage;
+
+    public Dao(Storage<T> storage) {
+        this.storage = storage;
+    }
     /**
      * Gets entries.
      *
      * @return the entries
      */
-    public abstract List<T> getEntries();
+    public List<T> getEntries() {
+        return storage.getEntries();
+    }
+
+    public List<T> getEntries(EntryFilter<T> filter) {
+        List<T> list = getEntries();
+        List<T> finalList = new ArrayList<>();
+        for (T entry : list) {
+            if (filter.include(entry)) {
+                finalList.add(entry);
+            }
+        }
+
+        return finalList;
+    }
 
     /**
      * Add.

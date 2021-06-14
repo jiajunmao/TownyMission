@@ -30,6 +30,15 @@ public class PointRewardJson extends RewardJson {
         return amount;
     }
 
+    @Override
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public String getDisplayLine() {
+        return "Amount: " + amount;
+    }
+
     @JsonIgnore
     public static RewardJson parse(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json, PointRewardJson.class);

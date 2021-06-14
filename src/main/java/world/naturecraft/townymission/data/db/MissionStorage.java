@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * The type Mission storage.
  */
-public class MissionStorage {
+public class MissionStorage extends Storage<MissionEntry> {
 
     private static MissionStorage singleton;
     private final StorageType storageType;

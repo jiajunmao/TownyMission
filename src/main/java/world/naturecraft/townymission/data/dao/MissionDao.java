@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.data.db.CooldownStorage;
 import world.naturecraft.townymission.data.db.MissionStorage;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class MissionDao extends Dao<MissionEntry> {
      * Instantiates a new Task dao.
      */
     public MissionDao() {
+        super(MissionStorage.getInstance());
         this.db = MissionStorage.getInstance();
     }
 
@@ -149,10 +151,5 @@ public class MissionDao extends Dao<MissionEntry> {
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);
         }
-    }
-
-    @Override
-    public List<MissionEntry> getEntries() {
-        return db.getEntries();
     }
 }
