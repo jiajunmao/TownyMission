@@ -4,6 +4,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.services.TownyMissionService;
 
@@ -14,16 +15,18 @@ import java.util.Locale;
 public class StatsConfigLoader {
 
     private final TownyMission instance;
+    private File customConfig;
     private FileConfiguration customFileConfig;
 
     public StatsConfigLoader(TownyMission instance) {
         this.instance = instance;
+        createStatsConfig();
     }
 
     public void createStatsConfig() {
         String fileName = "stats.yml";
-        String filePath = "datastore/" + File.separator + fileName;
-        File customConfig = new File(instance.getDataFolder(), filePath);
+        String filePath = "datastore" + File.separator + fileName;
+        customConfig = new File(instance.getDataFolder(), filePath);
         if (!customConfig.exists()) {
             customConfig.getParentFile().getParentFile().mkdirs();
             customConfig.getParentFile().mkdirs();
@@ -57,5 +60,21 @@ public class StatsConfigLoader {
 
     public int getInt(String path) {
         return customFileConfig.getInt(path);
+    }
+
+    public void set(String path, Object content) {
+        customFileConfig.set(path, content);
+    }
+
+    public long getLong(String path) {
+        return customFileConfig.getLong(path);
+    }
+
+    public void save() {
+        try {
+            customFileConfig.save(customConfig);
+        } catch (IOException e) {
+            throw new DataProcessException(e);
+        }
     }
 }

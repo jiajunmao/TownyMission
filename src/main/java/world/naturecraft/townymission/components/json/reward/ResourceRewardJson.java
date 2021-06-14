@@ -69,6 +69,7 @@ public class ResourceRewardJson extends RewardJson {
         this.amount = amount;
     }
 
+    @JsonIgnore
     public String getDisplayLine() {
         return "ResourceType: " + type.name().toLowerCase(Locale.ROOT) +
                 ", Amount: " + amount;

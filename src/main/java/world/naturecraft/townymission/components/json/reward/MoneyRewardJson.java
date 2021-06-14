@@ -53,6 +53,7 @@ public class MoneyRewardJson extends RewardJson {
         this.amount = amount;
     }
 
+    @JsonIgnore
     public String getDisplayLine() {
         return "Amount: " + amount;
     }

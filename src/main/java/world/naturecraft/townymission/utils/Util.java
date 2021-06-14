@@ -216,7 +216,7 @@ public class Util {
      */
     public static int getNumEmptySlotsInInventory(PlayerInventory playerInventory) {
         int num = 0;
-        for (int i = 9; i < 44; i++) {
+        for (int i = 0; i < 36; i++) {
             if (playerInventory.getStorageContents()[i] == null
                     || playerInventory.getStorageContents()[i].getType().equals(Material.AIR)) {
                 num++;

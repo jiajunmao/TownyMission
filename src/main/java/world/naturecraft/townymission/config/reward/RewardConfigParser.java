@@ -6,6 +6,7 @@ package world.naturecraft.townymission.config.reward;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.enums.RewardMethod;
@@ -29,17 +30,21 @@ public class RewardConfigParser {
      */
     public static List<RewardJson> parseAllRewards(RankType rankType) {
         TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-        List<String> rankList = instance.getConfig().getStringList(rankType.name().toLowerCase(Locale.ROOT) + ".rewards");
+        ConfigurationSection rankConfigSection = instance.getConfig().getConfigurationSection(rankType.name().toLowerCase(Locale.ROOT) + ".rewards.rewards");
+        Set<String> rankList = rankConfigSection.getKeys(false);
+        System.out.println("Rank String List length: " + rankList.size());
         List<RewardJson> rewardJsonList = new ArrayList<>();
 
         for (String rank : rankList) {
-            String fullpath = rankType.name().toLowerCase(Locale.ROOT) + ".rewards." + rank;
+            String fullpath = rankType.name().toLowerCase(Locale.ROOT) + ".rewards.rewards." + rank;
             List<String> rankedRewardList = instance.getConfig().getStringList(fullpath);
+            System.out.println("Parsing reward - Rank: " + rank + ", reward list lenght: " + rankedRewardList.size());
 
             for (String rankedReward : rankedRewardList) {
+                System.out.println("Parsing RewardJson: " + rankedReward);
                 int middleIdx = rankedReward.indexOf("{");
                 RewardType rewardType = RewardType.valueOf(rankedReward.substring(0, middleIdx).toUpperCase(Locale.ROOT));
-                String actualRewardString = rankedReward.substring(middleIdx + 1);
+                String actualRewardString = rankedReward.substring(middleIdx);
 
                 try {
                     RewardJson rewardJson = RewardJsonFactory.getJson(actualRewardString, rewardType);
@@ -69,6 +74,7 @@ public class RewardConfigParser {
      */
     public static Map<Integer, List<RewardJson>> getRankRewardsMap(RankType rankType) {
         List<RewardJson> allRewards = parseAllRewards(rankType);
+        System.out.println("RewardJson list length: " + allRewards.size());
         Map<Integer, List<RewardJson>> rewardsMap = new HashMap<>();
 
         for (RewardJson rewardJson : allRewards) {

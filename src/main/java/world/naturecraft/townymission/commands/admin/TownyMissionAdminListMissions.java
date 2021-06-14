@@ -43,9 +43,10 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
                     return new SanityChecker(instance).target(player).hasPermission("townymission.admin").check()
                             || new SanityChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
                 }).customCheck(() -> {
-                    if (args.length == 2) {
+                    // /tms admin listMission #type
+                    if (args.length == 3) {
                         for (MissionType missionType : MissionType.values()) {
-                            if (args[1].equalsIgnoreCase(missionType.name())) {
+                            if (args[2].equalsIgnoreCase(missionType.name())) {
                                 return true;
                             }
                         }
@@ -75,7 +76,7 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
             if (sanityCheck(player, args)) {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
-                MissionType missionType = MissionType.valueOf(args[1].toUpperCase(Locale.ROOT));
+                MissionType missionType = MissionType.valueOf(args[2].toUpperCase(Locale.ROOT));
                 Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
                 builder.add("&eMission Type&f: " + missionType.name());
                 builder.add(" ");

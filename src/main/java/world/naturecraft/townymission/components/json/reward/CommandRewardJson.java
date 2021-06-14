@@ -53,14 +53,17 @@ public class CommandRewardJson extends RewardJson {
         return command;
     }
 
+    @JsonIgnore
     public String getDisplayLine() {
         return "Command: " + command;
     }
 
+    @JsonIgnore
     public int getAmount() {
         return -1;
     }
 
+    @JsonIgnore
     public void setAmount(int amount) {
         // Do nothing
     }

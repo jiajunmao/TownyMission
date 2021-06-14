@@ -48,10 +48,11 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
      * @param season     the season
      * @param sprint     the sprint
      */
-    public void add(String playerUUID, String rewardJson, int season, int sprint) {
+    public void add(String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".playerUUID", playerUUID);
+        add(uuid + ".rewardType", rewardType);
         add(uuid + ".rewardJson", rewardJson);
         add(uuid + ".season", season);
         add(uuid + ".sprint", sprint);
@@ -66,8 +67,9 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
      * @param season     the season
      * @param sprint     the sprint
      */
-    public void update(UUID uuid, String playerUUID, String rewardJson, int season, int sprint) {
+    public void update(UUID uuid, String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
         set(uuid + ".playerUUID", playerUUID);
+        set(uuid + ".rewardType", rewardType);
         set(uuid + ".rewardJson", rewardJson);
         set(uuid + ".season", season);
         set(uuid + ".sprint", sprint);
@@ -89,6 +91,7 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
             entryList.add(new ClaimEntry(
                     key,
                     file.getString(key + ".playerUUID"),
+                    file.getString(key + ".rewardType"),
                     file.getString(key + ".rewardJson"),
                     file.getInt(key + ".season"),
                     file.getInt(key + ".sprint")
