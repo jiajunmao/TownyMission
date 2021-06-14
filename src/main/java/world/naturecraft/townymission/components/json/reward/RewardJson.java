@@ -18,6 +18,7 @@ import world.naturecraft.townymission.utils.RewardJsonFactory;
  */
 public abstract class RewardJson implements Rankable {
 
+    @JsonIgnore
     private RewardType rewardType;
     // If this is -1, that means this is others category
     @JsonIgnore
@@ -83,6 +84,7 @@ public abstract class RewardJson implements Rankable {
      *
      * @return the reward type
      */
+    @JsonIgnore
     public RewardType getRewardType() {
         return rewardType;
     }

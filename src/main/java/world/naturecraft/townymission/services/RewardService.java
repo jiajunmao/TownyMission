@@ -2,6 +2,7 @@ package world.naturecraft.townymission.services;
 
 import com.Zrips.CMI.Containers.CMIUser;
 import com.Zrips.CMI.Modules.Economy.CMIEconomyAcount;
+import com.Zrips.CMI.Modules.Economy.Economy;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
@@ -85,9 +86,7 @@ public class RewardService extends TownyMissionService {
                 throw new IllegalStateException("Season point reward CANNOT be rewarded to individual player");
             case MONEY:
                 MoneyRewardJson moneyRewardJson = (MoneyRewardJson) rewardJson;
-                CMIUser cmiUser = new CMIUser(player.getUniqueId());
-                CMIEconomyAcount economyAcount = new CMIEconomyAcount(cmiUser);
-                economyAcount.deposit(moneyRewardJson.getAmount());
+
                 ClaimDao.getInstance().remove(claimEntry);
                 break;
             case RESOURCE:
@@ -157,7 +156,8 @@ public class RewardService extends TownyMissionService {
                     for (Resident resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
-                                UUID.fromString(resident.getPlayer().getUniqueId().toString()),
+                                UUID.fromString(resident.getUUID().toString()),
+                                rewardJson.getRewardType(),
                                 rewardJson,
                                 instance.getStatsConfig().getInt("season.current"),
                                 instance.getStatsConfig().getInt("sprint.current"));
@@ -173,7 +173,8 @@ public class RewardService extends TownyMissionService {
                     for (Resident resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
-                                UUID.fromString(resident.getPlayer().getUniqueId().toString()),
+                                UUID.fromString(resident.getUUID().toString()),
+                                rewardJson.getRewardType(),
                                 copyRewardJseon,
                                 instance.getStatsConfig().getInt("season.current"),
                                 instance.getStatsConfig().getInt("sprint.current"));
@@ -194,6 +195,7 @@ public class RewardService extends TownyMissionService {
                                 new ClaimEntry(
                                         UUID.randomUUID(),
                                         UUID.fromString(playerUUID),
+                                        rewardJson.getRewardType(),
                                         copyRewardJson,
                                         instance.getStatsConfig().getInt("season.current"),
                                         instance.getStatsConfig().getInt("sprint.current")));
