@@ -157,7 +157,8 @@ public class TownyMission extends JavaPlugin {
         String dbPassword = getConfig().getString("database.password");
 
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbAddress);
+        config.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        config.addDataSourceProperty("serverName", dbAddress);
         config.addDataSourceProperty("port", dbPort);
         config.addDataSourceProperty("databaseName", dbName);
         config.setUsername(dbUsername);

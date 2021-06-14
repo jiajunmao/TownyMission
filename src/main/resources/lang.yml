@@ -10,6 +10,7 @@ commands:
     onNotMayorOrStarter: "&cYou either need to be the mayor or started the mission yourself to abort!"
   claim:
     onNotFound: "&cYour town does not have unclaimed missions!"
+    onNotEnoughSlot: "&cYou do not have enough inventory slot to claim this reward!"
     onSuccess: "&fYou have successfully claimed your rewards."
   deposit:
     onNotMatch: "&cThe item you are holding does not match the mission's resource type!"
@@ -36,7 +37,10 @@ commands:
     onAlreadyStarted: "&cYou have already strated season(s)! You cannot start it again!"
 
 services:
-
+  reward:
+    onRewardMoney: "&fYou have claimed your $%amount% reward!"
+    onRewardResource: "&fYou have claimed %amount% of %type%!"
+    onRewardCommand: "&fYou have been granted %commandDisplayName%!"
 
 universal:
   onCommandNotFound: "&cCommand not found!"

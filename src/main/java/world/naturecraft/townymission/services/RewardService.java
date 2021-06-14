@@ -2,13 +2,16 @@ package world.naturecraft.townymission.services;
 
 import com.Zrips.CMI.Containers.CMIUser;
 import com.Zrips.CMI.Modules.Economy.CMIEconomyAcount;
+import com.Zrips.CMI.Modules.Economy.Economy;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;
@@ -29,6 +32,7 @@ import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -78,17 +82,24 @@ public class RewardService extends TownyMissionService {
             case COMMAND:
                 CommandRewardJson commandRewardJson = (CommandRewardJson) rewardJson;
                 String command = commandRewardJson.getCommand().replace("%player%", player.getName());
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                System.out.println("Dispatching command: " +  command);
+                BukkitRunnable r = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                    }
+                };
+                r.runTask(instance);
                 ClaimDao.getInstance().remove(claimEntry);
+                Util.sendMsg(player, instance.getLangEntry("services.reward.onRewardCommand"));
                 break;
             case POINTS:
                 throw new IllegalStateException("Season point reward CANNOT be rewarded to individual player");
             case MONEY:
                 MoneyRewardJson moneyRewardJson = (MoneyRewardJson) rewardJson;
-                CMIUser cmiUser = new CMIUser(player.getUniqueId());
-                CMIEconomyAcount economyAcount = new CMIEconomyAcount(cmiUser);
-                economyAcount.deposit(moneyRewardJson.getAmount());
+                EconomyService.getInstance().depositBalance(player, moneyRewardJson.getAmount());
                 ClaimDao.getInstance().remove(claimEntry);
+                Util.sendMsg(player, instance.getLangEntry("services.reward.onRewardMoney").replace("%amount%", String.valueOf(moneyRewardJson.getAmount())));
                 break;
             case RESOURCE:
                 ResourceRewardJson resourceRewardJson = (ResourceRewardJson) rewardJson;
@@ -107,8 +118,13 @@ public class RewardService extends TownyMissionService {
                     player.getInventory().addItem(itemStack);
                     ClaimDao.getInstance().remove(claimEntry);
                 } else {
-                    // Not enough slot
+                    throw new NotEnoughInvSlotException();
                 }
+
+                Util.sendMsg(player,
+                        instance.getLangEntry("services.reward.onRewardResource")
+                                .replace("%amount%", String.valueOf(resourceRewardJson.getAmount()))
+                                .replace("%type%", resourceRewardJson.getType().name().toLowerCase(Locale.ROOT)));
                 break;
         }
     }
@@ -133,6 +149,7 @@ public class RewardService extends TownyMissionService {
      * @param rewardJson   the reward json
      */
     public void rewardTown(Town town, RewardMethod rewardMethod, RewardJson rewardJson) {
+        System.out.println("Rewarding town " + town.getName() + " with " + rewardJson.getDisplayLine() + " using " + rewardMethod);
         if (rewardJson.getRewardType().equals(RewardType.POINTS)) {
             // This is reward season point. Ignore RewardMethod.
             if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
@@ -156,7 +173,8 @@ public class RewardService extends TownyMissionService {
                     for (Resident resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
-                                UUID.fromString(resident.getPlayer().getUniqueId().toString()),
+                                UUID.fromString(resident.getUUID().toString()),
+                                rewardJson.getRewardType(),
                                 rewardJson,
                                 instance.getStatsConfig().getInt("season.current"),
                                 instance.getStatsConfig().getInt("sprint.current"));
@@ -172,7 +190,8 @@ public class RewardService extends TownyMissionService {
                     for (Resident resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
-                                UUID.fromString(resident.getPlayer().getUniqueId().toString()),
+                                UUID.fromString(resident.getUUID().toString()),
+                                rewardJson.getRewardType(),
                                 copyRewardJseon,
                                 instance.getStatsConfig().getInt("season.current"),
                                 instance.getStatsConfig().getInt("sprint.current"));
@@ -193,6 +212,7 @@ public class RewardService extends TownyMissionService {
                                 new ClaimEntry(
                                         UUID.randomUUID(),
                                         UUID.fromString(playerUUID),
+                                        rewardJson.getRewardType(),
                                         copyRewardJson,
                                         instance.getStatsConfig().getInt("season.current"),
                                         instance.getStatsConfig().getInt("sprint.current")));
@@ -213,10 +233,14 @@ public class RewardService extends TownyMissionService {
             case SPRINT:
                 List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
                 Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
-
+                System.out.println("SprintEntries length: " + sprintEntries.size());
+                System.out.println("RewardMap size: " + rewardsMap.keySet().size());
                 for (Integer currentRank : rewardsMap.keySet()) {
                     List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
-                    if (currentRank - 1 < sprintEntries.size()) {
+
+                    // This is rewarding ranked towns
+                    // TODO: Reward others
+                    if (currentRank != -1 && currentRank - 1 < sprintEntries.size()) {
                         SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
                         Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
 
