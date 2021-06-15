@@ -49,16 +49,14 @@ public class CooldownStorage extends Storage<CooldownEntry> {
      * Add.
      *
      * @param townUUID    the town uuid
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      */
-    public void add(String townUUID, long startedTime, long cooldown) {
+    public void add(String townUUID, String cooldownJsonList) {
         switch (storageType) {
             case YAML:
-                CooldownYamlStorage.getInstance().add(townUUID, startedTime, cooldown);
+                CooldownYamlStorage.getInstance().add(townUUID, cooldownJsonList);
                 break;
             case MYSQL:
-                CooldownSqlStorage.getInstance().add(townUUID, startedTime, cooldown);
+                CooldownSqlStorage.getInstance().add(townUUID, cooldownJsonList);
                 break;
         }
     }
@@ -84,16 +82,14 @@ public class CooldownStorage extends Storage<CooldownEntry> {
      *
      * @param id          the id
      * @param townUUID    the town uuid
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      */
-    public void update(UUID id, String townUUID, long startedTime, long cooldown) {
+    public void update(UUID id, String townUUID, String cooldownJsonList) {
         switch (storageType) {
             case YAML:
-                CooldownYamlStorage.getInstance().update(id, townUUID, startedTime, cooldown);
+                CooldownYamlStorage.getInstance().update(id, townUUID, cooldownJsonList);
                 break;
             case MYSQL:
-                CooldownSqlStorage.getInstance().update(id, townUUID, startedTime, cooldown);
+                CooldownSqlStorage.getInstance().update(id, townUUID, cooldownJsonList);
                 break;
         }
     }

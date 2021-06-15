@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.yaml;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
@@ -48,15 +49,12 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> {
      * Add.
      *
      * @param townUUID    the town uuid
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      */
-    public void add(String townUUID, long startedTime, long cooldown) {
+    public void add(String townUUID, String cooldownListJson) {
         String uuid = UUID.randomUUID().toString();
 
-        add(uuid + ".townUUID", townUUID);
-        add(uuid + ".startedTime", startedTime);
-        add(uuid + ".cooldown", cooldown);
+        super.add(uuid + ".townUUID", townUUID);
+        super.add(uuid + ".cooldownListJson", cooldownListJson);
     }
 
     /**
@@ -64,13 +62,10 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> {
      *
      * @param uuid        the uuid
      * @param townUUID    the town uuid
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      */
-    public void update(UUID uuid, String townUUID, long startedTime, long cooldown) {
+    public void update(UUID uuid, String townUUID, String cooldownListJson) {
         set(uuid + ".townUUID", townUUID);
-        set(uuid + ".startedTime", startedTime);
-        set(uuid + ".cooldown", cooldown);
+        set(uuid + ".cooldownListJson", cooldownListJson);
     }
 
     @Override
@@ -85,11 +80,10 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> {
                 entryList.add(new CooldownEntry(
                         UUID.fromString(key),
                         file.getString(key + ".townUUID"),
-                        file.getLong(key + ".startedTime"),
-                        file.getLong(key + ".cooldown")
+                        file.getString(key + ".cooldownListJson")
                 ));
-            } catch (NotRegisteredException notRegisteredException) {
-                notRegisteredException.printStackTrace();
+            } catch (JsonProcessingException | NotRegisteredException e) {
+                e.printStackTrace();
             }
         }
 

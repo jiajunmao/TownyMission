@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.sql;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
@@ -57,8 +58,7 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`id` VARCHAR(255) NOT NULL," +
                     "`town_uuid` VARCHAR(255) NOT NULL ," +
-                    "`started_time` BIGINT NOT NULL," +
-                    "`cooldown` BIGINT NOT NULL," +
+                    "`cooldownjsonlist` VARCHAR(255) NOT NULL," +
                     "PRIMARY KEY (`id`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -82,9 +82,8 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> {
                 try {
                     list.add(new CooldownEntry(UUID.fromString(result.getString("id")),
                             result.getString("town_uuid"),
-                            result.getLong("started_time"),
-                            result.getLong("cooldown")));
-                } catch (NotRegisteredException e) {
+                            result.getString("cooldownjsonlist")));
+                } catch (JsonProcessingException | NotRegisteredException e) {
                     e.printStackTrace();
                 }
             }
@@ -97,16 +96,13 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> {
      * Add.
      *
      * @param townUUID    the town uuid
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      */
-    public void add(String townUUID, long startedTime, long cooldown) {
+    public void add(String townUUID, String cooldownJsonList) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
-                    startedTime + "', '" +
-                    cooldown + "');";
+                    cooldownJsonList + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -133,15 +129,12 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> {
      *
      * @param id          the id
      * @param townUUID    the town uuid
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      */
-    public void update(UUID id, String townUUID, long startedTime, long cooldown) {
+    public void update(UUID id, String townUUID, String cooldownJsonList) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_uuid='" + townUUID +
-                    "', started_time='" + startedTime +
-                    "', cooldown='" + cooldown +
+                    "', cooldownjsonlist='" + cooldownJsonList +
                     "' WHERE id='" + id.toString() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();

@@ -45,12 +45,12 @@ public class CooldownDao extends Dao<CooldownEntry> {
 
     @Override
     public void add(CooldownEntry data) {
-        db.add(data.getTown().getUUID().toString(), data.getStartedTime(), data.getCooldown());
+        db.add(data.getTown().getUUID().toString(), data.getCooldownsAsString());
     }
 
     @Override
     public void update(CooldownEntry data) {
-        db.update(data.getId(), data.getTown().getUUID().toString(), data.getStartedTime(), data.getCooldown());
+        db.update(data.getId(), data.getTown().getUUID().toString(), data.getCooldownsAsString());
     }
 
     @Override

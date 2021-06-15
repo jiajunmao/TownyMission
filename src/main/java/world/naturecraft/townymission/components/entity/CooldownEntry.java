@@ -4,12 +4,15 @@
 
 package world.naturecraft.townymission.components.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.json.cooldown.CooldownJson;
+import world.naturecraft.townymission.components.json.cooldown.CooldownListJson;
 
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The type Cooldown entry.
@@ -17,22 +20,19 @@ import java.util.UUID;
 public class CooldownEntry extends DataEntity {
 
     private Town town;
-    private long startedTime;
-    private long cooldown;
+    // Map<StartedTime, Cooldown>
+    private CooldownListJson cooldownJsonList;
 
     /**
      * Instantiates a new Cooldown entry.
      *
      * @param id          the id
      * @param town        the town
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      */
-    public CooldownEntry(UUID id, Town town, long startedTime, long cooldown) {
+    public CooldownEntry(UUID id, Town town) {
         super(id, DbType.COOLDOWN);
         this.town = town;
-        this.startedTime = startedTime;
-        this.cooldown = cooldown;
+        cooldownJsonList = new CooldownListJson();
     }
 
     /**
@@ -40,12 +40,17 @@ public class CooldownEntry extends DataEntity {
      *
      * @param id          the id
      * @param townUUID    the town uuid
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
      * @throws NotRegisteredException the not registered exception
      */
-    public CooldownEntry(UUID id, String townUUID, long startedTime, long cooldown) throws NotRegisteredException {
-        this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)), startedTime, cooldown);
+    public CooldownEntry(UUID id, String townUUID) throws NotRegisteredException {
+        this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)));
+    }
+
+    public CooldownEntry(UUID id, String townUUID, String cooldownJsonList) throws NotRegisteredException, JsonProcessingException {
+        super(id, DbType.COOLDOWN);
+        this.town = TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID));
+        System.out.println("Parsing: " + cooldownJsonList);
+        this.cooldownJsonList = CooldownListJson.parse(cooldownJsonList);
     }
 
     /**
@@ -66,39 +71,29 @@ public class CooldownEntry extends DataEntity {
         this.town = town;
     }
 
-    /**
-     * Gets cooldown.
-     *
-     * @return the cooldown
-     */
-    public long getCooldown() {
-        return cooldown;
+    public CooldownListJson getCooldownJsonList() {
+        return cooldownJsonList;
     }
 
-    /**
-     * Sets cooldown.
-     *
-     * @param cooldown the cooldown
-     */
-    public void setCooldown(long cooldown) {
-        this.cooldown = cooldown;
+    public int getNumFinished(boolean remove) {
+        return cooldownJsonList.getNumFinished(remove);
     }
 
-    /**
-     * Gets started time.
-     *
-     * @return the started time
-     */
-    public long getStartedTime() {
-        return startedTime;
+    public int getNumTotal() {
+        return cooldownJsonList.getNumTotal();
     }
 
-    /**
-     * Sets started time.
-     *
-     * @param startedTime the started time
-     */
-    public void setStartedTime(long startedTime) {
-        this.startedTime = startedTime;
+    public void startCooldown(long cooldown) {
+        long timeNow = new Date().getTime();
+        cooldownJsonList.addCooldown(timeNow, cooldown);
+    }
+
+    public String getCooldownsAsString() {
+        try {
+            return cooldownJsonList.toJson();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
