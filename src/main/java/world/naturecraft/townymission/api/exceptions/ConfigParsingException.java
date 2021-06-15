@@ -7,15 +7,23 @@ package world.naturecraft.townymission.api.exceptions;
 /**
  * The type Configu parsing exception.
  */
-public class ConfiguParsingException extends RuntimeException {
+public class ConfigParsingException extends RuntimeException {
 
     /**
      * Instantiates a new Configu parsing exception.
      *
      * @param e the e
      */
-    public ConfiguParsingException(Exception e) {
+    public ConfigParsingException(Exception e) {
         super(e);
+    }
+
+    public ConfigParsingException(String message) {
+        super (message);
+    }
+
+    public ConfigParsingException(String message, Throwable e) {
+        super(message, e);
     }
 
 }

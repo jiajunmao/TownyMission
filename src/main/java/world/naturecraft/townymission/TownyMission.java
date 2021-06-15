@@ -90,7 +90,8 @@ public class TownyMission extends JavaPlugin {
     public void onDisable() {
         logger.info("=========   TOWNYMISSION DISABLING   =========");
         if (storageType.equals(StorageType.MYSQL)) {
-            close();
+            if (db != null)
+                close();
         }
     }
 
@@ -166,7 +167,7 @@ public class TownyMission extends JavaPlugin {
         config.setMinimumIdle(5);
         config.setConnectionTimeout(10000);
         config.setIdleTimeout(600000);
-        config.setMaxLifetime(1800000);
+        config.setMaxLifetime(180000);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<String> future = executor.submit(new Callable<String>() {
@@ -178,7 +179,7 @@ public class TownyMission extends JavaPlugin {
         });
 
         try {
-            future.get(5, TimeUnit.SECONDS);
+            future.get(10, TimeUnit.SECONDS);
         } catch (TimeoutException | ExecutionException | InterruptedException e) {
             future.cancel(true);
             Bukkit.getPluginManager().disablePlugin(this);

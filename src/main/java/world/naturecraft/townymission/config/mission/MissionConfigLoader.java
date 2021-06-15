@@ -8,6 +8,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMission;
+import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.io.File;
@@ -55,6 +56,7 @@ public class MissionConfigLoader {
 
             FileConfiguration customFileConfig = new YamlConfiguration();
             customFileConfig.load(customConfig);
+            MissionConfigValidator.checkMissionConfig(customFileConfig, missionType);
             customConfigs.put(missionType, customFileConfig);
         }
     }

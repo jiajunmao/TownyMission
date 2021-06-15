@@ -100,7 +100,7 @@ public class TimerService extends TownyMissionService {
                     RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
                     // Clear SprintStorage, move ranking to SprintHistoryStorage
-//                    SprintService.getInstance().sprintEndCleanUp();
+                    SprintService.getInstance().sprintEndCleanUp();
                 }
             }
         };
@@ -156,7 +156,7 @@ public class TimerService extends TownyMissionService {
             }
         };
 
-        r.runTaskTimerAsynchronously(instance, 0, 100);
+        r.runTaskTimerAsynchronously(instance, 0, 20*60);
     }
 
     /**
