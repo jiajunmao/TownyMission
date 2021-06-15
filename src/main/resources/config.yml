@@ -1,5 +1,5 @@
 # Choose mysql and yaml, MySql is recommended for best compatibility
-storage: mysql
+storage: yaml
 
 # Database settings
 database:

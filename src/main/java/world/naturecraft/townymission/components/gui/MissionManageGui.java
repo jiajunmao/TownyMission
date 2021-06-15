@@ -17,9 +17,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMission;
 import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.json.cooldown.CooldownListJson;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.TownyUtil;
@@ -60,79 +62,96 @@ public class MissionManageGui extends TownyMissionGui {
         MissionDao missionDao = MissionDao.getInstance();
 
         // Figure out how many missions the town is missing
-        int diff = instance.getConfig().getInt("mission.amount") - missionDao.getNumAdded(town);
+        List<MissionEntry> townMissions = MissionDao.getInstance().getTownMissions(town);
+        List<MissionEntry> newlyAddedMissions = new ArrayList<>();
+        int diff = instance.getConfig().getInt("mission.amount") - townMissions.size();
+
         List<MissionJson> missions = MissionConfigParser.parseAll(instance);
         int size = missions.size();
+
         Random rand = new Random();
 
-        // This means that we are not in recess
-        if (TimerService.getInstance().canStart()) {
-            for (int i = 0; i < diff; i++) {
-                //TODO: Prevent duplicates
-                int index = rand.nextInt(size);
-                MissionJson mission = missions.get(index);
-                try {
-                    MissionEntry entry = new MissionEntry(UUID.randomUUID(),
-                            mission.getMissionType().name(),
-                            Util.currentTime(),
-                            0,
-                            Util.hrToMs(mission.getHrAllowed()),
-                            mission.toJson(),
-                            town.getName(),
-                            null);
-                    missionDao.add(entry);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-            }
+        // If not in recess or not has not started, proceed.Otherwise place fillers;
+        if (!TimerService.getInstance().canStart()) {
+            placeFiller();
+            placeRecessFiller();
+            return;
+        }
 
-            // Get and place all town missions
-            // TODO: Kinda wasteful, should be combined with adding logic above
-            List<MissionEntry> missionList = missionDao.getTownMissions(town);
-            int placingIndex = 11;
-            for (MissionEntry entry : missionList) {
-                if (placingIndex % 9 == 0) {
-                    placingIndex += 2;
-                }
+        int numAddable = CooldownService.getInstance().getNumAddable(town);
+        diff = Math.min(numAddable, diff);
 
-                if (!entry.isStarted()) {
-                    inv.setItem(placingIndex, entry.getGuiItem());
-                    placingIndex++;
-                }
-            }
-
-            // Put in all started missions
-            missionList = MissionDao.getInstance().getStartedMissions(town);
-            placingIndex = 0;
-            for (MissionEntry entry : missionList) {
-                inv.setItem(0, entry.getGuiItem());
-                placingIndex += 9;
-            }
-        } else {
-            int placingIndex = 11;
-            for (int i = 0; i < instance.getConfig().getInt("mission.amount"); i++) {
-                if (placingIndex % 9 == 0) {
-                    placingIndex += 2;
-                }
-
-                ItemStack itemStack = new ItemStack(Material.FIREWORK_STAR, 1);
-                ItemMeta meta = itemStack.getItemMeta();
-                meta.setDisplayName(Util.translateColor("&cIn Recess"));
-
-                List<String> lore = new ArrayList<>();
-                lore.add(Util.translateColor("&r&7We are currently in recess"));
-                lore.add(Util.translateColor("&r&7Please wait for the sprint to start"));
-
-                meta.setLore(lore);
-                itemStack.setItemMeta(meta);
-                inv.setItem(placingIndex, itemStack);
-                placingIndex++;
+        // If the town is not in cooldown, it can get new missions
+        for (int i = 0; i < diff; i++) {
+            int index = rand.nextInt(size);
+            MissionJson mission = missions.get(index);
+            try {
+                MissionEntry entry = new MissionEntry(UUID.randomUUID(),
+                        mission.getMissionType().name(),
+                        Util.currentTime(),
+                        0,
+                        Util.hrToMs(mission.getHrAllowed()),
+                        mission.toJson(),
+                        town.getName(),
+                        null);
+                newlyAddedMissions.add(entry);
+                // Async this in the future and handle concurrency issue with click event
+                MissionDao.getInstance().add(entry);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
             }
         }
 
 
+        // Place down all missions
+        townMissions.addAll(newlyAddedMissions);
+        int placingIndex = 11;
+        for (MissionEntry entry : townMissions) {
+            if (placingIndex % 9 == 0) {
+                placingIndex += 2;
+            }
+
+            if (!entry.isStarted()) {
+                inv.setItem(placingIndex, entry.getGuiItem());
+                placingIndex++;
+            }
+        }
+
+        // Put in all started missions
+        townMissions = MissionDao.getInstance().getStartedMissions(town);
+        placingIndex = 0;
+        for (MissionEntry entry : townMissions) {
+            inv.setItem(0, entry.getGuiItem());
+            placingIndex += 9;
+        }
+
         // Place filler glass panes
         placeFiller();
+    }
+
+    /**
+     * Place fillers that show we are currently in recess
+     */
+    public void placeRecessFiller() {
+        int placingIndex = 11;
+        for (int i = 0; i < instance.getConfig().getInt("mission.amount"); i++) {
+            if (placingIndex % 9 == 0) {
+                placingIndex += 2;
+            }
+
+            ItemStack itemStack = new ItemStack(Material.FIREWORK_STAR, 1);
+            ItemMeta meta = itemStack.getItemMeta();
+            meta.setDisplayName(Util.translateColor("&cIn Recess"));
+
+            List<String> lore = new ArrayList<>();
+            lore.add(Util.translateColor("&r&7We are currently in recess"));
+            lore.add(Util.translateColor("&r&7Please wait for the sprint to start"));
+
+            meta.setLore(lore);
+            itemStack.setItemMeta(meta);
+            inv.setItem(placingIndex, itemStack);
+            placingIndex++;
+        }
     }
 
     /**
@@ -209,8 +228,6 @@ public class MissionManageGui extends TownyMissionGui {
             } else {
                 missionIdx = slot - 12;
             }
-
-            // Things to make the GUI work and better UX
 
             // This is the actual logic of storing into db
             if (MissionService.getInstance().startMission(player, missionIdx)) {

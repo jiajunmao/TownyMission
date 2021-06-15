@@ -58,27 +58,6 @@ public class MissionService extends TownyMissionService {
                         Util.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
                         return false;
                     }
-                }).customCheck(() -> {
-                    Town town = TownyUtil.residentOf(player);
-
-                    try {
-                        if (CooldownService.getInstance().isStillInCooldown(town)) {
-                            long remainingTime = CooldownService.getInstance().getRemaining(town);
-                            String display = String.format("%02d:%02d",
-                                    TimeUnit.MILLISECONDS.toHours(remainingTime),
-                                    TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
-                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
-                            Util.sendMsg(player, instance.getLangEntry("commands.start.onStillInCooldown").replace("%time%", display));
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    } catch (NotFoundException e) {
-                        Date date = new Date();
-                        // Not starting, only putting them into the db
-                        CooldownDao.getInstance().add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), 0));
-                        return true;
-                    }
                 }).check();
     }
 

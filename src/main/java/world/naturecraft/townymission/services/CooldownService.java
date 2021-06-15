@@ -34,31 +34,6 @@ public class CooldownService extends TownyMissionService {
 
         return singleton;
     }
-    /**
-     * Is still in cooldown boolean.
-     *
-     * @param town the town
-     * @return the boolean
-     */
-    public boolean isStillInCooldown(Town town) {
-        Date date = new Date();
-        if (CooldownDao.getInstance().get(town) == null)
-            throw new NotFoundException();
-        return CooldownDao.getInstance().get(town).getStartedTime() + CooldownDao.getInstance().get(town).getCooldown() >= date.getTime();
-    }
-
-    /**
-     * Gets remaining.
-     *
-     * @param town the town
-     * @return the remaining
-     */
-    public long getRemaining(Town town) {
-        Date date = new Date();
-        if (CooldownDao.getInstance().get(town) == null)
-            throw new NotFoundException();
-        return CooldownDao.getInstance().get(town).getStartedTime() + CooldownDao.getInstance().get(town).getCooldown() - date.getTime();
-    }
 
     /**
      * Start cooldown.
@@ -70,12 +45,21 @@ public class CooldownService extends TownyMissionService {
         Date date = new Date();
         // This means that the town does not exist in the db yet
         if (CooldownDao.getInstance().get(town) == null) {
-            CooldownDao.getInstance().add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), cooldown));
-        } else {
-            CooldownEntry entry = CooldownDao.getInstance().get(town);
-            entry.setStartedTime(date.getTime());
-            entry.setCooldown(cooldown);
-            CooldownDao.getInstance().update(entry);
+            CooldownDao.getInstance().add(new CooldownEntry(UUID.randomUUID(), town));
         }
+
+        CooldownEntry entry = CooldownDao.getInstance().get(town);
+        entry.startCooldown(cooldown);
+        CooldownDao.getInstance().update(entry);
+    }
+
+    public int getNumAddable(Town town) {
+        int amount = instance.getConfig().getInt("mission.amount");
+        CooldownEntry entry = CooldownDao.getInstance().get(town);
+
+        if (entry == null) return amount;
+        int finished = entry.getNumFinished(true);
+        CooldownDao.getInstance().update(entry);
+        return finished;
     }
 }
