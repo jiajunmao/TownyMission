@@ -7,7 +7,7 @@ package world.naturecraft.townymission.data.yaml;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMission;
-import world.naturecraft.townymission.api.exceptions.ConfiguParsingException;
+import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 
@@ -130,7 +130,7 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
                         file.getInt(key + ".season")
                 ));
             } catch (JsonProcessingException e) {
-                throw new ConfiguParsingException(e);
+                throw new ConfigParsingException(e);
             }
         }
 

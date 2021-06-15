@@ -23,6 +23,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 /**
@@ -36,7 +37,6 @@ public class TownyMission extends JavaPlugin {
     private StatsConfigLoader statsConfigLoader;
     private TownyMissionRoot rootCmd;
     private StorageType storageType;
-    private boolean enabled = true;
 
     @Override
     public void onEnable() {
@@ -60,8 +60,8 @@ public class TownyMission extends JavaPlugin {
             statsConfigLoader = new StatsConfigLoader(this);
         } catch (IOException | InvalidConfigurationException e) {
             logger.severe("IO operation fault during custom config initialization");
+            Bukkit.getPluginManager().disablePlugin(this);
             e.printStackTrace();
-            enabled = false;
         }
 
         /**
@@ -84,17 +84,14 @@ public class TownyMission extends JavaPlugin {
         registerListeners();
         logger.info(Util.translateColor("{#E9B728}===> Registering timers"));
         registerTimers();
-
-        if (!enabled) {
-            Bukkit.getPluginManager().disablePlugin(this);
-        }
     }
 
     @Override
     public void onDisable() {
         logger.info("=========   TOWNYMISSION DISABLING   =========");
         if (storageType.equals(StorageType.MYSQL)) {
-            close();
+            if (db != null)
+                close();
         }
     }
 
@@ -170,10 +167,24 @@ public class TownyMission extends JavaPlugin {
         config.setMinimumIdle(5);
         config.setConnectionTimeout(10000);
         config.setIdleTimeout(600000);
-        config.setMaxLifetime(1800000);
+        config.setMaxLifetime(180000);
 
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<String> future = executor.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                db = new HikariDataSource(config);
+                return "connected";
+            }
+        });
 
-        db = new HikariDataSource(config);
+        try {
+            future.get(10, TimeUnit.SECONDS);
+        } catch (TimeoutException | ExecutionException | InterruptedException e) {
+            future.cancel(true);
+            Bukkit.getPluginManager().disablePlugin(this);
+            e.printStackTrace();
+        }
     }
 
     /**
