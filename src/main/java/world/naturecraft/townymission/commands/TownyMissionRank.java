@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMission;
@@ -70,28 +71,36 @@ public class TownyMissionRank extends TownyMissionCommand {
         // /tms rank sprint
         // /tms rank season
         if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (sanityCheck(player, args)) {
-                List<Rankable> entryList;
-                if (args[1].equalsIgnoreCase("sprint"))
-                    entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
-                else
-                    entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
-                MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Sprint Rank&7------");
-                int index = 1;
-                for (Rankable entry : entryList) {
-                    Town town = TownyUtil.residentOf(player);
-                    if (args[1].equalsIgnoreCase("sprint")) {
-                        builder.add("&e" + index + ". &f" + town.getName() + " : "
-                                + Util.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
-                                + " points");
-                    } else {
-                        builder.add("&e" + index + ". &f" + town.getName() + " : " + entry.getRankingFactor() + " points");
+
+            BukkitRunnable r =new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Player player = (Player) sender;
+                    if (sanityCheck(player, args)) {
+                        List<Rankable> entryList;
+                        if (args[1].equalsIgnoreCase("sprint"))
+                            entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
+                        else
+                            entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
+                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Sprint Rank&7------");
+                        int index = 1;
+                        for (Rankable entry : entryList) {
+                            Town town = TownyUtil.residentOf(player);
+                            if (args[1].equalsIgnoreCase("sprint")) {
+                                builder.add("&e" + index + ". &f" + town.getName() + " : "
+                                        + Util.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
+                                        + " points");
+                            } else {
+                                builder.add("&e" + index + ". &f" + town.getName() + " : " + entry.getRankingFactor() + " points");
+                            }
+                        }
+                        String finalString = builder.toString();
+                        Util.sendMsg(player, finalString);
                     }
                 }
-                String finalString = builder.toString();
-                Util.sendMsg(player, finalString);
-            }
+            };
+
+            r.runTaskAsynchronously(instance);
         }
 
         return true;

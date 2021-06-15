@@ -33,7 +33,7 @@ build:
   dependencies:
     - test
   script:
-    - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml install'
+    - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml clean install'
   artifacts:
     paths:
       - target/TownyMission*.jar

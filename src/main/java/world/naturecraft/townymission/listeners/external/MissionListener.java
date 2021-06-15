@@ -142,9 +142,6 @@ public class MissionListener extends TownyMissionListener {
                     Town town = TownyUtil.residentOf(player);
                     MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town, missionType);
 
-                    System.out.println("Mission isCompleted: " + taskEntry.isCompleted());
-                    System.out.println("Completed: " + taskEntry.getMissionJson().getCompleted());
-                    System.out.println("Required: " + taskEntry.getMissionJson().getAmount());
                     if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
 
                     MissionJson json = taskEntry.getMissionJson();

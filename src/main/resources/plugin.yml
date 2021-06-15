@@ -11,6 +11,7 @@ softdepend:
   - CMI
   - UltimateVotes
   - Towny
+  - MMOItems
 
 permissions:
   townymission.player:
