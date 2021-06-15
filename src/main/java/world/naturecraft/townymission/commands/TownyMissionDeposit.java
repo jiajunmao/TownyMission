@@ -111,7 +111,6 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         }
                     } catch (JsonProcessingException exception) {
                         exception.printStackTrace();
-                        //Util.sendMsg(player, "Something went wrong during depositing");
                     }
                 }
             };

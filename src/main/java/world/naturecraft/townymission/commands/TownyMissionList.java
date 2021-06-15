@@ -51,6 +51,7 @@ public class TownyMissionList extends TownyMissionCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
+            // Do not call async here, async is handled in the GUI
             Player player = (Player) sender;
             if (TownyUtil.residentOf(player) != null) {
                 MissionManageGui gui = new MissionManageGui(instance);

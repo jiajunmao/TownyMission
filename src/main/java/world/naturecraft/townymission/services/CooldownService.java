@@ -67,13 +67,11 @@ public class CooldownService extends TownyMissionService {
      * @param cooldown the cooldown
      */
     public void startCooldown(Town town, long cooldown) {
-        System.out.println("Starting " + town.getName() + "'s cooldown for " + cooldown);
         Date date = new Date();
+        // This means that the town does not exist in the db yet
         if (CooldownDao.getInstance().get(town) == null) {
-            System.out.println("Entry not found, adding");
             CooldownDao.getInstance().add(new CooldownEntry(UUID.randomUUID(), town, date.getTime(), cooldown));
         } else {
-            System.out.println("Entry found, updating");
             CooldownEntry entry = CooldownDao.getInstance().get(town);
             entry.setStartedTime(date.getTime());
             entry.setCooldown(cooldown);

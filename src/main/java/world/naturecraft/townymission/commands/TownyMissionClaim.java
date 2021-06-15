@@ -123,7 +123,6 @@ public class TownyMissionClaim extends TownyMissionCommand {
                             Util.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess"));
                         } else {
                             // Claim all rewards
-                            // TODO: Make sure that SeasonPoint entry is not in there
                             RewardService.getInstance().claimEntry(player, claimEntries);
                             Util.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess"));
                         }

@@ -128,26 +128,6 @@ public class Util {
     }
 
     /**
-     * Classify task entry map.
-     *
-     * @param list the list
-     * @return the map
-     */
-    public static Map<MissionType, List<MissionEntry>> classifyTaskEntry(List<MissionEntry> list) {
-        Map<MissionType, List<MissionEntry>> map = new HashMap<>();
-        for (MissionType missionType : MissionType.values()) {
-            map.put(missionType, new ArrayList<>());
-        }
-
-        for (MissionEntry e : list) {
-            MissionType type = e.getMissionType();
-            map.get(type).add(e);
-        }
-
-        return map;
-    }
-
-    /**
      * Gets ranking points.
      *
      * @param numResident the num resident
