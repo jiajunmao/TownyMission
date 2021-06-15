@@ -238,9 +238,18 @@ public class RewardService extends TownyMissionService {
                 for (Integer currentRank : rewardsMap.keySet()) {
                     List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
 
-                    // This is rewarding ranked towns
-                    // TODO: Reward others
-                    if (currentRank != -1 && currentRank - 1 < sprintEntries.size()) {
+                    if (currentRank == -1) {
+                        // This is rewarding other towns
+                        int numRanked = rewardsMap.keySet().size();
+                        for (int i = numRanked; i < sprintEntries.size(); i++) {
+                            SprintEntry otherEntry = sprintEntries.get(i);
+                            Town town = TownyUtil.getTownByName(otherEntry.getTownName());
+                            for (RewardJson rewardJson : rewardJsonList) {
+                                rewardTown(town, rewardMethod, rewardJson);
+                            }
+                        }
+                    } else if (currentRank != -1 && currentRank - 1 < sprintEntries.size()) {
+                        // This is rewarding ranked towns
                         SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
                         Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
 
@@ -256,7 +265,18 @@ public class RewardService extends TownyMissionService {
 
                 for (Integer currentRank : rewardsMap.keySet()) {
                     List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
-                    if (currentRank - 1 < seasonEntries.size()) {
+
+                    if (currentRank == -1) {
+                        // This is rewarding other towns
+                        int numRanked = rewardsMap.keySet().size();
+                        for (int i = numRanked; i < seasonEntries.size(); i++) {
+                            SeasonEntry otherEntry = seasonEntries.get(i);
+                            Town town = TownyUtil.getTownByName(otherEntry.getTownName());
+                            for (RewardJson rewardJson : rewardJsonList) {
+                                rewardTown(town, rewardMethod, rewardJson);
+                            }
+                        }
+                    } else if (currentRank - 1 < seasonEntries.size()) {
                         SeasonEntry seasonEntry = seasonEntries.get(currentRank - 1);
                         Town town = TownyUtil.getTownByName(seasonEntry.getTownName());
 

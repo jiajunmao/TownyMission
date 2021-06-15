@@ -79,10 +79,10 @@ public class TimerService extends TownyMissionService {
                     // This means that sprint is now in the interval, do clean up task before config changes
 
                     // Check if in season interval, if is, do nothing
-                    if (SprintHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current"),
-                            instance.getStatsConfig().getInt("sprint.current")) != null) {
-                        return;
-                    }
+//                    if (SprintHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current"),
+//                            instance.getStatsConfig().getInt("sprint.current")) != null) {
+//                        return;
+//                    }
 
                     instance.getLogger().warning("Sprint interval reached, doing sprint recess clean up jobs");
 
@@ -100,7 +100,7 @@ public class TimerService extends TownyMissionService {
                     RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
                     // Clear SprintStorage, move ranking to SprintHistoryStorage
-                    SprintService.getInstance().sprintEndCleanUp();
+                    // SprintService.getInstance().sprintEndCleanUp();
                 }
             }
         };
