@@ -6,6 +6,7 @@ import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.data.db.ClaimStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /**
  * The type Claim sql storage.
  */
-public class ClaimSqlStorage extends SqlStorage<ClaimEntry> {
+public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStorage {
 
     private static ClaimSqlStorage singleton;
 

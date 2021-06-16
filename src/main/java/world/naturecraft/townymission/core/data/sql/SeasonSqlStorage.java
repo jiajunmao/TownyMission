@@ -6,6 +6,7 @@ import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.data.db.SeasonStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ import java.util.UUID;
 /**
  * The type Season database.
  */
-public class SeasonSqlStorage extends SqlStorage<SeasonEntry> {
+public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonStorage {
 
     private static SeasonSqlStorage singleton;
 

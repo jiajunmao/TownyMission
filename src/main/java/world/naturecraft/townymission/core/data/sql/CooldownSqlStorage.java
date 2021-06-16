@@ -12,6 +12,7 @@ import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.data.db.CooldownStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +23,7 @@ import java.util.UUID;
 /**
  * The type Cooldown database.
  */
-public class CooldownSqlStorage extends SqlStorage<CooldownEntry> {
+public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements CooldownStorage {
 
     private static CooldownSqlStorage singleton;
 

@@ -6,6 +6,7 @@ import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.data.db.SprintHistoryStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /**
  * The type Sprint history database.
  */
-public class SprintHistorySqlStorage extends SqlStorage<SprintHistoryEntry> {
+public class SprintHistorySqlStorage extends SqlStorage<SprintHistoryEntry> implements SprintHistoryStorage {
 
     private static SprintHistorySqlStorage singleton;
 

@@ -5,7 +5,9 @@
 package world.naturecraft.townymission.core.data.dao;
 
 import world.naturecraft.townymission.core.components.entity.SprintHistoryEntry;
+import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.data.db.SprintHistoryStorage;
+import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.List;
 
@@ -21,8 +23,8 @@ public class SprintHistoryDao extends Dao<SprintHistoryEntry> {
      * Instantiates a new Sprint history dao.
      */
     public SprintHistoryDao() {
-        super(SprintHistoryStorage.getInstance());
-        this.db = SprintHistoryStorage.getInstance();
+        super(StorageService.getInstance().getStorage(DbType.SPRINT_HISTORY));
+        this.db = StorageService.getInstance().getStorage(DbType.SPRINT_HISTORY);
     }
 
     /**

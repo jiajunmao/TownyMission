@@ -8,9 +8,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
+import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
-import world.naturecraft.townymission.core.data.db.MissionStorage;
 import world.naturecraft.townymission.bukkit.utils.EntryFilter;
+import world.naturecraft.townymission.core.data.db.MissionStorage;
+import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +29,8 @@ public class MissionDao extends Dao<MissionEntry> {
      * Instantiates a new Task dao.
      */
     public MissionDao() {
-        super(MissionStorage.getInstance());
-        this.db = MissionStorage.getInstance();
+        super(StorageService.getInstance().getStorage(DbType.MISSION));
+        this.db = StorageService.getInstance().getStorage(DbType.MISSION);
     }
 
     /**

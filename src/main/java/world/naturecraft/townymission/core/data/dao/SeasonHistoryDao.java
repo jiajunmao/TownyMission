@@ -5,7 +5,9 @@
 package world.naturecraft.townymission.core.data.dao;
 
 import world.naturecraft.townymission.core.components.entity.SeasonHistoryEntry;
+import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.data.db.SeasonHistoryStorage;
+import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.List;
 
@@ -21,8 +23,8 @@ public class SeasonHistoryDao extends Dao<SeasonHistoryEntry> {
      * Instantiates a new Season history dao.
      */
     public SeasonHistoryDao() {
-        super(SeasonHistoryStorage.getInstance());
-        this.db = SeasonHistoryStorage.getInstance();
+        super(StorageService.getInstance().getStorage(DbType.SEASON_HISTORY));
+        this.db = StorageService.getInstance().getStorage(DbType.SEASON_HISTORY);
     }
 
     /**

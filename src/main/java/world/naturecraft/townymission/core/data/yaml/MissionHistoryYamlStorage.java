@@ -10,6 +10,7 @@ import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.data.db.MissionHistoryStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.UUID;
 /**
  * The type Mission history yaml.
  */
-public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> {
+public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> implements MissionHistoryStorage {
 
     private static MissionHistoryYamlStorage singleton;
 

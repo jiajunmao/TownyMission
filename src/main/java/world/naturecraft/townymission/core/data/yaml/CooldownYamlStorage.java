@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.data.db.CooldownStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.UUID;
 /**
  * The type Cooldown yaml.
  */
-public class CooldownYamlStorage extends YamlStorage<CooldownEntry> {
+public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements CooldownStorage {
 
     private static CooldownYamlStorage singleton;
 

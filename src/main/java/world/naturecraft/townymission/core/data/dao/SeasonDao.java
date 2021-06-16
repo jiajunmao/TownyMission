@@ -5,8 +5,10 @@
 package world.naturecraft.townymission.core.data.dao;
 
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
+import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.core.data.db.SeasonStorage;
+import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +25,8 @@ public class SeasonDao extends Dao<SeasonEntry> {
      * Instantiates a new Season dao.
      */
     public SeasonDao() {
-        super(SeasonStorage.getInstance());
-        this.database = SeasonStorage.getInstance();
+        super(StorageService.getInstance().getStorage(DbType.SEASON));
+        this.database = StorageService.getInstance().getStorage(DbType.SEASON);
     }
 
     /**

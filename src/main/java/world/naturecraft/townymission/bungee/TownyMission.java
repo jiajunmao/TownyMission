@@ -14,21 +14,32 @@ import java.nio.file.Files;
 
 public class TownyMission extends Plugin {
 
-    Configuration configuration;
+    Configuration config;
 
     @Override
     public void onEnable() {
         getLogger().info("===> Enabling TownyMission");
         // This is loading in the config file
-        try {
-            createPlugin();
-            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder(), "config.yml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveDefaultConfig();
 
         // Registering plugin messaging channel
         getLogger().info("===> Registering Listeners and PMC");
+        registerListener();
+
+
+    }
+
+    public void saveDefaultConfig() {
+        try {
+            createPlugin();
+            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder(), "config.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            //TODO: disable plugin
+        }
+    }
+
+    public void registerListener() {
         getProxy().registerChannel("townymission:main");
         getProxy().getPluginManager().registerListener(this, new PluginMessageListener());
     }

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.data.db.SprintStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /**
  * The type Sprint yaml.
  */
-public class SprintYamlStorage extends YamlStorage<SprintEntry> {
+public class SprintYamlStorage extends YamlStorage<SprintEntry> implements SprintStorage {
 
     private static SprintYamlStorage singleton;
 

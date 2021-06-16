@@ -7,6 +7,7 @@ import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.data.db.MissionHistoryStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ import java.util.UUID;
 /**
  * The type Task history database.
  */
-public class MissionHistorySqlStorage extends SqlStorage<MissionHistoryEntry> {
+public class MissionHistorySqlStorage extends SqlStorage<MissionHistoryEntry> implements MissionHistoryStorage {
 
     private static MissionHistorySqlStorage singleton;
 

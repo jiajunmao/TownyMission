@@ -3,7 +3,9 @@ package world.naturecraft.townymission.core.data.dao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
+import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.data.db.ClaimStorage;
+import world.naturecraft.townymission.core.services.StorageService;
 
 /**
  * The type Claim dao.
@@ -17,8 +19,8 @@ public class ClaimDao extends Dao<ClaimEntry> {
      * Instantiates a new Claim dao.
      */
     public ClaimDao() {
-        super(ClaimStorage.getInstance());
-        db = ClaimStorage.getInstance();
+        super(StorageService.getInstance().getStorage(DbType.CLAIM));
+        db = StorageService.getInstance().getStorage(DbType.CLAIM);
     }
 
     /**

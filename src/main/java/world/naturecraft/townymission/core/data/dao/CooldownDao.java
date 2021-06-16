@@ -6,8 +6,10 @@ package world.naturecraft.townymission.core.data.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
-import world.naturecraft.townymission.core.data.db.CooldownStorage;
 import world.naturecraft.townymission.bukkit.utils.EntryFilter;
+import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.data.db.CooldownStorage;
+import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.List;
 
@@ -23,8 +25,8 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * Instantiates a new Cooldown dao.
      */
     public CooldownDao() {
-        super(CooldownStorage.getInstance());
-        this.db = CooldownStorage.getInstance();
+        super(StorageService.getInstance().getStorage(DbType.COOLDOWN));
+        this.db = StorageService.getInstance().getStorage(DbType.COOLDOWN);
     }
 
     /**

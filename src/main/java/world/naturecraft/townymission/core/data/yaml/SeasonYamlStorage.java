@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.data.db.SeasonStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /**
  * The type Season yaml.
  */
-public class SeasonYamlStorage extends YamlStorage<SeasonEntry> {
+public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements SeasonStorage {
 
     private static SeasonYamlStorage singleton;
 

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.data.db.ClaimStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.UUID;
 /**
  * The type Claim yaml storage.
  */
-public class ClaimYamlStorage extends YamlStorage<ClaimEntry> {
+public class ClaimYamlStorage extends YamlStorage<ClaimEntry> implements ClaimStorage {
 
     private static ClaimYamlStorage singleton;
 
