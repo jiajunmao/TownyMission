@@ -15,7 +15,7 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <mainClass>world.naturecraft.townymission.TownyMission</mainClass>
+        <mainClass>world.naturecraft.townymission.bukkit.TownyMission</mainClass>
     </properties>
 
     <distributionManagement>

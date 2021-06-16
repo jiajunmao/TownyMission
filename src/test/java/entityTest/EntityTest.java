@@ -1,9 +1,7 @@
 package entityTest;
 
-import com.palmergames.bukkit.towny.object.Town;
 import org.junit.Test;
-import world.naturecraft.townymission.components.entity.CooldownEntry;
-import world.naturecraft.townymission.components.entity.SprintEntry;
+import world.naturecraft.townymission.core.components.entity.SprintEntry;
 
 import java.util.UUID;
 
