@@ -1,9 +1,9 @@
 package world.naturecraft.townymission.core.data.yaml;
 
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.ClaimStorage;
 
 import java.util.ArrayList;
@@ -21,10 +21,9 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> implements ClaimSt
      * Instantiates a new Yaml storage.
      *
      * @param instance the instance
-     * @param dbType   the db type
      */
-    public ClaimYamlStorage(TownyMission instance, DbType dbType) {
-        super(instance, dbType);
+    public ClaimYamlStorage(TownyMissionInstance instance) {
+        super(instance, DbType.CLAIM);
     }
 
     /**
@@ -34,8 +33,7 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> implements ClaimSt
      */
     public static ClaimYamlStorage getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new ClaimYamlStorage(instance, DbType.CLAIM);
+            singleton = new ClaimYamlStorage(TownyMissionInstance.getInstance());
         }
 
         return singleton;

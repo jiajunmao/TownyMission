@@ -6,8 +6,10 @@ package world.naturecraft.townymission.core.services;
 
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.dao.CooldownDao;
 
 import java.util.Date;
@@ -19,16 +21,24 @@ import java.util.UUID;
 public class CooldownService extends TownyMissionService {
 
     private static CooldownService singleton;
-    private TownyMission instance;
 
-    public CooldownService(TownyMission instance) {
-        this.instance = instance;
+    /**
+     * Instantiates a new Cooldown service.
+     *
+     * @param instance the instance
+     */
+    public CooldownService(TownyMissionInstance instance) {
+        super(instance);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CooldownService getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new CooldownService(instance);
+            singleton = new CooldownService(TownyMissionInstance.getInstance());
         }
 
         return singleton;
@@ -52,8 +62,14 @@ public class CooldownService extends TownyMissionService {
         CooldownDao.getInstance().update(entry);
     }
 
+    /**
+     * Gets num addable.
+     *
+     * @param town the town
+     * @return the num addable
+     */
     public int getNumAddable(Town town) {
-        int amount = instance.getConfig().getInt("mission.amount");
+        int amount = instance.getInstanceConfig().getInt("mission.amount");
         CooldownEntry entry = CooldownDao.getInstance().get(town);
 
         if (entry == null) return amount;

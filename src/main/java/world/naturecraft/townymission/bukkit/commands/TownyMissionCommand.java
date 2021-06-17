@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
 import java.util.logging.Logger;
@@ -22,7 +22,7 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
     /**
      * The Instance.
      */
-    protected TownyMission instance;
+    protected TownyMissionBukkit instance;
     /**
      * The Logger.
      */
@@ -33,7 +33,7 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
      *
      * @param instance the instance
      */
-    public TownyMissionCommand(TownyMission instance) {
+    public TownyMissionCommand(TownyMissionBukkit instance) {
         this.instance = instance;
         this.logger = instance.getLogger();
     }

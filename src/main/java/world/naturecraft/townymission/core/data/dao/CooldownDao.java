@@ -6,7 +6,8 @@ package world.naturecraft.townymission.core.data.dao;
 
 import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
-import world.naturecraft.townymission.bukkit.utils.EntryFilter;
+import world.naturecraft.townymission.core.components.enums.ServerType;
+import world.naturecraft.townymission.core.utils.EntryFilter;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.data.db.CooldownStorage;
 import world.naturecraft.townymission.core.services.StorageService;
@@ -77,6 +78,9 @@ public class CooldownDao extends Dao<CooldownEntry> {
         }
     }
 
+    /**
+     * Remove all entries.
+     */
     public void removeAllEntries() {
         List<CooldownEntry> entries = getEntries();
         for (CooldownEntry entry : entries) {

@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
-import world.naturecraft.townymission.bukkit.utils.MultilineBuilder;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.core.utils.MultilineBuilder;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
@@ -37,13 +37,13 @@ public class TownyMissionInfo extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionInfo(TownyMission instance) {
+    public TownyMissionInfo(TownyMissionBukkit instance) {
         super(instance);
     }
 
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return new SanityChecker(instance).target(player)
+        return new BukkitChecker(instance).target(player)
                 .hasTown()
                 .customCheck(() -> {
                     if (args.length == 1) {

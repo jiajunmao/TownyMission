@@ -7,8 +7,8 @@ package world.naturecraft.townymission.core.data.yaml;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import world.naturecraft.townymission.bukkit.TownyMission;
-import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingError;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.core.components.entity.DataEntity;
 import world.naturecraft.townymission.core.components.enums.DbType;
 
@@ -28,7 +28,7 @@ public abstract class YamlStorage<T extends DataEntity> {
     /**
      * The Instance.
      */
-    protected TownyMission instance;
+    protected TownyMissionInstance instance;
     /**
      * The Db type.
      */
@@ -45,8 +45,9 @@ public abstract class YamlStorage<T extends DataEntity> {
      *
      * @param instance the instance
      * @param dbType   the db type
+     * @throws ConfigLoadingException the config loading exception
      */
-    public YamlStorage(TownyMission instance, DbType dbType) {
+    public YamlStorage(TownyMissionInstance instance, DbType dbType) throws ConfigLoadingException {
         this.instance = instance;
         this.dbType = dbType;
         createConfig();
@@ -55,23 +56,27 @@ public abstract class YamlStorage<T extends DataEntity> {
     /**
      * Create config.
      *
-     * @throws ConfigLoadingError the config loading error
+     * @throws ConfigLoadingException the config loading error
      */
-    protected void createConfig() throws ConfigLoadingError {
+    protected void createConfig() throws ConfigLoadingException {
         String fileName = dbType.toString().toLowerCase(Locale.ROOT) + ".yml";
         String filePath = "datastore" + File.separator + fileName;
-        customConfig = new File(instance.getDataFolder(), filePath);
+        customConfig = new File(instance.getInstanceDataFolder(), filePath);
         if (!customConfig.exists()) {
             customConfig.getParentFile().getParentFile().mkdirs();
             customConfig.getParentFile().mkdirs();
-            instance.saveResource(filePath, false);
+            try {
+                instance.saveInstanceResource(filePath, false);
+            } catch (IOException e) {
+                throw new ConfigLoadingException(e);
+            }
         }
 
         file = new YamlConfiguration();
         try {
             file.load(customConfig);
         } catch (IOException | InvalidConfigurationException e) {
-            throw new ConfigLoadingError(e);
+            throw new ConfigLoadingException(e);
         }
     }
 

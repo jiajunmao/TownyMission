@@ -1,34 +1,50 @@
 package world.naturecraft.townymission.core.services;
 
-import com.Zrips.CMI.Modules.DataBase.DBDAO;
-import com.palmergames.bukkit.towny.object.Town;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
+import world.naturecraft.townymission.core.components.DataHolder;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
+import world.naturecraft.townymission.core.config.MainConfig;
 import world.naturecraft.townymission.core.data.db.Storage;
 import world.naturecraft.townymission.core.data.sql.*;
 import world.naturecraft.townymission.core.data.yaml.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.*;
 
+/**
+ * The type Storage service.
+ */
 public class StorageService {
 
     private static StorageService singleton;
+    private HikariDataSource dataSource;
     private StorageType storageType;
     private Map<DbType, Storage> dbMap;
-    private TownyMission instance;
+    private TownyMissionInstance instance;
 
+    /**
+     * Instantiates a new Storage service.
+     */
     public StorageService() {
-        TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-        this.instance = instance;
+        this.instance = TownyMissionInstance.getInstance();
         this.storageType = instance.getStorageType();
         dbMap = new HashMap<>();
         initializeMap();
     }
 
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static StorageService getInstance() {
         if (singleton == null) {
             singleton = new StorageService();
@@ -37,12 +53,88 @@ public class StorageService {
         return singleton;
     }
 
+    /**
+     * Connect db.
+     *
+     * @throws DbConnectException the db connect exception
+     */
+    public void connectDb() throws DbConnectException{
+
+        MainConfig mainConfig = instance.getInstanceConfig();
+        String dbAddress = mainConfig.getString("database.address");
+        String dbPort = mainConfig.getString("database.port");
+        String dbName = mainConfig.getString("database.name");
+        String dbUsername = mainConfig.getString("database.username");
+        String dbPassword = mainConfig.getString("database.password");
+
+        HikariConfig config = new HikariConfig();
+        config.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        config.addDataSourceProperty("serverName", dbAddress);
+        config.addDataSourceProperty("port", dbPort);
+        config.addDataSourceProperty("databaseName", dbName);
+        config.setUsername(dbUsername);
+        config.setPassword(dbPassword);
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.setMaximumPoolSize(5);
+        config.setMinimumIdle(5);
+        config.setConnectionTimeout(10000);
+        config.setIdleTimeout(600000);
+        config.setMaxLifetime(180000);
+
+        final DataHolder<HikariDataSource> holder = new DataHolder<>();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<String> future = executor.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                holder.setData(new HikariDataSource(config));
+                return "connected";
+            }
+        });
+
+        try {
+            future.get(10, TimeUnit.SECONDS);
+        } catch (TimeoutException | ExecutionException | InterruptedException e) {
+            future.cancel(true);
+            throw new DbConnectException(e);
+        }
+
+        this.dataSource = holder.getData();
+    }
+
+    /**
+     * Close db.
+     */
+    public void closeDb() {
+        dataSource.close();
+    }
+
+    /**
+     * Gets storage.
+     *
+     * @param <T>    the type parameter
+     * @param dbType the db type
+     * @return the storage
+     */
     @SuppressWarnings("unchecked")
     public <T extends Storage> T getStorage(DbType dbType) {
-        TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+        TownyMissionBukkit townyMissionBukkit = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
         return (T) dbMap.get(dbType);
     }
 
+    /**
+     * Gets data source.
+     *
+     * @return the data source
+     */
+    public HikariDataSource getDataSource() {
+        return dataSource;
+    }
+
+    /**
+     * Initialize map.
+     */
     public void initializeMap() {
         for (DbType dbType : DbType.values()) {
             switch (dbType) {

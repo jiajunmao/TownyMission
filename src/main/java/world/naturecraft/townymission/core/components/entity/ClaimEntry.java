@@ -24,6 +24,7 @@ public class ClaimEntry extends DataEntity {
      *
      * @param id         the id
      * @param playerUUID the player uuid
+     * @param rewardType the reward type
      * @param rewardJson the reward json
      * @param season     the season
      * @param sprint     the sprint
@@ -42,6 +43,7 @@ public class ClaimEntry extends DataEntity {
      *
      * @param id         the id
      * @param playerUUID the player uuid
+     * @param rewardType the reward type
      * @param rewardJson the reward json
      * @param season     the season
      * @param sprint     the sprint
@@ -141,10 +143,20 @@ public class ClaimEntry extends DataEntity {
         this.season = season;
     }
 
+    /**
+     * Gets reward type.
+     *
+     * @return the reward type
+     */
     public RewardType getRewardType() {
         return rewardType;
     }
 
+    /**
+     * Sets reward type.
+     *
+     * @param rewardType the reward type
+     */
     public void setRewardType(RewardType rewardType) {
         this.rewardType = rewardType;
     }

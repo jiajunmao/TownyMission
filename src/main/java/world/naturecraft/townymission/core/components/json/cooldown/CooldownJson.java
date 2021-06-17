@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.ConstructorProperties;
 import java.util.Date;
 
+/**
+ * The type Cooldown json.
+ */
 public class CooldownJson {
 
     @JsonProperty
@@ -15,30 +18,61 @@ public class CooldownJson {
     @JsonProperty
     private long cooldown;
 
+    /**
+     * Instantiates a new Cooldown json.
+     *
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     */
     @ConstructorProperties({"startedTime", "cooldown"})
     public CooldownJson(long startedTime, long cooldown) {
         this.startedTime = startedTime;
         this.cooldown = cooldown;
     }
 
+    /**
+     * Gets started time.
+     *
+     * @return the started time
+     */
     @JsonProperty
     public long getStartedTime() {
         return startedTime;
     }
 
+    /**
+     * Sets started time.
+     *
+     * @param startedTime the started time
+     */
     public void setStartedTime(long startedTime) {
         this.startedTime = startedTime;
     }
 
+    /**
+     * Gets cooldown.
+     *
+     * @return the cooldown
+     */
     @JsonProperty
     public long getCooldown() {
         return cooldown;
     }
 
+    /**
+     * Sets cooldown.
+     *
+     * @param cooldown the cooldown
+     */
     public void setCooldown(long cooldown) {
         this.cooldown = cooldown;
     }
 
+    /**
+     * Is finished boolean.
+     *
+     * @return the boolean
+     */
     @JsonIgnore
     public boolean isFinished() {
         long timeNow = new Date().getTime();

@@ -18,10 +18,21 @@ public class ConfigParsingException extends RuntimeException {
         super(e);
     }
 
+    /**
+     * Instantiates a new Config parsing exception.
+     *
+     * @param message the message
+     */
     public ConfigParsingException(String message) {
         super (message);
     }
 
+    /**
+     * Instantiates a new Config parsing exception.
+     *
+     * @param message the message
+     * @param e       the e
+     */
     public ConfigParsingException(String message, Throwable e) {
         super(message, e);
     }

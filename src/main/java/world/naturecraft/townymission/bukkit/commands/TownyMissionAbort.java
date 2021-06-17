@@ -7,16 +7,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.CooldownService;
 import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.TimerService;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionAbort(TownyMission instance) {
+    public TownyMissionAbort(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -59,7 +60,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                 public void run() {
                     if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
-                        if (BukkitUtil.isInt(args[1])) {
+                        if (Util.isInt(args[1])) {
                             MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
                             MissionService.getInstance().abortMission(player, entry);
                         } else {
@@ -67,7 +68,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                                 MissionService.getInstance().abortMission(player, entry);
                             }
                         }
-                        CooldownService.getInstance().startCooldown(town, BukkitUtil.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+                        CooldownService.getInstance().startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
                     }
                 }
             };
@@ -86,15 +87,15 @@ public class TownyMissionAbort extends TownyMissionCommand {
      */
     public boolean sanityCheck(@NotNull Player player, String[] args) {
 
-        SanityChecker checker = new SanityChecker(instance).target(player)
+        BukkitChecker checker = new BukkitChecker(instance).target(player)
                 .hasTown()
                 .hasStarted()
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
                     if (args.length != 2 ||
-                            (!BukkitUtil.isInt(args[1])
+                            (!Util.isInt(args[1])
                                     || !args[1].equalsIgnoreCase("all")
-                                    || (BukkitUtil.isInt(args[1]) && Integer.parseInt(args[1]) < 1 && Integer.parseInt(args[1]) > 15))) {
+                                    || (Util.isInt(args[1]) && Integer.parseInt(args[1]) < 1 && Integer.parseInt(args[1]) > 15))) {
                         BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
@@ -105,7 +106,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                     if (TownyUtil.mayorOf(player) != null)
                         return true;
 
-                    if (BukkitUtil.isInt(args[1])) {
+                    if (Util.isInt(args[1])) {
                         MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
                         if (entry.getStartedPlayer().equals(player)) {
                             return true;

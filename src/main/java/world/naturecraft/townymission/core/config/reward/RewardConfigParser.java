@@ -2,18 +2,18 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.bukkit.config.reward;
+package world.naturecraft.townymission.core.config.reward;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.enums.RewardMethod;
 import world.naturecraft.townymission.core.components.enums.RewardType;
 import world.naturecraft.townymission.core.components.json.reward.RewardJson;
-import world.naturecraft.townymission.bukkit.utils.RewardJsonFactory;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.RewardJsonFactory;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class RewardConfigParser {
      * @return the list
      */
     public static List<RewardJson> parseAllRewards(RankType rankType) {
-        TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+        TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
         ConfigurationSection rankConfigSection = instance.getConfig().getConfigurationSection(rankType.name().toLowerCase(Locale.ROOT) + ".rewards.rewards");
         Set<String> rankList = rankConfigSection.getKeys(false);
         System.out.println("Rank String List length: " + rankList.size());
@@ -48,7 +48,7 @@ public class RewardConfigParser {
 
                 try {
                     RewardJson rewardJson = RewardJsonFactory.getJson(actualRewardString, rewardType);
-                    if (BukkitUtil.isInt(rank)) {
+                    if (Util.isInt(rank)) {
                         rewardJson.setRank(Integer.parseInt(rank));
                     } else {
                         rewardJson.setRank(-1);
@@ -96,7 +96,7 @@ public class RewardConfigParser {
      * @return the reward methods
      */
     public static RewardMethod getRewardMethods(RankType rankType) {
-        TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+        TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
         if (rankType.equals(RankType.SEASON)) {
             return RewardMethod.valueOf(instance.getConfig().getString("season.rewards.method"));
         } else {

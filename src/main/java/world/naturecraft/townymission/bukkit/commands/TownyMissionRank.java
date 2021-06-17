@@ -11,12 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.entity.Rankable;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
 import world.naturecraft.townymission.core.services.TimerService;
 import world.naturecraft.townymission.bukkit.utils.*;
+import world.naturecraft.townymission.core.utils.MultilineBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +31,13 @@ public class TownyMissionRank extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionRank(TownyMission instance) {
+    public TownyMissionRank(TownyMissionBukkit instance) {
         super(instance);
     }
 
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return new SanityChecker(instance).target(player)
+        return new BukkitChecker(instance).target(player)
                 .customCheck(() -> {
                     if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
                         return true;

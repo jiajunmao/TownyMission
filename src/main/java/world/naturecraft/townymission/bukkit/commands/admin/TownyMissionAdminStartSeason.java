@@ -9,8 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
 import java.util.Date;
@@ -26,7 +26,7 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionAdminStartSeason(TownyMission instance) {
+    public TownyMissionAdminStartSeason(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -39,10 +39,10 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
      */
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return new SanityChecker(instance).target(player)
+        return new BukkitChecker(instance).target(player)
                 .customCheck(() -> {
-                    return new SanityChecker(instance).target(player).hasPermission("townymission.admin").check()
-                            || new SanityChecker(instance).target(player).hasPermission("townymission.commands.admin.reload").check();
+                    return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
+                            || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.reload").check();
                 })
                 .customCheck(() -> {
                     // /tms admin startSeason

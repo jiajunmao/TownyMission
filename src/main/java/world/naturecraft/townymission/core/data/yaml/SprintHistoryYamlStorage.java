@@ -4,10 +4,10 @@
 
 package world.naturecraft.townymission.core.data.yaml;
 
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SprintHistoryStorage;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class SprintHistoryYamlStorage extends YamlStorage<SprintHistoryEntry> im
      *
      * @param instance the instance
      */
-    public SprintHistoryYamlStorage(TownyMission instance) {
+    public SprintHistoryYamlStorage(TownyMissionInstance instance) {
         super(instance, DbType.SPRINT_HISTORY);
         singleton = this;
     }
@@ -38,8 +38,7 @@ public class SprintHistoryYamlStorage extends YamlStorage<SprintHistoryEntry> im
      */
     public static SprintHistoryYamlStorage getInstance() {
         if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SprintHistoryYamlStorage(townyMission);
+            new SprintHistoryYamlStorage(TownyMissionInstance.getInstance());
         }
         return singleton;
     }

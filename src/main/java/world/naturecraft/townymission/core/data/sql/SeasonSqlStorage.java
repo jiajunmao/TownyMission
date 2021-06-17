@@ -1,12 +1,12 @@
 package world.naturecraft.townymission.core.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SeasonStorage;
+import world.naturecraft.townymission.core.services.StorageService;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,8 +39,9 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
      */
     public static SeasonSqlStorage getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new SeasonSqlStorage(instance.getDatasource(), BukkitUtil.getDbName(DbType.SEASON));
+            singleton = new SeasonSqlStorage(
+                    StorageService.getInstance().getDataSource(),
+                    Util.getDbName(DbType.SEASON));
         }
         return singleton;
     }

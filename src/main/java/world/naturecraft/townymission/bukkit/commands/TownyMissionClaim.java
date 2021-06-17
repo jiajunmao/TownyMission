@@ -10,15 +10,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
 import world.naturecraft.townymission.core.services.RewardService;
-import world.naturecraft.townymission.bukkit.utils.EntryFilter;
-import world.naturecraft.townymission.bukkit.utils.MultilineBuilder;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.core.utils.EntryFilter;
+import world.naturecraft.townymission.core.utils.MultilineBuilder;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +34,18 @@ public class TownyMissionClaim extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionClaim(TownyMission instance) {
+    public TownyMissionClaim(TownyMissionBukkit instance) {
         super(instance);
     }
 
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return new SanityChecker(instance).target(player)
+        return new BukkitChecker(instance).target(player)
                 .hasTown()
                 .customCheck(() -> {
                             if (args.length == 1
                                     || (args.length == 2
-                                    && BukkitUtil.isInt(args[1])
+                                    && Util.isInt(args[1])
                                     && Integer.parseInt(args[1]) >= 1
                                     && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
                                     || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
@@ -105,7 +106,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 index++;
                             }
                             BukkitUtil.sendMsg(player, builder.toString());
-                        } else if (args.length == 2 && BukkitUtil.isInt(args[1])) {
+                        } else if (args.length == 2 && Util.isInt(args[1])) {
                             // This is claiming one claim entry from all
                             int choice = Integer.parseInt(args[1]) - 1;
                             if (choice >= claimEntries.size()) {

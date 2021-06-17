@@ -5,11 +5,11 @@
 package world.naturecraft.townymission.core.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.MissionHistoryStorage;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
      *
      * @param instance the instance
      */
-    public MissionHistoryYamlStorage(TownyMission instance) {
+    public MissionHistoryYamlStorage(TownyMissionInstance instance) {
         super(instance, DbType.MISSION_HISTORY);
         singleton = this;
     }
@@ -40,8 +40,7 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
      */
     public static MissionHistoryYamlStorage getInstance() {
         if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new MissionHistoryYamlStorage(townyMission);
+            new MissionHistoryYamlStorage(TownyMissionInstance.getInstance());
         }
         return singleton;
     }

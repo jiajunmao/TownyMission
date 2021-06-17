@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 
 import java.util.logging.Logger;
 
@@ -20,7 +20,7 @@ public abstract class TownyMissionListener implements Listener {
     /**
      * The Instance.
      */
-    protected TownyMission instance;
+    protected TownyMissionBukkit instance;
 
     /**
      * The Plugin manager.
@@ -37,7 +37,7 @@ public abstract class TownyMissionListener implements Listener {
      *
      * @param instance the instance
      */
-    public TownyMissionListener(TownyMission instance) {
+    public TownyMissionListener(TownyMissionBukkit instance) {
         this.instance = instance;
 
         pluginManager = Bukkit.getPluginManager();

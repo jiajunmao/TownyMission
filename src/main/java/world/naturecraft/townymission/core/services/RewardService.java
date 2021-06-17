@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
@@ -15,11 +15,12 @@ import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.enums.RewardMethod;
 import world.naturecraft.townymission.core.components.enums.RewardType;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.json.reward.CommandRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.ResourceRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.RewardJson;
-import world.naturecraft.townymission.bukkit.config.reward.RewardConfigParser;
+import world.naturecraft.townymission.core.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
 import world.naturecraft.townymission.core.data.dao.SeasonDao;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
@@ -38,15 +39,14 @@ import java.util.UUID;
 public class RewardService extends TownyMissionService {
 
     private static RewardService singleton;
-    private final TownyMission instance;
 
     /**
      * Instantiates a new Reward service.
      *
      * @param instance the instance
      */
-    public RewardService(TownyMission instance) {
-        this.instance = instance;
+    public RewardService(TownyMissionInstance instance) {
+        super(instance);
     }
 
     /**
@@ -56,8 +56,7 @@ public class RewardService extends TownyMissionService {
      */
     public static RewardService getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new RewardService(instance);
+            singleton = new RewardService(TownyMissionInstance.getInstance());
         }
 
         return singleton;
@@ -70,7 +69,7 @@ public class RewardService extends TownyMissionService {
      * @param player     The online player
      * @param claimEntry The entry containing the reward
      */
-    // TODO: Grab stuff from the freaking DAO, you are a service!
+// TODO: Grab stuff from the freaking DAO, you are a service!
     public void claimEntry(Player player, ClaimEntry claimEntry) {
         RewardJson rewardJson = claimEntry.getRewardJson();
         RewardType rewardType = rewardJson.getRewardType();
@@ -85,7 +84,8 @@ public class RewardService extends TownyMissionService {
                         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
                     }
                 };
-                r.runTask(instance);
+
+                TaskService.runTaskAsync(r);
                 ClaimDao.getInstance().remove(claimEntry);
                 BukkitUtil.sendMsg(player, instance.getLangEntry("services.reward.onRewardCommand"));
                 break;
@@ -221,6 +221,7 @@ public class RewardService extends TownyMissionService {
     /**
      * Reward all towns.
      *
+     * @param rankType     the rank type
      * @param rewardMethod the reward method
      */
     public void rewardAllTowns(RankType rankType, RewardMethod rewardMethod) {

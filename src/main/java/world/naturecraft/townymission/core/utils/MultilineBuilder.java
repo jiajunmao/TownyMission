@@ -2,7 +2,9 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.bukkit.utils;
+package world.naturecraft.townymission.core.utils;
+
+import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
 import java.util.ArrayList;
 import java.util.List;

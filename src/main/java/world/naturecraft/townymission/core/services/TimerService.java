@@ -7,11 +7,14 @@ package world.naturecraft.townymission.core.services;
 // This service is mainly here to check the progress of sprint and season
 
 import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.*;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.enums.RewardMethod;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.dao.*;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.util.Date;
 import java.util.Locale;
@@ -24,13 +27,22 @@ public class TimerService extends TownyMissionService {
     private static TimerService singleton;
 
     /**
+     * Instantiates a new Timer service.
+     *
+     * @param instance the instance
+     */
+    public TimerService(TownyMissionInstance instance) {
+        super(instance);
+    }
+
+    /**
      * Gets instance.
      *
      * @return the instance
      */
     public static TimerService getInstance() {
         if (singleton == null) {
-            singleton = new TimerService();
+            singleton = new TimerService(TownyMissionInstance.getInstance());
         }
 
         return singleton;
@@ -90,7 +102,7 @@ public class TimerService extends TownyMissionService {
 
                     // Issue rewards
                     instance.getLogger().info(BukkitUtil.translateColor("{#E9B728}===> Issuing rewards"));
-                    RewardMethod rewardMethod = RewardMethod.valueOf(instance.getConfig().getString("sprint.rewards.method").toUpperCase(Locale.ROOT));
+                    RewardMethod rewardMethod = RewardMethod.valueOf(instance.getInstanceConfig().getString("sprint.rewards.method").toUpperCase(Locale.ROOT));
                     RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
                     // Clear SprintStorage, move ranking to SprintHistoryStorage
@@ -100,7 +112,7 @@ public class TimerService extends TownyMissionService {
         };
 
         // Check every minute for whether the sprint has ended
-        r.runTaskTimerAsynchronously(instance, 0, 60 * 20);
+        TaskService.runTaskTimerAsync(r, 0, 60 * 20);
     }
 
     /**
@@ -144,13 +156,13 @@ public class TimerService extends TownyMissionService {
                     }
 
                     // Reward all towns
-                    RewardMethod rewardMethod = RewardMethod.valueOf(instance.getConfig().getString("season.rewards.method").toUpperCase(Locale.ROOT));
+                    RewardMethod rewardMethod = RewardMethod.valueOf(instance.getInstanceConfig().getString("season.rewards.method").toUpperCase(Locale.ROOT));
                     RewardService.getInstance().rewardAllTowns(RankType.SEASON, rewardMethod);
                 }
             }
         };
 
-        r.runTaskTimerAsynchronously(instance, 0, 20*60);
+        TaskService.runTaskTimerAsync(r, 0, 20 * 60);
     }
 
     /**
@@ -209,10 +221,10 @@ public class TimerService extends TownyMissionService {
     public long getDuration(RankType rankType) {
         switch (rankType) {
             case SPRINT:
-                return BukkitUtil.hrToMs(instance.getConfig().getInt("sprint.duration") * 24);
+                return Util.hrToMs(instance.getInstanceConfig().getInt("sprint.duration") * 24);
             case SEASON:
-                long numSprints = instance.getConfig().getInt("season.sprintsPerSeason");
-                long sprintDura = BukkitUtil.hrToMs(instance.getConfig().getInt("sprint.duration") * 24);
+                long numSprints = instance.getInstanceConfig().getInt("season.sprintsPerSeason");
+                long sprintDura = Util.hrToMs(instance.getInstanceConfig().getInt("sprint.duration") * 24);
                 long sprintInterDura = getIntervalDuration(RankType.SPRINT);
                 return numSprints * (sprintDura + sprintInterDura);
         }
@@ -229,9 +241,9 @@ public class TimerService extends TownyMissionService {
     public long getIntervalDuration(RankType rankType) {
         switch (rankType) {
             case SPRINT:
-                return BukkitUtil.hrToMs(instance.getConfig().getInt("sprint.interval") * 24);
+                return Util.hrToMs(instance.getInstanceConfig().getInt("sprint.interval") * 24);
             case SEASON:
-                return BukkitUtil.hrToMs(instance.getConfig().getInt("season.interval") * 24);
+                return Util.hrToMs(instance.getInstanceConfig().getInt("season.interval") * 24);
         }
 
         throw new IllegalStateException();

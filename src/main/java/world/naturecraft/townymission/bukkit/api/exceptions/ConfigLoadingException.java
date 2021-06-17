@@ -7,14 +7,14 @@ package world.naturecraft.townymission.bukkit.api.exceptions;
 /**
  * The type Config loading error.
  */
-public class ConfigLoadingError extends RuntimeException {
+public class ConfigLoadingException extends RuntimeException {
 
     /**
      * Instantiates a new Config loading error.
      *
      * @param e the e
      */
-    public ConfigLoadingError(Exception e) {
+    public ConfigLoadingException(Exception e) {
         super(e);
     }
 }

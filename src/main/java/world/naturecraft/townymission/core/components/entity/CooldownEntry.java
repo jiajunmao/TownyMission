@@ -25,8 +25,8 @@ public class CooldownEntry extends DataEntity {
     /**
      * Instantiates a new Cooldown entry.
      *
-     * @param id          the id
-     * @param town        the town
+     * @param id   the id
+     * @param town the town
      */
     public CooldownEntry(UUID id, Town town) {
         super(id, DbType.COOLDOWN);
@@ -37,14 +37,23 @@ public class CooldownEntry extends DataEntity {
     /**
      * Instantiates a new Cooldown entry.
      *
-     * @param id          the id
-     * @param townUUID    the town uuid
+     * @param id       the id
+     * @param townUUID the town uuid
      * @throws NotRegisteredException the not registered exception
      */
     public CooldownEntry(UUID id, String townUUID) throws NotRegisteredException {
         this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)));
     }
 
+    /**
+     * Instantiates a new Cooldown entry.
+     *
+     * @param id               the id
+     * @param townUUID         the town uuid
+     * @param cooldownJsonList the cooldown json list
+     * @throws NotRegisteredException  the not registered exception
+     * @throws JsonProcessingException the json processing exception
+     */
     public CooldownEntry(UUID id, String townUUID, String cooldownJsonList) throws NotRegisteredException, JsonProcessingException {
         super(id, DbType.COOLDOWN);
         this.town = TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID));
@@ -70,23 +79,49 @@ public class CooldownEntry extends DataEntity {
         this.town = town;
     }
 
+    /**
+     * Gets cooldown json list.
+     *
+     * @return the cooldown json list
+     */
     public CooldownListJson getCooldownJsonList() {
         return cooldownJsonList;
     }
 
+    /**
+     * Gets num finished.
+     *
+     * @param remove the remove
+     * @return the num finished
+     */
     public int getNumFinished(boolean remove) {
         return cooldownJsonList.getNumFinished(remove);
     }
 
+    /**
+     * Gets num total.
+     *
+     * @return the num total
+     */
     public int getNumTotal() {
         return cooldownJsonList.getNumTotal();
     }
 
+    /**
+     * Start cooldown.
+     *
+     * @param cooldown the cooldown
+     */
     public void startCooldown(long cooldown) {
         long timeNow = new Date().getTime();
         cooldownJsonList.addCooldown(timeNow, cooldown);
     }
 
+    /**
+     * Gets cooldowns as string.
+     *
+     * @return the cooldowns as string
+     */
     public String getCooldownsAsString() {
         try {
             return cooldownJsonList.toJson();

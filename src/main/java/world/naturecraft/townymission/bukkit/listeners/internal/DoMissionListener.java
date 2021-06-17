@@ -5,7 +5,7 @@
 package world.naturecraft.townymission.bukkit.listeners.internal;
 
 import org.bukkit.event.EventHandler;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.events.DoMissionEvent;
 import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
 
@@ -19,7 +19,7 @@ public class DoMissionListener extends TownyMissionListener {
      *
      * @param instance the instance
      */
-    public DoMissionListener(TownyMission instance) {
+    public DoMissionListener(TownyMissionBukkit instance) {
         super(instance);
     }
 

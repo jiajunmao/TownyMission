@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class TownyMissionRoot extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionRoot(TownyMission instance) {
+    public TownyMissionRoot(TownyMissionBukkit instance) {
         super(instance);
         commands = new HashMap<>();
     }

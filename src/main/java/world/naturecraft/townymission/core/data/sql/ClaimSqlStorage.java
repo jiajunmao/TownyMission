@@ -1,12 +1,12 @@
 package world.naturecraft.townymission.core.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.ClaimStorage;
+import world.naturecraft.townymission.core.services.StorageService;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,8 +38,9 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
      */
     public static ClaimSqlStorage getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new ClaimSqlStorage(instance.getDatasource(), BukkitUtil.getDbName(DbType.CLAIM));
+            singleton = new ClaimSqlStorage(
+                    StorageService.getInstance().getDataSource(),
+                    Util.getDbName(DbType.CLAIM));
         }
 
         return singleton;

@@ -4,7 +4,7 @@
 
 package world.naturecraft.townymission.bukkit.commands.admin;
 
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.commands.TownyMissionCommand;
 
 /**
@@ -16,7 +16,7 @@ public abstract class TownyMissionAdminCommand extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionAdminCommand(TownyMission instance) {
+    public TownyMissionAdminCommand(TownyMissionBukkit instance) {
         super(instance);
     }
 

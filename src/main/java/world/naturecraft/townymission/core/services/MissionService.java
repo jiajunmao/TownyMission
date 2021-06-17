@@ -5,16 +5,23 @@
 package world.naturecraft.townymission.core.services;
 
 import com.palmergames.bukkit.towny.object.Town;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.entity.Player;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bungee.TownyMissionBungee;
 import world.naturecraft.townymission.core.components.entity.*;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.data.dao.*;
-import world.naturecraft.townymission.bukkit.utils.EntryFilter;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.core.utils.EntryFilter;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The type Mission service.
@@ -23,6 +30,14 @@ public class MissionService extends TownyMissionService {
 
     private static MissionService singleton;
 
+    /**
+     * Instantiates a new Mission service.
+     *
+     * @param instance the instance
+     */
+    public MissionService(TownyMissionInstance instance) {
+        super(instance);
+    }
 
     /**
      * Gets instance.
@@ -31,7 +46,7 @@ public class MissionService extends TownyMissionService {
      */
     public static MissionService getInstance() {
         if (singleton == null) {
-            singleton = new MissionService();
+            singleton = new MissionService(TownyMissionInstance.getInstance());
         }
         return singleton;
     }
@@ -43,34 +58,99 @@ public class MissionService extends TownyMissionService {
      * @return the boolean
      */
     private boolean canStartMission(Player player) {
-        return new SanityChecker(instance).target(player)
-                .hasTown()
-                .hasPermission("townymission.player")
-                .customCheck(() -> {
-                    Town town = TownyUtil.residentOf(player);
+        if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+            TownyMissionBukkit townyMissionBukkit = TownyMissionInstance.getInstance();
+            return new BukkitChecker(townyMissionBukkit).target(player)
+                    .hasTown()
+                    .hasPermission("townymission.player")
+                    .customCheck(() -> {
+                        Town town = TownyUtil.residentOf(player);
 
-                    if (MissionDao.getInstance().getStartedMission(town) == null) {
-                        return true;
-                    } else {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
-                        return false;
-                    }
-                }).check();
+                        if (MissionDao.getInstance().getStartedMission(town) == null) {
+                            return true;
+                        } else {
+                            BukkitUtil.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
+                            return false;
+                        }
+                    }).check();
+        } else {
+            // TODO: Async this!!!!
+            boolean overallResult = true;
+            ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(player.getUniqueId());
+            // Send the message to the server
+            UUID uuid = UUID.randomUUID();
+            // Check whether has town
+            PluginMessage request = new PluginMessage(
+                    proxiedPlayer.getUniqueId(),
+                    "sanitycheck:request",
+                    uuid,
+                    1,
+                    new String[]{"hasTown"}
+            );
+
+            // Registering CompletableFuture to get response
+            PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+            // We know that data[0] should contain the boolean response
+            if (!Boolean.parseBoolean(response.getData()[0])) {
+                return false;
+            }
+
+            uuid = UUID.randomUUID();
+            // Check whether has permission
+            request = new PluginMessage(
+                    proxiedPlayer.getUniqueId(),
+                    "sanitycheck:request",
+                    uuid,
+                    1,
+                    new String[]{"hasPermission", "townymission.player"}
+            );
+
+            response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+            if (!Boolean.parseBoolean(response.getData()[0])) {
+                return false;
+            }
+
+            uuid = UUID.randomUUID();
+            // Check whether has permission
+            request = new PluginMessage(
+                    proxiedPlayer.getUniqueId(),
+                    "data:request",
+                    uuid,
+                    1,
+                    new String[]{"getTownUUID"}
+            );
+
+            response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+            String townUUID = request.getData()[0];
+
+            if (MissionDao.getInstance().getStartedMission(UUID.fromString(townUUID)) == null) {
+                return true;
+            } else {
+                BukkitUtil.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
+                return false;
+            }
+        }
     }
 
     private boolean canAbortMission(Player player, MissionEntry entry) {
-        SanityChecker checker = new SanityChecker(instance).target(player)
-                .hasTown()
-                .hasStarted()
-                .hasPermission("townymission.player")
-                .customCheck(() -> {
-                    if (TownyUtil.mayorOf(player) != null)
-                        return true;
+        if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+            TownyMissionBukkit townyMissionBukkit = TownyMissionInstance.getInstance();
+            BukkitChecker checker = new BukkitChecker(townyMissionBukkit).target(player)
+                    .hasTown()
+                    .hasStarted()
+                    .hasPermission("townymission.player")
+                    .customCheck(() -> {
+                        if (TownyUtil.mayorOf(player) != null)
+                            return true;
 
-                    return entry.getStartedPlayer().equals(player);
-                });
+                        return entry.getStartedPlayer().equals(player);
+                    });
 
-        return checker.check();
+            return checker.check();
+        } else {
+            //TODO: fix this
+            return false;
+        }
     }
 
     /**
@@ -101,7 +181,7 @@ public class MissionService extends TownyMissionService {
 
         MissionEntry entry = taskEntries.get(missionIdx - 1);
 
-        entry.setStartedTime(BukkitUtil.currentTime());
+        entry.setStartedTime(Util.currentTime());
         entry.setStartedPlayer(player);
         MissionDao.getInstance().update(entry);
 
@@ -129,7 +209,7 @@ public class MissionService extends TownyMissionService {
             return;
 
         MissionDao.getInstance().remove(entry);
-        CooldownService.getInstance().startCooldown(entry.getTown(), BukkitUtil.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
     }
 
     /**
@@ -142,7 +222,7 @@ public class MissionService extends TownyMissionService {
         if (entry.isTimedout() && !entry.isCompleted()) return;
 
         MissionDao.getInstance().remove(entry);
-        MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, BukkitUtil.currentTime());
+        MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, Util.currentTime());
         MissionHistoryDao.getInstance().add(missionHistoryEntry);
         if (SprintDao.getInstance().contains(missionHistoryEntry.getTown())) {
             SprintEntry sprintEntry = SprintDao.getInstance().get(missionHistoryEntry.getTown().getUUID().toString());
@@ -156,7 +236,7 @@ public class MissionService extends TownyMissionService {
                     instance.getStatsConfig().getInt("sprint.current"),
                     instance.getStatsConfig().getInt("season.current")));
         }
-        CooldownService.getInstance().startCooldown(entry.getTown(), BukkitUtil.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
     }
 
     /**
@@ -199,6 +279,9 @@ public class MissionService extends TownyMissionService {
         return averageContribution;
     }
 
+    /**
+     * Sprint end clean up.
+     */
     public void sprintEndCleanUp() {
         List<MissionEntry> entryList = MissionDao.getInstance().getEntries();
         for (MissionEntry entry : entryList) {

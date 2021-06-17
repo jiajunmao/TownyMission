@@ -1,9 +1,10 @@
 package world.naturecraft.townymission.bukkit.utils;
 
 import org.bukkit.entity.Player;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.utils.BooleanChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +13,12 @@ import java.util.Locale;
 /**
  * The type Sanity checker.
  */
-public class SanityChecker {
+public class BukkitChecker {
 
     private final List<String> permissions;
     private final List<BooleanChecker> customChecks;
     private final MissionDao missionDao;
-    private final TownyMission instance;
+    private final TownyMissionBukkit instance;
     private boolean checkHasTown;
     private boolean checkIsMayor;
     private boolean checkHasStarted;
@@ -31,7 +32,7 @@ public class SanityChecker {
      *
      * @param instance the instance
      */
-    public SanityChecker(TownyMission instance) {
+    public BukkitChecker(TownyMissionBukkit instance) {
         this.instance = instance;
         missionDao = MissionDao.getInstance();
         customChecks = new ArrayList<>();
@@ -45,7 +46,7 @@ public class SanityChecker {
      * @param player the player
      * @return the sanity checker
      */
-    public SanityChecker target(Player player) {
+    public BukkitChecker target(Player player) {
         this.player = player;
         return this;
     }
@@ -56,7 +57,7 @@ public class SanityChecker {
      * @param isSilent the is silent
      * @return the sanity checker
      */
-    public SanityChecker silent(boolean isSilent) {
+    public BukkitChecker silent(boolean isSilent) {
         this.isSilent = isSilent;
         return this;
     }
@@ -66,7 +67,7 @@ public class SanityChecker {
      *
      * @return the sanity checker
      */
-    public SanityChecker hasTown() {
+    public BukkitChecker hasTown() {
         checkHasTown = true;
         return this;
     }
@@ -76,7 +77,7 @@ public class SanityChecker {
      *
      * @return the sanity checker
      */
-    public SanityChecker isMayor() {
+    public BukkitChecker isMayor() {
         checkIsMayor = true;
         return this;
     }
@@ -86,7 +87,7 @@ public class SanityChecker {
      *
      * @return the sanity checker
      */
-    public SanityChecker hasStarted() {
+    public BukkitChecker hasStarted() {
         checkHasStarted = true;
         return this;
     }
@@ -97,7 +98,7 @@ public class SanityChecker {
      * @param type the type
      * @return the sanity checker
      */
-    public SanityChecker isMissionType(MissionType type) {
+    public BukkitChecker isMissionType(MissionType type) {
         checkIsMissionType = true;
         missionType = type;
         return this;
@@ -109,7 +110,7 @@ public class SanityChecker {
      * @param permission the permission
      * @return the sanity checker
      */
-    public SanityChecker hasPermission(String permission) {
+    public BukkitChecker hasPermission(String permission) {
         permissions.add(permission);
         return this;
     }
@@ -120,7 +121,7 @@ public class SanityChecker {
      * @param checker the checker
      * @return the sanity checker
      */
-    public SanityChecker customCheck(BooleanChecker checker) {
+    public BukkitChecker customCheck(BooleanChecker checker) {
         // Other logic
 
         customChecks.add(checker);
@@ -183,7 +184,6 @@ public class SanityChecker {
         }
 
         if (customChecks.size() != 0) {
-            boolean result = true;
             for (BooleanChecker checker : customChecks) {
                 if (!checker.check()) {
                     return false;

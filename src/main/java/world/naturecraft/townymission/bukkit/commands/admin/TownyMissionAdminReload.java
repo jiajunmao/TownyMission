@@ -9,10 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.core.data.yaml.*;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionAdminReload(TownyMission instance) {
+    public TownyMissionAdminReload(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -40,9 +41,9 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand {
      */
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return new SanityChecker(instance).target(player)
-                .customCheck(() -> new SanityChecker(instance).target(player).hasPermission("tms.admin").check()
-                        || new SanityChecker(instance).target(player).hasPermission("tms.commands.reload").check())
+        return new BukkitChecker(instance).target(player)
+                .customCheck(() -> new BukkitChecker(instance).target(player).hasPermission("tms.admin").check()
+                        || new BukkitChecker(instance).target(player).hasPermission("tms.commands.reload").check())
                 .customCheck(() -> {
                     // /tms admin reload
                     if (args.length == 2 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("reload"))
@@ -72,16 +73,21 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand {
             Player player = (Player) sender;
             if (!sanityCheck(player, args)) return false;
 
-            instance.reloadConfigs();
+            try {
+                instance.reloadConfigs();
 
-            if (instance.getStorageType().equals(StorageType.YAML)) {
-                new CooldownYamlStorage(instance);
-                new MissionHistoryYamlStorage(instance);
-                new MissionYamlStorage(instance);
-                new SeasonYamlStorage(instance);
-                new SeasonHistoryYamlStorage(instance);
-                new SprintYamlStorage(instance);
-                new SprintHistoryYamlStorage(instance);
+                if (instance.getStorageType().equals(StorageType.YAML)) {
+                    new CooldownYamlStorage(instance);
+                    new MissionHistoryYamlStorage(instance);
+                    new MissionYamlStorage(instance);
+                    new SeasonYamlStorage(instance);
+                    new SeasonHistoryYamlStorage(instance);
+                    new SprintYamlStorage(instance);
+                    new SprintHistoryYamlStorage(instance);
+                }
+            } catch (ConfigLoadingException e) {
+                e.printStackTrace();
+                BukkitUtil.sendMsg(player, instance.getLangEntry("commands.reload.onFailure"));
             }
 
             BukkitUtil.sendMsg(player, instance.getLangEntry("commands.reload.onSuccess"));

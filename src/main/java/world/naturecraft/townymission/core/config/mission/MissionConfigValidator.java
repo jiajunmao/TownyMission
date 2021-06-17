@@ -2,17 +2,17 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.bukkit.config.mission;
+package world.naturecraft.townymission.core.config.mission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.enums.MissionType;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.Util;
 
 /**
  * The type Custom config validator.
@@ -20,6 +20,12 @@ import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 public class MissionConfigValidator {
 
 
+    /**
+     * Check mission config.
+     *
+     * @param missionConfig the mission config
+     * @param missionType   the mission type
+     */
     public static void checkMissionConfig(FileConfiguration missionConfig, MissionType missionType) {
         for (String key : missionConfig.getKeys(false)) {
             try {
@@ -69,23 +75,23 @@ public class MissionConfigValidator {
 
                 String path = key + ".amount";
                 String content = missionConfig.getString(path);
-                if (!BukkitUtil.isInt(content)) {
+                if (!Util.isInt(content)) {
                     throwException(missionConfig, key, "Amount of entry " + key + " is not a integer");
                 }
 
                 path = key + ".reward";
                 content = missionConfig.getString(path);
-                if (!BukkitUtil.isInt(content)) {
+                if (!Util.isInt(content)) {
                     throwException(missionConfig, key, "Reward of entry " + key + " is not a integer");
                 }
 
                 path = key + ".timeAllowed";
                 content = missionConfig.getString(path);
-                if (!BukkitUtil.isInt(content)) {
+                if (!Util.isInt(content)) {
                     throwException(missionConfig, key, "TimeAllowed of entry " + key + " is not a integer");
                 }
             } catch (ConfigParsingException e) {
-                TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+                TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
                 instance.getLogger().warning(e.getMessage());
             }
         }

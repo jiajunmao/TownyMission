@@ -9,12 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.bukkit.config.mission.MissionConfigParser;
-import world.naturecraft.townymission.bukkit.utils.MultilineBuilder;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.core.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.core.utils.MultilineBuilder;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
 import java.util.ArrayList;
@@ -32,16 +32,16 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionAdminListMissions(TownyMission instance) {
+    public TownyMissionAdminListMissions(TownyMissionBukkit instance) {
         super(instance);
     }
 
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return new SanityChecker(instance).target(player)
+        return new BukkitChecker(instance).target(player)
                 .customCheck(() -> {
-                    return new SanityChecker(instance).target(player).hasPermission("townymission.admin").check()
-                            || new SanityChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
+                    return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
+                            || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
                 }).customCheck(() -> {
                     // /tms admin listMission #type
                     if (args.length == 3) {

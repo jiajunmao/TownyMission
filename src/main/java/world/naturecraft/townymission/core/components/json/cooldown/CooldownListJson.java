@@ -9,35 +9,68 @@ import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Cooldown list json.
+ */
 public class CooldownListJson {
 
     @JsonProperty("cooldownJsonList")
     private List<CooldownJson> cooldownJsonList;
 
+    /**
+     * Instantiates a new Cooldown list json.
+     *
+     * @param cooldownJsonList the cooldown json list
+     */
     @ConstructorProperties({"cooldownJsonList"})
     public CooldownListJson(List<CooldownJson> cooldownJsonList) {
         this.cooldownJsonList = cooldownJsonList;
     }
 
+    /**
+     * Instantiates a new Cooldown list json.
+     */
     public CooldownListJson() {
         cooldownJsonList = new ArrayList<>();
     }
 
+    /**
+     * Gets cooldown json list.
+     *
+     * @return the cooldown json list
+     */
     @JsonProperty("cooldownJsonList")
     public List<CooldownJson> getCooldownJsonList() {
         return cooldownJsonList;
     }
 
+    /**
+     * Add cooldown.
+     *
+     * @param cooldownJson the cooldown json
+     */
     @JsonIgnore
     public void addCooldown(CooldownJson cooldownJson) {
         cooldownJsonList.add(cooldownJson);
     }
 
+    /**
+     * Add cooldown.
+     *
+     * @param startedTime the started time
+     * @param cooldown    the cooldown
+     */
     @JsonIgnore
     public void addCooldown(long startedTime, long cooldown) {
         cooldownJsonList.add(new CooldownJson(startedTime, cooldown));
     }
 
+    /**
+     * Gets num finished.
+     *
+     * @param remove the remove
+     * @return the num finished
+     */
     @JsonIgnore
     public int getNumFinished(boolean remove) {
         int num = 0;
@@ -56,6 +89,11 @@ public class CooldownListJson {
         return num;
     }
 
+    /**
+     * Gets num total.
+     *
+     * @return the num total
+     */
     @JsonIgnore
     public int getNumTotal() {
         return cooldownJsonList.size();

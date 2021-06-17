@@ -5,7 +5,8 @@
 package world.naturecraft.townymission.core.services;
 
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 
 /**
  * The type Towny mission service.
@@ -15,12 +16,14 @@ public abstract class TownyMissionService {
     /**
      * The Instance.
      */
-    protected TownyMission instance;
+    protected TownyMissionInstance instance;
 
     /**
      * Instantiates a new Towny mission service.
+     *
+     * @param instance the instance
      */
-    public TownyMissionService() {
-        this.instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+    public TownyMissionService(TownyMissionInstance instance) {
+        this.instance = instance;
     }
 }

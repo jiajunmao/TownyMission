@@ -6,7 +6,7 @@ package world.naturecraft.townymission.core.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
@@ -25,20 +25,34 @@ import java.util.UUID;
 public class SprintService {
 
     private static SprintService singleton;
-    private TownyMission instance;
+    private TownyMissionBukkit instance;
 
-    public SprintService(TownyMission instance) {
+    /**
+     * Instantiates a new Sprint service.
+     *
+     * @param instance the instance
+     */
+    public SprintService(TownyMissionBukkit instance) {
         this.instance = instance;
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static SprintService getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
+            TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
             singleton = new SprintService(instance);
         }
 
         return singleton;
     }
+
+    /**
+     * Sprint end clean up.
+     */
     public void sprintEndCleanUp() {
         List<TownRankJson> townRankJsons = (List<TownRankJson>) RankUtil.sort(SprintDao.getInstance().getEntriesAsJson());
         RankJson rankJson = new RankJson(RankType.SPRINT, townRankJsons);
