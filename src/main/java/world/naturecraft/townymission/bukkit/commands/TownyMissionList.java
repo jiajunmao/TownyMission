@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.gui.MissionManageGui;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
@@ -27,7 +27,7 @@ public class TownyMissionList extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionList(TownyMission instance) {
+    public TownyMissionList(TownyMissionBukkit instance) {
         super(instance);
     }
 

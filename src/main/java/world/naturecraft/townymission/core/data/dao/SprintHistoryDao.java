@@ -6,6 +6,7 @@ package world.naturecraft.townymission.core.data.dao;
 
 import world.naturecraft.townymission.core.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SprintHistoryStorage;
 import world.naturecraft.townymission.core.services.StorageService;
 

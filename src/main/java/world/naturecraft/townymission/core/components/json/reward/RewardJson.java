@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.entity.Rankable;
 import world.naturecraft.townymission.core.components.enums.RewardType;
-import world.naturecraft.townymission.bukkit.utils.RewardJsonFactory;
+import world.naturecraft.townymission.core.utils.RewardJsonFactory;
 
 /**
  * The type Reward json.

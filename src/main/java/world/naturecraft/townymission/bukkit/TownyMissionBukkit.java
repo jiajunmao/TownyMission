@@ -1,40 +1,47 @@
 package world.naturecraft.townymission.bukkit;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
-import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingError;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.bukkit.commands.*;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminListMissions;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminReload;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminStartSeason;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.core.components.gui.MissionManageGui;
-import world.naturecraft.townymission.bukkit.config.StatsConfigLoader;
-import world.naturecraft.townymission.bukkit.config.mission.MissionConfigLoader;
+import world.naturecraft.townymission.core.config.LangConfig;
+import world.naturecraft.townymission.core.config.MainConfig;
+import world.naturecraft.townymission.core.config.StatsConfig;
+import world.naturecraft.townymission.core.config.mission.MissionConfig;
 import world.naturecraft.townymission.bukkit.listeners.external.MissionListener;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
+import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
-import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 /**
  * The type Towny mission.
  */
-public class TownyMission extends JavaPlugin {
+public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstance {
 
     private final Logger logger = getLogger();
-    private HikariDataSource db;
-    private MissionConfigLoader missionConfigLoader;
-    private StatsConfigLoader statsConfigLoader;
+    private MissionConfig missionConfig;
+    private StatsConfig statsConfig;
+    private MainConfig mainConfig;
+    private LangConfig langConfig;
     private TownyMissionRoot rootCmd;
     private StorageType storageType;
 
@@ -51,17 +58,22 @@ public class TownyMission extends JavaPlugin {
         logger.info("-----------------------------------------------------------------");
 
         logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing configuration"));
+
+        TownyMissionInstanceType.serverType = ServerType.BUKKIT;
+
         /**
          * This is saving the config.yml (Default config)
          */
         this.saveDefaultConfig();
         try {
-            missionConfigLoader = new MissionConfigLoader(this);
-            statsConfigLoader = new StatsConfigLoader(this);
-        } catch (IOException | InvalidConfigurationException e) {
+            missionConfig = new MissionConfig();
+            statsConfig = new StatsConfig();
+            mainConfig = new MainConfig();
+            langConfig = new LangConfig();
+        } catch (ConfigLoadingException e) {
             logger.severe("IO operation fault during custom config initialization");
-            Bukkit.getPluginManager().disablePlugin(this);
             e.printStackTrace();
+            onDisable();
         }
 
         /**
@@ -90,10 +102,11 @@ public class TownyMission extends JavaPlugin {
     public void onDisable() {
         logger.info("=========   TOWNYMISSION DISABLING   =========");
         if (storageType.equals(StorageType.MYSQL)) {
-            if (db != null) {
-                db.close();
+            if (StorageService.getInstance().getDataSource() != null) {
+                StorageService.getInstance().closeDb();
             }
         }
+        Bukkit.getPluginManager().disablePlugin(this);
     }
 
     /**
@@ -153,44 +166,21 @@ public class TownyMission extends JavaPlugin {
      * Connect.
      */
     public void connect() {
-        String dbAddress = getConfig().getString("database.address");
-        String dbPort = getConfig().getString("database.port");
-        String dbName = getConfig().getString("database.name");
-        String dbUsername = getConfig().getString("database.username");
-        String dbPassword = getConfig().getString("database.password");
-
-        HikariConfig config = new HikariConfig();
-        config.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        config.addDataSourceProperty("serverName", dbAddress);
-        config.addDataSourceProperty("port", dbPort);
-        config.addDataSourceProperty("databaseName", dbName);
-        config.setUsername(dbUsername);
-        config.setPassword(dbPassword);
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.setMaximumPoolSize(5);
-        config.setMinimumIdle(5);
-        config.setConnectionTimeout(10000);
-        config.setIdleTimeout(600000);
-        config.setMaxLifetime(180000);
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<String> future = executor.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                db = new HikariDataSource(config);
-                return "connected";
-            }
-        });
-
         try {
-            future.get(10, TimeUnit.SECONDS);
-        } catch (TimeoutException | ExecutionException | InterruptedException e) {
-            future.cancel(true);
-            Bukkit.getPluginManager().disablePlugin(this);
+            StorageService.getInstance().connectDb();
+        } catch (DbConnectException e) {
             e.printStackTrace();
+            onDisable();
         }
+    }
+
+    /**
+     * Reload configs.
+     */
+    public void reloadConfigs() throws ConfigLoadingException {
+        this.reloadConfig();
+        missionConfig = new MissionConfig();
+        statsConfig = new StatsConfig();
     }
 
     /**
@@ -199,54 +189,59 @@ public class TownyMission extends JavaPlugin {
      * @param path the path
      * @return the lang entry
      */
+    @Override
     public String getLangEntry(String path) {
         String finalString = "";
-        finalString += getCustomConfig().getLangConfig().getString("prefix") + " ";
-        finalString += getCustomConfig().getLangConfig().getString(path);
+        finalString += langConfig.getLangConfig().getString("prefix") + " ";
+        finalString += langConfig.getLangConfig().getString(path);
         return finalString;
     }
-
-    /**
-     * Reload configs.
-     */
-    public void reloadConfigs() {
-        this.reloadConfig();
-        try {
-            missionConfigLoader = new MissionConfigLoader(this);
-            statsConfigLoader = new StatsConfigLoader(this);
-        } catch (IOException | InvalidConfigurationException e) {
-            throw new ConfigLoadingError(e);
-        }
-    }
-
-    /**
-     * Gets storage type.
-     *
-     * @return the storage type
-     */
-    public StorageType getStorageType() {
-        return storageType;
-    }
-
     /**
      * Gets custom config.
      *
      * @return the custom config
      */
-    public MissionConfigLoader getCustomConfig() {
-        return missionConfigLoader;
+    public MissionConfig getCustomConfig() {
+        return missionConfig;
     }
 
-    /**
-     * Gets datasource.
-     *
-     * @return the datasource
-     */
-    public HikariDataSource getDatasource() {
-        return db;
+    @Override
+    public StatsConfig getStatsConfig() {
+        return statsConfig;
     }
 
-    public StatsConfigLoader getStatsConfig() {
-        return statsConfigLoader;
+    @Override
+    public MainConfig getInstanceConfig() {
+        return mainConfig;
+    }
+
+    @Override
+    public ServerType getServerType() {
+        return ServerType.BUKKIT;
+    }
+
+    @Override
+    public StorageType getStorageType() {
+        return storageType;
+    }
+
+    @Override
+    public File getInstanceDataFolder() {
+        return this.getDataFolder();
+    }
+
+    @Override
+    public void saveInstanceResource(String filePath, boolean replace) {
+        this.saveResource(filePath, replace);
+    }
+
+    @Override
+    public InputStream getInstanceResource(String filePath) {
+        return this.getResource(filePath);
+    }
+
+    @Override
+    public Logger getLogger() {
+        return this.getLogger();
     }
 }

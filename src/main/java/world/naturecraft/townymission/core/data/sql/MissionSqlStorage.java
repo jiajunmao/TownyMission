@@ -2,12 +2,12 @@ package world.naturecraft.townymission.core.data.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.MissionStorage;
+import world.naturecraft.townymission.core.services.StorageService;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,8 +40,9 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
      */
     public static MissionSqlStorage getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new MissionSqlStorage(instance.getDatasource(), BukkitUtil.getDbName(DbType.MISSION));
+            singleton = new MissionSqlStorage(
+                    StorageService.getInstance().getDataSource(),
+                    Util.getDbName(DbType.MISSION));
         }
         return singleton;
     }

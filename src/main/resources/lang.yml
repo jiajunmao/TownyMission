@@ -32,6 +32,7 @@ commands:
     onSuccess: "&fYou have successfully completed the mission!"
   reload:
     onSuccess: "&fYou have successfully reloaded config!"
+    onFailure: "&cSomething went wrong during reload. Some config might not be valid. Please check console!"
   startSeason:
     onSuccess: "&fYou have successfully started season!"
     onAlreadyStarted: "&cYou have already strated season(s)! You cannot start it again!"

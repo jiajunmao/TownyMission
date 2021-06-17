@@ -12,9 +12,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.bukkit.utils.MissionJsonFactory;
+import world.naturecraft.townymission.core.utils.MissionJsonFactory;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -206,7 +207,7 @@ public class MissionEntry extends DataEntity {
 
         ItemMeta meta = stack.getItemMeta();
 
-        String displayName = "&r&6&l" + BukkitUtil.capitalizeFirst(missionType.name()) + " Mission";
+        String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
         meta.setDisplayName(BukkitUtil.translateColor(displayName));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

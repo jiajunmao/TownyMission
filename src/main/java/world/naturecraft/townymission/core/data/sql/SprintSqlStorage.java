@@ -1,12 +1,12 @@
 package world.naturecraft.townymission.core.data.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SprintStorage;
+import world.naturecraft.townymission.core.services.StorageService;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,8 +39,9 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
      */
     public static SprintSqlStorage getInstance() {
         if (singleton == null) {
-            TownyMission instance = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new SprintSqlStorage(instance.getDatasource(), BukkitUtil.getDbName(DbType.SPRINT));
+            singleton = new SprintSqlStorage(
+                    StorageService.getInstance().getDataSource(),
+                    Util.getDbName(DbType.SPRINT));
         }
         return singleton;
     }

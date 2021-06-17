@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
@@ -22,7 +22,7 @@ public class TownFallListener extends TownyMissionListener {
      *
      * @param instance the instance
      */
-    public TownFallListener(TownyMission instance) {
+    public TownFallListener(TownyMissionBukkit instance) {
         super(instance);
     }
 

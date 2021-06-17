@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.bukkit.utils;
+package world.naturecraft.townymission.core.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.core.components.enums.RewardType;

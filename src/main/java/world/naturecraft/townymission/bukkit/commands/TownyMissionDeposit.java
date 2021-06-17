@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.events.DoMissionEvent;
 import world.naturecraft.townymission.bukkit.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
@@ -22,7 +22,7 @@ import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.json.mission.ResourceMissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.TimerService;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
@@ -39,7 +39,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionDeposit(TownyMission instance) {
+    public TownyMissionDeposit(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -129,7 +129,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
      */
     public boolean sanityCheck(@NotNull Player player, String[] args) {
         MissionDao missionDao = MissionDao.getInstance();
-        return new SanityChecker(instance)
+        return new BukkitChecker(instance)
                 .target(player)
                 .hasTown()
                 .hasStarted()

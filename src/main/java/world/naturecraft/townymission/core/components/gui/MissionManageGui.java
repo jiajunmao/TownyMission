@@ -15,16 +15,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.bukkit.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.core.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.CooldownService;
 import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.TimerService;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ import java.util.UUID;
  */
 public class MissionManageGui extends TownyMissionGui {
 
-    private final TownyMission instance;
+    private final TownyMissionBukkit instance;
     private final String guiTitle;
 
     /**
@@ -44,7 +45,7 @@ public class MissionManageGui extends TownyMissionGui {
      *
      * @param instance the instance
      */
-    public MissionManageGui(TownyMission instance) {
+    public MissionManageGui(TownyMissionBukkit instance) {
         this.instance = instance;
         guiTitle = "Mission Manage";
         inv = Bukkit.createInventory(null, 36, guiTitle);
@@ -87,9 +88,9 @@ public class MissionManageGui extends TownyMissionGui {
             try {
                 MissionEntry entry = new MissionEntry(UUID.randomUUID(),
                         mission.getMissionType().name(),
-                        BukkitUtil.currentTime(),
+                        Util.currentTime(),
                         0,
-                        BukkitUtil.hrToMs(mission.getHrAllowed()),
+                        Util.hrToMs(mission.getHrAllowed()),
                         mission.toJson(),
                         town.getName(),
                         null);

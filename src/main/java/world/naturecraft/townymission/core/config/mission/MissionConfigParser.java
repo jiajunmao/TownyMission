@@ -2,13 +2,13 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.bukkit.config.mission;
+package world.naturecraft.townymission.core.config.mission;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.*;
 
@@ -63,7 +63,7 @@ public class MissionConfigParser {
      * @param instance    the instance
      * @return the list
      */
-    public static List<MissionJson> parse(MissionType missionType, TownyMission instance) {
+    public static List<MissionJson> parse(MissionType missionType, TownyMissionBukkit instance) {
         return parse(missionType, instance.getCustomConfig().getMissionConfig(missionType));
     }
 
@@ -73,7 +73,7 @@ public class MissionConfigParser {
      * @param instance the instance
      * @return the list
      */
-    public static List<MissionJson> parseAll(TownyMission instance) {
+    public static List<MissionJson> parseAll(TownyMissionBukkit instance) {
         List<MissionJson> all = new ArrayList<>();
         for (MissionType missionType : MissionType.values()) {
             List<MissionJson> customList = parse(missionType, instance);

@@ -1,44 +1,45 @@
-package world.naturecraft.townymission.bukkit.config;
+package world.naturecraft.townymission.core.config;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.enums.RankType;
 
 import java.io.File;
 import java.io.IOException;
 
-public class StatsConfigLoader {
+public class StatsConfig {
 
-    private final TownyMission instance;
+    private final TownyMissionInstance instance;
     private File customConfig;
     private FileConfiguration customFileConfig;
 
-    public StatsConfigLoader(TownyMission instance) {
-        this.instance = instance;
-        createStatsConfig();
+    public StatsConfig() throws ConfigLoadingException {
+        this.instance = TownyMissionInstance.getInstance();
+        try {
+            createStatsConfig();
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new ConfigLoadingException(e);
+        }
     }
 
-    public void createStatsConfig() {
+    public void createStatsConfig() throws IOException, InvalidConfigurationException {
         String fileName = "stats.yml";
         String filePath = "datastore" + File.separator + fileName;
-        customConfig = new File(instance.getDataFolder(), filePath);
+        customConfig = new File(instance.getInstanceDataFolder(), filePath);
         if (!customConfig.exists()) {
             customConfig.getParentFile().getParentFile().mkdirs();
             customConfig.getParentFile().mkdirs();
-            instance.saveResource(filePath, false);
+            instance.saveInstanceResource(filePath, false);
         }
 
         customFileConfig = new YamlConfiguration();
-        try {
-            customFileConfig.load(customConfig);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        customFileConfig.load(customConfig);
     }
 
     public int getCurrent(RankType rankType) {
@@ -72,7 +73,7 @@ public class StatsConfigLoader {
         try {
             customFileConfig.save(customConfig);
         } catch (IOException e) {
-            throw new DataProcessException(e);
+            throw new ConfigSavingException(e);
         }
     }
 }

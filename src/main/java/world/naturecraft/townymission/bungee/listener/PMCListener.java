@@ -8,7 +8,7 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import org.bukkit.event.EventHandler;
 
-public class PluginMessageListener implements Listener {
+public class PMCListener implements Listener {
 
     @EventHandler
     public void on(PluginMessageEvent event) {

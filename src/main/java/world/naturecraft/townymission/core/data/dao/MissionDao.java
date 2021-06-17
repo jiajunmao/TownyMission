@@ -10,12 +10,14 @@ import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
-import world.naturecraft.townymission.bukkit.utils.EntryFilter;
+import world.naturecraft.townymission.core.components.enums.ServerType;
+import world.naturecraft.townymission.core.utils.EntryFilter;
 import world.naturecraft.townymission.core.data.db.MissionStorage;
 import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Task dao.
@@ -118,6 +120,18 @@ public class MissionDao extends Dao<MissionEntry> {
         return null;
     }
 
+    public MissionEntry getStartedMission(UUID townUUID) {
+        for (MissionEntry e : db.getEntries()) {
+            if (e.getTown().getUUID().equals(townUUID)) {
+                if (e.getStartedTime() != 0) {
+                    return e;
+                }
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Gets started missions.
      *
@@ -144,7 +158,7 @@ public class MissionDao extends Dao<MissionEntry> {
      * @return The corresponding MissionEntry
      */
     public MissionEntry getIndexedMission(Town town, int index) {
-        List<MissionEntry> missionEntries = MissionDao.getInstance().getTownMissions(town);
+        List<MissionEntry> missionEntries = getTownMissions(town);
         return missionEntries.get(index - 1);
     }
 

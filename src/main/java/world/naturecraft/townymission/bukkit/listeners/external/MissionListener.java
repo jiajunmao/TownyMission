@@ -16,7 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import teozfrank.ultimatevotes.events.VoteRewardEvent;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.events.DoMissionEvent;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.MissionType;
@@ -24,7 +24,7 @@ import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.components.json.mission.MobMissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 
 /**
@@ -37,7 +37,7 @@ public class MissionListener extends TownyMissionListener {
      *
      * @param instance the instance
      */
-    public MissionListener(TownyMission instance) {
+    public MissionListener(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -50,12 +50,12 @@ public class MissionListener extends TownyMissionListener {
     public void onVoteReceived(VoteRewardEvent e) {
         Player player = e.getPlayer();
 
-        SanityChecker sanityChecker = new SanityChecker(instance).target(player)
+        BukkitChecker bukkitChecker = new BukkitChecker(instance).target(player)
                 .hasTown()
                 .hasStarted()
                 .isMissionType(MissionType.VOTE);
 
-        doLogic(sanityChecker, MissionType.VOTE, player, e.getUnclaimedCount());
+        doLogic(bukkitChecker, MissionType.VOTE, player, e.getUnclaimedCount());
     }
 
     /**
@@ -66,7 +66,7 @@ public class MissionListener extends TownyMissionListener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMoneyReceive(CMIUserBalanceChangeEvent event) {
         Player player = event.getUser().getPlayer();
-        SanityChecker checker = new SanityChecker(instance).target(player).silent(true)
+        BukkitChecker checker = new BukkitChecker(instance).target(player).silent(true)
                 .hasTown()
                 .hasStarted()
                 .isMissionType(MissionType.MONEY)
@@ -83,7 +83,7 @@ public class MissionListener extends TownyMissionListener {
      */
     @EventHandler
     public void onTownExpansion(TownClaimEvent e) {
-        SanityChecker checker = new SanityChecker(instance).target(e.getResident().getPlayer())
+        BukkitChecker checker = new BukkitChecker(instance).target(e.getResident().getPlayer())
                 .hasTown()
                 .hasStarted()
                 .isMissionType(MissionType.EXPANSION)
@@ -112,7 +112,7 @@ public class MissionListener extends TownyMissionListener {
 
         if (killer != null) {
 
-            SanityChecker checker = new SanityChecker(instance).target(killer)
+            BukkitChecker checker = new BukkitChecker(instance).target(killer)
                     .hasTown()
                     .hasStarted()
                     .isMissionType(MissionType.MOB)
@@ -129,16 +129,16 @@ public class MissionListener extends TownyMissionListener {
     /**
      * Do logic.
      *
-     * @param sanityChecker the sanity checker
+     * @param bukkitChecker the sanity checker
      * @param missionType   the mission type
      * @param player        the player
      * @param amount        the amount
      */
-    public void doLogic(SanityChecker sanityChecker, MissionType missionType, Player player, int amount) {
+    public void doLogic(BukkitChecker bukkitChecker, MissionType missionType, Player player, int amount) {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
-                if (sanityChecker.check()) {
+                if (bukkitChecker.check()) {
                     Town town = TownyUtil.residentOf(player);
                     MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town, missionType);
 

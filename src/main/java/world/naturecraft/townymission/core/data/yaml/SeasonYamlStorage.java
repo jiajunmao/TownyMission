@@ -4,10 +4,10 @@
 
 package world.naturecraft.townymission.core.data.yaml;
 
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SeasonStorage;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
      *
      * @param instance the instance
      */
-    public SeasonYamlStorage(TownyMission instance) {
+    public SeasonYamlStorage(TownyMissionInstance instance) {
         super(instance, DbType.SEASON);
         singleton = this;
     }
@@ -38,8 +38,7 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
      */
     public static SeasonYamlStorage getInstance() {
         if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new SeasonYamlStorage(townyMission);
+            new SeasonYamlStorage(TownyMissionInstance.getInstance());
         }
         return singleton;
     }

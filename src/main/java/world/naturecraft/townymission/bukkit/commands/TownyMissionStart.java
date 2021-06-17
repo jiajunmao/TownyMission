@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.TimerService;
-import world.naturecraft.townymission.bukkit.utils.SanityChecker;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
@@ -35,7 +35,7 @@ public class TownyMissionStart extends TownyMissionCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionStart(TownyMission instance) {
+    public TownyMissionStart(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -91,7 +91,7 @@ public class TownyMissionStart extends TownyMissionCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tm start <num>
-        return new SanityChecker(instance).target(player)
+        return new BukkitChecker(instance).target(player)
                 .hasTown()
                 .hasPermission("townymission.player")
                 .customCheck(() -> {

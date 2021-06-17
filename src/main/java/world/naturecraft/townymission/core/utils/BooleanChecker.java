@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.bukkit.utils;
+package world.naturecraft.townymission.core.utils;
 
 /**
  * The interface Boolean checker.

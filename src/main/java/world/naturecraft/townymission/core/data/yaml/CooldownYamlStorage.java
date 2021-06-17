@@ -6,10 +6,10 @@ package world.naturecraft.townymission.core.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.bukkit.TownyMission;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
+import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.CooldownStorage;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
      *
      * @param instance the instance
      */
-    public CooldownYamlStorage(TownyMission instance) {
+    public CooldownYamlStorage(TownyMissionInstance instance) {
         super(instance, DbType.COOLDOWN);
         singleton = this;
     }
@@ -40,8 +40,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
      */
     public static CooldownYamlStorage getInstance() {
         if (singleton == null) {
-            TownyMission townyMission = (TownyMission) Bukkit.getPluginManager().getPlugin("TownyMission");
-            new CooldownYamlStorage(townyMission);
+            new CooldownYamlStorage(TownyMissionInstance.getInstance());
         }
         return singleton;
     }
