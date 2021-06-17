@@ -1,8 +1,5 @@
 package world.naturecraft.townymission.bukkit.listeners.internal;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
-import net.md_5.bungee.api.ProxyServer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -37,7 +34,7 @@ public class PMCListener implements PluginMessageListener {
         String subchannel = request.getChannel();
         UUID uuid = request.getMessageUUID();
         int size = request.getSize();
-        String args[] = request.getData();
+        String[] args = request.getData();
 
         if (subchannel.equalsIgnoreCase("sanitycheck:request")) {
             TownyMissionBukkit townyMissionInstance = TownyMissionInstance.getInstance();
@@ -65,7 +62,7 @@ public class PMCListener implements PluginMessageListener {
                     "sanitycheck:response",
                     uuid, 1,
                     new String[]{String.valueOf(result)}
-                    ));
+            ));
         } else if (subchannel.equalsIgnoreCase("data:request")) {
             TownyMissionBukkit townyMissionBukkit = TownyMissionInstance.getInstance();
             String[] data = null;

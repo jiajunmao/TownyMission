@@ -9,9 +9,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
-import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
 
 /**
  * The type Town fall listener.

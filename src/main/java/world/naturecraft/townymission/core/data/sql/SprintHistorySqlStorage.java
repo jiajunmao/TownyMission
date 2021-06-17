@@ -3,7 +3,6 @@ package world.naturecraft.townymission.core.data.sql;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.core.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SprintHistoryStorage;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.utils.Util;

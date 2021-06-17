@@ -6,7 +6,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bungee.TownyMissionBungee;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 
 /**
  * The type Task service.

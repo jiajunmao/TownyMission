@@ -10,10 +10,9 @@ import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
-import world.naturecraft.townymission.core.utils.EntryFilter;
 import world.naturecraft.townymission.core.data.db.MissionStorage;
 import world.naturecraft.townymission.core.services.StorageService;
+import world.naturecraft.townymission.core.utils.EntryFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,7 +148,7 @@ public class MissionDao extends Dao<MissionEntry> {
             @Override
             public boolean include(MissionEntry data) {
                 return (data.getTown().equals(town)
-                && data.isStarted());
+                        && data.isStarted());
             }
         });
 

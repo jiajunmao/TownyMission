@@ -31,6 +31,18 @@ public class CooldownJson {
     }
 
     /**
+     * Parse rank json.
+     *
+     * @param json the json
+     * @return the rank json
+     * @throws JsonProcessingException the json processing exception
+     */
+    @JsonIgnore
+    public static CooldownJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, CooldownJson.class);
+    }
+
+    /**
      * Gets started time.
      *
      * @return the started time
@@ -77,18 +89,6 @@ public class CooldownJson {
     public boolean isFinished() {
         long timeNow = new Date().getTime();
         return (startedTime + cooldown) < timeNow;
-    }
-
-    /**
-     * Parse rank json.
-     *
-     * @param json the json
-     * @return the rank json
-     * @throws JsonProcessingException the json processing exception
-     */
-    @JsonIgnore
-    public static CooldownJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, CooldownJson.class);
     }
 
     /**

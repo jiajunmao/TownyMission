@@ -12,11 +12,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
+import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.bukkit.utils.RankUtil;
+import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.Rankable;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
 import world.naturecraft.townymission.core.services.TimerService;
-import world.naturecraft.townymission.bukkit.utils.*;
 import world.naturecraft.townymission.core.utils.MultilineBuilder;
 
 import java.util.ArrayList;
@@ -73,7 +76,7 @@ public class TownyMissionRank extends TownyMissionCommand {
         // /tms rank season
         if (sender instanceof Player) {
 
-            BukkitRunnable r =new BukkitRunnable() {
+            BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
                     Player player = (Player) sender;

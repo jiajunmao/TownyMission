@@ -9,13 +9,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
+import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.bukkit.utils.RankUtil;
+import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.enums.RewardMethod;
 import world.naturecraft.townymission.core.components.enums.RewardType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.json.reward.CommandRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.ResourceRewardJson;
@@ -24,9 +26,6 @@ import world.naturecraft.townymission.core.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
 import world.naturecraft.townymission.core.data.dao.SeasonDao;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
-import world.naturecraft.townymission.bukkit.utils.RankUtil;
-import world.naturecraft.townymission.bukkit.utils.TownyUtil;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 
 import java.util.List;
 import java.util.Locale;
@@ -77,7 +76,7 @@ public class RewardService extends TownyMissionService {
             case COMMAND:
                 CommandRewardJson commandRewardJson = (CommandRewardJson) rewardJson;
                 String command = commandRewardJson.getCommand().replace("%player%", player.getName());
-                System.out.println("Dispatching command: " +  command);
+                System.out.println("Dispatching command: " + command);
                 BukkitRunnable r = new BukkitRunnable() {
                     @Override
                     public void run() {

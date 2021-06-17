@@ -9,7 +9,6 @@ import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.MissionHistoryStorage;
 
 import java.util.ArrayList;

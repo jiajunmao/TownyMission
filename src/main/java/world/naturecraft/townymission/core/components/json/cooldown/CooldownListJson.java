@@ -15,7 +15,7 @@ import java.util.List;
 public class CooldownListJson {
 
     @JsonProperty("cooldownJsonList")
-    private List<CooldownJson> cooldownJsonList;
+    private final List<CooldownJson> cooldownJsonList;
 
     /**
      * Instantiates a new Cooldown list json.
@@ -32,6 +32,18 @@ public class CooldownListJson {
      */
     public CooldownListJson() {
         cooldownJsonList = new ArrayList<>();
+    }
+
+    /**
+     * Parse rank json.
+     *
+     * @param json the json
+     * @return the rank json
+     * @throws JsonProcessingException the json processing exception
+     */
+    @JsonIgnore
+    public static CooldownListJson parse(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json, CooldownListJson.class);
     }
 
     /**
@@ -97,18 +109,6 @@ public class CooldownListJson {
     @JsonIgnore
     public int getNumTotal() {
         return cooldownJsonList.size();
-    }
-
-    /**
-     * Parse rank json.
-     *
-     * @param json the json
-     * @return the rank json
-     * @throws JsonProcessingException the json processing exception
-     */
-    @JsonIgnore
-    public static CooldownListJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, CooldownListJson.class);
     }
 
     /**

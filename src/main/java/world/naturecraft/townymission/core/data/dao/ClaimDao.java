@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.ClaimStorage;
 import world.naturecraft.townymission.core.services.StorageService;
 

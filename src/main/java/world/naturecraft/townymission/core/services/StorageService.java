@@ -25,9 +25,9 @@ public class StorageService {
 
     private static StorageService singleton;
     private HikariDataSource dataSource;
-    private StorageType storageType;
-    private Map<DbType, Storage> dbMap;
-    private TownyMissionInstance instance;
+    private final StorageType storageType;
+    private final Map<DbType, Storage> dbMap;
+    private final TownyMissionInstance instance;
 
     /**
      * Instantiates a new Storage service.
@@ -58,7 +58,7 @@ public class StorageService {
      *
      * @throws DbConnectException the db connect exception
      */
-    public void connectDb() throws DbConnectException{
+    public void connectDb() throws DbConnectException {
 
         MainConfig mainConfig = instance.getInstanceConfig();
         String dbAddress = mainConfig.getString("database.address");

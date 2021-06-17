@@ -7,7 +7,6 @@ package world.naturecraft.townymission.core.data.yaml;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SeasonStorage;
 
 import java.util.ArrayList;

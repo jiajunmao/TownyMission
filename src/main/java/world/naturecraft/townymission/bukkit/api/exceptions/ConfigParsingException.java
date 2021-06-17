@@ -24,7 +24,7 @@ public class ConfigParsingException extends RuntimeException {
      * @param message the message
      */
     public ConfigParsingException(String message) {
-        super (message);
+        super(message);
     }
 
     /**

@@ -1,15 +1,10 @@
 package world.naturecraft.townymission.core.config;
 
-import net.md_5.bungee.api.ProxyServer;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.TownyMissionInstanceType;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
-import world.naturecraft.townymission.bungee.TownyMissionBungee;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +16,7 @@ import java.io.Reader;
  */
 public class LangConfig {
 
-    private TownyMissionInstance instance;
+    private final TownyMissionInstance instance;
     private FileConfiguration langConfig;
 
     /**

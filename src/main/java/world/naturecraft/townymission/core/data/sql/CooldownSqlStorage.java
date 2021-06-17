@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.CooldownStorage;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.utils.Util;
@@ -97,7 +96,7 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
     /**
      * Add.
      *
-     * @param townUUID    the town uuid
+     * @param townUUID the town uuid
      */
     public void add(String townUUID, String cooldownJsonList) {
         execute(conn -> {
@@ -129,8 +128,8 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
     /**
      * Update.
      *
-     * @param id          the id
-     * @param townUUID    the town uuid
+     * @param id       the id
+     * @param townUUID the town uuid
      */
     public void update(UUID id, String townUUID, String cooldownJsonList) {
         execute(conn -> {

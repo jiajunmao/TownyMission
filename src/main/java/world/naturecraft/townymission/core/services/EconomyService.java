@@ -5,8 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 
 /**
  * The type Economy service.
@@ -14,7 +12,7 @@ import world.naturecraft.townymission.core.components.enums.ServerType;
 public class EconomyService extends TownyMissionService {
 
     private static EconomyService singleton;
-    private Economy economy;
+    private final Economy economy;
 
     /**
      * Instantiates a new Economy service.

@@ -21,7 +21,8 @@ public class DataHolder<T> {
     /**
      * Instantiates a new Data holder.
      */
-    public DataHolder() {}
+    public DataHolder() {
+    }
 
     /**
      * Gets data.

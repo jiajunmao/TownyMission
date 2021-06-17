@@ -6,7 +6,6 @@ package world.naturecraft.townymission.core.data.dao;
 
 import world.naturecraft.townymission.core.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.SeasonHistoryStorage;
 import world.naturecraft.townymission.core.services.StorageService;
 

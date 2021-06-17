@@ -5,8 +5,8 @@
 package world.naturecraft.townymission.core.data.dao;
 
 import world.naturecraft.townymission.core.components.entity.DataEntity;
-import world.naturecraft.townymission.core.utils.EntryFilter;
 import world.naturecraft.townymission.core.data.db.Storage;
+import world.naturecraft.townymission.core.utils.EntryFilter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.json.cooldown.CooldownListJson;
 
-import java.util.*;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * The type Cooldown entry.
@@ -20,7 +21,7 @@ public class CooldownEntry extends DataEntity {
 
     private Town town;
     // Map<StartedTime, Cooldown>
-    private CooldownListJson cooldownJsonList;
+    private final CooldownListJson cooldownJsonList;
 
     /**
      * Instantiates a new Cooldown entry.

@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.core.services;
 
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMissionInstance;
 
 /**

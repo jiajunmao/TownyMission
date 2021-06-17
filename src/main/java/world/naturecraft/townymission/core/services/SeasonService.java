@@ -7,13 +7,13 @@ package world.naturecraft.townymission.core.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.utils.RankUtil;
 import world.naturecraft.townymission.core.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.json.rank.RankJson;
 import world.naturecraft.townymission.core.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.core.data.dao.SeasonDao;
 import world.naturecraft.townymission.core.data.dao.SeasonHistoryDao;
-import world.naturecraft.townymission.bukkit.utils.RankUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +24,7 @@ import java.util.UUID;
 public class SeasonService {
 
     private static SeasonService singleton;
-    private TownyMissionBukkit instance;
+    private final TownyMissionBukkit instance;
 
     /**
      * Instantiates a new Season service.

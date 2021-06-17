@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.MissionHistoryStorage;
 import world.naturecraft.townymission.core.services.StorageService;
 

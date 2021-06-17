@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.data.db.CooldownStorage;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
     /**
      * Add.
      *
-     * @param townUUID    the town uuid
+     * @param townUUID the town uuid
      */
     public void add(String townUUID, String cooldownListJson) {
         String uuid = UUID.randomUUID().toString();
@@ -60,8 +59,8 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
     /**
      * Update.
      *
-     * @param uuid        the uuid
-     * @param townUUID    the town uuid
+     * @param uuid     the uuid
+     * @param townUUID the town uuid
      */
     public void update(UUID uuid, String townUUID, String cooldownListJson) {
         set(uuid + ".townUUID", townUUID);

@@ -5,12 +5,9 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Plugin;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bungee.TownyMissionBungee;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
-import world.naturecraft.townymission.core.components.enums.ServerType;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,14 +21,13 @@ import java.util.concurrent.CompletableFuture;
 public class PluginMessagingService {
 
     /**
-     * The Response.
-     */
-    Map<String, CompletableFuture<Byte[]>> response;
-
-    /**
      * The constant singleton.
      */
     public static PluginMessagingService singleton;
+    /**
+     * The Response.
+     */
+    Map<String, CompletableFuture<Byte[]>> response;
 
     /**
      * Instantiates a new Plugin messaging service.

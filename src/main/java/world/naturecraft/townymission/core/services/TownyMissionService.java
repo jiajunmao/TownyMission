@@ -4,9 +4,7 @@
 
 package world.naturecraft.townymission.core.services;
 
-import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 
 /**
  * The type Towny mission service.

@@ -18,6 +18,21 @@ import java.util.logging.Logger;
 public interface TownyMissionInstance {
 
     /**
+     * Gets instance.
+     *
+     * @param <T> the type parameter
+     * @return the instance
+     */
+    @SuppressWarnings("unchecked")
+    static <T extends TownyMissionInstance> T getInstance() {
+        if (TownyMissionInstanceType.serverType.equals(ServerType.BUKKIT)) {
+            return (T) Bukkit.getPluginManager().getPlugin("TownyMission");
+        } else {
+            return (T) ProxyServer.getInstance().getPluginManager().getPlugin("TownyMission");
+        }
+    }
+
+    /**
      * On enable.
      */
     void onEnable();
@@ -93,19 +108,4 @@ public interface TownyMissionInstance {
      * @throws IOException the io exception
      */
     void saveInstanceResource(String filePath, boolean replace) throws IOException;
-
-    /**
-     * Gets instance.
-     *
-     * @param <T> the type parameter
-     * @return the instance
-     */
-    @SuppressWarnings("unchecked")
-    static <T extends TownyMissionInstance> T getInstance() {
-        if (TownyMissionInstanceType.serverType.equals(ServerType.BUKKIT)) {
-            return (T) Bukkit.getPluginManager().getPlugin("TownyMission");
-        } else {
-            return (T) ProxyServer.getInstance().getPluginManager().getPlugin("TownyMission");
-        }
-    }
 }

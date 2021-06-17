@@ -1,8 +1,5 @@
 package world.naturecraft.townymission.core.components.entity;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Plugin;
-
 import java.util.UUID;
 
 /**
@@ -14,7 +11,7 @@ public class PluginMessage {
     private String channel;
     private UUID messageUUID;
     private int size;
-    private String data[];
+    private String[] data;
 
     /**
      * Instantiates a new Plugin message.
@@ -36,7 +33,8 @@ public class PluginMessage {
     /**
      * Instantiates a new Plugin message.
      */
-    public PluginMessage() {}
+    public PluginMessage() {
+    }
 
     /**
      * Player uuid plugin message.

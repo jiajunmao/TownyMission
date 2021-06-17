@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.entity.EntityType;
-import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.utils.Util;
 
 import java.beans.ConstructorProperties;
