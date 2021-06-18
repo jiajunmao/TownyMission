@@ -12,6 +12,7 @@ import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Season dao.
@@ -42,8 +43,8 @@ public class SeasonDao extends Dao<SeasonEntry> {
     }
 
     public void update(SeasonEntry entry) {
-        if (get(entry.getTownID()) != null) {
-            database.update(entry.getId(), entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
+        if (get(entry.getTownUUID()) != null) {
+            database.update(entry.getId(), entry.getTownUUID(), entry.getSeasonPoint(), entry.getSeason());
         }
     }
 
@@ -53,8 +54,7 @@ public class SeasonDao extends Dao<SeasonEntry> {
     }
 
     public void add(SeasonEntry entry) {
-        System.out.println("SeasonDao.add called with " + entry.getTownName());
-        database.add(entry.getTownID(), entry.getTownName(), entry.getSeasonPoint(), entry.getSeason());
+        database.add(entry.getTownUUID(), entry.getSeasonPoint(), entry.getSeason());
     }
 
     /**
@@ -63,12 +63,12 @@ public class SeasonDao extends Dao<SeasonEntry> {
      * @param townUUID the town uuid
      * @return the season entry
      */
-    public SeasonEntry get(String townUUID) {
+    public SeasonEntry get(UUID townUUID) {
         if (database.getEntries() == null)
             return null;
 
         for (SeasonEntry s : database.getEntries()) {
-            if (s.getTownID().equalsIgnoreCase(townUUID)) {
+            if (s.getTownUUID().equals(townUUID)) {
                 return s;
             }
         }

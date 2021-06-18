@@ -1,5 +1,8 @@
 package world.naturecraft.townymission.bukkit.listeners.internal;
 
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -11,6 +14,7 @@ import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -32,14 +36,14 @@ public class PMCListener implements PluginMessageListener {
 
         PluginMessage request = PluginMessagingService.parseData(message);
         String subchannel = request.getChannel();
-        UUID uuid = request.getMessageUUID();
-        int size = request.getSize();
-        String[] args = request.getData();
+        UUID requestUUID = request.getMessageUUID();
+        int requestSize = request.getSize();
+        String[] requestData = request.getData();
 
         if (subchannel.equalsIgnoreCase("sanitycheck:request")) {
             TownyMissionBukkit townyMissionInstance = TownyMissionInstance.getInstance();
             boolean result;
-            switch (args[0]) {
+            switch (requestData[0]) {
                 case "hasTown":
                     // This has to be the bukkit instead, this event would only be registered with bukkit
                     result = new BukkitChecker(townyMissionInstance).target(player)
@@ -51,41 +55,65 @@ public class PMCListener implements PluginMessageListener {
                     break;
                 case "permission":
                     result = new BukkitChecker(townyMissionInstance).target(player)
-                            .hasPermission(args[1]).check();
+                            .hasPermission(requestData[1]).check();
                     break;
                 default:
-                    throw new IllegalStateException("Unexpected value: " + args[0]);
+                    throw new IllegalStateException("Unexpected value: " + requestData[0]);
             }
 
             PluginMessagingService.sendData(new PluginMessage(
                     player.getUniqueId(),
                     "sanitycheck:response",
-                    uuid, 1,
+                    requestUUID, 1,
                     new String[]{String.valueOf(result)}
             ));
         } else if (subchannel.equalsIgnoreCase("data:request")) {
             TownyMissionBukkit townyMissionBukkit = TownyMissionInstance.getInstance();
-            String[] data = null;
+            String[] responseData = null;
             int responseSize = 0;
             switch (subchannel) {
                 // data[0] is the player UUID
-                case "getTownUUID":
+                case "getTownOfPlayer":
                     responseSize = 1;
-                    data = new String[size];
-                    data[0] = TownyUtil.residentOf(Bukkit.getPlayer(UUID.fromString(data[0]))).getUUID().toString();
+                    responseData = new String[requestSize];
+                    responseData[0] = TownyUtil.residentOf(Bukkit.getPlayer(UUID.fromString(responseData[0]))).getUUID().toString();
                     break;
+                // data[0] is the town UUID
                 case "getTownName":
                     responseSize = 1;
-                    data = new String[size];
-                    data[0] = TownyUtil.residentOf(Bukkit.getPlayer(UUID.fromString(data[0]))).getName();
+                    responseData = new String[requestSize];
+                    responseData[0] = TownyUtil.residentOf(Bukkit.getPlayer(UUID.fromString(responseData[0]))).getName();
+                    break;
+                // data[0] is the town UUID
+                case "getTownResidents":
+                    Town town;
+                    try {
+                        town = TownyUtil.getTown(UUID.fromString(requestData[0]));
+                    } catch (NotRegisteredException e) {
+                        town = null;
+                    }
+
+                    if (town == null) {
+                        responseSize = 0;
+                        responseData = null;
+                        break;
+                    } else {
+                        List<Resident> residents = town.getResidents();
+                        responseSize = residents.size();
+                        responseData = new String[residents.size()];
+                        int index = 0;
+                        for (Resident resident : residents) {
+                            responseData[++index] = resident.getUUID().toString();
+                        }
+                    }
                     break;
             }
 
             PluginMessagingService.sendData(new PluginMessage(
                     player.getUniqueId(),
                     "sanitycheck:response",
-                    uuid, responseSize,
-                    data
+                    requestUUID, responseSize,
+                    responseData
             ));
         }
     }

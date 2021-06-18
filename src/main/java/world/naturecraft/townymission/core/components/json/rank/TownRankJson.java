@@ -48,7 +48,7 @@ public class TownRankJson implements Rankable {
      */
     @JsonIgnore
     public TownRankJson(SprintEntry sprintEntry) {
-        this.townId = sprintEntry.getTownID();
+        this.townId = sprintEntry.getTownUUID();
         this.townName = sprintEntry.getTownName();
         this.points = sprintEntry.getNaturepoints();
     }
@@ -60,7 +60,7 @@ public class TownRankJson implements Rankable {
      */
     @JsonIgnore
     public TownRankJson(SeasonEntry seasonEntry) {
-        this.townId = seasonEntry.getTownID();
+        this.townId = seasonEntry.getTownUUID();
         this.townName = seasonEntry.getTownName();
         this.points = seasonEntry.getSeasonPoint();
     }

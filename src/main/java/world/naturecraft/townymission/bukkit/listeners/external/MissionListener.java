@@ -89,8 +89,8 @@ public class MissionListener extends TownyMissionListener {
                 .isMissionType(MissionType.EXPANSION)
                 .customCheck(() -> {
                     try {
-                        MissionEntry entry = MissionDao.getInstance().getTownStartedMission(e.getTownBlock().getTown(), MissionType.EXPANSION);
-                        return entry.getTown().equals(e.getTownBlock().getTown());
+                        MissionEntry entry = MissionDao.getInstance().getTownStartedMission(e.getTownBlock().getTown().getUUID(), MissionType.EXPANSION);
+                        return entry.getTownUUID().equals(e.getTownBlock().getTown().getUUID());
                     } catch (NotRegisteredException notRegisteredException) {
                         return false;
                     }
@@ -117,7 +117,7 @@ public class MissionListener extends TownyMissionListener {
                     .hasStarted()
                     .isMissionType(MissionType.MOB)
                     .customCheck(() -> {
-                        MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(killer), MissionType.MOB);
+                        MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(killer).getUUID(), MissionType.MOB);
                         MobMissionJson mobMissionJson = (MobMissionJson) taskEntry.getMissionJson();
                         return mobMissionJson.getEntityType().equals(dead.getType());
                     });
@@ -140,7 +140,7 @@ public class MissionListener extends TownyMissionListener {
             public void run() {
                 if (bukkitChecker.check()) {
                     Town town = TownyUtil.residentOf(player);
-                    MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town, missionType);
+                    MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town.getUUID(), missionType);
 
                     if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
 

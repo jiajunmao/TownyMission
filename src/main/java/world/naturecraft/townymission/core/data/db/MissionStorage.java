@@ -18,10 +18,10 @@ public interface MissionStorage extends Storage<MissionEntry> {
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID);
+    void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID);
 
     /**
      * Remove.
@@ -39,10 +39,10 @@ public interface MissionStorage extends Storage<MissionEntry> {
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID);
+    void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID);
 
     List<MissionEntry> getEntries();
 }

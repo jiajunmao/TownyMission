@@ -9,8 +9,7 @@ import java.util.UUID;
  * The type Sprint entry.
  */
 public class SprintEntry extends DataEntity implements Rankable {
-    private String townID;
-    private String townName;
+    private UUID townUUID;
     private int naturepoints;
     private int sprint;
     private int season;
@@ -19,16 +18,14 @@ public class SprintEntry extends DataEntity implements Rankable {
      * Instantiates a new Sprint entry.
      *
      * @param id           the id
-     * @param townID       the town id
-     * @param townName     the town name
+     * @param townUUID     the town id
      * @param naturepoints the naturepoints
      * @param sprint       the sprint
      * @param season       the season
      */
-    public SprintEntry(UUID id, String townID, String townName, int naturepoints, int sprint, int season) {
+    public SprintEntry(UUID id, UUID townUUID, int naturepoints, int sprint, int season) {
         super(id, DbType.SPRINT);
-        this.townID = townID;
-        this.townName = townName;
+        this.townUUID = townUUID;
         this.naturepoints = naturepoints;
         this.sprint = sprint;
         this.season = season;
@@ -39,35 +36,17 @@ public class SprintEntry extends DataEntity implements Rankable {
      *
      * @return the town id
      */
-    public String getTownID() {
-        return townID;
+    public UUID getTownUUID() {
+        return townUUID;
     }
 
     /**
      * Sets town id.
      *
-     * @param townID the town id
+     * @param townUUID the town id
      */
-    public void setTownID(String townID) {
-        this.townID = townID;
-    }
-
-    /**
-     * Gets town name.
-     *
-     * @return the town name
-     */
-    public String getTownName() {
-        return townName;
-    }
-
-    /**
-     * Sets town name.
-     *
-     * @param townName the town name
-     */
-    public void setTownName(String townName) {
-        this.townName = townName;
+    public void setTownUUID(UUID townUUID) {
+        this.townUUID = townUUID;
     }
 
     /**

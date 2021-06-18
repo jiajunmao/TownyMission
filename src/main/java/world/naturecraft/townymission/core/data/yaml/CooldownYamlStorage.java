@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.core.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
@@ -78,10 +77,10 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
             try {
                 entryList.add(new CooldownEntry(
                         UUID.fromString(key),
-                        file.getString(key + ".townUUID"),
+                        UUID.fromString(file.getString(key + ".townUUID")),
                         file.getString(key + ".cooldownListJson")
                 ));
-            } catch (JsonProcessingException | NotRegisteredException e) {
+            } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }

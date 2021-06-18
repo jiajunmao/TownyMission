@@ -52,14 +52,14 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      * @param completedTime     the completed time
      * @param isClaimed         the is claimed
      * @param sprint            the sprint
      * @param season            the season
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townUUID, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".missionType", missionType);
@@ -67,7 +67,7 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
         add(uuid + ".startedTime", startedTime);
         add(uuid + ".allowedTime", allowedTime);
         add(uuid + ".missionJson", missionJson);
-        add(uuid + ".townName", townName);
+        add(uuid + ".townUUID", townUUID);
         add(uuid + ".startedPlayerUUID", startedPlayerUUID);
         add(uuid + ".completedTime", completedTime);
         add(uuid + ".isClaimed", isClaimed);
@@ -84,20 +84,20 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      * @param completedTime     the completed time
      * @param isClaimed         the is claimed
      * @param sprint            the sprint
      * @param season            the season
      */
-    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townUUID, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);
         set(uuid + ".allowedTime", allowedTime);
         set(uuid + ".missionJson", missionJson);
-        set(uuid + ".townName", townName);
+        set(uuid + ".townUUID", townUUID);
         set(uuid + ".startedPlayerUUID", startedPlayerUUID);
         set(uuid + ".completedTime", completedTime);
         set(uuid + ".isClaimed", isClaimed);
@@ -121,8 +121,8 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
                         file.getLong(key + ".startedTime"),
                         file.getLong(key + ".allowedTime"),
                         file.getString(key + ".missionJson"),
-                        file.getString(key + ".townName"),
-                        file.getString(key + ".startedPlayerUUID"),
+                        UUID.fromString(file.getString(key + ".townUUID")),
+                        UUID.fromString(file.getString(key + ".startedPlayerUUID")),
                         file.getLong(key + ".completedTime"),
                         file.getBoolean(key + ".isClaimed"),
                         file.getInt(key + ".sprint"),

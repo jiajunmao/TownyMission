@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.core.data.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
@@ -57,10 +56,10 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL," +
+                    "`uuid` VARCHAR(255) NOT NULL," +
                     "`town_uuid` VARCHAR(255) NOT NULL ," +
                     "`cooldownjsonlist` VARCHAR(255) NOT NULL," +
-                    "PRIMARY KEY (`id`))";
+                    "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -81,10 +80,10 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
             ResultSet result = p.executeQuery();
             while (result.next()) {
                 try {
-                    list.add(new CooldownEntry(UUID.fromString(result.getString("id")),
-                            result.getString("town_uuid"),
+                    list.add(new CooldownEntry(UUID.fromString(result.getString("uuid")),
+                            UUID.fromString(result.getString("town_uuid")),
                             result.getString("cooldownjsonlist")));
-                } catch (JsonProcessingException | NotRegisteredException e) {
+                } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
             }
@@ -98,7 +97,7 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
      *
      * @param townUUID the town uuid
      */
-    public void add(String townUUID, String cooldownJsonList) {
+    public void add(UUID townUUID, String cooldownJsonList) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -113,12 +112,12 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
     /**
      * Remove.
      *
-     * @param id the id
+     * @param uuid the id
      */
-    public void remove(UUID id) {
+    public void remove(UUID uuid) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id.toString() + "');";
+                    "uuid='" + uuid.toString() + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -128,15 +127,15 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
     /**
      * Update.
      *
-     * @param id       the id
+     * @param uuid     the id
      * @param townUUID the town uuid
      */
-    public void update(UUID id, String townUUID, String cooldownJsonList) {
+    public void update(UUID uuid, UUID townUUID, String cooldownJsonList) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_uuid='" + townUUID +
                     "', cooldownjsonlist='" + cooldownJsonList +
-                    "' WHERE id='" + id.toString() + "';";
+                    "' WHERE uuid='" + uuid + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
