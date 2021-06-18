@@ -48,7 +48,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
      *
      * @param townUUID the town uuid
      */
-    public void add(String townUUID, String cooldownListJson) {
+    public void add(UUID townUUID, String cooldownListJson) {
         String uuid = UUID.randomUUID().toString();
 
         super.add(uuid + ".townUUID", townUUID);
@@ -61,7 +61,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
      * @param uuid     the uuid
      * @param townUUID the town uuid
      */
-    public void update(UUID uuid, String townUUID, String cooldownListJson) {
+    public void update(UUID uuid, UUID townUUID, String cooldownListJson) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".cooldownListJson", cooldownListJson);
     }

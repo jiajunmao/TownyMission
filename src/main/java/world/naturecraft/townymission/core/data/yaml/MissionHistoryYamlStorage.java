@@ -59,7 +59,7 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
      * @param sprint            the sprint
      * @param season            the season
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townUUID, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".missionType", missionType);
@@ -91,7 +91,7 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
      * @param sprint            the sprint
      * @param season            the season
      */
-    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townUUID, String startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);

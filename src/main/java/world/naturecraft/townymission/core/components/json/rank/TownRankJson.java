@@ -14,30 +14,27 @@ import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 
 import java.beans.ConstructorProperties;
+import java.util.UUID;
 
 /**
  * The type Season rank.
  */
 public class TownRankJson implements Rankable {
 
-    @JsonProperty("townId")
-    private final String townId;
-    @JsonProperty("townName")
-    private final String townName;
+    @JsonProperty("townUUID")
+    private final UUID townUUID;
     @JsonProperty("points")
     private final int points;
 
     /**
      * Instantiates a new Season rank.
      *
-     * @param townId   the town id
-     * @param townName the town name
+     * @param townUUID   the town id
      * @param points   the points
      */
-    @ConstructorProperties({"townId", "townName", "points"})
-    public TownRankJson(String townId, String townName, int points) {
-        this.townId = townId;
-        this.townName = townName;
+    @ConstructorProperties({"townUUID", "points"})
+    public TownRankJson(UUID townUUID, int points) {
+        this.townUUID = townUUID;
         this.points = points;
     }
 
@@ -48,8 +45,7 @@ public class TownRankJson implements Rankable {
      */
     @JsonIgnore
     public TownRankJson(SprintEntry sprintEntry) {
-        this.townId = sprintEntry.getTownUUID();
-        this.townName = sprintEntry.getTownName();
+        this.townUUID = sprintEntry.getTownUUID();
         this.points = sprintEntry.getNaturepoints();
     }
 
@@ -60,8 +56,7 @@ public class TownRankJson implements Rankable {
      */
     @JsonIgnore
     public TownRankJson(SeasonEntry seasonEntry) {
-        this.townId = seasonEntry.getTownUUID();
-        this.townName = seasonEntry.getTownName();
+        this.townUUID = seasonEntry.getTownUUID();
         this.points = seasonEntry.getSeasonPoint();
     }
 
@@ -100,23 +95,13 @@ public class TownRankJson implements Rankable {
     }
 
     /**
-     * Gets town name.
-     *
-     * @return the town name
-     */
-    @JsonProperty("townName")
-    public String getTownName() {
-        return townName;
-    }
-
-    /**
      * Gets town id.
      *
      * @return the town id
      */
     @JsonProperty("townId")
-    public String getTownId() {
-        return townId;
+    public UUID getTownId() {
+        return townUUID;
     }
 
     @Override

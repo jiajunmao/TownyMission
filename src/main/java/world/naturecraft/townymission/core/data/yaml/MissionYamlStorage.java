@@ -55,7 +55,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townUUID, String startedPlayerUUID) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".missionType", missionType);
@@ -79,7 +79,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townUUID, String startedPlayerUUID) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);

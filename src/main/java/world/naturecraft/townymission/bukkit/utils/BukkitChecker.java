@@ -156,7 +156,7 @@ public class BukkitChecker {
         if (checkHasStarted) {
             if (!checkHasTown)
                 return false;
-            if (missionDao.getStartedMission(TownyUtil.residentOf(player)) == null) {
+            if (missionDao.getStartedMission(TownyUtil.residentOf(player).getUUID()) == null) {
                 if (!isSilent)
                     BukkitUtil.sendMsg(player, instance.getLangEntry("commands.sanityChecker.onNoStartedMission"));
                 return false;
@@ -166,7 +166,7 @@ public class BukkitChecker {
         if (checkIsMissionType) {
             if (!checkHasStarted)
                 return false;
-            if (!missionDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType)) {
+            if (!missionDao.getStartedMission(TownyUtil.residentOf(player).getUUID()).getMissionType().equals(missionType)) {
                 if (!isSilent)
                     BukkitUtil.sendMsg(player, instance.getLangEntry("commands.sanityChecker.onMissionTypeMismatch").replace("%missionType%", missionType.name().toLowerCase(Locale.ROOT)));
                 return false;

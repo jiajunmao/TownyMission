@@ -164,7 +164,7 @@ public class RewardService extends TownyMissionService {
             switch (rewardMethod) {
                 case INDIVIDUAL:
                     // This means rewarding everyone in the town everything on the list
-                    List<Resident> residents = town.getResidents();
+                    List<Resident> residents = null;
                     for (Resident resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
@@ -177,7 +177,7 @@ public class RewardService extends TownyMissionService {
                     }
                     break;
                 case EQUAL:
-                    residents = town.getResidents();
+                    residents = null;
                     int numResidents = residents.size();
                     int share = rewardJson.getAmount() / numResidents + 1;
                     RewardJson copyRewardJseon = RewardJson.deepCopy(rewardJson);
