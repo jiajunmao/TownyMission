@@ -1,6 +1,6 @@
 name: TownyMission
 author: Barbadosian
-main: world.naturecraft.townymission.bukkit.TownyMission
+main: world.naturecraft.townymission.bukkit.TownyMissionBukkit
 version: 0.4.7
 api-version: 1.16
 
