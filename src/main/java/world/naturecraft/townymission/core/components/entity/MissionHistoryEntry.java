@@ -1,11 +1,8 @@
 package world.naturecraft.townymission.core.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
-import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
@@ -23,8 +20,8 @@ public class MissionHistoryEntry extends DataEntity {
     private long startedTime;
     private long allowedTime;
     private MissionJson missionJson;
-    private Town town;
-    private Player startedPlayer;
+    private UUID townUUID;
+    private UUID startedPlayerUUID;
     private long completedTime;
     private boolean claimed;
     private int sprint;
@@ -33,21 +30,21 @@ public class MissionHistoryEntry extends DataEntity {
     /**
      * Instantiates a new Task history entry.
      *
-     * @param id            the id
-     * @param missionType   the task type
-     * @param addedTime     the added time
-     * @param startedTime   the started time
-     * @param allowedTime   the allowed time
-     * @param missionJson   the task json
-     * @param town          the town
-     * @param startedPlayer the started player
-     * @param completedTime the completed time
-     * @param claimed       the claimed
-     * @param sprint        the sprint
-     * @param season        the season
+     * @param id                the id
+     * @param missionType       the task type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the task json
+     * @param townUUID          the town
+     * @param startedPlayerUUID the started player
+     * @param completedTime     the completed time
+     * @param claimed           the claimed
+     * @param sprint            the sprint
+     * @param season            the season
      */
     public MissionHistoryEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime,
-                               MissionJson missionJson, Town town, Player startedPlayer, long completedTime, boolean claimed,
+                               MissionJson missionJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean claimed,
                                int sprint, int season) {
         super(id, DbType.MISSION_HISTORY);
         this.missionType = missionType;
@@ -55,8 +52,8 @@ public class MissionHistoryEntry extends DataEntity {
         this.startedTime = startedTime;
         this.allowedTime = allowedTime;
         this.missionJson = missionJson;
-        this.town = town;
-        this.startedPlayer = startedPlayer;
+        this.townUUID = townUUID;
+        this.startedPlayerUUID = startedPlayerUUID;
         this.completedTime = completedTime;
         this.claimed = claimed;
         this.sprint = sprint;
@@ -66,24 +63,24 @@ public class MissionHistoryEntry extends DataEntity {
     /**
      * Instantiates a new Mission history entry.
      *
-     * @param id            the id
-     * @param missionType   the mission type
-     * @param addedTime     the added time
-     * @param startedTime   the started time
-     * @param allowedTime   the allowed time
-     * @param missionJson   the mission json
-     * @param townName      the town name
-     * @param startedPlayer the started player
-     * @param completedTime the completed time
-     * @param claimed       the claimed
-     * @param sprint        the sprint
-     * @param season        the season
+     * @param id                the id
+     * @param missionType       the mission type
+     * @param addedTime         the added time
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the mission json
+     * @param townUUID          the town name
+     * @param startedPlayerUUID the started player
+     * @param completedTime     the completed time
+     * @param claimed           the claimed
+     * @param sprint            the sprint
+     * @param season            the season
      * @throws JsonProcessingException the json processing exception
      */
     public MissionHistoryEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime,
-                               String missionJson, String townName, String startedPlayer, long completedTime,
+                               String missionJson, UUID townUUID, UUID startedPlayerUUID, long completedTime,
                                boolean claimed, int sprint, int season) throws JsonProcessingException {
-        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), Bukkit.getPlayer(UUID.fromString(startedPlayer)), completedTime, claimed, sprint, season);
+        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, townUUID, startedPlayerUUID, completedTime, claimed, sprint, season);
         this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
     }
 
@@ -95,7 +92,7 @@ public class MissionHistoryEntry extends DataEntity {
      */
     public MissionHistoryEntry(MissionEntry entry, long completedTime) {
         this(UUID.randomUUID(), entry.getMissionType(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(),
-                entry.getMissionJson(), entry.getTown(), entry.getStartedPlayer(), completedTime, false, 0, 0);
+                entry.getMissionJson(), entry.getTownUUID(), entry.getStartedPlayerUUID(), completedTime, false, 0, 0);
         TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
         setSprint(instance.getStatsConfig().getInt("sprint.current"));
         setSeason(instance.getStatsConfig().getInt("season.current"));
@@ -164,6 +161,10 @@ public class MissionHistoryEntry extends DataEntity {
         return missionJson;
     }
 
+    public void setMissionJson(MissionJson missionJson) {
+        this.missionJson = missionJson;
+    }
+
     /**
      * Sets task json.
      *
@@ -173,22 +174,13 @@ public class MissionHistoryEntry extends DataEntity {
         this.missionJson = missionJson;
     }
 
-    /**
-     * Gets town.
-     *
-     * @return the town
-     */
-    public Town getTown() {
-        return town;
+
+    public UUID getTownUUID() {
+        return townUUID;
     }
 
-    /**
-     * Sets town.
-     *
-     * @param town the town
-     */
-    public void setTown(Town town) {
-        this.town = town;
+    public void setTownUUID(UUID townUUID) {
+        this.townUUID = townUUID;
     }
 
     /**
@@ -263,22 +255,12 @@ public class MissionHistoryEntry extends DataEntity {
         this.addedTime = addedTime;
     }
 
-    /**
-     * Gets started player.
-     *
-     * @return the started player
-     */
-    public Player getStartedPlayer() {
-        return startedPlayer;
+    public UUID getStartedPlayerUUID() {
+        return startedPlayerUUID;
     }
 
-    /**
-     * Sets started player.
-     *
-     * @param startedPlayer the started player
-     */
-    public void setStartedPlayer(Player startedPlayer) {
-        this.startedPlayer = startedPlayer;
+    public void setStartedPlayerUUID(UUID startedPlayerUUID) {
+        this.startedPlayerUUID = startedPlayerUUID;
     }
 
     /**

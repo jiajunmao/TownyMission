@@ -15,7 +15,7 @@ public interface CooldownStorage extends Storage<CooldownEntry> {
      * @param townUUID         the town uuid
      * @param cooldownJsonList the cooldown json list
      */
-    void add(String townUUID, String cooldownJsonList);
+    void add(UUID townUUID, String cooldownJsonList);
 
     /**
      * Remove.
@@ -31,5 +31,5 @@ public interface CooldownStorage extends Storage<CooldownEntry> {
      * @param townUUID         the town uuid
      * @param cooldownJsonList the cooldown json list
      */
-    void update(UUID id, String townUUID, String cooldownJsonList);
+    void update(UUID id, UUID townUUID, String cooldownJsonList);
 }

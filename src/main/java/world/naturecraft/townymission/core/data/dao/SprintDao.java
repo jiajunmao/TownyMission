@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.core.data.dao;
 
-import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.json.rank.TownRankJson;
@@ -13,6 +12,7 @@ import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Sprint dao.
@@ -43,8 +43,8 @@ public class SprintDao extends Dao<SprintEntry> {
     }
 
     public void update(SprintEntry entry) {
-        if (get(entry.getTownID()) != null) {
-            database.update(entry.getId(), entry.getTownID(), entry.getTownName(), entry.getNaturepoints(), entry.getSprint(), entry.getSeason());
+        if (get(entry.getTownUUID()) != null) {
+            database.update(entry.getId(), entry.getTownUUID(), entry.getNaturepoints(), entry.getSprint(), entry.getSeason());
         }
     }
 
@@ -54,8 +54,8 @@ public class SprintDao extends Dao<SprintEntry> {
     }
 
     public void add(SprintEntry entry) {
-        if (get(entry.getTownID()) == null) {
-            database.add(entry.getTownID(), entry.getTownName(), entry.getNaturepoints(), entry.getSprint(), entry.getSeason());
+        if (get(entry.getTownUUID()) == null) {
+            database.add(entry.getTownUUID(), entry.getNaturepoints(), entry.getSprint(), entry.getSeason());
         } else {
             update(entry);
         }
@@ -78,12 +78,12 @@ public class SprintDao extends Dao<SprintEntry> {
     /**
      * Contains boolean.
      *
-     * @param town the town
+     * @param townUUID the town
      * @return the boolean
      */
-    public boolean contains(Town town) {
+    public boolean contains(UUID townUUID) {
         for (SprintEntry entry : getEntries()) {
-            if (entry.getTownID().equalsIgnoreCase(town.getUUID().toString())) {
+            if (entry.getTownUUID().equals(townUUID)) {
                 return true;
             }
         }
@@ -96,12 +96,12 @@ public class SprintDao extends Dao<SprintEntry> {
      * @param townUUID the town uuid
      * @return the sprint entry
      */
-    public SprintEntry get(String townUUID) {
+    public SprintEntry get(UUID townUUID) {
         if (database.getEntries() == null)
             return null;
 
         for (SprintEntry s : database.getEntries()) {
-            if (s.getTownID().equalsIgnoreCase(townUUID)) {
+            if (s.getTownUUID().equals(townUUID)) {
                 return s;
             }
         }

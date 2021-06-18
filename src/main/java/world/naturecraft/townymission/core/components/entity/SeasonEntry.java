@@ -9,8 +9,7 @@ import java.util.UUID;
  * The type Season entry.
  */
 public class SeasonEntry extends DataEntity implements Rankable {
-    private String townID;
-    private String townName;
+    private UUID townUUID;
     private int seasonPoint;
     private int season;
 
@@ -18,15 +17,13 @@ public class SeasonEntry extends DataEntity implements Rankable {
      * Instantiates a new Season entry.
      *
      * @param id          the id
-     * @param townID      the town id
-     * @param townName    the town name
+     * @param townUUID    the town id
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public SeasonEntry(UUID id, String townID, String townName, int seasonPoint, int season) {
+    public SeasonEntry(UUID id, UUID townUUID, int seasonPoint, int season) {
         super(id, DbType.SEASON);
-        this.townID = townID;
-        this.townName = townName;
+        this.townUUID = townUUID;
         this.seasonPoint = seasonPoint;
         this.season = season;
     }
@@ -36,35 +33,17 @@ public class SeasonEntry extends DataEntity implements Rankable {
      *
      * @return the town id
      */
-    public String getTownID() {
-        return townID;
+    public UUID getTownUUID() {
+        return townUUID;
     }
 
     /**
      * Sets town id.
      *
-     * @param townID the town id
+     * @param townUUID the town id
      */
-    public void setTownID(String townID) {
-        this.townID = townID;
-    }
-
-    /**
-     * Gets town name.
-     *
-     * @return the town name
-     */
-    public String getTownName() {
-        return townName;
-    }
-
-    /**
-     * Sets town name.
-     *
-     * @param townName the town name
-     */
-    public void setTownName(String townName) {
-        this.townName = townName;
+    public void setTownUUID(UUID townUUID) {
+        this.townUUID = townUUID;
     }
 
     /**

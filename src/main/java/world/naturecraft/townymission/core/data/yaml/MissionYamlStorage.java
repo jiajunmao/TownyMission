@@ -52,10 +52,10 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".missionType", missionType);
@@ -63,7 +63,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
         add(uuid + ".startedTime", startedTime);
         add(uuid + ".allowedTime", allowedTime);
         add(uuid + ".missionJson", missionJson);
-        add(uuid + ".townName", townName);
+        add(uuid + ".townUUID", townUUID);
         add(uuid + ".startedPlayerUUID", startedPlayerUUID);
     }
 
@@ -76,16 +76,16 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);
         set(uuid + ".allowedTime", allowedTime);
         set(uuid + ".missionJson", missionJson);
-        set(uuid + ".townName", townName);
+        set(uuid + ".townUUID", townUUID);
         set(uuid + ".startedPlayerUUID", startedPlayerUUID);
     }
 
@@ -105,8 +105,8 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
                         file.getLong(key + ".startedTime"),
                         file.getLong(key + ".allowedTime"),
                         file.getString(key + ".missionJson"),
-                        file.getString(key + ".townName"),
-                        file.getString(key + ".startedPlayerUUID")
+                        UUID.fromString(file.getString(key + ".townUUID")),
+                        UUID.fromString(file.getString(key + ".startedPlayerUUID"))
                 ));
             } catch (JsonProcessingException e) {
                 throw new ConfigParsingException(e);

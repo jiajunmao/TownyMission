@@ -11,7 +11,7 @@ public class EntityTest {
 
     @Test
     public void sprintEntry_constructorTest() {
-        SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), UUID.randomUUID().toString(), "TestDummy" ,73808, 73808, 73808);
+        SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), UUID.randomUUID(),73808, 73808, 73808);
 
         assertEquals(sprintEntry.getSeason(), 73808);
     }

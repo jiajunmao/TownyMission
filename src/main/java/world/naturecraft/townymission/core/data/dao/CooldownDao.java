@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.core.data.dao;
 
-import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.data.db.CooldownStorage;
@@ -12,6 +11,7 @@ import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.utils.EntryFilter;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Cooldown dao.
@@ -43,12 +43,12 @@ public class CooldownDao extends Dao<CooldownEntry> {
 
     @Override
     public void add(CooldownEntry data) {
-        db.add(data.getTown().getUUID().toString(), data.getCooldownsAsString());
+        db.add(data.getTownUUID(), data.getCooldownsAsString());
     }
 
     @Override
     public void update(CooldownEntry data) {
-        db.update(data.getId(), data.getTown().getUUID().toString(), data.getCooldownsAsString());
+        db.update(data.getId(), data.getTownUUID(), data.getCooldownsAsString());
     }
 
     @Override
@@ -59,14 +59,14 @@ public class CooldownDao extends Dao<CooldownEntry> {
     /**
      * Get cooldown entry.
      *
-     * @param town the town
+     * @param townUUID the town
      * @return the cooldown entry
      */
-    public CooldownEntry get(Town town) {
+    public CooldownEntry get(UUID townUUID) {
         List<CooldownEntry> list = getEntries(new EntryFilter<CooldownEntry>() {
             @Override
             public boolean include(CooldownEntry data) {
-                return (data.getTown().equals(town));
+                return (data.getTownUUID().equals(townUUID));
             }
         });
 

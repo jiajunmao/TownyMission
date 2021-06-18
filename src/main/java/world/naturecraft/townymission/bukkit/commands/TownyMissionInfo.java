@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.bukkit.commands;
 
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -92,9 +93,10 @@ public class TownyMissionInfo extends TownyMissionCommand {
 
                         // Started Mission section
                         builder.add("&5--Mission Section--");
-                        if ((taskEntry = MissionDao.getInstance().getStartedMission(town)) != null) {
+                        if ((taskEntry = MissionDao.getInstance().getStartedMission(town.getUUID())) != null) {
                             builder.add("&eCurrent Mission: &f" + taskEntry.getMissionJson().getDisplayLine());
-                            builder.add("&eStarted By: &f" + taskEntry.getStartedPlayer().getName());
+                            Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
+                            builder.add("&eStarted By: &f" + startedPlayer.getName());
 
                             long startedTime = taskEntry.getStartedTime();
                             long allowedTime = taskEntry.getAllowedTime();
@@ -138,7 +140,7 @@ public class TownyMissionInfo extends TownyMissionCommand {
                         int realBaseline = baseline + (town.getNumResidents() - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
                         realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
-                        int naturepoints = SprintDao.getInstance().get(town.getUUID().toString()).getNaturepoints();
+                        int naturepoints = SprintDao.getInstance().get(town.getUUID()).getNaturepoints();
 
                         builder.add("&eTotal Points: &f" + naturepoints);
                         builder.add("&eBaseline: &f" + realBaseline);

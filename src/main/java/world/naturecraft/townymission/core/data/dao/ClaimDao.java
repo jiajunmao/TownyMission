@@ -44,7 +44,7 @@ public class ClaimDao extends Dao<ClaimEntry> {
     @Override
     public void add(ClaimEntry data) {
         try {
-            db.add(data.getPlayerUUID().toString(),
+            db.add(data.getPlayerUUID(),
                     data.getRewardType().name(),
                     data.getRewardJson().toJson(),
                     data.getSeason(),
@@ -62,7 +62,7 @@ public class ClaimDao extends Dao<ClaimEntry> {
     @Override
     public void update(ClaimEntry data) {
         try {
-            db.update(data.getId(), data.getPlayerUUID().toString(), data.getRewardType().name(),
+            db.update(data.getId(), data.getPlayerUUID(), data.getRewardType().name(),
                     data.getRewardJson().toJson(), data.getSeason(), data.getSprint());
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);

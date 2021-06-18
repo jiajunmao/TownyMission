@@ -1,18 +1,21 @@
 package world.naturecraft.townymission.core.services;
 
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bukkit.utils.RankUtil;
-import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
+import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
@@ -139,24 +142,21 @@ public class RewardService extends TownyMissionService {
     /**
      * Reward town.
      *
-     * @param town         the town
      * @param rewardMethod the reward method
      * @param rewardJson   the reward json
      */
-    public void rewardTown(Town town, RewardMethod rewardMethod, RewardJson rewardJson) {
-        System.out.println("Rewarding town " + town.getName() + " with " + rewardJson.getDisplayLine() + " using " + rewardMethod);
+    public void rewardTown(UUID townUUID, RewardMethod rewardMethod, RewardJson rewardJson) {
         if (rewardJson.getRewardType().equals(RewardType.POINTS)) {
             // This is reward season point. Ignore RewardMethod.
-            if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
+            if (SeasonDao.getInstance().get(townUUID) == null) {
                 SeasonDao.getInstance().add(
                         new SeasonEntry(
                                 UUID.randomUUID(),
-                                town.getUUID().toString(),
-                                town.getName(),
+                                townUUID,
                                 rewardJson.getAmount(),
                                 instance.getStatsConfig().getInt("season.current")));
             } else {
-                SeasonEntry seasonEntry = SeasonDao.getInstance().get(town.getUUID().toString());
+                SeasonEntry seasonEntry = SeasonDao.getInstance().get(townUUID);
                 seasonEntry.setSeasonPoint(seasonEntry.getSeasonPoint() + rewardJson.getAmount());
             }
         } else {
@@ -164,7 +164,7 @@ public class RewardService extends TownyMissionService {
             switch (rewardMethod) {
                 case INDIVIDUAL:
                     // This means rewarding everyone in the town everything on the list
-                    List<Resident> residents = town.getResidents();
+                    List<Resident> residents = null;
                     for (Resident resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
@@ -177,7 +177,7 @@ public class RewardService extends TownyMissionService {
                     }
                     break;
                 case EQUAL:
-                    residents = town.getResidents();
+                    residents = null;
                     int numResidents = residents.size();
                     int share = rewardJson.getAmount() / numResidents + 1;
                     RewardJson copyRewardJseon = RewardJson.deepCopy(rewardJson);
@@ -239,18 +239,16 @@ public class RewardService extends TownyMissionService {
                         int numRanked = rewardsMap.keySet().size();
                         for (int i = numRanked; i < sprintEntries.size(); i++) {
                             SprintEntry otherEntry = sprintEntries.get(i);
-                            Town town = TownyUtil.getTownByName(otherEntry.getTownName());
                             for (RewardJson rewardJson : rewardJsonList) {
-                                rewardTown(town, rewardMethod, rewardJson);
+                                rewardTown(otherEntry.getTownUUID(), rewardMethod, rewardJson);
                             }
                         }
                     } else if (currentRank != -1 && currentRank - 1 < sprintEntries.size()) {
                         // This is rewarding ranked towns
                         SprintEntry sprintEntry = sprintEntries.get(currentRank - 1);
-                        Town town = TownyUtil.getTownByName(sprintEntry.getTownName());
 
                         for (RewardJson rewardJson : rewardJsonList) {
-                            rewardTown(town, rewardMethod, rewardJson);
+                            rewardTown(sprintEntry.getTownUUID(), rewardMethod, rewardJson);
                         }
                     }
                 }
@@ -267,17 +265,15 @@ public class RewardService extends TownyMissionService {
                         int numRanked = rewardsMap.keySet().size();
                         for (int i = numRanked; i < seasonEntries.size(); i++) {
                             SeasonEntry otherEntry = seasonEntries.get(i);
-                            Town town = TownyUtil.getTownByName(otherEntry.getTownName());
                             for (RewardJson rewardJson : rewardJsonList) {
-                                rewardTown(town, rewardMethod, rewardJson);
+                                rewardTown(otherEntry.getTownUUID(), rewardMethod, rewardJson);
                             }
                         }
                     } else if (currentRank - 1 < seasonEntries.size()) {
                         SeasonEntry seasonEntry = seasonEntries.get(currentRank - 1);
-                        Town town = TownyUtil.getTownByName(seasonEntry.getTownName());
 
                         for (RewardJson rewardJson : rewardJsonList) {
-                            rewardTown(town, rewardMethod, rewardJson);
+                            rewardTown(seasonEntry.getTownUUID(), rewardMethod, rewardJson);
                         }
                     }
                 }

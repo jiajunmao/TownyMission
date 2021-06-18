@@ -48,11 +48,11 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL ," +
+                    "`uuid` VARCHAR(255) NOT NULL ," +
                     "`season` INT NOT NULL ," +
                     "`started_time` BIGINT NOT NULL ," +
                     "`rank_json` VARCHAR(255) NOT NULL ," +
-                    "PRIMARY KEY (`id`))";
+                    "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -68,7 +68,7 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
             ResultSet result = p.executeQuery();
 
             while (result.next()) {
-                list.add(new SeasonHistoryEntry(UUID.fromString(result.getString("id")),
+                list.add(new SeasonHistoryEntry(UUID.fromString(result.getString("uuid")),
                         result.getInt("season"),
                         result.getLong("started_time"),
                         result.getString("rank_json")));
@@ -102,12 +102,12 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
     /**
      * Remove.
      *
-     * @param id the id
+     * @param uuid the id
      */
-    public void remove(UUID id) {
+    public void remove(UUID uuid) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id + "');";
+                    "uuid='" + uuid + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -117,18 +117,18 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
     /**
      * Update.
      *
-     * @param id          the id
+     * @param uuid        the id
      * @param season      the season
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void update(UUID id, int season, long startedTime, String rankJson) {
+    public void update(UUID uuid, int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + season +
                     "', started_time='" + startedTime +
                     "', rank_json='" + rankJson +
-                    "' WHERE id='" + id + "';";
+                    "' WHERE uuid='" + uuid + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

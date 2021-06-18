@@ -62,7 +62,7 @@ public class MissionManageGui extends TownyMissionGui {
         MissionDao missionDao = MissionDao.getInstance();
 
         // Figure out how many missions the town is missing
-        List<MissionEntry> townMissions = MissionDao.getInstance().getTownMissions(town);
+        List<MissionEntry> townMissions = MissionDao.getInstance().getTownMissions(town.getUUID());
         List<MissionEntry> newlyAddedMissions = new ArrayList<>();
         int diff = instance.getConfig().getInt("mission.amount") - townMissions.size();
 
@@ -78,7 +78,7 @@ public class MissionManageGui extends TownyMissionGui {
             return;
         }
 
-        int numAddable = CooldownService.getInstance().getNumAddable(town);
+        int numAddable = CooldownService.getInstance().getNumAddable(town.getUUID());
         diff = Math.min(numAddable, diff);
 
         // If the town is not in cooldown, it can get new missions
@@ -86,13 +86,14 @@ public class MissionManageGui extends TownyMissionGui {
             int index = rand.nextInt(size);
             MissionJson mission = missions.get(index);
             try {
-                MissionEntry entry = new MissionEntry(UUID.randomUUID(),
+                MissionEntry entry = new MissionEntry(
+                        UUID.randomUUID(),
                         mission.getMissionType().name(),
                         Util.currentTime(),
                         0,
                         Util.hrToMs(mission.getHrAllowed()),
                         mission.toJson(),
-                        town.getName(),
+                        town.getUUID(),
                         null);
                 newlyAddedMissions.add(entry);
                 // Async this in the future and handle concurrency issue with click event
@@ -118,7 +119,7 @@ public class MissionManageGui extends TownyMissionGui {
         }
 
         // Put in all started missions
-        townMissions = MissionDao.getInstance().getStartedMissions(town);
+        townMissions = MissionDao.getInstance().getStartedMissions(town.getUUID());
         placingIndex = 0;
         for (MissionEntry entry : townMissions) {
             inv.setItem(0, entry.getGuiItem());
@@ -243,7 +244,7 @@ public class MissionManageGui extends TownyMissionGui {
                 BukkitRunnable r = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, missionIdxFinal);
+                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town.getUUID(), missionIdxFinal);
 
                         try {
                             BukkitUtil.sendMsg(player, instance.getLangEntry("commands.start.onSuccess")
@@ -267,7 +268,7 @@ public class MissionManageGui extends TownyMissionGui {
         // This means that the player is clicking on a STARTED mission
         if (slot == 0 || slot == 9 || slot == 18 || slot == 27) {
             Town town = TownyUtil.residentOf(player);
-            List<MissionEntry> startedList = MissionDao.getInstance().getStartedMissions(town);
+            List<MissionEntry> startedList = MissionDao.getInstance().getStartedMissions(town.getUUID());
             int index = slot / 9;
             MissionEntry entry = startedList.get(index);
 
@@ -295,7 +296,7 @@ public class MissionManageGui extends TownyMissionGui {
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MissionService.getInstance().completeMission(player, entry);
+                        MissionService.getInstance().completeMission(entry);
                         BukkitUtil.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess").replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
                     }
                 };

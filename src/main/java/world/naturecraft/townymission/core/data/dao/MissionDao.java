@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.core.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
@@ -47,32 +46,15 @@ public class MissionDao extends Dao<MissionEntry> {
     }
 
     /**
-     * Gets num added.
-     *
-     * @param town the town
-     * @return the num added
-     */
-    public int getNumAdded(Town town) {
-        int num = 0;
-        for (MissionEntry e : db.getEntries()) {
-            if (e.getTown().equals(town)) {
-                num++;
-            }
-        }
-
-        return num;
-    }
-
-    /**
      * Gets town tasks.
      *
-     * @param town the town
+     * @param townUUID the town uuid
      * @return the town tasks
      */
-    public List<MissionEntry> getTownMissions(Town town) {
+    public List<MissionEntry> getTownMissions(UUID townUUID) {
         List<MissionEntry> list = new ArrayList<>();
         for (MissionEntry e : db.getEntries()) {
-            if (e.getTown().equals(town)) {
+            if (e.getTownUUID().equals(townUUID)) {
                 list.add(e);
             }
         }
@@ -83,36 +65,17 @@ public class MissionDao extends Dao<MissionEntry> {
     /**
      * Gets town tasks.
      *
-     * @param town        the town
+     * @param townUUID    the town uuid
      * @param missionType the mission type
      * @return the town tasks
      */
     @Deprecated
-    public MissionEntry getTownStartedMission(Town town, MissionType missionType) {
-        List<MissionEntry> list = getTownMissions(town);
+    public MissionEntry getTownStartedMission(UUID townUUID, MissionType missionType) {
+        List<MissionEntry> list = getTownMissions(townUUID);
 
         for (MissionEntry e : list) {
             if (e.getMissionType().equals(missionType) && e.getStartedTime() != 0) {
                 return e;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets started mission.
-     *
-     * @param town the town
-     * @return the started mission
-     */
-    @Deprecated
-    public MissionEntry getStartedMission(Town town) {
-        for (MissionEntry e : db.getEntries()) {
-            if (e.getTown().equals(town)) {
-                if (e.getStartedTime() != 0) {
-                    return e;
-                }
             }
         }
 
@@ -127,7 +90,7 @@ public class MissionDao extends Dao<MissionEntry> {
      */
     public MissionEntry getStartedMission(UUID townUUID) {
         for (MissionEntry e : db.getEntries()) {
-            if (e.getTown().getUUID().equals(townUUID)) {
+            if (e.getTownUUID().equals(townUUID)) {
                 if (e.getStartedTime() != 0) {
                     return e;
                 }
@@ -140,14 +103,14 @@ public class MissionDao extends Dao<MissionEntry> {
     /**
      * Gets started missions.
      *
-     * @param town the town
+     * @param townUUID the town uuid
      * @return the started missions
      */
-    public List<MissionEntry> getStartedMissions(Town town) {
+    public List<MissionEntry> getStartedMissions(UUID townUUID) {
         List<MissionEntry> list = getEntries(new EntryFilter<MissionEntry>() {
             @Override
             public boolean include(MissionEntry data) {
-                return (data.getTown().equals(town)
+                return (data.getTownUUID().equals(townUUID)
                         && data.isStarted());
             }
         });
@@ -158,12 +121,12 @@ public class MissionDao extends Dao<MissionEntry> {
     /**
      * This returns the indexed MissionEntry from 1 to mission.amount
      *
-     * @param town  The town for the index mission
-     * @param index The index
+     * @param townUUID the town uuid
+     * @param index    The index
      * @return The corresponding MissionEntry
      */
-    public MissionEntry getIndexedMission(Town town, int index) {
-        List<MissionEntry> missionEntries = getTownMissions(town);
+    public MissionEntry getIndexedMission(UUID townUUID, int index) {
+        List<MissionEntry> missionEntries = getTownMissions(townUUID);
         return missionEntries.get(index - 1);
     }
 
@@ -175,7 +138,14 @@ public class MissionDao extends Dao<MissionEntry> {
      */
     public void add(MissionEntry entry) {
         try {
-            db.add(entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer() == null ? null : entry.getStartedPlayer().getUniqueId().toString());
+            db.add(
+                    entry.getMissionType().name(),
+                    entry.getAddedTime(),
+                    entry.getStartedTime(),
+                    entry.getAllowedTime(),
+                    entry.getMissionJson().toJson(),
+                    entry.getTownUUID(),
+                    entry.getStartedPlayerUUID());
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);
         }
@@ -198,7 +168,15 @@ public class MissionDao extends Dao<MissionEntry> {
      */
     public void update(MissionEntry entry) {
         try {
-            db.update(entry.getId(), entry.getMissionType().name(), entry.getAddedTime(), entry.getStartedTime(), entry.getAllowedTime(), entry.getMissionJson().toJson(), entry.getTown().getName(), entry.getStartedPlayer().getUniqueId().toString());
+            db.update(
+                    entry.getId(),
+                    entry.getMissionType().name(),
+                    entry.getAddedTime(),
+                    entry.getStartedTime(),
+                    entry.getAllowedTime(),
+                    entry.getMissionJson().toJson(),
+                    entry.getTownUUID(),
+                    entry.getStartedPlayerUUID());
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);
         }

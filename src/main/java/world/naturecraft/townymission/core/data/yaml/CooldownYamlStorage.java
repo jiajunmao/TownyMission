@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.core.data.yaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
@@ -49,7 +48,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
      *
      * @param townUUID the town uuid
      */
-    public void add(String townUUID, String cooldownListJson) {
+    public void add(UUID townUUID, String cooldownListJson) {
         String uuid = UUID.randomUUID().toString();
 
         super.add(uuid + ".townUUID", townUUID);
@@ -62,7 +61,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
      * @param uuid     the uuid
      * @param townUUID the town uuid
      */
-    public void update(UUID uuid, String townUUID, String cooldownListJson) {
+    public void update(UUID uuid, UUID townUUID, String cooldownListJson) {
         set(uuid + ".townUUID", townUUID);
         set(uuid + ".cooldownListJson", cooldownListJson);
     }
@@ -78,10 +77,10 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
             try {
                 entryList.add(new CooldownEntry(
                         UUID.fromString(key),
-                        file.getString(key + ".townUUID"),
+                        UUID.fromString(file.getString(key + ".townUUID")),
                         file.getString(key + ".cooldownListJson")
                 ));
-            } catch (JsonProcessingException | NotRegisteredException e) {
+            } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }

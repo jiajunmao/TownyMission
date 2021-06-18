@@ -69,7 +69,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
                     if (!sanityCheck(player, args)) return;
 
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     ResourceMissionJson resourceMissionJson;
 
                     resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
@@ -135,7 +135,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
                     if (player.getItemInHand().getType().equals(resourceMissionJson.getType())) {
                         return true;
@@ -147,7 +147,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     }
                 })
                 .customCheck(() -> {
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     try {
                         if (resourceEntry.isTimedout()) {
                             BukkitUtil.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));

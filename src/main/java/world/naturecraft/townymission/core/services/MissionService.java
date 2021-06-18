@@ -71,7 +71,7 @@ public class MissionService extends TownyMissionService {
                     .customCheck(() -> {
                         Town town = TownyUtil.residentOf(player);
 
-                        if (MissionDao.getInstance().getStartedMission(town) == null) {
+                        if (MissionDao.getInstance().getStartedMission(town.getUUID()) == null) {
                             return true;
                         } else {
                             BukkitUtil.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
@@ -93,11 +93,11 @@ public class MissionService extends TownyMissionService {
                     "data:request",
                     uuid,
                     1,
-                    new String[]{"getTownUUID"}
+                    new String[]{"getTownOfPlayer"}
             );
 
             PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
-            String townUUID = response.getData()[0];
+            UUID townUUID = UUID.fromString(response.getData()[0]);
 
             if (!hasStarted(townUUID)) {
                 return true;
@@ -119,7 +119,7 @@ public class MissionService extends TownyMissionService {
                         if (TownyUtil.mayorOf(player) != null)
                             return true;
 
-                        return entry.getStartedPlayer().equals(player);
+                        return entry.getStartedPlayerUUID().equals(player.getUniqueId());
                     });
 
             return checker.check();
@@ -137,11 +137,11 @@ public class MissionService extends TownyMissionService {
                     "data:request",
                     uuid,
                     1,
-                    new String[]{"getTownUUID"}
+                    new String[]{"getTownOfPlayer"}
             );
 
             PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
-            String townUUID = response.getData()[0];
+            UUID townUUID = UUID.fromString(response.getData()[0]);
 
             if (hasStarted(townUUID)) {
                 BukkitUtil.sendMsg(player, instance.getLangEntry("commands.start.onAlreadyStarted"));
@@ -149,7 +149,7 @@ public class MissionService extends TownyMissionService {
             }
 
             boolean isMayor = BungeeChecker.isMayor(proxiedPlayer);
-            boolean canAbort = entry.getStartedPlayer().getUniqueId().equals(proxiedPlayer.getUniqueId()) || isMayor;
+            boolean canAbort = entry.getStartedPlayerUUID().equals(proxiedPlayer.getUniqueId()) || isMayor;
 
             return canAbort;
         }
@@ -158,15 +158,11 @@ public class MissionService extends TownyMissionService {
     /**
      * Has started boolean.
      *
-     * @param town the town
+     * @param townUUID the town
      * @return the boolean
      */
-    public boolean hasStarted(Town town) {
-        return MissionDao.getInstance().getStartedMission(town) == null;
-    }
-
-    public boolean hasStarted(String townUUID) {
-        return MissionDao.getInstance().getStartedMission(UUID.fromString(townUUID)) != null;
+    public boolean hasStarted(UUID townUUID) {
+        return MissionDao.getInstance().getStartedMission(townUUID) == null;
     }
 
     /**
@@ -182,22 +178,27 @@ public class MissionService extends TownyMissionService {
 
         Town town = TownyUtil.residentOf(player);
 
-        List<MissionEntry> taskEntries = MissionDao.getInstance().getTownMissions(town);
+        List<MissionEntry> taskEntries = MissionDao.getInstance().getTownMissions(town.getUUID());
         int missionIdx = choice;
 
         MissionEntry entry = taskEntries.get(missionIdx - 1);
 
         entry.setStartedTime(Util.currentTime());
-        entry.setStartedPlayer(player);
+        entry.setStartedPlayerUUID(player.getUniqueId());
         MissionDao.getInstance().update(entry);
 
-        if (SprintDao.getInstance().get(town.getUUID().toString()) == null) {
-            SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getStatsConfig().getInt("sprint.current"), instance.getStatsConfig().getInt("season.current"));
+        if (SprintDao.getInstance().get(town.getUUID()) == null) {
+            SprintEntry sprintEntry = new SprintEntry(
+                    UUID.randomUUID(),
+                    UUID.fromString(town.getUUID().toString()),
+                    0,
+                    instance.getStatsConfig().getInt("sprint.current"),
+                    instance.getStatsConfig().getInt("season.current"));
             SprintDao.getInstance().add(sprintEntry);
         }
 
-        if (SeasonDao.getInstance().get(town.getUUID().toString()) == null) {
-            SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), town.getUUID().toString(), town.getName(), 0, instance.getStatsConfig().getInt("season.current"));
+        if (SeasonDao.getInstance().get(town.getUUID()) == null) {
+            SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), town.getUUID(), 0, instance.getStatsConfig().getInt("season.current"));
             SeasonDao.getInstance().add(seasonEntry);
         }
 
@@ -215,34 +216,33 @@ public class MissionService extends TownyMissionService {
             return;
 
         MissionDao.getInstance().remove(entry);
-        CooldownService.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTownUUID(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
     }
 
     /**
      * Complete mission.
      *
-     * @param player the player
-     * @param entry  the entry
+     * @param entry the entry
      */
-    public void completeMission(Player player, MissionEntry entry) {
+    public void completeMission(MissionEntry entry) {
         if (entry.isTimedout() && !entry.isCompleted()) return;
 
         MissionDao.getInstance().remove(entry);
         MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, Util.currentTime());
         MissionHistoryDao.getInstance().add(missionHistoryEntry);
-        if (SprintDao.getInstance().contains(missionHistoryEntry.getTown())) {
-            SprintEntry sprintEntry = SprintDao.getInstance().get(missionHistoryEntry.getTown().getUUID().toString());
+        if (SprintDao.getInstance().contains(missionHistoryEntry.getTownUUID())) {
+            SprintEntry sprintEntry = SprintDao.getInstance().get(missionHistoryEntry.getTownUUID());
             sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() + missionHistoryEntry.getMissionJson().getReward());
             SprintDao.getInstance().update(sprintEntry);
         } else {
-            SprintDao.getInstance().add(new SprintEntry(UUID.randomUUID(),
-                    missionHistoryEntry.getTown().getUUID().toString(),
-                    missionHistoryEntry.getTown().getName(),
+            SprintDao.getInstance().add(new SprintEntry(
+                    UUID.randomUUID(),
+                    missionHistoryEntry.getTownUUID(),
                     missionHistoryEntry.getMissionJson().getReward(),
                     instance.getStatsConfig().getInt("sprint.current"),
                     instance.getStatsConfig().getInt("season.current")));
         }
-        CooldownService.getInstance().startCooldown(entry.getTown(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTownUUID(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
     }
 
     /**
@@ -293,7 +293,7 @@ public class MissionService extends TownyMissionService {
         for (MissionEntry entry : entryList) {
             if (entry.isStarted() && entry.isCompleted()) {
                 // If it is already completed, but unmoved, move to MissionHistory, and give the reward
-                MissionService.getInstance().completeMission(entry.getTown().getMayor().getPlayer(), entry);
+                MissionService.getInstance().completeMission(entry);
             }
 
             // Remove the entry from MissionStorage
