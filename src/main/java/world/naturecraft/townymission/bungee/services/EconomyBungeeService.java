@@ -38,8 +38,8 @@ public class EconomyBungeeService extends EconomyService {
                 playerUUID,
                 "econ:request",
                 UUID.randomUUID(),
-                2,
-                new String[]{"getBalance", playerUUID.toString()});
+                1,
+                new String[]{"getBalance"});
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
         return Integer.parseInt(response.getData()[0]);
     }
@@ -57,7 +57,7 @@ public class EconomyBungeeService extends EconomyService {
                 "econ:request",
                 UUID.randomUUID(),
                 2,
-                new String[]{"depositBalance", playerUUID.toString(), String.valueOf(amount)});
+                new String[]{"depositBalance", String.valueOf(amount)});
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
     }
 
@@ -74,7 +74,7 @@ public class EconomyBungeeService extends EconomyService {
                 "econ:request",
                 UUID.randomUUID(),
                 2,
-                new String[]{"withdrawBalance", playerUUID.toString(), String.valueOf(amount)});
+                new String[]{"withdrawBalance", String.valueOf(amount)});
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
     }
 }

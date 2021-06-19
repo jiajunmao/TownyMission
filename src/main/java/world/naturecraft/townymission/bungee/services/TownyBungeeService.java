@@ -17,10 +17,10 @@ public class TownyBungeeService extends TownyService {
     public UUID residentOf(UUID playerUUID) {
         PluginMessage pluginMessage = new PluginMessage(
                 playerUUID,
-                "data:request",
+                "townyinfo:request",
                 UUID.randomUUID(),
                 1,
-                new String[]{"getTownOfPlayer", playerUUID.toString()});
+                new String[]{"getTownOfPlayer"});
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(pluginMessage);
 
         if (response.getSize() == 0) {
@@ -34,10 +34,10 @@ public class TownyBungeeService extends TownyService {
     public UUID mayorOf(UUID playerUUID) {
         PluginMessage pluginMessage = new PluginMessage(
                 playerUUID,
-                "data:request",
+                "townyinfo:request",
                 UUID.randomUUID(),
                 1,
-                new String[]{"getMayorOfPlayer", playerUUID.toString()});
+                new String[]{"getMayorOfPlayer"});
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(pluginMessage);
 
         if (response.getSize() == 0) {
@@ -48,13 +48,13 @@ public class TownyBungeeService extends TownyService {
     }
 
     @Override
-    public List<UUID> getResidents(UUID townUUID) {
+    public List<UUID> getResidents(UUID playerUUID) {
         PluginMessage pluginMessage = new PluginMessage(
-                townUUID,
-                "data:request",
+                playerUUID,
+                "townyinfo:request",
                 UUID.randomUUID(),
                 1,
-                new String[]{"getTownResidents", townUUID.toString()});
+                new String[]{"getTownResidents"});
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(pluginMessage);
 
         if (response.getSize() == 0) {

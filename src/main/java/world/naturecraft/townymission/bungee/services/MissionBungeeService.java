@@ -47,11 +47,11 @@ public class MissionBungeeService extends MissionService {
         UUID uuid = UUID.randomUUID();
         // Check whether has permission
         PluginMessage request = new PluginMessage(
-                proxiedPlayer.getUniqueId(),
-                "data:request",
+                playerUUID,
+                "townyinfo:request",
                 uuid,
                 1,
-                new String[]{"getTownUUID"}
+                new String[]{"getTownOfPlayer", playerUUID.toString()}
         );
 
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
@@ -76,10 +76,10 @@ public class MissionBungeeService extends MissionService {
         // Check whether has permission
         PluginMessage request = new PluginMessage(
                 proxiedPlayer.getUniqueId(),
-                "data:request",
+                "townyinfo:request",
                 uuid,
                 1,
-                new String[]{"getTownUUID"}
+                new String[]{"getTownOfPlayer", playerUUID.toString()}
         );
 
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);

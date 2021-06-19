@@ -50,7 +50,6 @@ public class TownyUtil {
         return null;
     }
 
-
     /**
      * Gets town.
      *

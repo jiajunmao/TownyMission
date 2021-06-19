@@ -15,13 +15,12 @@ public class PlayerBungeeService extends PlayerService {
     @Override
     public int getNumEmptySlot(UUID playerUUID) {
         // Send PMC to server to ask
-        ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerUUID);
         UUID messageUUID = UUID.randomUUID();
         PluginMessage pluginMessage = new PluginMessage(
                 playerUUID,
-                "data:request",
+                "player:request",
                 messageUUID,
-                1,
+                2,
                 new String[]{"getNumEmptySlot"}
         );
 
@@ -33,10 +32,10 @@ public class PlayerBungeeService extends PlayerService {
     public void addItem(UUID playerUUID, String material, int amount) {
         PluginMessage request = new PluginMessage(
                 playerUUID,
-                "data:request",
+                "player:request",
                 UUID.randomUUID(),
                 2,
-                new String[]{material, String.valueOf(amount)});
+                new String[]{"addItem", material, String.valueOf(amount)});
 
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
         // TODO: maybe check for success?

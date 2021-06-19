@@ -91,15 +91,19 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
         }
     }
 
-    /**
-     * Send data.
-     *
-     * @param player the player
-     * @param data1  the data 1
-     * @param data2  the data 2
-     */
-    public void sendData(ProxiedPlayer player, String data1, int data2) {
+    public void registerChannel() {
+        TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
+        townyMissionBungee.getProxy().registerChannel("townymission:main");
+        townyMissionBungee.getLogger().info("townymission:main PMC channel registered");
+    }
 
+    /**
+     * Deregister channel.
+     */
+    public void deregisterChannel() {
+        TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
+        townyMissionBungee.getProxy().unregisterChannel("townymission:main");
+        townyMissionBungee.getLogger().info("townymission:main PMC channel unregistered");
     }
 
     /**

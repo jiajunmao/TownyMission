@@ -30,13 +30,13 @@ public class TownyBukkitService extends TownyService {
     @Override
     public UUID residentOf(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
-        return TownyUtil.residentOf(player).getUUID();
+        return TownyUtil.residentOf(player) == null ? null : TownyUtil.residentOf(player).getUUID();
     }
 
     @Override
     public UUID mayorOf(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
-        return TownyUtil.mayorOf(player).getUUID();
+        return TownyUtil.mayorOf(player) == null ? null : TownyUtil.mayorOf(player).getUUID();
     }
 
     @Override
