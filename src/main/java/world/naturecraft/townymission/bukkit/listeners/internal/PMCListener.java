@@ -1,9 +1,7 @@
 package world.naturecraft.townymission.bukkit.listeners.internal;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import jdk.jfr.Frequency;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -14,7 +12,6 @@ import world.naturecraft.townymission.bukkit.services.EconomyBukkitService;
 import world.naturecraft.townymission.bukkit.services.PlayerBukkitService;
 import world.naturecraft.townymission.bukkit.services.TownyBukkitService;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
@@ -58,6 +55,11 @@ public class PMCListener implements PluginMessageListener {
         }
     }
 
+    /**
+     * Handle economy.
+     *
+     * @param request the request
+     */
     public void handleEconomy(PluginMessage request) {
         String[] requestData = request.getData();
         String[] responseData = null;
@@ -92,6 +94,11 @@ public class PMCListener implements PluginMessageListener {
         ));
     }
 
+    /**
+     * Handle player.
+     *
+     * @param request the request
+     */
     public void handlePlayer(PluginMessage request) {
         String[] requestData = request.getData();
         String[] responseData = null;
@@ -122,6 +129,11 @@ public class PMCListener implements PluginMessageListener {
         ));
     }
 
+    /**
+     * Handle towny info.
+     *
+     * @param request the request
+     */
     public void handleTownyInfo(PluginMessage request) {
         String[] requestData = request.getData();
         String[] responseData = null;
@@ -192,6 +204,11 @@ public class PMCListener implements PluginMessageListener {
         ));
     }
 
+    /**
+     * Handle sanity check.
+     *
+     * @param request the request
+     */
     public void handleSanityCheck(PluginMessage request) {
         TownyMissionBukkit townyMissionInstance = TownyMissionInstance.getInstance();
         String[] requestData = request.getData();

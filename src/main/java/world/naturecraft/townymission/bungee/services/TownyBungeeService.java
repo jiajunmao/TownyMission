@@ -21,7 +21,7 @@ public class TownyBungeeService extends TownyService {
                 UUID.randomUUID(),
                 1,
                 new String[]{"getTownOfPlayer"});
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(pluginMessage);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(pluginMessage);
 
         if (response.getSize() == 0) {
             return null;
@@ -38,7 +38,7 @@ public class TownyBungeeService extends TownyService {
                 UUID.randomUUID(),
                 1,
                 new String[]{"getMayorOfPlayer"});
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(pluginMessage);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(pluginMessage);
 
         if (response.getSize() == 0) {
             return null;
@@ -48,14 +48,15 @@ public class TownyBungeeService extends TownyService {
     }
 
     @Override
-    public List<UUID> getResidents(UUID playerUUID) {
+    public List<UUID> getResidents(UUID townUUID) {
         PluginMessage pluginMessage = new PluginMessage(
-                playerUUID,
+                null,
                 "townyinfo:request",
                 UUID.randomUUID(),
                 1,
-                new String[]{"getTownResidents"});
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(pluginMessage);
+                new String[]{"getTownResidents", townUUID.toString()});
+        // TODO: Change this!
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(pluginMessage, "nc-terra-earth");
 
         if (response.getSize() == 0) {
             return null;

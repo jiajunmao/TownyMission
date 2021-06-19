@@ -22,7 +22,6 @@ import world.naturecraft.townymission.core.config.LangConfig;
 import world.naturecraft.townymission.core.config.MainConfig;
 import world.naturecraft.townymission.core.config.StatsConfig;
 import world.naturecraft.townymission.core.config.mission.MissionConfig;
-import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
 

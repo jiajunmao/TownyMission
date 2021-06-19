@@ -41,7 +41,7 @@ public class ClaimEntry extends DataEntity {
     /**
      * Instantiates a new Claim entry.
      *
-     * @param uuid         the id
+     * @param uuid       the id
      * @param playerUUID the player uuid
      * @param rewardType the reward type
      * @param rewardJson the reward json

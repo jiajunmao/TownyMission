@@ -1,7 +1,5 @@
 package world.naturecraft.townymission.bungee.services;
 
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.PlayerService;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
@@ -24,7 +22,7 @@ public class PlayerBungeeService extends PlayerService {
                 new String[]{"getNumEmptySlot"}
         );
 
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(pluginMessage);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(pluginMessage);
         return Integer.parseInt(response.getData()[0]);
     }
 
@@ -37,7 +35,7 @@ public class PlayerBungeeService extends PlayerService {
                 2,
                 new String[]{"addItem", material, String.valueOf(amount)});
 
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
         // TODO: maybe check for success?
     }
 }

@@ -40,7 +40,7 @@ public class EconomyBungeeService extends EconomyService {
                 UUID.randomUUID(),
                 1,
                 new String[]{"getBalance"});
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
         return Integer.parseInt(response.getData()[0]);
     }
 
@@ -58,7 +58,7 @@ public class EconomyBungeeService extends EconomyService {
                 UUID.randomUUID(),
                 2,
                 new String[]{"depositBalance", String.valueOf(amount)});
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
     }
 
     /**
@@ -75,6 +75,6 @@ public class EconomyBungeeService extends EconomyService {
                 UUID.randomUUID(),
                 2,
                 new String[]{"withdrawBalance", String.valueOf(amount)});
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
     }
 }

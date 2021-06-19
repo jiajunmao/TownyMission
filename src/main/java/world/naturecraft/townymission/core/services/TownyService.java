@@ -54,5 +54,5 @@ public abstract class TownyService {
      * @param townUUID the town uuid
      * @return the residents
      */
-    public abstract List<UUID> getResidents(UUID playerUUID);
+    public abstract List<UUID> getResidents(UUID townUUID);
 }

@@ -54,7 +54,7 @@ public class MissionBungeeService extends MissionService {
                 new String[]{"getTownOfPlayer", playerUUID.toString()}
         );
 
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
         UUID townUUID = UUID.fromString(response.getData()[0]);
 
         if (!hasStarted(townUUID)) {
@@ -82,7 +82,7 @@ public class MissionBungeeService extends MissionService {
                 new String[]{"getTownOfPlayer", playerUUID.toString()}
         );
 
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
         UUID townUUID = UUID.fromString(response.getData()[0]);
 
         if (hasStarted(townUUID)) {

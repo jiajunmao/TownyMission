@@ -43,12 +43,12 @@ public class TownyBukkitService extends TownyService {
     public List<UUID> getResidents(UUID townUUID) {
         try {
             List<Resident> players = TownyAPI.getInstance().getDataSource().getTown(townUUID).getResidents();
-            List<UUID> playerUUID = new ArrayList<>();
+            List<UUID> playerList = new ArrayList<>();
             for (Resident resident : players) {
-                playerUUID.add(resident.getUUID());
+                playerList.add(resident.getUUID());
             }
 
-            return playerUUID;
+            return playerList;
         } catch (NotRegisteredException e) {
             return null;
         }

@@ -49,7 +49,7 @@ public class BungeeChecker {
                 new String[]{"hasPermission", permission}
         );
 
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
         // We know that data[0] should contain the boolean response
         return Boolean.parseBoolean(response.getData()[0]);
     }
@@ -66,7 +66,7 @@ public class BungeeChecker {
         );
 
         // Registering CompletableFuture to get response
-        PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
+        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
         // We know that data[0] should contain the boolean response
         return Boolean.parseBoolean(response.getData()[0]);
     }

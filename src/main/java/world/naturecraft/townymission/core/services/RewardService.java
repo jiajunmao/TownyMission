@@ -1,7 +1,5 @@
 package world.naturecraft.townymission.core.services;
 
-import com.palmergames.bukkit.towny.object.Resident;
-import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
@@ -74,7 +72,7 @@ public class RewardService extends TownyMissionService {
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
-                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                        CommandService.getInstance().dispatchCommand(playerUUID, command);
                     }
                 };
 
@@ -154,11 +152,11 @@ public class RewardService extends TownyMissionService {
             switch (rewardMethod) {
                 case INDIVIDUAL:
                     // This means rewarding everyone in the town everything on the list
-                    List<Resident> residents = null;
-                    for (Resident resident : residents) {
+                    List<UUID> residents = TownyService.getInstance().getResidents(townUUID);
+                    for (UUID resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
-                                UUID.fromString(resident.getUUID().toString()),
+                                resident,
                                 rewardJson.getRewardType(),
                                 rewardJson,
                                 instance.getStatsConfig().getInt("season.current"),
@@ -167,15 +165,15 @@ public class RewardService extends TownyMissionService {
                     }
                     break;
                 case EQUAL:
-                    residents = null;
+                    residents = TownyService.getInstance().getResidents(townUUID);
                     int numResidents = residents.size();
                     int share = rewardJson.getAmount() / numResidents + 1;
                     RewardJson copyRewardJseon = RewardJson.deepCopy(rewardJson);
                     copyRewardJseon.setAmount(share);
-                    for (Resident resident : residents) {
+                    for (UUID resident : residents) {
                         ClaimEntry entry = new ClaimEntry(
                                 UUID.randomUUID(),
-                                UUID.fromString(resident.getUUID().toString()),
+                                resident,
                                 rewardJson.getRewardType(),
                                 copyRewardJseon,
                                 instance.getStatsConfig().getInt("season.current"),

@@ -5,8 +5,6 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bungee.TownyMissionBungee;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 
 import java.util.Collection;
@@ -18,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * The type Plugin messaging service.
  */
+@SuppressWarnings("UnstableApiUsage")
 public class PluginMessagingService {
 
     /**
@@ -50,28 +49,6 @@ public class PluginMessagingService {
     }
 
     /**
-     * Register channel.
-     */
-    public static void registerChannel() {
-        if (TownyMissionInstance.getInstance() instanceof TownyMissionBungee) {
-            TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
-            townyMissionBungee.getProxy().registerChannel("townymission:main");
-            townyMissionBungee.getLogger().info("townymission:main PMC channel registered");
-        }
-    }
-
-    /**
-     * Deregister channel.
-     */
-    public static void deregisterChannel() {
-        if (TownyMissionInstance.getInstance() instanceof TownyMissionBungee) {
-            TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
-            townyMissionBungee.getProxy().unregisterChannel("townymission:main");
-            townyMissionBungee.getLogger().info("townymission:main PMC channel unregistered");
-        }
-    }
-
-    /**
      * Send data.
      *
      * @param message the message
@@ -92,6 +69,23 @@ public class PluginMessagingService {
 
         ProxyServer.getInstance().getPlayer(message.getPlayerUUID())
                 .getServer().getInfo().sendData("townymission:main", out.toByteArray());
+    }
+
+    public static void sendData(PluginMessage message, String serverName) {
+        Collection<ProxiedPlayer> networkPlayers = ProxyServer.getInstance().getPlayers();
+        if (networkPlayers == null || networkPlayers.isEmpty()) {
+            return;
+        }
+
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF(message.getChannel());
+        out.writeUTF(message.getMessageUUID().toString());
+        out.writeInt(message.getSize());
+        for (String str : message.getData()) {
+            out.writeUTF(str);
+        }
+
+        ProxyServer.getInstance().getServerInfo(serverName).sendData("townymission:main", out.toByteArray());
     }
 
     /**
@@ -170,10 +164,17 @@ public class PluginMessagingService {
      * @param message the message
      * @return the plugin message
      */
-    public PluginMessage sendAndWaitForResponse(PluginMessage message) {
-        getInstance().registerRequest(message.getMessageUUID().toString());
-        Byte[] responseBytes = getInstance().getFuture(message.getMessageUUID().toString()).join();
-        PluginMessage response = parseData(responseBytes);
-        return response;
+    public PluginMessage sendAndWait(PluginMessage message) {
+        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
+        sendData(message);
+        Byte[] responseBytes = future.join();
+        return parseData(responseBytes);
+    }
+
+    public PluginMessage sendAndWait(PluginMessage message, String serverName) {
+        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
+        sendData(message, serverName);
+        Byte[] responseBytes = future.join();
+        return parseData(responseBytes);
     }
 }
