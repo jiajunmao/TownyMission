@@ -1,16 +1,12 @@
 package world.naturecraft.townymission.core.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
-import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
@@ -30,32 +26,32 @@ public class MissionEntry extends DataEntity {
     private final MissionType missionType;
     private final long addedTime;
     private final long allowedTime;
-    private final Town town;
+    private final UUID townUUID;
     private long startedTime;
     private MissionJson missionJson;
-    private Player startedPlayer;
+    private UUID startedPlayerUUID;
 
     /**
      * Instantiates a new Task entry.
      *
-     * @param id            the id
-     * @param missionType   the task type
-     * @param addedTime     the time the task is added
-     * @param startedTime   the started time
-     * @param allowedTime   the allowed time
-     * @param missionJson   the task json
-     * @param town          the town
-     * @param startedPlayer the started player
+     * @param id                the id
+     * @param missionType       the task type
+     * @param addedTime         the time the task is added
+     * @param startedTime       the started time
+     * @param allowedTime       the allowed time
+     * @param missionJson       the task json
+     * @param townUUID          the town
+     * @param startedPlayerUUID the started player
      */
-    public MissionEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, Town town, Player startedPlayer) {
+    public MissionEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, UUID townUUID, UUID startedPlayerUUID) {
         super(id, DbType.MISSION);
         this.missionType = missionType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;
         this.allowedTime = allowedTime;
         this.missionJson = missionJson;
-        this.town = town;
-        this.startedPlayer = startedPlayer;
+        this.townUUID = townUUID;
+        this.startedPlayerUUID = startedPlayerUUID;
     }
 
     /**
@@ -67,12 +63,12 @@ public class MissionEntry extends DataEntity {
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player name
      * @throws JsonProcessingException the json processing exception
      */
-    public MissionEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) throws JsonProcessingException {
-        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, TownyUtil.getTownByName(townName), (startedPlayerUUID == null || startedPlayerUUID.equals("null")) ? null : Bukkit.getPlayer(UUID.fromString(startedPlayerUUID)));
+    public MissionEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) throws JsonProcessingException {
+        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, townUUID, startedPlayerUUID);
 
         //TODO: replace with polymorphism
         this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
@@ -133,13 +129,8 @@ public class MissionEntry extends DataEntity {
         this.missionJson = json;
     }
 
-    /**
-     * Gets town.
-     *
-     * @return the town
-     */
-    public Town getTown() {
-        return town;
+    public UUID getTownUUID() {
+        return townUUID;
     }
 
     /**
@@ -161,22 +152,12 @@ public class MissionEntry extends DataEntity {
         return allowedTime;
     }
 
-    /**
-     * Gets started player.
-     *
-     * @return the started player
-     */
-    public Player getStartedPlayer() {
-        return startedPlayer;
+    public UUID getStartedPlayerUUID() {
+        return startedPlayerUUID;
     }
 
-    /**
-     * Sets started player.
-     *
-     * @param startedPlayer the started player
-     */
-    public void setStartedPlayer(Player startedPlayer) {
-        this.startedPlayer = startedPlayer;
+    public void setStartedPlayerUUID(UUID startedPlayerUUID) {
+        this.startedPlayerUUID = startedPlayerUUID;
     }
 
     private Material getGuiItemMaterial() {

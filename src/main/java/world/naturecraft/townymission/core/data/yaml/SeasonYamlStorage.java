@@ -46,16 +46,13 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
      * Add.
      *
      * @param townUUID    the town uuid
-     * @param townName    the town name
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public void add(String townUUID, String townName, int seasonPoint, int season) {
-        System.out.println("SeasonDao.add called with " + townName);
+    public void add(UUID townUUID, int seasonPoint, int season) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".townUUID", townUUID);
-        add(uuid + ".townName", townName);
         add(uuid + ".seasonPoint", seasonPoint);
         add(uuid + ".season", season);
     }
@@ -65,13 +62,11 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
      *
      * @param uuid        the uuid
      * @param townUUID    the town uuid
-     * @param townName    the town name
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public void update(UUID uuid, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(UUID uuid, UUID townUUID, int seasonPoint, int season) {
         set(uuid + ".townUUID", townUUID);
-        set(uuid + ".townName", townName);
         set(uuid + ".seasonPoint", seasonPoint);
         set(uuid + ".season", season);
     }
@@ -86,8 +81,7 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             entryList.add(new SeasonEntry(
                     UUID.fromString(key),
-                    file.getString(key + ".townUUID"),
-                    file.getString(key + ".townName"),
+                    UUID.fromString(file.getString(key + ".townUUID")),
                     file.getInt(key + ".seasonPoint"),
                     file.getInt(key + ".season")
             ));

@@ -18,7 +18,7 @@ public interface ClaimStorage extends Storage<ClaimEntry> {
      * @param season     the season
      * @param sprint     the sprint
      */
-    void add(String playerUUID, String rewardType, String rewardJson, int season, int sprint);
+    void add(UUID playerUUID, String rewardType, String rewardJson, int season, int sprint);
 
     /**
      * Update.
@@ -30,7 +30,7 @@ public interface ClaimStorage extends Storage<ClaimEntry> {
      * @param season     the season
      * @param sprint     the sprint
      */
-    void update(UUID uuid, String playerUUID, String rewardType, String rewardJson, int season, int sprint);
+    void update(UUID uuid, UUID playerUUID, String rewardType, String rewardJson, int season, int sprint);
 
     /**
      * Remove.

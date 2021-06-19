@@ -15,6 +15,7 @@ import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.core.data.yaml.*;
+import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand {
                     if (args.length == 2 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("reload"))
                         return true;
 
-                    BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                     return false;
                 }).check();
     }
@@ -87,10 +88,10 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand {
                 }
             } catch (ConfigLoadingException e) {
                 e.printStackTrace();
-                BukkitUtil.sendMsg(player, instance.getLangEntry("commands.reload.onFailure"));
+                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.reload.onFailure"));
             }
 
-            BukkitUtil.sendMsg(player, instance.getLangEntry("commands.reload.onSuccess"));
+            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.reload.onSuccess"));
         }
 
         return true;

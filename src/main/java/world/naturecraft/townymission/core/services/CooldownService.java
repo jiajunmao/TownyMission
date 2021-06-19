@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.core.services;
 
-import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.data.dao.CooldownDao;
@@ -35,17 +34,17 @@ public class CooldownService extends TownyMissionService {
     /**
      * Start cooldown.
      *
-     * @param town     the town
+     * @param townUUID the town uuid
      * @param cooldown the cooldown
      */
-    public void startCooldown(Town town, long cooldown) {
+    public void startCooldown(UUID townUUID, long cooldown) {
         Date date = new Date();
         // This means that the town does not exist in the db yet
-        if (CooldownDao.getInstance().get(town) == null) {
-            CooldownDao.getInstance().add(new CooldownEntry(UUID.randomUUID(), town));
+        if (CooldownDao.getInstance().get(townUUID) == null) {
+            CooldownDao.getInstance().add(new CooldownEntry(UUID.randomUUID(), townUUID));
         }
 
-        CooldownEntry entry = CooldownDao.getInstance().get(town);
+        CooldownEntry entry = CooldownDao.getInstance().get(townUUID);
         entry.startCooldown(cooldown);
         CooldownDao.getInstance().update(entry);
     }
@@ -53,12 +52,12 @@ public class CooldownService extends TownyMissionService {
     /**
      * Gets num addable.
      *
-     * @param town the town
+     * @param townUUID the town uuid
      * @return the num addable
      */
-    public int getNumAddable(Town town) {
+    public int getNumAddable(UUID townUUID) {
         int amount = instance.getInstanceConfig().getInt("mission.amount");
-        CooldownEntry entry = CooldownDao.getInstance().get(town);
+        CooldownEntry entry = CooldownDao.getInstance().get(townUUID);
 
         if (entry == null) return amount;
         int finished = entry.getNumFinished(true);

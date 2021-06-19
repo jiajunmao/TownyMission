@@ -48,7 +48,7 @@ public class MissionBungeeService extends MissionService {
         );
 
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
-        String townUUID = response.getData()[0];
+        UUID townUUID = UUID.fromString(response.getData()[0]);
 
         if (!hasStarted(townUUID)) {
             return true;
@@ -76,7 +76,7 @@ public class MissionBungeeService extends MissionService {
         );
 
         PluginMessage response = PluginMessagingService.getInstance().sendAndWaitForResponse(request);
-        String townUUID = response.getData()[0];
+        UUID townUUID = UUID.fromString(response.getData()[0]);
 
         if (hasStarted(townUUID)) {
             ChatService.getInstance().sendMsg(playerUUID, instance.getLangEntry("commands.start.onAlreadyStarted"));
@@ -84,7 +84,7 @@ public class MissionBungeeService extends MissionService {
         }
 
         boolean isMayor = BungeeChecker.isMayor(proxiedPlayer);
-        boolean canAbort = entry.getStartedPlayer().getUniqueId().equals(proxiedPlayer.getUniqueId()) || isMayor;
+        boolean canAbort = entry.getStartedPlayerUUID().equals(proxiedPlayer.getUniqueId()) || isMayor;
 
         return canAbort;
     }

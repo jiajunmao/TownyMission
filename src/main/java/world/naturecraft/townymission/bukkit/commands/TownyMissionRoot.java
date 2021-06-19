@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,16 +33,20 @@ public class TownyMissionRoot extends TownyMissionCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 0) {
-            BukkitUtil.sendMsg(sender, "&f I am too lazy to make a help page again -Barb");
-            return false;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (args.length == 0) {
+                ChatService.getInstance().sendMsg(player.getUniqueId(), "&f I am too lazy to make a help page again -Barb");
+                return false;
+            }
+
+            if (commands.containsKey(args[0])) {
+                getExecutor(args[0]).onCommand(sender, command, alias, args);
+            } else {
+                onUnknown(player);
+            }
         }
 
-        if (commands.containsKey(args[0])) {
-            getExecutor(args[0]).onCommand(sender, command, alias, args);
-        } else {
-            onUnknown(sender);
-        }
 
         return true;
     }

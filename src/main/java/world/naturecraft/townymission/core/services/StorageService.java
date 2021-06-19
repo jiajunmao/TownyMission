@@ -23,10 +23,10 @@ import java.util.concurrent.*;
 public class StorageService {
 
     private static StorageService singleton;
-    private HikariDataSource dataSource;
     private final StorageType storageType;
     private final Map<DbType, Storage> dbMap;
     private final TownyMissionInstance instance;
+    private HikariDataSource dataSource;
 
     /**
      * Instantiates a new Storage service.

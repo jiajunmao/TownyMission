@@ -35,7 +35,7 @@ public class MissionBukkitService extends MissionService {
                 .customCheck(() -> {
                     Town town = TownyUtil.residentOf(player);
 
-                    if (MissionDao.getInstance().getStartedMission(town) == null) {
+                    if (MissionDao.getInstance().getStartedMission(town.getUUID()) == null) {
                         return true;
                     } else {
                         ChatService.getInstance().sendMsg(playerUUID, townyMissionBukkit.getLangEntry("commands.start.onAlreadyStarted"));
@@ -55,7 +55,7 @@ public class MissionBukkitService extends MissionService {
                     if (TownyUtil.mayorOf(player) != null)
                         return true;
 
-                    return entry.getStartedPlayer().equals(player);
+                    return entry.getStartedPlayerUUID().equals(playerUUID);
                 });
 
         return checker.check();

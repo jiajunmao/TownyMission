@@ -19,6 +19,7 @@ import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.TimerService;
 
@@ -61,11 +62,11 @@ public class TownyMissionStart extends TownyMissionCommand {
                     Player player = (Player) sender;
                     if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
-                        MissionEntry entry = MissionDao.getInstance().getStartedMission(town);
-                        MissionService.getInstance().startMission(player, Integer.parseInt(args[1]));
+                        MissionEntry entry = MissionDao.getInstance().getStartedMission(town.getUUID());
+                        MissionService.getInstance().startMission(player.getUniqueId(), Integer.parseInt(args[1]));
 
                         try {
-                            BukkitUtil.sendMsg(sender, instance.getLangEntry("commands.start.onSuccess")
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.start.onSuccess")
                                     .replace("%type%", entry.getMissionType().name())
                                     .replace("%details%", entry.getDisplayLine()));
                         } catch (JsonProcessingException exception) {
@@ -97,13 +98,13 @@ public class TownyMissionStart extends TownyMissionCommand {
                 .customCheck(() -> {
                     if (args.length == 1 ||
                             (Integer.parseInt(args[1]) > instance.getConfig().getInt("mission.amount") || Integer.parseInt(args[1]) < 1)) {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
                 }).customCheck(() -> {
                     if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
                         return false;
                     }
                     return true;

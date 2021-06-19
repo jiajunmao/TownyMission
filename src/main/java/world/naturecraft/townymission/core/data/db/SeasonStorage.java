@@ -14,11 +14,10 @@ public interface SeasonStorage extends Storage<SeasonEntry> {
      * Add.
      *
      * @param townUUID    the town uuid
-     * @param townName    the town name
      * @param seasonPoint the season point
      * @param season      the season
      */
-    void add(String townUUID, String townName, int seasonPoint, int season);
+    void add(UUID townUUID, int seasonPoint, int season);
 
     /**
      * Remove.
@@ -32,11 +31,10 @@ public interface SeasonStorage extends Storage<SeasonEntry> {
      *
      * @param id          the id
      * @param townUUID    the town uuid
-     * @param townName    the town name
      * @param seasonPoint the season point
      * @param season      the season
      */
-    void update(UUID id, String townUUID, String townName, int seasonPoint, int season);
+    void update(UUID id, UUID townUUID, int seasonPoint, int season);
 
     List<SeasonEntry> getEntries();
 }

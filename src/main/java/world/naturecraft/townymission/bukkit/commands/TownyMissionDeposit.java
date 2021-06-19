@@ -24,6 +24,7 @@ import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.json.mission.ResourceMissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.TimerService;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
                     if (!sanityCheck(player, args)) return;
 
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     ResourceMissionJson resourceMissionJson;
 
                     resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
@@ -87,7 +88,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
                         resourceMissionJson.addContribution(player.getUniqueId().toString(), total);
                         resourceMissionJson.addCompleted(total);
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
                                 .replace("%number", String.valueOf(total)
                                         .replace("%type%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT))));
                     } else {
@@ -95,7 +96,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         resourceMissionJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
                         resourceMissionJson.addCompleted(number);
                         player.setItemInHand(null);
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("commands.deposit.onSuccess")
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
                                 .replace("%number", String.valueOf(number)
                                         .replace("%type%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT))));
                     }
@@ -135,22 +136,22 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
                     if (player.getItemInHand().getType().equals(resourceMissionJson.getType())) {
                         return true;
                     } else {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("commands.deposit.onNotMatch"));
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT)));
-                        BukkitUtil.sendMsg(player, "&cIn-hand type: " + instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNotMatch"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT)));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), "&cIn-hand type: " + instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         return false;
                     }
                 })
                 .customCheck(() -> {
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     try {
                         if (resourceEntry.isTimedout()) {
-                            BukkitUtil.sendMsg(player, instance.getLangEntry("commands.deposit.onMissionTimedOut"));
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onMissionTimedOut"));
                             return false;
                         }
                     } catch (NoStartedException e) {
@@ -166,13 +167,13 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                         return true;
                     } else {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                 })
                 .customCheck(() -> {
                     if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
                         return false;
                     }
                     return true;

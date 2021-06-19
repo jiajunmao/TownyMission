@@ -5,9 +5,6 @@
 package world.naturecraft.townymission.core.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.json.cooldown.CooldownListJson;
 
@@ -19,31 +16,20 @@ import java.util.UUID;
  */
 public class CooldownEntry extends DataEntity {
 
-    private Town town;
     // Map<StartedTime, Cooldown>
     private final CooldownListJson cooldownJsonList;
+    private UUID townUUID;
 
     /**
      * Instantiates a new Cooldown entry.
      *
-     * @param id   the id
-     * @param town the town
+     * @param uuid     the id
+     * @param townUUID the town
      */
-    public CooldownEntry(UUID id, Town town) {
-        super(id, DbType.COOLDOWN);
-        this.town = town;
+    public CooldownEntry(UUID uuid, UUID townUUID) {
+        super(uuid, DbType.COOLDOWN);
+        this.townUUID = townUUID;
         cooldownJsonList = new CooldownListJson();
-    }
-
-    /**
-     * Instantiates a new Cooldown entry.
-     *
-     * @param id       the id
-     * @param townUUID the town uuid
-     * @throws NotRegisteredException the not registered exception
-     */
-    public CooldownEntry(UUID id, String townUUID) throws NotRegisteredException {
-        this(id, TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID)));
     }
 
     /**
@@ -52,32 +38,30 @@ public class CooldownEntry extends DataEntity {
      * @param id               the id
      * @param townUUID         the town uuid
      * @param cooldownJsonList the cooldown json list
-     * @throws NotRegisteredException  the not registered exception
      * @throws JsonProcessingException the json processing exception
      */
-    public CooldownEntry(UUID id, String townUUID, String cooldownJsonList) throws NotRegisteredException, JsonProcessingException {
+    public CooldownEntry(UUID id, UUID townUUID, String cooldownJsonList) throws JsonProcessingException {
         super(id, DbType.COOLDOWN);
-        this.town = TownyAPI.getInstance().getDataSource().getTown(UUID.fromString(townUUID));
-        System.out.println("Parsing: " + cooldownJsonList);
+        this.townUUID = townUUID;
         this.cooldownJsonList = CooldownListJson.parse(cooldownJsonList);
     }
 
     /**
-     * Gets town.
+     * Gets town uuid.
      *
-     * @return the town
+     * @return the town uuid
      */
-    public Town getTown() {
-        return town;
+    public UUID getTownUUID() {
+        return townUUID;
     }
 
     /**
-     * Sets town.
+     * Sets town uuid.
      *
-     * @param town the town
+     * @param townUUID the town uuid
      */
-    public void setTown(Town town) {
-        this.town = town;
+    public void setTownUUID(UUID townUUID) {
+        this.townUUID = townUUID;
     }
 
     /**

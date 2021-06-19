@@ -5,29 +5,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.services.EconomyBukkitService;
+import world.naturecraft.townymission.bungee.services.EconomyBungeeService;
+
+import java.util.UUID;
 
 /**
  * The type Economy service.
  */
-public class EconomyService extends TownyMissionService {
+public abstract class EconomyService extends TownyMissionService {
 
     private static EconomyService singleton;
-    private final Economy economy;
-
-    /**
-     * Instantiates a new Economy service.
-     */
-    public EconomyService() {
-        super();
-        if (Bukkit.getPluginManager().getPlugin("Vault") == null)
-            throw new IllegalStateException("Vault is a hard-dependency!");
-
-        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            throw new IllegalStateException("Vault is a hard-dependency!");
-        }
-        economy = rsp.getProvider();
-    }
 
     /**
      * Gets instance.
@@ -36,7 +25,11 @@ public class EconomyService extends TownyMissionService {
      */
     public static EconomyService getInstance() {
         if (singleton == null) {
-            singleton = new EconomyService();
+            if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+                singleton = EconomyBukkitService.getInstance();
+            } else {
+                singleton = EconomyBungeeService.getInstance();
+            }
         }
 
         return singleton;
@@ -45,30 +38,24 @@ public class EconomyService extends TownyMissionService {
     /**
      * Gets balance.
      *
-     * @param player the player
+     * @param playerUUID the player
      * @return the balance
      */
-    public double getBalance(OfflinePlayer player) {
-        return economy.getBalance(player);
-    }
+    public abstract double getBalance(UUID playerUUID);
 
     /**
      * Deposit balance.
      *
-     * @param player the player
+     * @param playerUUID the player
      * @param amount the amount
      */
-    public void depositBalance(OfflinePlayer player, double amount) {
-        economy.depositPlayer(player, amount);
-    }
+    public abstract void depositBalance(UUID playerUUID, double amount);
 
     /**
      * Withdraw balance.
      *
-     * @param player the player
+     * @param playerUUID the player
      * @param amount the amount
      */
-    public void withdrawBalance(OfflinePlayer player, double amount) {
-        economy.withdrawPlayer(player, amount);
-    }
+    public abstract void withdrawBalance(UUID playerUUID, double amount);
 }

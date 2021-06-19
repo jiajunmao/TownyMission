@@ -19,6 +19,7 @@ import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.Rankable;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.TimerService;
 import world.naturecraft.townymission.core.utils.MultilineBuilder;
 
@@ -45,13 +46,13 @@ public class TownyMissionRank extends TownyMissionCommand {
                     if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
                         return true;
                     } else {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                 })
                 .customCheck(() -> {
                     if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
                         return false;
                     }
                     return true;
@@ -99,7 +100,7 @@ public class TownyMissionRank extends TownyMissionCommand {
                             }
                         }
                         String finalString = builder.toString();
-                        BukkitUtil.sendMsg(player, finalString);
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), finalString);
                     }
                 }
             };

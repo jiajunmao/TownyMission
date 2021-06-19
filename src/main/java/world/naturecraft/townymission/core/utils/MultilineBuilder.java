@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.core.utils;
 
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,6 @@ public class MultilineBuilder {
             finalDisplay += str + "\n";
         }
         finalDisplay += footer;
-        return BukkitUtil.translateColor(finalDisplay);
+        return ChatService.getInstance().translateColor(finalDisplay);
     }
 }

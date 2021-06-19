@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.logging.Logger;
 
@@ -43,8 +44,8 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
      *
      * @param sender the sender
      */
-    public void onUnknown(CommandSender sender) {
-        BukkitUtil.sendMsg(sender, "&c The command you are looking for does not exist");
+    public void onUnknown(Player sender) {
+        ChatService.getInstance().sendMsg(sender.getUniqueId(), "&c The command you are looking for does not exist");
     }
 
     /**
@@ -52,8 +53,8 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
      *
      * @param sender the sender
      */
-    public void onNoPermission(CommandSender sender) {
-        BukkitUtil.sendMsg(sender, "&c You do not have the permission to execute this command");
+    public void onNoPermission(Player sender) {
+        ChatService.getInstance().sendMsg(sender.getUniqueId(), "&c You do not have the permission to execute this command");
     }
 
     /**

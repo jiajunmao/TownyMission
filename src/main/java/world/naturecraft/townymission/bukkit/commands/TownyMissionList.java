@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
-import world.naturecraft.townymission.core.components.gui.MissionManageGui;
+import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
+import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class TownyMissionList extends TownyMissionCommand {
                 MissionManageGui gui = new MissionManageGui(instance);
                 gui.openInventory(player);
             } else {
-                BukkitUtil.sendMsg(sender, "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
+                ChatService.getInstance().sendMsg(player.getUniqueId(), "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
             }
         }
 

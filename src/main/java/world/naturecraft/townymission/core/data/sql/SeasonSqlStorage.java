@@ -49,12 +49,11 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL ," +
+                    "`uuid` VARCHAR(255) NOT NULL ," +
                     "`town_id` VARCHAR(255) NOT NULL ," +
-                    "`town_name` VARCHAR(255) NOT NULL, " +
                     "`seasonpoints` INT NOT NULL, " +
                     "`season` INT NOT NULL ," +
-                    "PRIMARY KEY (`id`))";
+                    "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -70,9 +69,9 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
             try {
                 ResultSet result = p.executeQuery();
                 while (result.next()) {
-                    list.add(new SeasonEntry(UUID.fromString(result.getString("id")),
-                            result.getString("town_id"),
-                            result.getString("town_name"),
+                    list.add(new SeasonEntry(
+                            UUID.fromString(result.getString("uuid")),
+                            UUID.fromString(result.getString("town_id")),
                             result.getInt("seasonpoints"),
                             result.getInt("season")));
                 }
@@ -89,16 +88,14 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
      * Add.
      *
      * @param townUUID    the town uuid
-     * @param townName    the town name
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public void add(String townUUID, String townName, int seasonPoint, int season) {
+    public void add(UUID townUUID, int seasonPoint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
-                    townName + "', '" +
                     seasonPoint + "', '" +
                     season + "');";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -110,12 +107,12 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
     /**
      * Remove.
      *
-     * @param id the id
+     * @param uuid the id
      */
-    public void remove(UUID id) {
+    public void remove(UUID uuid) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id + "');";
+                    "uuid='" + uuid + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -125,20 +122,18 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
     /**
      * Update.
      *
-     * @param id          the id
+     * @param uuid        the id
      * @param townUUID    the town uuid
-     * @param townName    the town name
      * @param seasonPoint the season point
      * @param season      the season
      */
-    public void update(UUID id, String townUUID, String townName, int seasonPoint, int season) {
+    public void update(UUID uuid, UUID townUUID, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +
-                    "', town_name='" + townName +
                     "', seasonpoints='" + seasonPoint +
                     "', season='" + season +
-                    "' WHERE id='" + id + "';";
+                    "' WHERE uuid='" + uuid + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

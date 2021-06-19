@@ -16,6 +16,7 @@ import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.RewardService;
 import world.naturecraft.townymission.core.utils.EntryFilter;
 import world.naturecraft.townymission.core.utils.MultilineBuilder;
@@ -51,7 +52,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                     || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
                                 return true;
                             } else {
-                                BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                                 return false;
                             }
                         }
@@ -94,7 +95,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
                     });
 
                     if (claimEntries.size() == 0) {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("commands.claim.onNotFound"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onNotFound"));
                         return;
                     } else {
                         // Listing all the claims
@@ -105,27 +106,27 @@ public class TownyMissionClaim extends TownyMissionCommand {
                                 builder.add("&e" + index + ". Type&f: " + e.getRewardJson().getRewardType() + " " + e.getRewardJson().getDisplayLine());
                                 index++;
                             }
-                            BukkitUtil.sendMsg(player, builder.toString());
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), builder.toString());
                         } else if (args.length == 2 && Util.isInt(args[1])) {
                             // This is claiming one claim entry from all
                             int choice = Integer.parseInt(args[1]) - 1;
                             if (choice >= claimEntries.size()) {
-                                BukkitUtil.sendMsg(player, instance.getLangEntry("commands.claim.notValidIndex"));
+                                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.notValidIndex"));
                                 return;
                             }
 
                             ClaimEntry entry = claimEntries.get(choice);
                             try {
-                                RewardService.getInstance().claimEntry(player, entry);
+                                RewardService.getInstance().claimEntry(player.getUniqueId(), entry);
                             } catch (NotEnoughInvSlotException e) {
-                                BukkitUtil.sendMsg(player, instance.getLangEntry("commands.claim.onNotEnoughSlot"));
+                                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onNotEnoughSlot"));
                                 return;
                             }
-                            BukkitUtil.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess"));
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess"));
                         } else {
                             // Claim all rewards
-                            RewardService.getInstance().claimEntry(player, claimEntries);
-                            BukkitUtil.sendMsg(player, instance.getLangEntry("commands.claim.onSuccess"));
+                            RewardService.getInstance().claimEntry(player.getUniqueId(), claimEntries);
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess"));
                         }
                     }
                 }

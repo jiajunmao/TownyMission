@@ -49,13 +49,12 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL ," +
+                    "`uuid` VARCHAR(255) NOT NULL ," +
                     "`town_id` VARCHAR(255) NOT NULL ," +
-                    "`town_name` VARCHAR(255) NOT NULL, " +
                     "`naturepoints` INT NOT NULL, " +
                     "`sprint` INT NOT NULL ," +
                     "`season` INT NOT NULL ," +
-                    "PRIMARY KEY (`id`))";
+                    "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -72,9 +71,8 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
                 ResultSet result = p.executeQuery();
 
                 while (result.next()) {
-                    SprintEntry entry = new SprintEntry(UUID.fromString(result.getString("id")),
-                            result.getString("town_id"),
-                            result.getString("town_name"),
+                    SprintEntry entry = new SprintEntry(UUID.fromString(result.getString("uuid")),
+                            UUID.fromString(result.getString("town_id")),
                             result.getInt("naturepoints"),
                             result.getInt("sprint"),
                             result.getInt("season"));
@@ -93,17 +91,15 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
      * Add.
      *
      * @param townUUID     the town uuid
-     * @param townName     the town name
      * @param naturePoints the nature points
      * @param sprint       the sprint
      * @param season       the season
      */
-    public void add(String townUUID, String townName, int naturePoints, int sprint, int season) {
+    public void add(UUID townUUID, int naturePoints, int sprint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
-                    townName + "', '" +
                     naturePoints + "', '" +
                     sprint + "', '" +
                     season + "');";
@@ -116,12 +112,12 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
     /**
      * Remove.
      *
-     * @param id the id
+     * @param uuid the id
      */
-    public void remove(UUID id) {
+    public void remove(UUID uuid) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id + "');";
+                    "uuid='" + uuid + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -131,22 +127,20 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
     /**
      * Update.
      *
-     * @param id           the id
+     * @param uuid         the id
      * @param townUUID     the town uuid
-     * @param townName     the town name
      * @param naturePoints the nature points
      * @param sprint       the sprint
      * @param season       the season
      */
-    public void update(UUID id, String townUUID, String townName, int naturePoints, int sprint, int season) {
+    public void update(UUID uuid, UUID townUUID, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +
-                    "', town_name='" + townName +
                     "', naturepoints='" + naturePoints +
                     "', sprint='" + sprint +
                     "', season='" + season +
-                    "' WHERE id='" + id + "';";
+                    "' WHERE uuid='" + uuid + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

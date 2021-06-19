@@ -52,13 +52,13 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL," +
+                    "`uuid` VARCHAR(255) NOT NULL," +
                     "`player_uuid` VARCHAR(255) NOT NULL ," +
                     "`reward_type` VARCHAR(255) NOT NULL ," +
                     "`reward_json` VARCHAR(255) NOT NULL," +
                     "`sprint` INT NOT NULL," +
                     "`season` INT NOT NULL," +
-                    "PRIMARY KEY (`id`))";
+                    "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -79,7 +79,7 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
             ResultSet result = p.executeQuery();
             while (result.next()) {
                 list.add(new ClaimEntry(
-                        result.getString("id"),
+                        result.getString("uuid"),
                         result.getString("player_uuid"),
                         result.getString("reward_type"),
                         result.getString("reward_json"),
@@ -100,7 +100,7 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
      * @param season     the season
      * @param sprint     the sprint
      */
-    public void add(String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
+    public void add(UUID playerUUID, String rewardType, String rewardJson, int season, int sprint) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -118,12 +118,12 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
     /**
      * Remove.
      *
-     * @param id the id
+     * @param uuid the id
      */
-    public void remove(UUID id) {
+    public void remove(UUID uuid) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id.toString() + "');";
+                    "uuid='" + uuid.toString() + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -133,21 +133,21 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
     /**
      * Update.
      *
-     * @param id         the id
+     * @param uuid       the id
      * @param playerUUID the player uuid
      * @param rewardJson the reward json
      * @param season     the season
      * @param sprint     the sprint
      */
-    public void update(UUID id, String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
+    public void update(UUID uuid, UUID playerUUID, String rewardType, String rewardJson, int season, int sprint) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET player_uuid='" + playerUUID +
-                    "', rewardType='" + rewardType +
+                    "', reward_type='" + rewardType +
                     "', reward_json='" + rewardJson +
                     "', season='" + season +
                     "', sprint='" + sprint +
-                    "' WHERE id='" + id.toString() + "';";
+                    "' WHERE uuid='" + uuid + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

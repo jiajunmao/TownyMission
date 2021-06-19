@@ -14,6 +14,7 @@ import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.CooldownService;
 import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.TimerService;
@@ -61,14 +62,14 @@ public class TownyMissionAbort extends TownyMissionCommand {
                     if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
                         if (Util.isInt(args[1])) {
-                            MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
-                            MissionService.getInstance().abortMission(player, entry);
+                            MissionEntry entry = MissionDao.getInstance().getIndexedMission(town.getUUID(), Integer.parseInt(args[1]));
+                            MissionService.getInstance().abortMission(player.getUniqueId(), entry);
                         } else {
-                            for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town)) {
-                                MissionService.getInstance().abortMission(player, entry);
+                            for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town.getUUID())) {
+                                MissionService.getInstance().abortMission(player.getUniqueId(), entry);
                             }
                         }
-                        CooldownService.getInstance().startCooldown(town, Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+                        CooldownService.getInstance().startCooldown(town.getUUID(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
                     }
                 }
             };
@@ -96,7 +97,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                             (!Util.isInt(args[1])
                                     || !args[1].equalsIgnoreCase("all")
                                     || (Util.isInt(args[1]) && Integer.parseInt(args[1]) < 1 && Integer.parseInt(args[1]) > 15))) {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
@@ -107,30 +108,30 @@ public class TownyMissionAbort extends TownyMissionCommand {
                         return true;
 
                     if (Util.isInt(args[1])) {
-                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town, Integer.parseInt(args[1]));
-                        if (entry.getStartedPlayer().equals(player)) {
+                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town.getUUID(), Integer.parseInt(args[1]));
+                        if (entry.getStartedPlayerUUID().equals(player.getUniqueId())) {
                             return true;
                         } else {
-                            BukkitUtil.sendMsg(player, instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
                             return false;
                         }
                     } else {
                         boolean result = true;
-                        for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town)) {
-                            result = result && entry.getStartedPlayer().equals(player);
+                        for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town.getUUID())) {
+                            result = result && entry.getStartedPlayerUUID().equals(player.getUniqueId());
                         }
 
                         if (result) {
                             return true;
                         } else {
-                            BukkitUtil.sendMsg(player, instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
                             return false;
                         }
                     }
                 })
                 .customCheck(() -> {
                     if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onClickDuringRecess"));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
                         return false;
                     }
                     return true;

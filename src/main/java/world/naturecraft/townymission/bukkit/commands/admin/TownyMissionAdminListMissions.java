@@ -15,6 +15,7 @@ import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.utils.MultilineBuilder;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
                         }
                     }
 
-                    BukkitUtil.sendMsg(player, instance.getLangEntry("universal.onCommandFormatError"));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                     return false;
                 }).check();
     }
@@ -84,7 +85,7 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
                     builder.add(" " + json.getDisplayLine());
                 }
 
-                BukkitUtil.sendMsg(sender, BukkitUtil.translateColor(builder.toString()));
+                ChatService.getInstance().sendMsg(player.getUniqueId(), ChatService.getInstance().translateColor(builder.toString()));
             }
         }
         return true;

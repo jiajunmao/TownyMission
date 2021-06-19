@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.core.data.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.palmergames.bukkit.towny.object.Town;
 import world.naturecraft.townymission.bukkit.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.core.components.enums.DbType;
@@ -14,6 +13,7 @@ import world.naturecraft.townymission.core.services.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Mission history dao.
@@ -46,15 +46,15 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
     /**
      * Gets all unclaimed.
      *
-     * @param town the town
+     * @param townUUID the town uuid
      * @return the all unclaimed
      */
-    public List<MissionHistoryEntry> getAllUnclaimed(Town town) {
+    public List<MissionHistoryEntry> getAllUnclaimed(UUID townUUID) {
         List<MissionHistoryEntry> list = db.getEntries();
         List<MissionHistoryEntry> result = new ArrayList<>();
 
         for (MissionHistoryEntry e : list) {
-            if (e.getTown().equals(town) && !e.isClaimed()) {
+            if (e.getTownUUID().equals(townUUID) && !e.isClaimed()) {
                 result.add(e);
             }
         }
@@ -69,8 +69,8 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
                     entry.getStartedTime(),
                     entry.getAllowedTime(),
                     entry.getMissionJson().toJson(),
-                    entry.getTown().getName(),
-                    entry.getStartedPlayer().getUniqueId().toString(),
+                    entry.getTownUUID(),
+                    entry.getStartedPlayerUUID(),
                     entry.getCompletedTime(),
                     entry.isClaimed(),
                     entry.getSprint(),
@@ -92,8 +92,8 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
                     entry.getStartedTime(),
                     entry.getAllowedTime(),
                     entry.getMissionJson().toJson(),
-                    entry.getTown().getName(),
-                    entry.getStartedPlayer().getUniqueId().toString(),
+                    entry.getTownUUID(),
+                    entry.getStartedPlayerUUID(),
                     entry.getCompletedTime(),
                     entry.isClaimed(),
                     entry.getSprint(),

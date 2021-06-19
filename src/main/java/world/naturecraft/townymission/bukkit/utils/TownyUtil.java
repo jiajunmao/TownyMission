@@ -52,4 +52,9 @@ public class TownyUtil {
 
         return null;
     }
+
+
+    public static Town getTown(UUID townUUID) throws NotRegisteredException {
+        return TownyAPI.getInstance().getDataSource().getTown(townUUID);
+    }
 }

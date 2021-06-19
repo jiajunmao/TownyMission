@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,17 +39,21 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 1) {
-            // This means the input is /tms admin, which is false
-            BukkitUtil.sendMsg(sender, instance.getLangEntry("universal.onCommandFormatError"));
-            return false;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (args.length == 1) {
+                // This means the input is /tms admin, which is false
+                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                return false;
+            }
+
+            if (commands.containsKey(args[1])) {
+                getExecutor(args[1]).onCommand(sender, command, alias, args);
+            } else {
+                onUnknown(player);
+            }
         }
 
-        if (commands.containsKey(args[1])) {
-            getExecutor(args[1]).onCommand(sender, command, alias, args);
-        } else {
-            onUnknown(sender);
-        }
 
         return true;
     }

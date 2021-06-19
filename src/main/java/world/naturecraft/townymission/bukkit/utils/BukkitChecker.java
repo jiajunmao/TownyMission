@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.utils.BooleanChecker;
 
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class BukkitChecker {
         if (checkHasTown) {
             if (TownyUtil.residentOf(player) == null) {
                 if (!isSilent)
-                    BukkitUtil.sendMsg(player, instance.getLangEntry("commands.sanityChecker.onNoTown"));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoTown"));
                 return false;
             }
         }
@@ -148,7 +149,7 @@ public class BukkitChecker {
                 return false;
             if (TownyUtil.mayorOf(player) == null) {
                 if (!isSilent)
-                    BukkitUtil.sendMsg(player, instance.getLangEntry("commands.sanityChecker.onNotMayor"));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNotMayor"));
                 return false;
             }
         }
@@ -156,9 +157,9 @@ public class BukkitChecker {
         if (checkHasStarted) {
             if (!checkHasTown)
                 return false;
-            if (missionDao.getStartedMission(TownyUtil.residentOf(player)) == null) {
+            if (missionDao.getStartedMission(TownyUtil.residentOf(player).getUUID()) == null) {
                 if (!isSilent)
-                    BukkitUtil.sendMsg(player, instance.getLangEntry("commands.sanityChecker.onNoStartedMission"));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoStartedMission"));
                 return false;
             }
         }
@@ -166,9 +167,9 @@ public class BukkitChecker {
         if (checkIsMissionType) {
             if (!checkHasStarted)
                 return false;
-            if (!missionDao.getStartedMission(TownyUtil.residentOf(player)).getMissionType().equals(missionType)) {
+            if (!missionDao.getStartedMission(TownyUtil.residentOf(player).getUUID()).getMissionType().equals(missionType)) {
                 if (!isSilent)
-                    BukkitUtil.sendMsg(player, instance.getLangEntry("commands.sanityChecker.onMissionTypeMismatch").replace("%missionType%", missionType.name().toLowerCase(Locale.ROOT)));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onMissionTypeMismatch").replace("%missionType%", missionType.name().toLowerCase(Locale.ROOT)));
                 return false;
             }
         }
@@ -177,7 +178,7 @@ public class BukkitChecker {
             for (String s : permissions) {
                 if (!player.hasPermission(s)) {
                     if (!isSilent)
-                        BukkitUtil.sendMsg(player, instance.getLangEntry("commands.sanityChecker.onNoPermission").replace("%permission%", s));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoPermission").replace("%permission%", s));
                     return false;
                 }
             }

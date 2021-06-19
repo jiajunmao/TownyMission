@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.core.components.gui;
+package world.naturecraft.townymission.bukkit.gui;
 
 /**
  * The type Claim gui.

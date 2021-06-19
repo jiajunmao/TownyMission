@@ -50,15 +50,15 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
     public void createTable() {
         execute(conn -> {
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
-                    "`id` VARCHAR(255) NOT NULL ," +
+                    "`uuid` VARCHAR(255) NOT NULL ," +
                     "`task_type` VARCHAR(255) NOT NULL ," +
                     "`added_time` BIGINT NOT NULL, " +
                     "`started_time` BIGINT NOT NULL, " +
                     "`allowed_time` BIGINT NOT NULL, " +
-                    "`task_json` VARCHAR(255) NOT NULL ," +
-                    "`town` VARCHAR(255) NOT NULL ," +
-                    "`started_player` VARCHAR(255) NOT NULL," +
-                    "PRIMARY KEY (`id`))";
+                    "`mission_json` VARCHAR(255) NOT NULL ," +
+                    "`town_uuid` VARCHAR(255) NOT NULL ," +
+                    "`started_player_uuid` VARCHAR(255) NOT NULL," +
+                    "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -81,9 +81,9 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
                                 result.getLong("added_time"),
                                 result.getLong("started_time"),
                                 result.getLong("allowed_time"),
-                                result.getString("task_json"),
-                                result.getString("town"),
-                                result.getString("started_player")));
+                                result.getString("mission_json"),
+                                UUID.fromString(result.getString("town_uuid")),
+                                UUID.fromString(result.getString("started_player_uuid"))));
                     } catch (JsonProcessingException exception) {
                         exception.printStackTrace();
                     }
@@ -105,10 +105,10 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -117,7 +117,7 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
                     startedTime + "', '" +
                     allowedTime + "', '" +
                     missionJson + "', '" +
-                    townName + "', '" +
+                    townUUID + "', '" +
                     startedPlayerUUID + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -133,7 +133,7 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
     public void remove(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
-                    "id='" + id + "');";
+                    "uuid='" + id + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -149,20 +149,20 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
      * @param startedTime       the started time
      * @param allowedTime       the allowed time
      * @param missionJson       the mission json
-     * @param townName          the town name
+     * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, String townName, String startedPlayerUUID) {
+    public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET task_type='" + missionType +
                     "', added_time='" + addedTime +
                     "', started_time='" + startedTime +
                     "', allowed_time='" + allowedTime +
-                    "', task_json='" + missionJson +
-                    "', town='" + townName +
-                    "', started_player='" + startedPlayerUUID +
-                    "' WHERE id='" + id + "';";
+                    "', mission_json='" + missionJson +
+                    "', town_uuid='" + townUUID +
+                    "', started_player_uuid='" + startedPlayerUUID +
+                    "' WHERE uuid='" + id + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
