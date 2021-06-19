@@ -18,7 +18,6 @@ public abstract class TownyMissionService {
 
     /**
      * Instantiates a new Towny mission service.
-     *
      */
     public TownyMissionService() {
         this.instance = TownyMissionInstance.getInstance();

@@ -4,19 +4,14 @@
 
 package world.naturecraft.townymission.core.services;
 
-import com.palmergames.bukkit.towny.object.Town;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.services.MissionBukkitService;
-import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
-import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bungee.services.MissionBungeeService;
-import world.naturecraft.townymission.bungee.utils.BungeeChecker;
-import world.naturecraft.townymission.core.components.entity.*;
+import world.naturecraft.townymission.core.components.entity.MissionEntry;
+import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
+import world.naturecraft.townymission.core.components.entity.SeasonEntry;
+import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.data.dao.MissionHistoryDao;
@@ -53,8 +48,21 @@ public abstract class MissionService extends TownyMissionService {
         return singleton;
     }
 
+    /**
+     * Can start mission boolean.
+     *
+     * @param playerUUID the player uuid
+     * @return the boolean
+     */
     public abstract boolean canStartMission(UUID playerUUID);
 
+    /**
+     * Can abort mission boolean.
+     *
+     * @param playerUUID the player uuid
+     * @param entry      the entry
+     * @return the boolean
+     */
     public abstract boolean canAbortMission(UUID playerUUID, MissionEntry entry);
 
     /**
@@ -71,7 +79,7 @@ public abstract class MissionService extends TownyMissionService {
      * Start mission.
      *
      * @param playerUUID the player
-     * @param choice the choice
+     * @param choice     the choice
      * @return the boolean
      */
     public boolean startMission(UUID playerUUID, int choice) {
@@ -111,7 +119,7 @@ public abstract class MissionService extends TownyMissionService {
      * Abort mission.
      *
      * @param playerUUID the player
-     * @param entry  the entry
+     * @param entry      the entry
      */
     public void abortMission(UUID playerUUID, MissionEntry entry) {
         if (!canAbortMission(playerUUID, entry))

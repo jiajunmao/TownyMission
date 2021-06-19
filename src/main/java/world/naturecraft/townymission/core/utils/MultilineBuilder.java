@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.core.utils;
 
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.ArrayList;

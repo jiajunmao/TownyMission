@@ -10,10 +10,18 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Chat bukkit service.
+ */
 public class ChatBukkitService extends ChatService {
 
     private static ChatBukkitService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ChatBukkitService getInstance() {
         if (singleton == null) {
             singleton = new ChatBukkitService();
@@ -21,6 +29,7 @@ public class ChatBukkitService extends ChatService {
 
         return singleton;
     }
+
     /**
      * Send msg.
      *

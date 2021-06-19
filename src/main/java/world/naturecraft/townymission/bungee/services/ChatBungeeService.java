@@ -3,18 +3,27 @@ package world.naturecraft.townymission.bungee.services;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Chat bungee service.
+ */
 public class ChatBungeeService extends ChatService {
 
+    /**
+     * The constant singleton.
+     */
     public static ChatBungeeService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ChatBungeeService getInstance() {
         if (singleton == null) {
             singleton = new ChatBungeeService();

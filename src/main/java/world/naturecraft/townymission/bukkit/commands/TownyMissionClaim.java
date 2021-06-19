@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
 import world.naturecraft.townymission.core.services.ChatService;

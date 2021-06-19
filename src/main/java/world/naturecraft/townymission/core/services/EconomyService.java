@@ -1,9 +1,5 @@
 package world.naturecraft.townymission.core.services;
 
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.services.EconomyBukkitService;
@@ -47,7 +43,7 @@ public abstract class EconomyService extends TownyMissionService {
      * Deposit balance.
      *
      * @param playerUUID the player
-     * @param amount the amount
+     * @param amount     the amount
      */
     public abstract void depositBalance(UUID playerUUID, double amount);
 
@@ -55,7 +51,7 @@ public abstract class EconomyService extends TownyMissionService {
      * Withdraw balance.
      *
      * @param playerUUID the player
-     * @param amount the amount
+     * @param amount     the amount
      */
     public abstract void withdrawBalance(UUID playerUUID, double amount);
 }

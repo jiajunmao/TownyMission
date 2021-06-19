@@ -1,17 +1,12 @@
 package world.naturecraft.townymission.bukkit.utils;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
-import world.naturecraft.townymission.bungee.utils.BungeeUtil;
 
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The type Util.
@@ -55,6 +50,12 @@ public class BukkitUtil {
         return num;
     }
 
+    /**
+     * Gets player name from uuid.
+     *
+     * @param playerUUID the player uuid
+     * @return the player name from uuid
+     */
     public static String getPlayerNameFromUUID(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
         return player.getName();

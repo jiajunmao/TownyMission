@@ -14,10 +14,18 @@ import world.naturecraft.townymission.core.services.MissionService;
 
 import java.util.UUID;
 
+/**
+ * The type Mission bukkit service.
+ */
 public class MissionBukkitService extends MissionService {
 
     private static MissionBukkitService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MissionBukkitService getInstance() {
         if (singleton == null) {
             singleton = new MissionBukkitService();
@@ -60,6 +68,6 @@ public class MissionBukkitService extends MissionService {
 
         return checker.check();
     }
-    
-    
+
+
 }

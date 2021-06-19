@@ -3,7 +3,6 @@ package world.naturecraft.townymission.core.services;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.core.components.DataHolder;
 import world.naturecraft.townymission.core.components.enums.DbType;

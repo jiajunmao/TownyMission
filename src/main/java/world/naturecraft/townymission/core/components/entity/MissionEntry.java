@@ -6,7 +6,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
@@ -129,6 +128,11 @@ public class MissionEntry extends DataEntity {
         this.missionJson = json;
     }
 
+    /**
+     * Gets town uuid.
+     *
+     * @return the town uuid
+     */
     public UUID getTownUUID() {
         return townUUID;
     }
@@ -152,10 +156,20 @@ public class MissionEntry extends DataEntity {
         return allowedTime;
     }
 
+    /**
+     * Gets started player uuid.
+     *
+     * @return the started player uuid
+     */
     public UUID getStartedPlayerUUID() {
         return startedPlayerUUID;
     }
 
+    /**
+     * Sets started player uuid.
+     *
+     * @param startedPlayerUUID the started player uuid
+     */
     public void setStartedPlayerUUID(UUID startedPlayerUUID) {
         this.startedPlayerUUID = startedPlayerUUID;
     }

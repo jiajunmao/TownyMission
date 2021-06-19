@@ -1,16 +1,23 @@
 package world.naturecraft.townymission.bungee.services;
 
-import org.bukkit.plugin.Plugin;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.EconomyService;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
 
 import java.util.UUID;
 
+/**
+ * The type Economy bungee service.
+ */
 public class EconomyBungeeService extends EconomyService {
 
     private static EconomyBungeeService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EconomyBungeeService getInstance() {
         if (singleton == null) {
             singleton = new EconomyBungeeService();

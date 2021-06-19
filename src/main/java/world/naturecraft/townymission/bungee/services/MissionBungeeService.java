@@ -2,7 +2,6 @@ package world.naturecraft.townymission.bungee.services;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bungee.utils.BungeeChecker;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
@@ -12,10 +11,18 @@ import world.naturecraft.townymission.core.services.PluginMessagingService;
 
 import java.util.UUID;
 
+/**
+ * The type Mission bungee service.
+ */
 public class MissionBungeeService extends MissionService {
 
     private static MissionBungeeService singletion;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MissionBungeeService getInstance() {
         if (singletion == null) {
             singletion = new MissionBungeeService();

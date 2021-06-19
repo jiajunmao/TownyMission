@@ -161,6 +161,11 @@ public class MissionHistoryEntry extends DataEntity {
         return missionJson;
     }
 
+    /**
+     * Sets mission json.
+     *
+     * @param missionJson the mission json
+     */
     public void setMissionJson(MissionJson missionJson) {
         this.missionJson = missionJson;
     }
@@ -175,10 +180,20 @@ public class MissionHistoryEntry extends DataEntity {
     }
 
 
+    /**
+     * Gets town uuid.
+     *
+     * @return the town uuid
+     */
     public UUID getTownUUID() {
         return townUUID;
     }
 
+    /**
+     * Sets town uuid.
+     *
+     * @param townUUID the town uuid
+     */
     public void setTownUUID(UUID townUUID) {
         this.townUUID = townUUID;
     }
@@ -255,10 +270,20 @@ public class MissionHistoryEntry extends DataEntity {
         this.addedTime = addedTime;
     }
 
+    /**
+     * Gets started player uuid.
+     *
+     * @return the started player uuid
+     */
     public UUID getStartedPlayerUUID() {
         return startedPlayerUUID;
     }
 
+    /**
+     * Sets started player uuid.
+     *
+     * @param startedPlayerUUID the started player uuid
+     */
     public void setStartedPlayerUUID(UUID startedPlayerUUID) {
         this.startedPlayerUUID = startedPlayerUUID;
     }

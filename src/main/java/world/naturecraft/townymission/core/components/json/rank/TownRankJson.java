@@ -29,7 +29,7 @@ public class TownRankJson implements Rankable {
     /**
      * Instantiates a new Season rank.
      *
-     * @param townUUID   the town id
+     * @param townUUID the town id
      * @param points   the points
      */
     @ConstructorProperties({"townUUID", "points"})

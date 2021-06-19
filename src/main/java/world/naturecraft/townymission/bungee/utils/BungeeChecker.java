@@ -11,14 +11,33 @@ import java.util.UUID;
  */
 public class BungeeChecker {
 
+    /**
+     * Is mayor boolean.
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public static boolean isMayor(ProxiedPlayer player) {
         return booleanCheck(player, "isMayor");
     }
 
+    /**
+     * Has town boolean.
+     *
+     * @param player the player
+     * @return the boolean
+     */
     public static boolean hasTown(ProxiedPlayer player) {
         return booleanCheck(player, "hasTown");
     }
 
+    /**
+     * Has permission boolean.
+     *
+     * @param player     the player
+     * @param permission the permission
+     * @return the boolean
+     */
     public static boolean hasPermission(ProxiedPlayer player, String permission) {
         UUID uuid = UUID.randomUUID();
         // Check whether has town

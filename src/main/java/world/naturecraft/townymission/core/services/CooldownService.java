@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.core.services;
 
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.CooldownEntry;
 import world.naturecraft.townymission.core.data.dao.CooldownDao;
 

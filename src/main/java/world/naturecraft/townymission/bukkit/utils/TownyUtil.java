@@ -6,12 +6,9 @@ package world.naturecraft.townymission.bukkit.utils;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -54,6 +51,13 @@ public class TownyUtil {
     }
 
 
+    /**
+     * Gets town.
+     *
+     * @param townUUID the town uuid
+     * @return the town
+     * @throws NotRegisteredException the not registered exception
+     */
     public static Town getTown(UUID townUUID) throws NotRegisteredException {
         return TownyAPI.getInstance().getDataSource().getTown(townUUID);
     }

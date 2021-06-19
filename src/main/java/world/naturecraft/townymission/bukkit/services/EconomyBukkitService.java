@@ -8,11 +8,17 @@ import world.naturecraft.townymission.core.services.EconomyService;
 
 import java.util.UUID;
 
+/**
+ * The type Economy bukkit service.
+ */
 public class EconomyBukkitService extends EconomyService {
 
     private static EconomyBukkitService singleton;
     private final Economy economy;
 
+    /**
+     * Instantiates a new Economy bukkit service.
+     */
     public EconomyBukkitService() {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
@@ -21,6 +27,11 @@ public class EconomyBukkitService extends EconomyService {
         economy = rsp.getProvider();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EconomyBukkitService getInstance() {
         if (singleton == null) {
             singleton = new EconomyBukkitService();
@@ -44,7 +55,7 @@ public class EconomyBukkitService extends EconomyService {
      * Deposit balance.
      *
      * @param playerUUID the player
-     * @param amount the amount
+     * @param amount     the amount
      */
     public void depositBalance(UUID playerUUID, double amount) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
@@ -55,7 +66,7 @@ public class EconomyBukkitService extends EconomyService {
      * Withdraw balance.
      *
      * @param playerUUID the player
-     * @param amount the amount
+     * @param amount     the amount
      */
     public void withdrawBalance(UUID playerUUID, double amount) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);

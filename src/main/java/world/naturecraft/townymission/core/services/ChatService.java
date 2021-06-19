@@ -14,6 +14,11 @@ public abstract class ChatService extends TownyMissionService {
 
     private static ChatService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ChatService getInstance() {
         if (singleton == null) {
             if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
@@ -26,7 +31,19 @@ public abstract class ChatService extends TownyMissionService {
         return singleton;
     }
 
+    /**
+     * Send msg.
+     *
+     * @param playerUUID the player uuid
+     * @param message    the message
+     */
     public abstract void sendMsg(UUID playerUUID, String message);
 
+    /**
+     * Translate color string.
+     *
+     * @param message the message
+     * @return the string
+     */
     public abstract String translateColor(String message);
 }

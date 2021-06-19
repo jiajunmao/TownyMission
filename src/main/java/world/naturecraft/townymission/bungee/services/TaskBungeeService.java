@@ -7,10 +7,18 @@ import world.naturecraft.townymission.core.services.TaskService;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type Task bungee service.
+ */
 public class TaskBungeeService extends TaskService {
 
     private static TaskBungeeService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static TaskBungeeService getInstance() {
         if (singleton == null) {
             singleton = new TaskBungeeService();
@@ -18,6 +26,7 @@ public class TaskBungeeService extends TaskService {
 
         return singleton;
     }
+
     /**
      * Run task async.
      *

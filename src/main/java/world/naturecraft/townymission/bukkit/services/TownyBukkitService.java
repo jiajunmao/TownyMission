@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Towny bukkit service.
+ */
 public class TownyBukkitService extends TownyService {
 
     @Override

@@ -33,7 +33,8 @@ public class PluginMessage {
     /**
      * Instantiates a new Plugin message.
      */
-    public PluginMessage() {}
+    public PluginMessage() {
+    }
 
     /**
      * Player uuid plugin message.

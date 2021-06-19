@@ -1,25 +1,14 @@
 package world.naturecraft.townymission.core.services;
 
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.config.ServerInfo;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bukkit.utils.RankUtil;
-import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.bungee.utils.BungeeUtil;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
-import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
@@ -63,6 +52,7 @@ public class RewardService extends TownyMissionService {
      * Reward a player with the content in the RewarsJson
      * This assumes that the player is online
      *
+     * @param playerUUID the player uuid
      * @param claimEntry The entry containing the reward
      */
 // TODO: Grab stuff from the freaking DAO, you are a service!
@@ -129,7 +119,7 @@ public class RewardService extends TownyMissionService {
     /**
      * Claim entry.
      *
-     * @param playerUUID         the player
+     * @param playerUUID     the player
      * @param rewardJsonList the reward json list
      */
     public void claimEntry(UUID playerUUID, List<ClaimEntry> rewardJsonList) {
@@ -141,6 +131,7 @@ public class RewardService extends TownyMissionService {
     /**
      * Reward town.
      *
+     * @param townUUID     the town uuid
      * @param rewardMethod the reward method
      * @param rewardJson   the reward json
      */

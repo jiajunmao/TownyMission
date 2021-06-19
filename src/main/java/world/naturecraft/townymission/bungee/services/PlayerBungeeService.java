@@ -2,13 +2,15 @@ package world.naturecraft.townymission.bungee.services;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.bukkit.plugin.Plugin;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.PlayerService;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
 
 import java.util.UUID;
 
+/**
+ * The type Player bungee service.
+ */
 public class PlayerBungeeService extends PlayerService {
     @Override
     public int getNumEmptySlot(UUID playerUUID) {

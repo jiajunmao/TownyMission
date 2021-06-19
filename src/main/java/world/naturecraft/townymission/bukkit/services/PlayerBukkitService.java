@@ -2,7 +2,6 @@ package world.naturecraft.townymission.bukkit.services;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
@@ -11,10 +10,21 @@ import world.naturecraft.townymission.core.services.PlayerService;
 import java.util.Locale;
 import java.util.UUID;
 
+/**
+ * The type Player bukkit service.
+ */
 public class PlayerBukkitService extends PlayerService {
 
+    /**
+     * The constant singleton.
+     */
     public static PlayerBukkitService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static PlayerBukkitService getInstance() {
         if (singleton == null) {
             singleton = new PlayerBukkitService();

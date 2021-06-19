@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Towny bungee service.
+ */
 public class TownyBungeeService extends TownyService {
 
     @Override

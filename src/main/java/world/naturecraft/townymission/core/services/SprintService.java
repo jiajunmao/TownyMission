@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.core.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.RankUtil;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
 import world.naturecraft.townymission.core.components.entity.SprintHistoryEntry;

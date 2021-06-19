@@ -5,12 +5,10 @@
 package world.naturecraft.townymission.bukkit.commands;
 
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
-import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.services.ChatService;
 
 import java.util.logging.Logger;
