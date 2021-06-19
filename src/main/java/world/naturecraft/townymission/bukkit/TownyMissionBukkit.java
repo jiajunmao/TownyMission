@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstance {
 
-    private final Logger logger = getLogger();
+    private final Logger logger = this.getLogger();
     private MissionConfig missionConfig;
     private StatsConfig statsConfig;
     private MainConfig mainConfig;
@@ -45,6 +45,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
     @Override
     public void onEnable() {
+
         logger.info(BukkitUtil.translateColor("{#22DDBA}" + "  _______                        __  __ _         _             "));
         logger.info(BukkitUtil.translateColor("{#22DDBA}" + " |__   __|                      |  \\/  (_)       (_)            "));
         logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));
@@ -242,10 +243,5 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public InputStream getInstanceResource(String filePath) {
         return this.getResource(filePath);
-    }
-
-    @Override
-    public Logger getLogger() {
-        return this.getLogger();
     }
 }

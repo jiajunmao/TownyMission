@@ -2,7 +2,6 @@ package world.naturecraft.townymission.core.services;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
@@ -119,7 +118,6 @@ public class StorageService {
      */
     @SuppressWarnings("unchecked")
     public <T extends Storage> T getStorage(DbType dbType) {
-        TownyMissionBukkit townyMissionBukkit = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
         return (T) dbMap.get(dbType);
     }
 

@@ -2,16 +2,13 @@ package world.naturecraft.townymission.core.services;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bukkit.utils.RankUtil;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
+import world.naturecraft.townymission.bungee.utils.BungeeUtil;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
@@ -40,22 +37,13 @@ public class RewardService extends TownyMissionService {
     private static RewardService singleton;
 
     /**
-     * Instantiates a new Reward service.
-     *
-     * @param instance the instance
-     */
-    public RewardService(TownyMissionInstance instance) {
-        super(instance);
-    }
-
-    /**
      * Gets instance.
      *
      * @return the instance
      */
     public static RewardService getInstance() {
         if (singleton == null) {
-            singleton = new RewardService(TownyMissionInstance.getInstance());
+            singleton = new RewardService();
         }
 
         return singleton;
@@ -65,61 +53,65 @@ public class RewardService extends TownyMissionService {
      * Reward a player with the content in the RewarsJson
      * This assumes that the player is online
      *
-     * @param player     The online player
      * @param claimEntry The entry containing the reward
      */
 // TODO: Grab stuff from the freaking DAO, you are a service!
-    public void claimEntry(Player player, ClaimEntry claimEntry) {
+    public void claimEntry(UUID playerUUID, ClaimEntry claimEntry) {
         RewardJson rewardJson = claimEntry.getRewardJson();
         RewardType rewardType = rewardJson.getRewardType();
+        String playerName;
+        if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+            playerName = BukkitUtil.getPlayerNameFromUUID(playerUUID);
+        } else {
+            playerName = BungeeUtil.getPlayerNameFromUUID(playerUUID);
+        }
+
         switch (rewardType) {
             case COMMAND:
                 CommandRewardJson commandRewardJson = (CommandRewardJson) rewardJson;
-                String command = commandRewardJson.getCommand().replace("%player%", player.getName());
+                String command = commandRewardJson.getCommand().replace("%player%", playerName);
                 System.out.println("Dispatching command: " + command);
-                BukkitRunnable r = new BukkitRunnable() {
+                Runnable r = new Runnable() {
                     @Override
                     public void run() {
                         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
                     }
                 };
 
-                TaskService.runTaskAsync(r);
+                TaskService.getInstance().runTaskAsync(r);
                 ClaimDao.getInstance().remove(claimEntry);
-                BukkitUtil.sendMsg(player, instance.getLangEntry("services.reward.onRewardCommand"));
+                ChatService.getInstance().sendMsg(playerUUID, instance.getLangEntry("services.reward.onRewardCommand"));
                 break;
             case POINTS:
                 throw new IllegalStateException("Season point reward CANNOT be rewarded to individual player");
             case MONEY:
                 MoneyRewardJson moneyRewardJson = (MoneyRewardJson) rewardJson;
-                EconomyService.getInstance().depositBalance(player, moneyRewardJson.getAmount());
+                EconomyService.getInstance().depositBalance(playerUUID, moneyRewardJson.getAmount());
                 ClaimDao.getInstance().remove(claimEntry);
-                BukkitUtil.sendMsg(player, instance.getLangEntry("services.reward.onRewardMoney").replace("%amount%", String.valueOf(moneyRewardJson.getAmount())));
+                ChatService.getInstance().sendMsg(playerUUID, instance.getLangEntry("services.reward.onRewardMoney").replace("%amount%", String.valueOf(moneyRewardJson.getAmount())));
                 break;
             case RESOURCE:
                 ResourceRewardJson resourceRewardJson = (ResourceRewardJson) rewardJson;
-                Material material = resourceRewardJson.getType();
+                String material = resourceRewardJson.getType();
                 int amount = resourceRewardJson.getAmount();
                 int slotsRequired = amount / 64 + 1;
 
-                if (BukkitUtil.getNumEmptySlotsInInventory(player.getInventory()) >= slotsRequired) {
+                if (PlayerService.getInstance().getNumEmptySlot(playerUUID) >= slotsRequired) {
                     while (amount > 64) {
-                        ItemStack itemStack = new ItemStack(material, 64);
-                        player.getInventory().addItem(itemStack);
+                        PlayerService.getInstance().addItem(playerUUID, material, 64);
                         amount -= 64;
                     }
 
-                    ItemStack itemStack = new ItemStack(material, amount);
-                    player.getInventory().addItem(itemStack);
+                    PlayerService.getInstance().addItem(playerUUID, material, amount);
                     ClaimDao.getInstance().remove(claimEntry);
                 } else {
                     throw new NotEnoughInvSlotException();
                 }
 
-                BukkitUtil.sendMsg(player,
+                ChatService.getInstance().sendMsg(playerUUID,
                         instance.getLangEntry("services.reward.onRewardResource")
                                 .replace("%amount%", String.valueOf(resourceRewardJson.getAmount()))
-                                .replace("%type%", resourceRewardJson.getType().name().toLowerCase(Locale.ROOT)));
+                                .replace("%type%", resourceRewardJson.getType().toLowerCase(Locale.ROOT)));
                 break;
         }
     }
@@ -127,12 +119,12 @@ public class RewardService extends TownyMissionService {
     /**
      * Claim entry.
      *
-     * @param player         the player
+     * @param playerUUID         the player
      * @param rewardJsonList the reward json list
      */
-    public void claimEntry(Player player, List<ClaimEntry> rewardJsonList) {
+    public void claimEntry(UUID playerUUID, List<ClaimEntry> rewardJsonList) {
         for (ClaimEntry entry : rewardJsonList) {
-            claimEntry(player, entry);
+            claimEntry(playerUUID, entry);
         }
     }
 

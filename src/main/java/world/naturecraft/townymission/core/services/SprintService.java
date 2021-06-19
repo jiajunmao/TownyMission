@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.core.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.bukkit.Bukkit;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.RankUtil;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
@@ -22,19 +21,9 @@ import java.util.UUID;
 /**
  * The type Sprint service.
  */
-public class SprintService {
+public class SprintService extends TownyMissionService {
 
     private static SprintService singleton;
-    private final TownyMissionBukkit instance;
-
-    /**
-     * Instantiates a new Sprint service.
-     *
-     * @param instance the instance
-     */
-    public SprintService(TownyMissionBukkit instance) {
-        this.instance = instance;
-    }
 
     /**
      * Gets instance.
@@ -43,8 +32,7 @@ public class SprintService {
      */
     public static SprintService getInstance() {
         if (singleton == null) {
-            TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
-            singleton = new SprintService(instance);
+            singleton = new SprintService();
         }
 
         return singleton;

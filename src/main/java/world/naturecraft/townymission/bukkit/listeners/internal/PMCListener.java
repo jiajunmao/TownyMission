@@ -11,6 +11,7 @@ import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -64,7 +65,6 @@ public class PMCListener implements PluginMessageListener {
                     new String[]{String.valueOf(result)}
             ));
         } else if (subchannel.equalsIgnoreCase("data:request")) {
-            TownyMissionBukkit townyMissionBukkit = TownyMissionInstance.getInstance();
             String[] data = null;
             int responseSize = 0;
             switch (subchannel) {
@@ -74,6 +74,7 @@ public class PMCListener implements PluginMessageListener {
                     data = new String[size];
                     data[0] = TownyUtil.residentOf(Bukkit.getPlayer(UUID.fromString(data[0]))).getUUID().toString();
                     break;
+                // data[0] is the player UUID
                 case "getTownName":
                     responseSize = 1;
                     data = new String[size];

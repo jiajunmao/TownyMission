@@ -5,9 +5,6 @@
 package world.naturecraft.townymission.core.services;
 
 // This service is mainly here to check the progress of sprint and season
-
-import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.enums.RankType;
@@ -28,22 +25,13 @@ public class TimerService extends TownyMissionService {
     private static TimerService singleton;
 
     /**
-     * Instantiates a new Timer service.
-     *
-     * @param instance the instance
-     */
-    public TimerService(TownyMissionInstance instance) {
-        super(instance);
-    }
-
-    /**
      * Gets instance.
      *
      * @return the instance
      */
     public static TimerService getInstance() {
         if (singleton == null) {
-            singleton = new TimerService(TownyMissionInstance.getInstance());
+            singleton = new TimerService();
         }
 
         return singleton;
@@ -63,7 +51,7 @@ public class TimerService extends TownyMissionService {
      * Start sprint timer.
      */
     public void startSprintTimer() {
-        BukkitRunnable r = new BukkitRunnable() {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
                 Date date = new Date();
@@ -113,14 +101,14 @@ public class TimerService extends TownyMissionService {
         };
 
         // Check every minute for whether the sprint has ended
-        TaskService.runTaskTimerAsync(r, 0, 60 * 20);
+        TaskService.getInstance().runTimerTaskAsync(r, 0, 60 * 20);
     }
 
     /**
      * Start season timer.
      */
     public void startSeasonTimer() {
-        BukkitRunnable r = new BukkitRunnable() {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
                 Date date = new Date();
@@ -163,7 +151,7 @@ public class TimerService extends TownyMissionService {
             }
         };
 
-        TaskService.runTaskTimerAsync(r, 0, 20 * 60);
+        TaskService.getInstance().runTimerTaskAsync(r, 0, 20 * 60);
     }
 
     /**

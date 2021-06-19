@@ -20,7 +20,7 @@ import java.util.Locale;
 public class ResourceRewardJson extends RewardJson {
 
     @JsonProperty("type")
-    private final Material type;
+    private final String type;
     @JsonProperty("amount")
     private int amount;
 
@@ -31,7 +31,7 @@ public class ResourceRewardJson extends RewardJson {
      * @param amount the amount
      */
     @ConstructorProperties({"type", "amount"})
-    public ResourceRewardJson(Material type, int amount) {
+    public ResourceRewardJson(String type, int amount) {
         super(RewardType.RESOURCE);
         this.type = type;
         this.amount = amount;
@@ -55,7 +55,7 @@ public class ResourceRewardJson extends RewardJson {
      * @return the type
      */
     @JsonProperty("type")
-    public Material getType() {
+    public String getType() {
         return type;
     }
 
@@ -71,7 +71,7 @@ public class ResourceRewardJson extends RewardJson {
 
     @JsonIgnore
     public String getDisplayLine() {
-        return "ResourceType: " + type.name().toLowerCase(Locale.ROOT) +
+        return "ResourceType: " + type.toLowerCase(Locale.ROOT) +
                 ", Amount: " + amount;
     }
 }

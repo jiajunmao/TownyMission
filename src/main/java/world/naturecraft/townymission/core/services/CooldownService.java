@@ -20,22 +20,13 @@ public class CooldownService extends TownyMissionService {
     private static CooldownService singleton;
 
     /**
-     * Instantiates a new Cooldown service.
-     *
-     * @param instance the instance
-     */
-    public CooldownService(TownyMissionInstance instance) {
-        super(instance);
-    }
-
-    /**
      * Gets instance.
      *
      * @return the instance
      */
     public static CooldownService getInstance() {
         if (singleton == null) {
-            singleton = new CooldownService(TownyMissionInstance.getInstance());
+            singleton = new CooldownService();
         }
 
         return singleton;

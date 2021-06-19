@@ -14,6 +14,7 @@ import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.utils.MissionJsonFactory;
 import world.naturecraft.townymission.core.utils.Util;
 
@@ -208,18 +209,18 @@ public class MissionEntry extends DataEntity {
         ItemMeta meta = stack.getItemMeta();
 
         String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
-        meta.setDisplayName(BukkitUtil.translateColor(displayName));
+        meta.setDisplayName(ChatService.getInstance().translateColor(displayName));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Setting lores
         List<String> loreList = new ArrayList<>();
         if (isTimedout() && !isCompleted() && isStarted()) {
-            loreList.add(BukkitUtil.translateColor("&eStatus: {#DD3322}Timed Out"));
+            loreList.add(ChatService.getInstance().translateColor("&eStatus: {#DD3322}Timed Out"));
         } else if (isCompleted() && isStarted()) {
-            loreList.add(BukkitUtil.translateColor("&eStatus: &aCompleted"));
+            loreList.add(ChatService.getInstance().translateColor("&eStatus: &aCompleted"));
         } else if (!isTimedout() && !isCompleted() && isStarted()) {
-            loreList.add(BukkitUtil.translateColor("&eStatus: {#39DBF3}Started"));
+            loreList.add(ChatService.getInstance().translateColor("&eStatus: {#39DBF3}Started"));
         }
         loreList.addAll(missionJson.getLore());
         meta.setLore(loreList);

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.MissionType;
+import world.naturecraft.townymission.core.services.ChatService;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -65,9 +66,9 @@ public class VoteMissionJson extends MissionJson {
     @JsonIgnore
     public List<String> getLore() {
         List<String> loreList = new ArrayList<>();
-        loreList.add(BukkitUtil.translateColor("&r&eAmount: &7" + getAmount()));
-        loreList.add(BukkitUtil.translateColor("&r&eReward: &7" + getReward()));
-        loreList.add(BukkitUtil.translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
+        loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eReward: &7" + getReward()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
 
         return loreList;
     }

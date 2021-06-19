@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.MissionType;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.utils.Util;
 
 import java.beans.ConstructorProperties;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class MobMissionJson extends MissionJson {
 
     @JsonProperty("entityType")
-    private final EntityType entityType;
+    private final String entityType;
 
     /**
      * Instantiates a new Mob.
@@ -37,7 +38,7 @@ public class MobMissionJson extends MissionJson {
      * @param contributions the contributions
      */
     @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward", "contributions"})
-    public MobMissionJson(EntityType entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    public MobMissionJson(String entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         super(MissionType.MOB, amount, completed, hrAllowed, reward, contributions);
         this.entityType = entityType;
     }
@@ -58,7 +59,7 @@ public class MobMissionJson extends MissionJson {
      *
      * @return the entity type
      */
-    public EntityType getEntityType() {
+    public String getEntityType() {
         return entityType;
     }
 
@@ -71,7 +72,7 @@ public class MobMissionJson extends MissionJson {
     @Override
     @JsonIgnore
     public String getDisplayLine() {
-        return "&f- &eType: &f" + getEntityType().getName() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
+        return "&f- &eType: &f" + getEntityType() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
     }
 
     /**
@@ -83,10 +84,10 @@ public class MobMissionJson extends MissionJson {
     @JsonIgnore
     public List<String> getLore() {
         List<String> loreList = new ArrayList<>();
-        loreList.add(BukkitUtil.translateColor("&r&eMob Type: &7" + Util.capitalizeFirst(entityType.name())));
-        loreList.add(BukkitUtil.translateColor("&r&eAmount: &7" + getAmount()));
-        loreList.add(BukkitUtil.translateColor("&r&eReward: &7" + getReward()));
-        loreList.add(BukkitUtil.translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
+        loreList.add(ChatService.getInstance().translateColor("&r&eMob Type: &7" + Util.capitalizeFirst(entityType)));
+        loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eReward: &7" + getReward()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
 
         return loreList;
     }

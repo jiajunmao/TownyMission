@@ -40,7 +40,7 @@ public class MissionConfigParser {
                 list.add(new ExpansionMissionJson(world, amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.MOB)) {
                 String mobType = section.getString("type");
-                MobMissionJson mobMissionJson = new MobMissionJson(EntityType.valueOf(mobType), amount, 0, hrAllowed, reward, null);
+                MobMissionJson mobMissionJson = new MobMissionJson((mobType), amount, 0, hrAllowed, reward, null);
                 list.add(mobMissionJson);
             } else if (type.equals(MissionType.MONEY)) {
                 list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, null));

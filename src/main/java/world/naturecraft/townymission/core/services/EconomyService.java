@@ -16,11 +16,9 @@ public class EconomyService extends TownyMissionService {
 
     /**
      * Instantiates a new Economy service.
-     *
-     * @param instance the instance
      */
-    public EconomyService(TownyMissionInstance instance) {
-        super(instance);
+    public EconomyService() {
+        super();
         if (Bukkit.getPluginManager().getPlugin("Vault") == null)
             throw new IllegalStateException("Vault is a hard-dependency!");
 
@@ -38,7 +36,7 @@ public class EconomyService extends TownyMissionService {
      */
     public static EconomyService getInstance() {
         if (singleton == null) {
-            singleton = new EconomyService(TownyMissionInstance.getInstance());
+            singleton = new EconomyService();
         }
 
         return singleton;
