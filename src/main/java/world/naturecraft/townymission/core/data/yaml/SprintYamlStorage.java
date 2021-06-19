@@ -55,7 +55,7 @@ public class SprintYamlStorage extends YamlStorage<SprintEntry> implements Sprin
     public void add(UUID townUUID, int naturePoints, int sprint, int season) {
         String uuid = UUID.randomUUID().toString();
 
-        add(uuid + ".townUUID", townUUID);
+        add(uuid + ".townUUID", townUUID.toString());
         add(uuid + ".naturePoints", naturePoints);
         add(uuid + ".sprint", sprint);
         add(uuid + ".season", season);
@@ -71,7 +71,7 @@ public class SprintYamlStorage extends YamlStorage<SprintEntry> implements Sprin
      * @param season       the season
      */
     public void update(UUID uuid, UUID townUUID, int naturePoints, int sprint, int season) {
-        set(uuid + ".townUUID", townUUID);
+        set(uuid + ".townUUID", townUUID.toString());
         set(uuid + ".naturePoints", naturePoints);
         set(uuid + ".sprint", sprint);
         set(uuid + ".season", season);

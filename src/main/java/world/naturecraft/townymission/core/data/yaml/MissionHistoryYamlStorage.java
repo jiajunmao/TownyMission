@@ -67,8 +67,8 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
         add(uuid + ".startedTime", startedTime);
         add(uuid + ".allowedTime", allowedTime);
         add(uuid + ".missionJson", missionJson);
-        add(uuid + ".townUUID", townUUID);
-        add(uuid + ".startedPlayerUUID", startedPlayerUUID);
+        add(uuid + ".townUUID", townUUID.toString());
+        add(uuid + ".startedPlayerUUID", startedPlayerUUID.toString());
         add(uuid + ".completedTime", completedTime);
         add(uuid + ".isClaimed", isClaimed);
         add(uuid + ".sprint", sprint);

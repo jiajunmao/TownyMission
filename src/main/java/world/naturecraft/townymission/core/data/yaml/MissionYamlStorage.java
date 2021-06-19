@@ -63,8 +63,10 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
         add(uuid + ".startedTime", startedTime);
         add(uuid + ".allowedTime", allowedTime);
         add(uuid + ".missionJson", missionJson);
-        add(uuid + ".townUUID", townUUID);
-        add(uuid + ".startedPlayerUUID", startedPlayerUUID);
+        add(uuid + ".townUUID", townUUID.toString());
+        if (startedPlayerUUID != null) {
+            add(uuid + ".startedPlayerUUID", startedPlayerUUID.toString());
+        }
     }
 
     /**
@@ -85,8 +87,8 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
         set(uuid + ".startedTime", startedTime);
         set(uuid + ".allowedTime", allowedTime);
         set(uuid + ".missionJson", missionJson);
-        set(uuid + ".townUUID", townUUID);
-        set(uuid + ".startedPlayerUUID", startedPlayerUUID);
+        set(uuid + ".townUUID", townUUID.toString());
+        set(uuid + ".startedPlayerUUID", startedPlayerUUID.toString());
     }
 
     @Override
@@ -98,6 +100,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
 
         for (String key : file.getConfigurationSection("").getKeys(false)) {
             try {
+                String startedPlayerUUID = file.getString(key + ".startedPlayerUUID");
                 entryList.add(new MissionEntry(
                         UUID.fromString(key),
                         file.getString(key + ".missionType"),
@@ -106,7 +109,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
                         file.getLong(key + ".allowedTime"),
                         file.getString(key + ".missionJson"),
                         UUID.fromString(file.getString(key + ".townUUID")),
-                        UUID.fromString(file.getString(key + ".startedPlayerUUID"))
+                        startedPlayerUUID == null ? null : UUID.fromString(file.getString(key + ".startedPlayerUUID"))
                 ));
             } catch (JsonProcessingException e) {
                 throw new ConfigParsingException(e);

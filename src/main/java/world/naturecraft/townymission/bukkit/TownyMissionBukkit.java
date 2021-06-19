@@ -15,6 +15,7 @@ import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
 import world.naturecraft.townymission.bukkit.listeners.external.MissionListener;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
+import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.core.config.LangConfig;
@@ -46,17 +47,17 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public void onEnable() {
 
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + "  _______                        __  __ _         _             "));
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + " |__   __|                      |  \\/  (_)       (_)            "));
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ "));
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |"));
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|"));
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + "                            __/ |                               "));
-        logger.info(ChatService.getInstance().translateColor("{#22DDBA}" + "                           |___/                                "));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "  _______                        __  __ _         _             "));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + " |__   __|                      |  \\/  (_)       (_)            "));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ "));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |"));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|"));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "                            __/ |                               "));
+        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "                           |___/                                "));
         logger.info("-----------------------------------------------------------------");
 
-        logger.info(ChatService.getInstance().translateColor("{#E9B728}===> Parsing configuration"));
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing configuration"));
 
         TownyMissionInstanceType.serverType = ServerType.BUKKIT;
 
@@ -78,7 +79,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * Configure data storage, yaml, or mysql
          */
-        logger.info(ChatService.getInstance().translateColor("{#E9B728}===> Connecting to datastore"));
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Connecting to datastore"));
         String storage = getConfig().getString("storage");
         storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
 
@@ -89,11 +90,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             logger.info("Using YAML flat file as storage backend");
         }
 
-        logger.info(ChatService.getInstance().translateColor("{#E9B728}===> Registering commands"));
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering commands"));
         registerCommands();
-        logger.info(ChatService.getInstance().translateColor("{#E9B728}===> Registering listeners"));
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering listeners"));
         registerListeners();
-        logger.info(ChatService.getInstance().translateColor("{#E9B728}===> Registering timers"));
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
         registerTimers();
     }
 
@@ -196,6 +197,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public String getLangEntry(String path) {
         String finalString = "";
+        System.out.println("Lang config: " + langConfig);
         finalString += langConfig.getLangConfig().getString("prefix") + " ";
         finalString += langConfig.getLangConfig().getString(path);
         return finalString;

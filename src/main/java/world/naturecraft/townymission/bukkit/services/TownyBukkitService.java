@@ -17,6 +17,16 @@ import java.util.UUID;
  */
 public class TownyBukkitService extends TownyService {
 
+    private static TownyBukkitService singleton;
+
+    public static TownyBukkitService getInstance() {
+        if (singleton == null) {
+            singleton = new TownyBukkitService();
+        }
+
+        return singleton;
+    }
+
     @Override
     public UUID residentOf(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);

@@ -41,15 +41,15 @@ public class ClaimEntry extends DataEntity {
     /**
      * Instantiates a new Claim entry.
      *
-     * @param id         the id
+     * @param uuid         the id
      * @param playerUUID the player uuid
      * @param rewardType the reward type
      * @param rewardJson the reward json
      * @param season     the season
      * @param sprint     the sprint
      */
-    public ClaimEntry(String id, String playerUUID, String rewardType, String rewardJson, int season, int sprint) {
-        this(UUID.fromString(id), UUID.fromString(playerUUID), RewardType.valueOf(rewardType), null, season, sprint);
+    public ClaimEntry(UUID uuid, UUID playerUUID, String rewardType, String rewardJson, int season, int sprint) {
+        this(uuid, playerUUID, RewardType.valueOf(rewardType), null, season, sprint);
         try {
             RewardType rewardTypeEnum = RewardType.valueOf(rewardType);
             switch (rewardTypeEnum) {

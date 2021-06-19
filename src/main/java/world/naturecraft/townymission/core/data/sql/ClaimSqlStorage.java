@@ -79,8 +79,8 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
             ResultSet result = p.executeQuery();
             while (result.next()) {
                 list.add(new ClaimEntry(
-                        result.getString("uuid"),
-                        result.getString("player_uuid"),
+                        UUID.fromString(result.getString("uuid")),
+                        UUID.fromString(result.getString("player_uuid")),
                         result.getString("reward_type"),
                         result.getString("reward_json"),
                         result.getInt("season"),

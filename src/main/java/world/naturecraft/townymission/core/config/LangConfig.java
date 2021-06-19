@@ -24,6 +24,7 @@ public class LangConfig {
      */
     public LangConfig() {
         this.instance = TownyMissionInstance.getInstance();
+        createLanguageConfig();
     }
 
     private void createLanguageConfig() throws ConfigLoadingException {

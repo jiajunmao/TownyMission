@@ -52,7 +52,7 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
     public void add(UUID townUUID, int seasonPoint, int season) {
         String uuid = UUID.randomUUID().toString();
 
-        add(uuid + ".townUUID", townUUID);
+        add(uuid + ".townUUID", townUUID.toString());
         add(uuid + ".seasonPoint", seasonPoint);
         add(uuid + ".season", season);
     }
@@ -66,7 +66,7 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
      * @param season      the season
      */
     public void update(UUID uuid, UUID townUUID, int seasonPoint, int season) {
-        set(uuid + ".townUUID", townUUID);
+        set(uuid + ".townUUID", townUUID.toString());
         set(uuid + ".seasonPoint", seasonPoint);
         set(uuid + ".season", season);
     }
