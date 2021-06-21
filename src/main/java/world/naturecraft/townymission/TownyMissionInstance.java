@@ -98,7 +98,7 @@ public interface TownyMissionInstance {
      *
      * @return the logger
      */
-    Logger getLogger();
+    Logger getInstanceLogger();
 
     /**
      * Save instance resource.

@@ -1,11 +1,10 @@
 package world.naturecraft.townymission.core.config;
 
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
+import world.naturecraft.townymission.bukkit.config.BukkitConfig;
+import world.naturecraft.townymission.bungee.config.BungeeConfig;
 import world.naturecraft.townymission.core.components.enums.RankType;
 
 import java.io.File;
@@ -16,9 +15,7 @@ import java.io.IOException;
  */
 public class StatsConfig {
 
-    private final TownyMissionInstance instance;
-    private File customConfig;
-    private FileConfiguration customFileConfig;
+    private TownyMissionConfig config;
 
     /**
      * Instantiates a new Stats config.
@@ -26,32 +23,7 @@ public class StatsConfig {
      * @throws ConfigLoadingException the config loading exception
      */
     public StatsConfig() throws ConfigLoadingException {
-        this.instance = TownyMissionInstance.getInstance();
-        try {
-            createStatsConfig();
-        } catch (IOException | InvalidConfigurationException e) {
-            throw new ConfigLoadingException(e);
-        }
-    }
-
-    /**
-     * Create stats config.
-     *
-     * @throws IOException                   the io exception
-     * @throws InvalidConfigurationException the invalid configuration exception
-     */
-    public void createStatsConfig() throws IOException, InvalidConfigurationException {
-        String fileName = "stats.yml";
-        String filePath = "datastore" + File.separator + fileName;
-        customConfig = new File(instance.getInstanceDataFolder(), filePath);
-        if (!customConfig.exists()) {
-            customConfig.getParentFile().getParentFile().mkdirs();
-            customConfig.getParentFile().mkdirs();
-            instance.saveInstanceResource(filePath, false);
-        }
-
-        customFileConfig = new YamlConfiguration();
-        customFileConfig.load(customConfig);
+        createConfig();
     }
 
     /**
@@ -63,9 +35,9 @@ public class StatsConfig {
     public int getCurrent(RankType rankType) {
         switch (rankType) {
             case SEASON:
-                return customFileConfig.getInt("season.current");
+                return config.getInt("season.current");
             case SPRINT:
-                return customFileConfig.getInt("sprint.current");
+                return config.getInt("sprint.current");
             default:
                 throw new IllegalStateException();
         }
@@ -77,7 +49,18 @@ public class StatsConfig {
      * @return the season started time
      */
     public long getSeasonStartedTime() {
-        return customFileConfig.getLong("season.startedTime");
+        return config.getLong("season.startedTime");
+    }
+
+    /**
+     * Create config.
+     */
+    public void createConfig() {
+        if (TownyMissionInstanceType.isBukkit()) {
+            config = new BukkitConfig("datastore" + File.separator + "stats.yml");
+        } else {
+            config = new BungeeConfig("datastore" + File.separator + "stats.yml");
+        }
     }
 
     /**
@@ -87,7 +70,17 @@ public class StatsConfig {
      * @return the int
      */
     public int getInt(String path) {
-        return customFileConfig.getInt(path);
+        return config.getInt(path);
+    }
+
+    /**
+     * Gets string.
+     *
+     * @param path the path
+     * @return the string
+     */
+    public String getString(String path) {
+        return config.getString(path);
     }
 
     /**
@@ -97,7 +90,7 @@ public class StatsConfig {
      * @param content the content
      */
     public void set(String path, Object content) {
-        customFileConfig.set(path, content);
+        config.set(path, content);
     }
 
     /**
@@ -107,7 +100,7 @@ public class StatsConfig {
      * @return the long
      */
     public long getLong(String path) {
-        return customFileConfig.getLong(path);
+        return config.getLong(path);
     }
 
     /**
@@ -115,7 +108,7 @@ public class StatsConfig {
      */
     public void save() {
         try {
-            customFileConfig.save(customConfig);
+            config.save();
         } catch (IOException e) {
             throw new ConfigSavingException(e);
         }

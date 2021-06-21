@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.core.services;
 
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.services.EconomyBukkitService;
 import world.naturecraft.townymission.bungee.services.EconomyBungeeService;
 
@@ -21,7 +20,7 @@ public abstract class EconomyService extends TownyMissionService {
      */
     public static EconomyService getInstance() {
         if (singleton == null) {
-            if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+            if (TownyMissionInstanceType.isBukkit()) {
                 singleton = EconomyBukkitService.getInstance();
             } else {
                 singleton = EconomyBungeeService.getInstance();

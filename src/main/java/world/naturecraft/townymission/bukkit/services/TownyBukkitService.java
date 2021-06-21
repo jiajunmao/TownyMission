@@ -19,6 +19,11 @@ public class TownyBukkitService extends TownyService {
 
     private static TownyBukkitService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static TownyBukkitService getInstance() {
         if (singleton == null) {
             singleton = new TownyBukkitService();

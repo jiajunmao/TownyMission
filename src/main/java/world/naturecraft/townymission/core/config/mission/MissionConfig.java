@@ -4,15 +4,14 @@
 
 package world.naturecraft.townymission.core.config.mission;
 
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.config.BukkitConfig;
+import world.naturecraft.townymission.bungee.config.BungeeConfig;
 import world.naturecraft.townymission.core.components.enums.MissionType;
+import world.naturecraft.townymission.core.config.TownyMissionConfig;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -22,8 +21,7 @@ import java.util.Map;
  */
 public class MissionConfig {
 
-    private final TownyMissionInstance instance;
-    private final Map<MissionType, FileConfiguration> customConfigs;
+    private final Map<MissionType, TownyMissionConfig> customConfigs;
 
     /**
      * Instantiates a new Custom config loader.
@@ -31,31 +29,24 @@ public class MissionConfig {
      * @throws ConfigLoadingException the config loading exception
      */
     public MissionConfig() throws ConfigLoadingException {
-        this.instance = TownyMissionInstance.getInstance();
         this.customConfigs = new HashMap<>();
 
-        try {
-            createMissionConfig();
-        } catch (IOException | InvalidConfigurationException e) {
-            throw new ConfigLoadingException(e);
-        }
+        createMissionConfig();
     }
 
-    private void createMissionConfig() throws IOException, InvalidConfigurationException {
+    private void createMissionConfig() {
         for (MissionType missionType : MissionType.values()) {
             String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
             String filePath = "missions" + File.separator + fileName;
-            File customConfig = new File(instance.getInstanceDataFolder(), filePath);
-            if (!customConfig.exists()) {
-                customConfig.getParentFile().getParentFile().mkdirs();
-                customConfig.getParentFile().mkdirs();
-                instance.saveInstanceResource(filePath, false);
+
+            TownyMissionConfig tempConfig;
+            if (TownyMissionInstanceType.isBukkit()) {
+                tempConfig = new BukkitConfig(filePath);
+            } else {
+                tempConfig = new BungeeConfig(filePath);
             }
 
-            FileConfiguration customFileConfig = new YamlConfiguration();
-            customFileConfig.load(customConfig);
-            MissionConfigValidator.checkMissionConfig(customFileConfig, missionType);
-            customConfigs.put(missionType, customFileConfig);
+            customConfigs.put(missionType, tempConfig);
         }
     }
 
@@ -65,7 +56,7 @@ public class MissionConfig {
      * @param missionType the mission type
      * @return the mission config
      */
-    public FileConfiguration getMissionConfig(MissionType missionType) {
+    public TownyMissionConfig getMissionConfig(MissionType missionType) {
         return customConfigs.getOrDefault(missionType, null);
     }
 }
