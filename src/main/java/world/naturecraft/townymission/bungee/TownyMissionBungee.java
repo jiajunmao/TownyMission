@@ -25,22 +25,23 @@ import java.util.logging.Logger;
  */
 public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
+    private Logger logger = this.getLogger();
     private Configuration config;
     private MainConfig mainConfig;
     private LangConfig langConfig;
 
     @Override
     public void onEnable() {
-        getLogger().info("===> Enabling TownyMission");
+        logger.info("===> Enabling TownyMission");
         TownyMissionInstanceType.serverType = ServerType.BUNGEE;
         // This is loading in the config file
-        getLogger().info("===> Registering and parsing configs");
+        logger.info("===> Registering and parsing configs");
         saveDefaultConfig();
         mainConfig = new MainConfig();
         langConfig = new LangConfig();
 
         // Registering plugin messaging channel
-        getLogger().info("===> Registering Listeners and PMC");
+        logger.info("===> Registering Listeners and PMC");
         registerListener();
     }
 
@@ -67,7 +68,7 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
     @Override
     public void onDisable() {
-        getLogger().info("===> Disabling TownyMission");
+        logger.info("===> Disabling TownyMission");
         getProxy().unregisterChannel("townymission:main");
         getProxy().getPluginManager().unregisterCommands(this);
         getProxy().getPluginManager().unregisterListeners(this);
@@ -93,7 +94,7 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     public void registerChannel() {
         TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
         townyMissionBungee.getProxy().registerChannel("townymission:main");
-        townyMissionBungee.getLogger().info("townymission:main PMC channel registered");
+        townyMissionBungee.logger.info("townymission:main PMC channel registered");
     }
 
     /**
@@ -102,7 +103,7 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     public void deregisterChannel() {
         TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
         townyMissionBungee.getProxy().unregisterChannel("townymission:main");
-        townyMissionBungee.getLogger().info("townymission:main PMC channel unregistered");
+        townyMissionBungee.logger.info("townymission:main PMC channel unregistered");
     }
 
     /**
@@ -156,10 +157,5 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
             InputStream in = getResourceAsStream(filePath);
             Files.copy(in, file.toPath());
         }
-    }
-
-    @Override
-    public Logger getLogger() {
-        return this.getLogger();
     }
 }

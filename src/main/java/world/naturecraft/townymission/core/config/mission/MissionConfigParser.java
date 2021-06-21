@@ -5,11 +5,10 @@
 package world.naturecraft.townymission.core.config.mission;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.*;
+import world.naturecraft.townymission.core.config.TownyMissionConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,26 +25,25 @@ public class MissionConfigParser {
      * @param fileConfiguration the file configuration
      * @return the list
      */
-    public static List<MissionJson> parse(MissionType type, FileConfiguration fileConfiguration) {
+    public static List<MissionJson> parse(MissionType type, TownyMissionConfig fileConfiguration) {
         List<MissionJson> list = new ArrayList<>();
-        for (String key : fileConfiguration.getKeys(false)) {
-            ConfigurationSection section = fileConfiguration.getConfigurationSection(key);
-            int amount = section.getInt("amount");
-            int reward = section.getInt("reward");
-            int hrAllowed = section.getInt("timeAllowed");
+        for (String key : fileConfiguration.getShallowKeys()) {
+            int amount = fileConfiguration.getInt(key + ".amount");
+            int reward = fileConfiguration.getInt(key + ".reward");
+            int hrAllowed = fileConfiguration.getInt(key + ".timeAllowed");
 
             if (type.equals(MissionType.EXPANSION)) {
-                String world = section.getString("world");
+                String world = fileConfiguration.getString(key + "world");
                 list.add(new ExpansionMissionJson(world, amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.MOB)) {
-                String mobType = section.getString("type");
+                String mobType = fileConfiguration.getString(key + "type");
                 MobMissionJson mobMissionJson = new MobMissionJson((mobType), amount, 0, hrAllowed, reward, null);
                 list.add(mobMissionJson);
             } else if (type.equals(MissionType.MONEY)) {
                 list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.RESOURCE)) {
-                boolean isMi = section.getBoolean("isMi");
-                String resourceType = section.getString("type");
+                boolean isMi = fileConfiguration.getBoolean(key + "isMi");
+                String resourceType = fileConfiguration.getString(key + "type");
                 list.add(new ResourceMissionJson(isMi, Material.valueOf(resourceType), amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.VOTE)) {
                 list.add(new VoteMissionJson(amount, 0, hrAllowed, reward, null));

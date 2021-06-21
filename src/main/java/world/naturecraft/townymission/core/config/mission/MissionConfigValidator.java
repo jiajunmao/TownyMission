@@ -7,11 +7,11 @@ package world.naturecraft.townymission.core.config.mission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.enums.MissionType;
+import world.naturecraft.townymission.core.config.TownyMissionConfig;
 import world.naturecraft.townymission.core.utils.Util;
 
 /**
@@ -19,15 +19,14 @@ import world.naturecraft.townymission.core.utils.Util;
  */
 public class MissionConfigValidator {
 
-
     /**
      * Check mission config.
      *
      * @param missionConfig the mission config
      * @param missionType   the mission type
      */
-    public static void checkMissionConfig(FileConfiguration missionConfig, MissionType missionType) {
-        for (String key : missionConfig.getKeys(false)) {
+    public static void checkMissionConfig(TownyMissionConfig missionConfig, MissionType missionType) {
+        for (String key : missionConfig.getShallowKeys()) {
             try {
                 switch (missionType) {
                     case EXPANSION:
@@ -97,12 +96,12 @@ public class MissionConfigValidator {
         }
     }
 
-    private static void throwException(FileConfiguration missionConfig, String path, String message, Throwable original) throws ConfigParsingException {
+    private static void throwException(TownyMissionConfig missionConfig, String path, String message, Throwable original) throws ConfigParsingException {
         missionConfig.set(path, null);
         throw new ConfigParsingException(message, original);
     }
 
-    private static void throwException(FileConfiguration missionConfig, String path, String message) throws ConfigParsingException {
+    private static void throwException(TownyMissionConfig missionConfig, String path, String message) throws ConfigParsingException {
         missionConfig.set(path, null);
         throw new ConfigParsingException(message);
     }

@@ -1,10 +1,10 @@
 package world.naturecraft.townymission.core.config;
 
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.config.BukkitConfig;
+import world.naturecraft.townymission.bungee.config.BungeeConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.io.Reader;
 public class LangConfig {
 
     private final TownyMissionInstance instance;
-    private FileConfiguration langConfig;
+    private TownyMissionConfig config;
 
     /**
      * Instantiates a new Lang config.
@@ -28,39 +28,15 @@ public class LangConfig {
     }
 
     private void createLanguageConfig() throws ConfigLoadingException {
-        try {
-            File langFile = new File(instance.getInstanceDataFolder(), "lang.yml");
-            if (!langFile.exists()) {
-                langFile.getParentFile().mkdirs();
-                instance.saveInstanceResource("lang.yml", false);
-            } else {
-                updateLang();
-            }
-
-            langFile = new File(instance.getInstanceDataFolder(), "lang.yml");
-            langConfig = new YamlConfiguration();
-            langConfig.load(langFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            throw new ConfigLoadingException(e);
+        if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+            config = new BukkitConfig("lang.yml");
+        } else {
+            config = new BungeeConfig("lang.yml");
         }
     }
 
-    private void updateLang() throws IOException, InvalidConfigurationException {
-        File langFile = new File(instance.getInstanceDataFolder(), "lang.yml");
-        FileConfiguration currLangConfig = new YamlConfiguration();
-        currLangConfig.load(langFile);
-
-        FileConfiguration pluginConfig = new YamlConfiguration();
-        Reader reader = new InputStreamReader(instance.getInstanceResource("lang.yml"));
-        pluginConfig.load(reader);
-
-        for (String key : pluginConfig.getConfigurationSection("").getKeys(true)) {
-            if (currLangConfig.getString(key) == null) {
-                currLangConfig.createSection(key);
-                currLangConfig.set(key, pluginConfig.getString(key));
-            }
-        }
-        currLangConfig.save(langFile);
+    private void updateLang() throws IOException {
+        config.updateConfig("lang.yml");
     }
 
     /**
@@ -68,7 +44,7 @@ public class LangConfig {
      *
      * @return the lang config
      */
-    public FileConfiguration getLangConfig() {
-        return langConfig;
+    public TownyMissionConfig getLangConfig() {
+        return config;
     }
 }
