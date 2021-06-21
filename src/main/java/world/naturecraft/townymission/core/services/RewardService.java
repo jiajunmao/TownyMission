@@ -4,7 +4,6 @@ import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bukkit.utils.RankUtil;
-import world.naturecraft.townymission.bungee.utils.BungeeUtil;
 import world.naturecraft.townymission.core.components.entity.ClaimEntry;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
@@ -56,11 +55,9 @@ public class RewardService extends TownyMissionService {
     public void claimEntry(UUID playerUUID, ClaimEntry claimEntry) {
         RewardJson rewardJson = claimEntry.getRewardJson();
         RewardType rewardType = rewardJson.getRewardType();
-        String playerName;
+        String playerName = null;
         if (TownyMissionInstanceType.isBukkit()) {
             playerName = BukkitUtil.getPlayerNameFromUUID(playerUUID);
-        } else {
-            playerName = BungeeUtil.getPlayerNameFromUUID(playerUUID);
         }
 
         switch (rewardType) {

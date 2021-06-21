@@ -2,7 +2,6 @@ package world.naturecraft.townymission.core.services;
 
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.services.CommandBukkitService;
-import world.naturecraft.townymission.bungee.services.CommandBungeeService;
 
 import java.util.UUID;
 
@@ -22,8 +21,6 @@ public abstract class CommandService extends TownyMissionService {
         if (singleton == null) {
             if (TownyMissionInstanceType.isBukkit()) {
                 singleton = CommandBukkitService.getInstance();
-            } else {
-                singleton = CommandBungeeService.getInstance();
             }
         }
 

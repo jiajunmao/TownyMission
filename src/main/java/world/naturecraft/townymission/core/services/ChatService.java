@@ -2,7 +2,6 @@ package world.naturecraft.townymission.core.services;
 
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.services.ChatBukkitService;
-import world.naturecraft.townymission.bungee.services.ChatBungeeService;
 
 import java.util.UUID;
 
@@ -22,8 +21,6 @@ public abstract class ChatService extends TownyMissionService {
         if (singleton == null) {
             if (TownyMissionInstanceType.isBukkit()) {
                 singleton = ChatBukkitService.getInstance();
-            } else {
-                singleton = ChatBungeeService.getInstance();
             }
         }
 

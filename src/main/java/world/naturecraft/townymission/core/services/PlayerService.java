@@ -2,7 +2,6 @@ package world.naturecraft.townymission.core.services;
 
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.services.PlayerBukkitService;
-import world.naturecraft.townymission.bungee.services.PlayerBungeeService;
 
 import java.util.UUID;
 
@@ -25,8 +24,6 @@ public abstract class PlayerService {
         if (singleton == null) {
             if (TownyMissionInstanceType.isBukkit()) {
                 singleton = PlayerBukkitService.getInstance();
-            } else {
-                singleton = PlayerBungeeService.getInstance();
             }
         }
 
