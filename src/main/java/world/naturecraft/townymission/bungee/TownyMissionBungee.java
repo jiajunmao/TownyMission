@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  */
 public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
-    private Logger logger = this.getLogger();
+    private final Logger logger = this.getLogger();
     private Configuration config;
     private MainConfig mainConfig;
     private LangConfig langConfig;
@@ -91,6 +91,9 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
         }
     }
 
+    /**
+     * Register channel.
+     */
     public void registerChannel() {
         TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
         townyMissionBungee.getProxy().registerChannel("townymission:main");
@@ -148,6 +151,16 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     @Override
     public InputStream getInstanceResource(String filePath) {
         return getResourceAsStream(filePath);
+    }
+
+    /**
+     * Gets logger.
+     *
+     * @return the logger
+     */
+    @Override
+    public Logger getInstanceLogger() {
+        return this.getLogger();
     }
 
     @Override

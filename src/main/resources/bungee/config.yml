@@ -1,7 +1,7 @@
 # Database settings
 database:
   # The address of the database, in IP or domain name
-  address:
+  address: colo.server.naturecraft.world
   # The port of the database, default should be 3306
   port:
   # The name of the database

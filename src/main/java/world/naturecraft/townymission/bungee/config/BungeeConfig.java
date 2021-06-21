@@ -8,15 +8,25 @@ import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingExcepti
 import world.naturecraft.townymission.bungee.TownyMissionBungee;
 import world.naturecraft.townymission.core.config.TownyMissionConfig;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Collection;
 
+/**
+ * The type Bungee config.
+ */
 public class BungeeConfig implements TownyMissionConfig {
 
     private Configuration configuration;
     private File configFile;
 
+    /**
+     * Instantiates a new Bungee config.
+     *
+     * @param path the path
+     */
     public BungeeConfig(String path) {
         createConfig(path);
     }

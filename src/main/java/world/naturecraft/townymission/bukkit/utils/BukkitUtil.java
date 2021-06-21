@@ -65,6 +65,12 @@ public class BukkitUtil {
         return player.getName();
     }
 
+    /**
+     * Send msg.
+     *
+     * @param sender  the sender
+     * @param message the message
+     */
     public static void sendMsg(CommandSender sender, String message) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -74,6 +80,12 @@ public class BukkitUtil {
         }
     }
 
+    /**
+     * Send msg.
+     *
+     * @param playerUUID the player uuid
+     * @param message    the message
+     */
     public static void sendMsg(UUID playerUUID, String message) {
         Player player = Bukkit.getPlayer(playerUUID);
         sendMsg(player, message);

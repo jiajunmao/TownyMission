@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.core.services;
 
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.bukkit.utils.RankUtil;
@@ -58,7 +57,7 @@ public class RewardService extends TownyMissionService {
         RewardJson rewardJson = claimEntry.getRewardJson();
         RewardType rewardType = rewardJson.getRewardType();
         String playerName;
-        if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+        if (TownyMissionInstanceType.isBukkit()) {
             playerName = BukkitUtil.getPlayerNameFromUUID(playerUUID);
         } else {
             playerName = BungeeUtil.getPlayerNameFromUUID(playerUUID);

@@ -6,10 +6,18 @@ import world.naturecraft.townymission.core.services.PluginMessagingService;
 
 import java.util.UUID;
 
+/**
+ * The type Command bungee service.
+ */
 public class CommandBungeeService extends CommandService {
 
     private static CommandBungeeService singleton;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CommandBungeeService getInstance() {
         if (singleton == null) {
             singleton = new CommandBungeeService();

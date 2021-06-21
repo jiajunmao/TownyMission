@@ -71,6 +71,12 @@ public class PluginMessagingService {
                 .getServer().getInfo().sendData("townymission:main", out.toByteArray());
     }
 
+    /**
+     * Send data.
+     *
+     * @param message    the message
+     * @param serverName the server name
+     */
     public static void sendData(PluginMessage message, String serverName) {
         Collection<ProxiedPlayer> networkPlayers = ProxyServer.getInstance().getPlayers();
         if (networkPlayers == null || networkPlayers.isEmpty()) {
@@ -171,6 +177,13 @@ public class PluginMessagingService {
         return parseData(responseBytes);
     }
 
+    /**
+     * Send and wait plugin message.
+     *
+     * @param message    the message
+     * @param serverName the server name
+     * @return the plugin message
+     */
     public PluginMessage sendAndWait(PluginMessage message, String serverName) {
         CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
         sendData(message, serverName);

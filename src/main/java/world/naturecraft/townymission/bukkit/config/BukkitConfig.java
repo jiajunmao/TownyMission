@@ -12,13 +12,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collection;
-import java.util.List;
 
+/**
+ * The type Bukkit config.
+ */
 public class BukkitConfig implements TownyMissionConfig {
 
     private FileConfiguration configuration;
     private File configFile;
 
+    /**
+     * Instantiates a new Bukkit config.
+     *
+     * @param path the path
+     */
     public BukkitConfig(String path) {
         createConfig(path);
     }

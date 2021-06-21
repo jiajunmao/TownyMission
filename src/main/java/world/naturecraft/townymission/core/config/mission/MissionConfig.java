@@ -4,8 +4,7 @@
 
 package world.naturecraft.townymission.core.config.mission;
 
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.bukkit.config.BukkitConfig;
 import world.naturecraft.townymission.bungee.config.BungeeConfig;
@@ -41,7 +40,7 @@ public class MissionConfig {
             String filePath = "missions" + File.separator + fileName;
 
             TownyMissionConfig tempConfig;
-            if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+            if (TownyMissionInstanceType.isBukkit()) {
                 tempConfig = new BukkitConfig(filePath);
             } else {
                 tempConfig = new BungeeConfig(filePath);

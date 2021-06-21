@@ -12,4 +12,22 @@ public class TownyMissionInstanceType {
      */
     public static ServerType serverType;
 
+    /**
+     * Is bungee boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isBungee() {
+        return serverType.equals(ServerType.BUNGEE);
+    }
+
+    /**
+     * Is bukkit boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isBukkit() {
+        return serverType.equals(ServerType.BUKKIT);
+    }
+
 }

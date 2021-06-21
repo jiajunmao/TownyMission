@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.core.services;
 
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.services.TaskBukkitService;
 import world.naturecraft.townymission.bungee.services.TaskBungeeService;
 
@@ -19,7 +18,7 @@ public abstract class TaskService extends TownyMissionService {
      */
     public static TaskService getInstance() {
         if (executor == null) {
-            if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+            if (TownyMissionInstanceType.isBukkit()) {
                 executor = TaskBukkitService.getInstance();
             } else {
                 executor = TaskBungeeService.getInstance();

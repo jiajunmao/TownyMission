@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.core.config;
 
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.bukkit.config.BukkitConfig;
@@ -53,8 +52,11 @@ public class StatsConfig {
         return config.getLong("season.startedTime");
     }
 
+    /**
+     * Create config.
+     */
     public void createConfig() {
-        if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+        if (TownyMissionInstanceType.isBukkit()) {
             config = new BukkitConfig("datastore" + File.separator + "stats.yml");
         } else {
             config = new BungeeConfig("datastore" + File.separator + "stats.yml");
@@ -71,6 +73,12 @@ public class StatsConfig {
         return config.getInt(path);
     }
 
+    /**
+     * Gets string.
+     *
+     * @param path the path
+     * @return the string
+     */
     public String getString(String path) {
         return config.getString(path);
     }

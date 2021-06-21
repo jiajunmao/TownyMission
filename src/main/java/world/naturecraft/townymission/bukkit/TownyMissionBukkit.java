@@ -15,6 +15,7 @@ import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
 import world.naturecraft.townymission.bukkit.listeners.external.MissionListener;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
+import world.naturecraft.townymission.bukkit.listeners.internal.PMCListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
@@ -95,6 +96,13 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         registerListeners();
         logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
         registerTimers();
+
+        if (getConfig().getBoolean("bungeecord.enable")) {
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Detected running BUNGEE MODE"));
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering Bungee Plugin Messaging Channel"));
+            // This means that this bukkit instance should respond to the events
+            registerPMC();
+        }
     }
 
     @Override
@@ -150,7 +158,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     public void registerPMC() {
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "townymission:main");
-
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, "townymission:main", new PMCListener());
     }
 
     /**
@@ -244,5 +252,15 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public InputStream getInstanceResource(String filePath) {
         return this.getResource(filePath);
+    }
+
+    /**
+     * Gets logger.
+     *
+     * @return the logger
+     */
+    @Override
+    public Logger getInstanceLogger() {
+        return this.getLogger();
     }
 }

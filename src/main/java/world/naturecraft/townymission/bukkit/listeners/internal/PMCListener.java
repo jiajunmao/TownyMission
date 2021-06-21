@@ -3,6 +3,7 @@ package world.naturecraft.townymission.bukkit.listeners.internal;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
@@ -224,9 +225,19 @@ public class PMCListener implements PluginMessageListener {
                 result = new BukkitChecker(townyMissionInstance).target(player)
                         .hasTown().isMayor().check();
                 break;
-            case "permission":
+            case "hasPermission":
                 result = new BukkitChecker(townyMissionInstance).target(player)
                         .hasPermission(requestData[1]).check();
+                break;
+            case "hasWorld":
+                String worldStr = requestData[1];
+                boolean hasWorld = false;
+                for (World world : Bukkit.getServer().getWorlds()) {
+                    if (world.getName().equalsIgnoreCase(worldStr)) {
+                        hasWorld = true;
+                    }
+                }
+                result = hasWorld;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + requestData[0]);

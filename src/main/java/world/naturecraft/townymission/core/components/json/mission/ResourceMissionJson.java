@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bukkit.Material;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.utils.Util;
@@ -26,7 +25,7 @@ public class ResourceMissionJson extends MissionJson {
     @JsonProperty("mi")
     private final boolean isMi;
     @JsonProperty("type")
-    private final Material type;
+    private final String type;
 
     /**
      * Instantiates a new Resource.
@@ -40,7 +39,7 @@ public class ResourceMissionJson extends MissionJson {
      * @param contributions the contributions
      */
     @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "contributions"})
-    public ResourceMissionJson(boolean isMi, Material type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    public ResourceMissionJson(boolean isMi, String type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         super(MissionType.RESOURCE, amount, completed, hrAllowed, reward, contributions);
         this.isMi = isMi;
         this.type = type;
@@ -71,7 +70,7 @@ public class ResourceMissionJson extends MissionJson {
      *
      * @return the type
      */
-    public Material getType() {
+    public String getType() {
         return type;
     }
 
@@ -83,7 +82,7 @@ public class ResourceMissionJson extends MissionJson {
     @Override
     @JsonIgnore
     public String getDisplayLine() {
-        return "&f- &eisMi: &f" + isMi() + "&7; &e Type: &f" + getType().name() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
+        return "&f- &eisMi: &f" + isMi() + "&7; &e Type: &f" + getType() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
     }
 
     /**
@@ -95,7 +94,7 @@ public class ResourceMissionJson extends MissionJson {
     @JsonIgnore
     public List<String> getLore() {
         List<String> loreList = new ArrayList<>();
-        loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(type.name())));
+        loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(type)));
         loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
         loreList.add(ChatService.getInstance().translateColor("&r&eReward: &7" + getReward()));
         loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));

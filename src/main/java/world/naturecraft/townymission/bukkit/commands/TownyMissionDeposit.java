@@ -89,7 +89,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         resourceMissionJson.addCompleted(total);
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
                                 .replace("%number", String.valueOf(total)
-                                        .replace("%type%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT))));
+                                        .replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT))));
                     } else {
                         int number = player.getItemInHand().getAmount();
                         resourceMissionJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
@@ -97,7 +97,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         player.setItemInHand(null);
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
                                 .replace("%number", String.valueOf(number)
-                                        .replace("%type%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT))));
+                                        .replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT))));
                     }
 
                     try {
@@ -141,7 +141,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         return true;
                     } else {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNotMatch"));
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceMissionJson.getType().name().toLowerCase(Locale.ROOT)));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
                         ChatService.getInstance().sendMsg(player.getUniqueId(), "&cIn-hand type: " + instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         return false;
                     }

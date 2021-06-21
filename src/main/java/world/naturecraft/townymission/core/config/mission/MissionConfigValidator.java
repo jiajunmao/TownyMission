@@ -4,11 +4,7 @@
 
 package world.naturecraft.townymission.core.config.mission;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.EntityType;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.config.TownyMissionConfig;
@@ -32,16 +28,12 @@ public class MissionConfigValidator {
                     case EXPANSION:
                         String path = key + ".world";
                         String worldStr = missionConfig.getString(path);
-                        boolean hasWorld = false;
-                        for (World world : Bukkit.getServer().getWorlds()) {
-                            if (world.getName().equalsIgnoreCase(worldStr)) {
-                                hasWorld = true;
-                            }
-                        }
-
-                        if (!hasWorld) {
-                            throwException(missionConfig, key, "No world named: " + worldStr);
-                        }
+//                        boolean hasWorld =
+//
+//                        if (!hasWorld) {
+//                            throwException(missionConfig, key, "No world named: " + worldStr);
+//                        }
+                        // I will assume smart user for now
                         break;
                     case RESOURCE:
                         path = key + ".isMi";
@@ -54,21 +46,21 @@ public class MissionConfigValidator {
                         path = key + ".type";
                         String type = missionConfig.getString(path);
 
-                        try {
-                            Material.valueOf(type);
-                        } catch (IllegalArgumentException e) {
-                            throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
-                        }
+//                        try {
+//                            Material.valueOf(type);
+//                        } catch (IllegalArgumentException e) {
+//                            throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
+//                        }
                         break;
                     case MOB:
                         path = key + ".type";
                         String mobType = missionConfig.getString(path);
 
-                        try {
-                            EntityType.valueOf(mobType);
-                        } catch (IllegalArgumentException e) {
-                            throwException(missionConfig, key, "MobType " + mobType + " for entry " + key + " is invalid", e);
-                        }
+//                        try {
+//                            EntityType.valueOf(mobType);
+//                        } catch (IllegalArgumentException e) {
+//                            throwException(missionConfig, key, "MobType " + mobType + " for entry " + key + " is invalid", e);
+//                        }
                         break;
                 }
 
@@ -90,8 +82,8 @@ public class MissionConfigValidator {
                     throwException(missionConfig, key, "TimeAllowed of entry " + key + " is not a integer");
                 }
             } catch (ConfigParsingException e) {
-                TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
-                instance.getLogger().warning(e.getMessage());
+                TownyMissionInstance instance = TownyMissionInstance.getInstance();
+                instance.getInstanceLogger().warning(e.getMessage());
             }
         }
     }

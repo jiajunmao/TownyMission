@@ -65,7 +65,7 @@ public class TimerService extends TownyMissionService {
 
 
                 if (timeNow > getTotalEndTime(RankType.SPRINT)) {
-                    instance.getLogger().warning("Sprint interval ended, proceeding to the next interval");
+                    instance.getInstanceLogger().warning("Sprint interval ended, proceeding to the next interval");
                     // This means that we are in the next sprint, change config.yml
                     instance.getStatsConfig().set("sprint.current", instance.getStatsConfig().getInt("sprint.current") + 1);
                     instance.getStatsConfig().save();
@@ -79,18 +79,18 @@ public class TimerService extends TownyMissionService {
 //                        return;
 //                    }
 
-                    instance.getLogger().warning("Sprint interval reached, doing sprint recess clean up jobs");
+                    instance.getInstanceLogger().warning("Sprint interval reached, doing sprint recess clean up jobs");
 
                     // Clear MissionStorage
-                    instance.getLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Cleaning up mission storage"));
+                    instance.getInstanceLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Cleaning up mission storage"));
                     MissionService.getInstance().sprintEndCleanUp();
 
                     // Clear CooldownStorage
-                    instance.getLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Cleaning up cooldown storage"));
+                    instance.getInstanceLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Cleaning up cooldown storage"));
                     CooldownDao.getInstance().removeAllEntries();
 
                     // Issue rewards
-                    instance.getLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Issuing rewards"));
+                    instance.getInstanceLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Issuing rewards"));
                     RewardMethod rewardMethod = RewardMethod.valueOf(instance.getInstanceConfig().getString("sprint.rewards.method").toUpperCase(Locale.ROOT));
                     RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
@@ -118,7 +118,7 @@ public class TimerService extends TownyMissionService {
                 if (instance.getStatsConfig().getLong("season.startedTime") == -1) return;
 
                 if (timeNow > getTotalEndTime(RankType.SEASON)) {
-                    instance.getLogger().warning("Season interval ended. Proceed to the next season.");
+                    instance.getInstanceLogger().warning("Season interval ended. Proceed to the next season.");
                     // This means we are entering next season
                     instance.getStatsConfig().set("season.current", instance.getStatsConfig().getInt("season.current") + 1);
                     instance.getStatsConfig().set("sprint.current", 1);
@@ -129,7 +129,7 @@ public class TimerService extends TownyMissionService {
                     if (SeasonHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current")) != null)
                         return;
 
-                    instance.getLogger().warning("Season interval reached. Doing season clean up job");
+                    instance.getInstanceLogger().warning("Season interval reached. Doing season clean up job");
                     // This means we are in the interval time, do clean up job and issue rewards
                     // Since reaching this point means the sprint has ended, and sprint cleanup job has been done
                     //     - Mission has been moved to MissionHistory

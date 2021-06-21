@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.core.config.mission;
 
-import org.bukkit.Material;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.*;
@@ -33,18 +32,18 @@ public class MissionConfigParser {
             int hrAllowed = fileConfiguration.getInt(key + ".timeAllowed");
 
             if (type.equals(MissionType.EXPANSION)) {
-                String world = fileConfiguration.getString(key + "world");
+                String world = fileConfiguration.getString(key + ".world");
                 list.add(new ExpansionMissionJson(world, amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.MOB)) {
-                String mobType = fileConfiguration.getString(key + "type");
+                String mobType = fileConfiguration.getString(key + ".type");
                 MobMissionJson mobMissionJson = new MobMissionJson((mobType), amount, 0, hrAllowed, reward, null);
                 list.add(mobMissionJson);
             } else if (type.equals(MissionType.MONEY)) {
                 list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.RESOURCE)) {
-                boolean isMi = fileConfiguration.getBoolean(key + "isMi");
-                String resourceType = fileConfiguration.getString(key + "type");
-                list.add(new ResourceMissionJson(isMi, Material.valueOf(resourceType), amount, 0, hrAllowed, reward, null));
+                boolean isMi = fileConfiguration.getBoolean(key + ".isMi");
+                String resourceType = fileConfiguration.getString(key + ".type");
+                list.add(new ResourceMissionJson(isMi, resourceType, amount, 0, hrAllowed, reward, null));
             } else if (type.equals(MissionType.VOTE)) {
                 list.add(new VoteMissionJson(amount, 0, hrAllowed, reward, null));
             }

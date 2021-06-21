@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.core.config;
 
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.config.BukkitConfig;
 import world.naturecraft.townymission.bungee.config.BungeeConfig;
 
@@ -16,7 +15,7 @@ public class MainConfig {
      * Instantiates a new Main config.
      */
     public MainConfig() {
-        if (TownyMissionInstance.getInstance() instanceof TownyMissionBukkit) {
+        if (TownyMissionInstanceType.isBukkit()) {
             config = new BukkitConfig("config.yml");
         } else {
             config = new BungeeConfig("config.yml");
