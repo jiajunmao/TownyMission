@@ -29,7 +29,7 @@ fi
 AUTHOR_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%aN")"
 COMMITTER_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%cN")"
 COMMIT_SUBJECT="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
-COMMIT_MESSAGE=$(git log -1 "$CI_COMMIT_SHA" --pretty="%b" | sed ':a;N;$!ba;s/\n/\\n/g' | sed "s/-/[\` + \`](www.google.com)/g")
+COMMIT_MESSAGE=$(git log -1 "$CI_COMMIT_SHA" --pretty="%b" | sed ':a;N;$!ba;s/\n/\\n/g' | sed "s/-/[\` + \`](www.naturecraft.world)/g")
 
 echo "Following is the commit message"
 echo $COMMIT_MESSAGE
