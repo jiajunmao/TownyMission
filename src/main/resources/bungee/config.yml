@@ -1,3 +1,6 @@
+# Main Server setting
+main-server: nc-terra-earth
+
 # Database settings
 database:
   # The address of the database, in IP or domain name
@@ -11,90 +14,6 @@ database:
   # The password to access the database
   password:
 
-# Settings for participants in the sprint/season
-participants:
-  # How many points does each town has to earn regardless to enter the ranking
-  sprintRewardBaseline: 2000
-  # How many extra points each town must make when they have multiple members
-  # Formula for total reward entry bar is: baseline+(n-1)*scale
-  sprintRewardMemberScale: 1500
-  # Whether there is a max cap that the entry bar can reach
-  sprintRewardBaselineCap: 15000
-  # How many required naturepoints are added to the base line for each successive sprint
-  sprintBaselineIncrement: 1000
-
-# Mission settings
-mission:
-  # Cooldown between abort/complete and town getting new mission, in minutes
-  cooldown: 30
-  # How many missions a town can see
-  amount: 14
-
-# Sprint settings
-sprint:
-  # Duration of the sprint, in days
-  duration: 5
-  # Interval between two springs, in days
-  interval: 2
-  rewards:
-    # EQUAL, CONTRIBUTIONS, INDIVIDUAL
-    # EQUALS means that the reward is distributed evenly among all town members,
-    #     whether they actually contributed or not
-    # CONTRIBUTIONS means that the reward is distributed according to average contribution
-    #     (sum of individual contribution)/(number of mission)
-    # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
-    #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
-    # ** points{} reward category is added to the town directly. It is not affected by this setting
-    method: contributions
-    # There are only four types, RESOURCE, MONEY, COMMAND, and POINTS
-    # Points are the season points used to calculate season rewards below
-    # ***---> The numbering for the list means RANK, so the highest ranking town would receive rewards under 1:
-    # ***---> If no other: exists, non-rank-specified town would receive nothing fdsd
-    # Please use the exact format as the shown in the following default config
-    # Placeholders
-    #   - %player%: the name of the player, only works in COMMAND type
-    rewards:
-      1:
-        - 'resource{"type": "DIAMOND", "amount": 100}'
-        - 'money{"amount": 50000}'
-        - 'command{"command": "cmi msg %player% wow you are amazing"}'
-        - 'points{"amount":5}'
-      2:
-        - 'resource{"type": "DIAMOND", "amount": 100}'
-        - 'money{"amount": 50000}'
-        - 'command{"command": "cmi msg %player% wow you are amazing"}'
-        - 'points{"amount":5}'
-      others:
-        - 'points{"amount": 1}'
-
-
-season:
-  # Number of sprints that a season will have
-  sprintsPerSeason: 4
-  # Interval between two season, in days
-  interval: 7
-  rewards:
-    # EQUAL, CONTRIBUTIONS, INDIVIDUAL
-    # EQUALS means that the reward is distributed evenly among all town members,
-    #     whether they actually contributed or not
-    # CONTRIBUTIONS means that the reward is distributed according to average contribution
-    #     (sum of individual contribution)/(number of mission)
-    # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
-    #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
-    method: contributions
-    # There are only three types, RESOURCE, MONEY, and COMMAND
-    # Please use the exact format as the shown in the following default config
-    # Placeholders
-    #   - %player%: the name of the player, only works in COMMAND type
-    rewards:
-      1:
-        - 'resource{"type": "DIAMOND", "amount": 100}'
-        - 'money{"amount": 50000}'
-        - 'command{"command": "cmi msg %player% wow you are amazing"}'
-      others:
-        - 'resource{"type": "DIAMOND", "amount": 100}'
-        - 'money{"amount": 50000}'
-        - 'command{"command": "cmi msg %player% wow you are amazing"}'
 # The hooks that enable certain mission types
 # In each section, one hook must be enabled to enable the mission type
 hooks:

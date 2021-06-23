@@ -7,7 +7,6 @@ import java.util.UUID;
  */
 public class PluginMessage {
 
-    private UUID playerUUID;
     private String channel;
     private UUID messageUUID;
     private int size;
@@ -16,14 +15,12 @@ public class PluginMessage {
     /**
      * Instantiates a new Plugin message.
      *
-     * @param playerUUID  the player uuid
      * @param channel     the channel
      * @param messageUUID the message uuid
      * @param size        the size
      * @param data        the data
      */
-    public PluginMessage(UUID playerUUID, String channel, UUID messageUUID, int size, String[] data) {
-        this.playerUUID = playerUUID;
+    public PluginMessage(String channel, UUID messageUUID, int size, String[] data) {
         this.channel = channel;
         this.messageUUID = messageUUID;
         this.size = size;
@@ -34,17 +31,6 @@ public class PluginMessage {
      * Instantiates a new Plugin message.
      */
     public PluginMessage() {
-    }
-
-    /**
-     * Player uuid plugin message.
-     *
-     * @param id the id
-     * @return the plugin message
-     */
-    public PluginMessage playerUUID(UUID id) {
-        this.playerUUID = id;
-        return this;
     }
 
     /**
@@ -89,15 +75,6 @@ public class PluginMessage {
     public PluginMessage data(String[] data) {
         this.data = data;
         return this;
-    }
-
-    /**
-     * Gets player uuid.
-     *
-     * @return the player uuid
-     */
-    public UUID getPlayerUUID() {
-        return playerUUID;
     }
 
     /**

@@ -1,7 +1,9 @@
 package world.naturecraft.townymission.bukkit;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
@@ -16,19 +18,22 @@ import world.naturecraft.townymission.bukkit.listeners.external.MissionListener;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.PMCListener;
+import world.naturecraft.townymission.bukkit.services.PluginMessagingBukkitService;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.core.config.LangConfig;
 import world.naturecraft.townymission.core.config.MainConfig;
 import world.naturecraft.townymission.core.config.StatsConfig;
 import world.naturecraft.townymission.core.config.mission.MissionConfig;
+import world.naturecraft.townymission.core.services.PluginMessagingService;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Locale;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -43,6 +48,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     private LangConfig langConfig;
     private TownyMissionRoot rootCmd;
     private StorageType storageType;
+    private boolean isMainServer;
+    private boolean isBungeecordEnabled;
 
     @Override
     public void onEnable() {
@@ -57,19 +64,37 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         logger.info(BukkitUtil.translateColor("{#22DDBA}" + "                           |___/                                "));
         logger.info("-----------------------------------------------------------------");
 
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing configuration"));
-
         TownyMissionInstanceType.serverType = ServerType.BUKKIT;
+
+        /**
+         * Determine bungeecord is enabled, and whether this server is the main server
+         */
+        isMainServer = false;
+        if (getConfig().getBoolean("bungeecord.enable")) {
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Running BUNGEECORD mode"));
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering Bungee Plugin Messaging Channel"));
+            // This means that this bukkit instance should respond to the events
+            registerPMC();
+            isBungeecordEnabled = true;
+
+            isMainServer = getConfig().getBoolean("bungeecord.main-server");
+        }
 
         /**
          * This is saving the config.yml (Default config)
          */
-        this.saveDefaultConfig();
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing configuration"));
         try {
-            missionConfig = new MissionConfig();
-            statsConfig = new StatsConfig();
+            // Main config and lang config needs to be saved regardless
             mainConfig = new MainConfig();
             langConfig = new LangConfig();
+
+            // If bungeecord and not main server, don't save
+            if (!isBungeecordEnabled || isMainServer) {
+                logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission&stats config"));
+                missionConfig = new MissionConfig();
+                statsConfig = new StatsConfig();
+            }
         } catch (ConfigLoadingException e) {
             logger.severe("IO operation fault during custom config initialization");
             e.printStackTrace();
@@ -96,13 +121,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         registerListeners();
         logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
         registerTimers();
-
-        if (getConfig().getBoolean("bungeecord.enable")) {
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Detected running BUNGEE MODE"));
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering Bungee Plugin Messaging Channel"));
-            // This means that this bukkit instance should respond to the events
-            registerPMC();
-        }
     }
 
     @Override
@@ -157,8 +175,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      * Register pmc.
      */
     public void registerPMC() {
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "townymission:main");
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "townymission:main", new PMCListener());
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "townymission:main");
+        Bukkit.getMessenger().registerIncomingPluginChannel(this, "townymission:main", new PMCListener());
     }
 
     /**
@@ -190,7 +209,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      * @throws ConfigLoadingException the config loading exception
      */
     public void reloadConfigs() throws ConfigLoadingException {
-        this.reloadConfig();
+        mainConfig = new MainConfig();
+        langConfig = new LangConfig();
         missionConfig = new MissionConfig();
         statsConfig = new StatsConfig();
     }

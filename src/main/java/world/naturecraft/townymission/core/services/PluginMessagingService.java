@@ -5,6 +5,12 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.services.PluginMessagingBukkitService;
+import world.naturecraft.townymission.bungee.TownyMissionBungee;
+import world.naturecraft.townymission.bungee.services.PluginMessagingBungeeService;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 
 import java.util.Collection;
@@ -17,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
  * The type Plugin messaging service.
  */
 @SuppressWarnings("UnstableApiUsage")
-public class PluginMessagingService {
+public abstract class PluginMessagingService {
 
     /**
      * The constant singleton.
@@ -42,62 +48,20 @@ public class PluginMessagingService {
      */
     public static PluginMessagingService getInstance() {
         if (singleton == null) {
-            singleton = new PluginMessagingService();
+            if (TownyMissionInstanceType.isBukkit()) {
+                singleton = PluginMessagingBukkitService.getInstance();
+            } else {
+                singleton = PluginMessagingBungeeService.getInstance();
+            }
         }
 
         return singleton;
     }
 
     /**
-     * Send data.
-     *
-     * @param message the message
-     */
-    public static void sendData(PluginMessage message) {
-        Collection<ProxiedPlayer> networkPlayers = ProxyServer.getInstance().getPlayers();
-        if (networkPlayers == null || networkPlayers.isEmpty()) {
-            return;
-        }
-
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF(message.getChannel());
-        out.writeUTF(message.getMessageUUID().toString());
-        out.writeInt(message.getSize());
-        for (String str : message.getData()) {
-            out.writeUTF(str);
-        }
-
-        ProxyServer.getInstance().getPlayer(message.getPlayerUUID())
-                .getServer().getInfo().sendData("townymission:main", out.toByteArray());
-    }
-
-    /**
-     * Send data.
-     *
-     * @param message    the message
-     * @param serverName the server name
-     */
-    public static void sendData(PluginMessage message, String serverName) {
-        Collection<ProxiedPlayer> networkPlayers = ProxyServer.getInstance().getPlayers();
-        if (networkPlayers == null || networkPlayers.isEmpty()) {
-            return;
-        }
-
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF(message.getChannel());
-        out.writeUTF(message.getMessageUUID().toString());
-        out.writeInt(message.getSize());
-        for (String str : message.getData()) {
-            out.writeUTF(str);
-        }
-
-        ProxyServer.getInstance().getServerInfo(serverName).sendData("townymission:main", out.toByteArray());
-    }
-
-    /**
      * Parse data plugin message.
      *
-     * @param byteData the byte data
+     * @param byteData the data
      * @return the plugin message
      */
     public static PluginMessage parseData(Byte[] byteData) {
@@ -105,15 +69,10 @@ public class PluginMessagingService {
         for (int i = 0; i < byteData.length; i++) {
             data[i] = byteData[i];
         }
+
         return parseData(data);
     }
 
-    /**
-     * Parse data plugin message.
-     *
-     * @param data the data
-     * @return the plugin message
-     */
     public static PluginMessage parseData(byte[] data) {
         ByteArrayDataInput in = ByteStreams.newDataInput(data);
         PluginMessage message = new PluginMessage()
@@ -154,6 +113,14 @@ public class PluginMessagingService {
         this.response.get(responseId).complete(data);
     }
 
+    public void completeRequest(String respondId, byte[] data) {
+        Byte[] byteData = new Byte[data.length];
+        for (int i = 0; i < data.length; i++) {
+            byteData[i] = data[i];
+        }
+
+        completeRequest(respondId, byteData);
+    }
     /**
      * Gets future.
      *
@@ -170,24 +137,7 @@ public class PluginMessagingService {
      * @param message the message
      * @return the plugin message
      */
-    public PluginMessage sendAndWait(PluginMessage message) {
-        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
-        sendData(message);
-        Byte[] responseBytes = future.join();
-        return parseData(responseBytes);
-    }
+    public abstract PluginMessage sendAndWait(PluginMessage message);
 
-    /**
-     * Send and wait plugin message.
-     *
-     * @param message    the message
-     * @param serverName the server name
-     * @return the plugin message
-     */
-    public PluginMessage sendAndWait(PluginMessage message, String serverName) {
-        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
-        sendData(message, serverName);
-        Byte[] responseBytes = future.join();
-        return parseData(responseBytes);
-    }
+    public abstract void send(PluginMessage message);
 }
