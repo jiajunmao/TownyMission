@@ -1,12 +1,20 @@
 package world.naturecraft.townymission.bungee.listener;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
-import org.bukkit.event.EventHandler;
+import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.event.EventHandler;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.bungee.TownyMissionBungee;
+import world.naturecraft.townymission.bungee.services.PluginMessagingBungeeService;
+import world.naturecraft.townymission.core.components.entity.PluginMessage;
+import world.naturecraft.townymission.core.services.PluginMessagingService;
+
+import java.util.UUID;
 
 /**
  * The type Pmc listener.
@@ -19,20 +27,36 @@ public class PMCListener implements Listener {
      * @param event the event
      */
     @EventHandler
-    public void on(PluginMessageEvent event) {
-
+    public void onPluginMessageEvent(PluginMessageEvent event) {
         if (!event.getTag().equalsIgnoreCase("townymission:main")) return;
 
         ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
         String subChannel = in.readUTF();
-        if (subChannel.equals("mission")) {
-            String data = in.readUTF();
-            System.out.println("Message received in " + subChannel + " as " + data);
-            if (event.getReceiver() instanceof ProxiedPlayer) {
-                ProxiedPlayer player = (ProxiedPlayer) event.getReceiver();
-            } else if (event.getReceiver() instanceof Server) {
-                Server server = (Server) event.getReceiver();
-            }
+        UUID msgUUID = UUID.fromString(in.readUTF());
+        int requestSize = in.readInt();
+        String[] data = new String[requestSize];
+        for (int i = 0; i < requestSize; i++) {
+            data[i] = in.readUTF();
+        }
+
+        TownyMissionBungee instance = TownyMissionInstance.getInstance();
+        if (subChannel.equals("config:request")) {
+            String configValue = instance.getConfig().getString(data[0]);
+            PluginMessage response = new PluginMessage()
+                    .channel("config:response")
+                    .messageUUID(msgUUID)
+                    .dataSize(1)
+                    .data(new String[]{configValue});
+
+            PluginMessagingService.getInstance().send(response);
+        } else if (subChannel.equals("mission:request")) {
+            PluginMessage response = new PluginMessage()
+                    .channel("mission:response")
+                    .messageUUID(msgUUID)
+                    .dataSize(4)
+                    .data(data);
+
+            PluginMessagingService.getInstance().send(response);
         }
     }
 }

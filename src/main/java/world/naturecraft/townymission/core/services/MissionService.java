@@ -10,6 +10,7 @@ import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.core.components.entity.SeasonEntry;
 import world.naturecraft.townymission.core.components.entity.SprintEntry;
+import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.data.dao.MissionHistoryDao;
@@ -190,6 +191,8 @@ public abstract class MissionService extends TownyMissionService {
 
         return averageContribution;
     }
+
+    public abstract void doMission(UUID townUUID, UUID playerUUID, MissionType missionType, int amount);
 
     /**
      * Sprint end clean up.

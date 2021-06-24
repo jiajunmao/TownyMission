@@ -42,6 +42,7 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
         // Registering plugin messaging channel
         logger.info("===> Registering Listeners and PMC");
+        registerChannel();
         registerListener();
     }
 
@@ -62,7 +63,6 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
      * Register listener.
      */
     public void registerListener() {
-        getProxy().registerChannel("townymission:main");
         getProxy().getPluginManager().registerListener(this, new PMCListener());
     }
 

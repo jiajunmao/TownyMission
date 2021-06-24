@@ -22,10 +22,16 @@ import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
+import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.components.json.mission.MobMissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.services.MissionService;
+import world.naturecraft.townymission.core.services.PluginMessagingService;
+
+import java.util.Locale;
+import java.util.UUID;
 
 /**
  * The type Mission listener.
@@ -135,34 +141,44 @@ public class MissionListener extends TownyMissionListener {
      * @param amount        the amount
      */
     public void doLogic(BukkitChecker bukkitChecker, MissionType missionType, Player player, int amount) {
-        BukkitRunnable r = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (bukkitChecker.check()) {
-                    Town town = TownyUtil.residentOf(player);
-                    MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town.getUUID(), missionType);
+        // This is where main server and non-main server differs
+        // If it is main server, directly interact with the DAOs
+        // If it is not the main server, send the event to the main server through PMC
 
-                    if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
-
-                    MissionJson json = taskEntry.getMissionJson();
-                    json.setCompleted(json.getCompleted() + amount);
-                    json.addContribution(player.getUniqueId().toString(), amount);
-                    try {
-                        taskEntry.setMissionJson(json);
-                    } catch (JsonProcessingException exception) {
-                        exception.printStackTrace();
-                        return;
-                    }
-
-                    DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
-                    pluginManager.callEvent(missionEvent);
-                    if (!missionEvent.isCanceled()) {
-                        MissionDao.getInstance().update(taskEntry);
+        if (!instance.getConfig().getBoolean("bungeecord.enable") || (instance.getConfig().getBoolean("bungeecord.enable") && instance.getConfig().getBoolean("bungeecord.main-server"))) {
+            // This means either the bungeecord is not enabled
+            //  or bungeecord is enabled and this is main server
+            //  directly interact with the DAOs
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (bukkitChecker.check()) {
+                        Town town = TownyUtil.residentOf(player);
+                        MissionService.getInstance().doMission(town.getUUID(), player.getUniqueId(), missionType, amount);
                     }
                 }
-            }
-        };
+            };
 
-        runTaskAsynchronously(r);
+            runTaskAsynchronously(r);
+        } else if (instance.getConfig().getBoolean("bungeecord.enable") && !instance.getConfig().getBoolean("bungeecord.main-server")) {
+            // This means that bungeecord is enabled, but this is not the main server
+            //    send the package to the main server instead
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    PluginMessage request = new PluginMessage()
+                            .channel("mission:request")
+                            .messageUUID(UUID.randomUUID())
+                            .dataSize(4)
+                            .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
+
+                    // No need for reply
+                    PluginMessagingService.getInstance().send(request);
+                }
+            };
+
+            r.runTaskAsynchronously(instance);
+        }
     }
 }
