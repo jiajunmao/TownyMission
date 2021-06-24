@@ -3,6 +3,7 @@ package world.naturecraft.townymission.bukkit.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
@@ -74,7 +75,7 @@ public class MissionBukkitService extends MissionService {
     }
 
     public void doMission(UUID townUUID, UUID playerUUID, MissionType missionType, int amount) {
-        Player player = Bukkit.getPlayer(playerUUID);
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(townUUID, missionType);
 
         if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
@@ -89,7 +90,7 @@ public class MissionBukkitService extends MissionService {
             return;
         }
 
-        DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
+        DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, false);
         Bukkit.getPluginManager().callEvent(missionEvent);
         if (!missionEvent.isCanceled()) {
             MissionDao.getInstance().update(taskEntry);

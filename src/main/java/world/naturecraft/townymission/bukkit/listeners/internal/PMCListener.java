@@ -1,6 +1,7 @@
 package world.naturecraft.townymission.bukkit.listeners.internal;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
@@ -43,8 +44,12 @@ public class PMCListener implements PluginMessageListener {
             // If this is not the main server, just ignore, otherwise this infinite looping
             if (!instance.getConfig().getBoolean("bungeecord.main-server")) return;
 
-            UUID townUUID = TownyUtil.residentOf(player).getUUID();
-            MissionService.getInstance().doMission(townUUID, player.getUniqueId(), MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)), Integer.parseInt(request.getData()[3]));
+            System.out.println("Player UUID is " + request.getData()[1]);
+            OfflinePlayer realPlayer = Bukkit.getOfflinePlayer(UUID.fromString(request.getData()[1]));
+            UUID townUUID = TownyUtil.residentOf(realPlayer).getUUID();
+            System.out.println("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
+            System.out.println("The townUUID is " + townUUID);
+            MissionService.getInstance().doMission(townUUID, realPlayer.getUniqueId(), MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)), Integer.parseInt(request.getData()[3]));
         }
     }
 }

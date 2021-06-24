@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.bukkit.api.events;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -17,7 +18,7 @@ import world.naturecraft.townymission.core.components.entity.MissionEntry;
 public class DoMissionEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private final Player player;
+    private final OfflinePlayer player;
     // !!IMPORTANT!! this entry contains the **updated** info
     private final MissionEntry taskEntry;
     private boolean isCanceled;
@@ -29,7 +30,7 @@ public class DoMissionEvent extends Event implements Cancellable {
      * @param entry   the entry
      * @param isAsync the is async
      */
-    public DoMissionEvent(Player player, MissionEntry entry, boolean isAsync) {
+    public DoMissionEvent(OfflinePlayer player, MissionEntry entry, boolean isAsync) {
         super(isAsync);
         this.player = player;
         this.taskEntry = entry;
@@ -87,7 +88,7 @@ public class DoMissionEvent extends Event implements Cancellable {
      *
      * @return the player
      */
-    public Player getPlayer() {
+    public OfflinePlayer getPlayer() {
         return player;
     }
 
