@@ -6,6 +6,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bungee.TownyMissionBungee;
@@ -38,14 +39,22 @@ public class PMCListener implements Listener {
             data[i] = in.readUTF();
         }
 
+        TownyMissionBungee instance = TownyMissionInstance.getInstance();
         if (subChannel.equals("config:request")) {
-            TownyMissionBungee instance = TownyMissionInstance.getInstance();
             String configValue = instance.getConfig().getString(data[0]);
             PluginMessage response = new PluginMessage()
                     .channel("config:response")
                     .messageUUID(msgUUID)
                     .dataSize(1)
                     .data(new String[]{configValue});
+
+            PluginMessagingService.getInstance().send(response);
+        } else if (subChannel.equals("mission:request")) {
+            PluginMessage response = new PluginMessage()
+                    .channel("mission:response")
+                    .messageUUID(msgUUID)
+                    .dataSize(4)
+                    .data(data);
 
             PluginMessagingService.getInstance().send(response);
         }

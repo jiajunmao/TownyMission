@@ -27,6 +27,7 @@ import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.components.json.mission.MobMissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
 
 import java.util.Locale;
@@ -153,25 +154,7 @@ public class MissionListener extends TownyMissionListener {
                 public void run() {
                     if (bukkitChecker.check()) {
                         Town town = TownyUtil.residentOf(player);
-                        MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(town.getUUID(), missionType);
-
-                        if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
-
-                        MissionJson json = taskEntry.getMissionJson();
-                        json.setCompleted(json.getCompleted() + amount);
-                        json.addContribution(player.getUniqueId().toString(), amount);
-                        try {
-                            taskEntry.setMissionJson(json);
-                        } catch (JsonProcessingException exception) {
-                            exception.printStackTrace();
-                            return;
-                        }
-
-                        DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, true);
-                        pluginManager.callEvent(missionEvent);
-                        if (!missionEvent.isCanceled()) {
-                            MissionDao.getInstance().update(taskEntry);
-                        }
+                        MissionService.getInstance().doMission(town.getUUID(), player.getUniqueId(), missionType, amount);
                     }
                 }
             };
@@ -184,13 +167,18 @@ public class MissionListener extends TownyMissionListener {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PluginMessage pluginMessage = new PluginMessage()
+                    PluginMessage request = new PluginMessage()
                             .channel("mission:request")
                             .messageUUID(UUID.randomUUID())
-                            .dataSize(3)
-                            .data(new String[]{"doMission", missionType.name(), String.valueOf(amount)});
+                            .dataSize(4)
+                            .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
+
+                    // No need for reply
+                    PluginMessagingService.getInstance().send(request);
                 }
             };
+
+            r.runTaskAsynchronously(instance);
         }
     }
 }
