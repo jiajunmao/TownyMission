@@ -1,9 +1,7 @@
 package world.naturecraft.townymission.bukkit;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
@@ -14,20 +12,17 @@ import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRel
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminStartSeason;
 import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
-import world.naturecraft.townymission.bukkit.listeners.external.MissionListener;
+import world.naturecraft.townymission.bukkit.listeners.external.mission.*;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.PMCListener;
-import world.naturecraft.townymission.bukkit.services.PluginMessagingBukkitService;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
-import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.core.config.LangConfig;
 import world.naturecraft.townymission.core.config.MainConfig;
 import world.naturecraft.townymission.core.config.StatsConfig;
 import world.naturecraft.townymission.core.config.mission.MissionConfig;
-import world.naturecraft.townymission.core.services.PluginMessagingService;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
 
@@ -104,23 +99,28 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * Configure data storage, yaml, or mysql
          */
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Connecting to datastore"));
-        String storage = getConfig().getString("storage");
-        storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
+        // If is bungee, and not main, do nothing here except for the listeners
+        if (!isBungeecordEnabled || isMainServer) {
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Connecting to datastore"));
+            String storage = getConfig().getString("storage");
+            storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
 
-        if (storageType.equals(StorageType.MYSQL)) {
-            logger.info("Using MYSQL as storage backend");
-            connect();
+            if (storageType.equals(StorageType.MYSQL)) {
+                logger.info("Using MYSQL as storage backend");
+                connect();
+            } else {
+                logger.info("Using YAML flat file as storage backend");
+            }
+
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering commands"));
+            registerCommands();
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering listeners"));
+            registerListeners();
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
+            registerTimers();
         } else {
-            logger.info("Using YAML flat file as storage backend");
+            registerListeners();
         }
-
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering commands"));
-        registerCommands();
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering listeners"));
-        registerListeners();
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
-        registerTimers();
     }
 
     @Override
@@ -163,12 +163,24 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     public void registerListeners() {
         // Event listeners
-        getServer().getPluginManager().registerEvents(new MissionListener(this), this);
-        getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
-        getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
+        // If bungee and !main, do not register town related listeners
+        if (!isBungeecordEnabled || isMainServer) {
+            getServer().getPluginManager().registerEvents(new ExpansionListener(this), this);
+            getServer().getPluginManager().registerEvents(new MobListener(this), this);
+            getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
+            getServer().getPluginManager().registerEvents(new VoteListener(this), this);
 
-        // GUI listeners
-        getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
+            getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
+            getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
+
+            // GUI listeners
+            getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
+        } else {
+            // This means is bungee, but not main server
+            getServer().getPluginManager().registerEvents(new MobListener(this), this);
+            getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
+            getServer().getPluginManager().registerEvents(new VoteListener(this), this);
+        }
     }
 
     /**
@@ -282,5 +294,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public Logger getInstanceLogger() {
         return this.getLogger();
+    }
+
+    public boolean isMainserver() {
+        return !isBungeecordEnabled || isMainServer;
     }
 }

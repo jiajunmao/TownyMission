@@ -6,7 +6,9 @@ package world.naturecraft.townymission.bukkit.utils;
 
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -37,17 +39,21 @@ public class TownyUtil {
      * @param player the player
      * @return the town
      */
-    public static Town residentOf(Player player) {
+    public static Town residentOf(OfflinePlayer player) {
         if (player == null)
             return null;
 
-        for (Town t : TownyAPI.getInstance().getDataSource().getTowns()) {
-            if (t.hasResident(player.getDisplayName())) {
-                return t;
+        try {
+            for (Resident r : TownyAPI.getInstance().getDataSource().getResidents()) {
+                if (r.getUUID().equals(player.getUniqueId()) && r.hasTown()) {
+                    return r.getTown();
+                }
             }
-        }
 
-        return null;
+            return null;
+        } catch (NotRegisteredException e) {
+            return null;
+        }
     }
 
     /**
