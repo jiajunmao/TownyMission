@@ -112,6 +112,7 @@ public abstract class YamlStorage<T extends DataEntity> {
      * @param content the content
      */
     public void set(String path, Object content) {
+        instance.getInstanceLogger().info("YamlStorage setting " + path + " to value " + content);
         file.set(path, content);
         try {
             file.save(customConfig);

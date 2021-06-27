@@ -44,11 +44,9 @@ public class PMCListener implements PluginMessageListener {
             // If this is not the main server, just ignore, otherwise this infinite looping
             if (!instance.getConfig().getBoolean("bungeecord.main-server")) return;
 
-            System.out.println("Player UUID is " + request.getData()[1]);
             OfflinePlayer realPlayer = Bukkit.getOfflinePlayer(UUID.fromString(request.getData()[1]));
             UUID townUUID = TownyUtil.residentOf(realPlayer).getUUID();
             System.out.println("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
-            System.out.println("The townUUID is " + townUUID);
             MissionService.getInstance().doMission(townUUID, realPlayer.getUniqueId(), MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)), Integer.parseInt(request.getData()[3]));
         }
     }
