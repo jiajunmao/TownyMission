@@ -2,12 +2,13 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.core.config.reward;
+package world.naturecraft.townymission.bukkit.config.reward;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.enums.RankType;
 import world.naturecraft.townymission.core.components.enums.RewardMethod;
 import world.naturecraft.townymission.core.components.enums.RewardType;
@@ -32,7 +33,6 @@ public class RewardConfigParser {
         TownyMissionBukkit instance = (TownyMissionBukkit) Bukkit.getPluginManager().getPlugin("TownyMission");
         ConfigurationSection rankConfigSection = instance.getConfig().getConfigurationSection(rankType.name().toLowerCase(Locale.ROOT) + ".rewards.rewards");
         Set<String> rankList = rankConfigSection.getKeys(false);
-        System.out.println("Rank String List length: " + rankList.size());
         List<RewardJson> rewardJsonList = new ArrayList<>();
 
         for (String rank : rankList) {
@@ -56,7 +56,7 @@ public class RewardConfigParser {
 
                     rewardJsonList.add(rewardJson);
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    throw new ConfigParsingException(e);
                 }
 
             }

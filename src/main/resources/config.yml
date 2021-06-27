@@ -11,8 +11,6 @@ bungeecord:
   # Whether this is the main server, remember to fill both the main-server and serverName
   #   Remember to also fill in the main-server name on Bungee config
   main-server: true
-  # The name for this server, the EXACT same as defined in the config.yml for bungeecord
-  serverName: nc-terra-earth
 
 # Database settings
 database:

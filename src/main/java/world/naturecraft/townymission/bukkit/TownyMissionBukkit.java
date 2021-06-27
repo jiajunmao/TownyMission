@@ -1,18 +1,18 @@
 package world.naturecraft.townymission.bukkit;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.bukkit.commands.*;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminListMissions;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminReload;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminStartSeason;
+import world.naturecraft.townymission.bukkit.config.reward.RewardConfigValidator;
 import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
 import world.naturecraft.townymission.bukkit.listeners.external.mission.ExpansionListener;
@@ -27,7 +27,7 @@ import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.core.config.LangConfig;
 import world.naturecraft.townymission.core.config.MainConfig;
 import world.naturecraft.townymission.core.config.StatsConfig;
-import world.naturecraft.townymission.core.config.mission.MissionConfig;
+import world.naturecraft.townymission.bukkit.config.mission.MissionConfig;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
 
@@ -95,10 +95,16 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                 missionConfig = new MissionConfig();
                 statsConfig = new StatsConfig();
             }
+
+            RewardConfigValidator.checkRewardConfig();
         } catch (ConfigLoadingException e) {
             logger.severe("IO operation fault during custom config initialization");
             e.printStackTrace();
-            onDisable();
+            Bukkit.getPluginManager().disablePlugin(this);
+        } catch (ConfigParsingException e) {
+            logger.severe("There are errors in the reward section in config.yml! Please correct them and then reload plugin!");
+            e.printStackTrace();
+            Bukkit.getPluginManager().disablePlugin(this);
         }
 
         /**
