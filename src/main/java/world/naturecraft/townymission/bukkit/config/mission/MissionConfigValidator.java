@@ -2,8 +2,11 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.core.config.mission;
+package world.naturecraft.townymission.bukkit.config.mission;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.core.components.enums.MissionType;
@@ -28,11 +31,14 @@ public class MissionConfigValidator {
                     case EXPANSION:
                         String path = key + ".world";
                         String worldStr = missionConfig.getString(path);
-//                        boolean hasWorld =
-//
-//                        if (!hasWorld) {
-//                            throwException(missionConfig, key, "No world named: " + worldStr);
-//                        }
+                        boolean hasWorld = false;
+                        if (Bukkit.getWorld(worldStr) == null) {
+                            throwException(missionConfig, key, "World name for entry " + key + " is invalid");
+                        }
+
+                        if (!hasWorld) {
+                            throwException(missionConfig, key, "No world named: " + worldStr);
+                        }
                         // I will assume smart user for now
                         break;
                     case RESOURCE:
@@ -46,21 +52,21 @@ public class MissionConfigValidator {
                         path = key + ".type";
                         String type = missionConfig.getString(path);
 
-//                        try {
-//                            Material.valueOf(type);
-//                        } catch (IllegalArgumentException e) {
-//                            throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
-//                        }
+                        try {
+                            Material.valueOf(type);
+                        } catch (IllegalArgumentException e) {
+                            throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
+                        }
                         break;
                     case MOB:
                         path = key + ".type";
                         String mobType = missionConfig.getString(path);
 
-//                        try {
-//                            EntityType.valueOf(mobType);
-//                        } catch (IllegalArgumentException e) {
-//                            throwException(missionConfig, key, "MobType " + mobType + " for entry " + key + " is invalid", e);
-//                        }
+                        try {
+                            EntityType.valueOf(mobType);
+                        } catch (IllegalArgumentException e) {
+                            throwException(missionConfig, key, "MobType " + mobType + " for entry " + key + " is invalid", e);
+                        }
                         break;
                 }
 

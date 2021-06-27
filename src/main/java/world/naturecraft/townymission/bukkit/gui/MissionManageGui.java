@@ -19,7 +19,7 @@ import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.core.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.bukkit.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.CooldownService;

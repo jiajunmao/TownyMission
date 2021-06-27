@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.core.config.mission;
+package world.naturecraft.townymission.bukkit.config.mission;
 
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
@@ -46,6 +46,7 @@ public class MissionConfig {
                 tempConfig = new BungeeConfig(filePath);
             }
 
+            MissionConfigValidator.checkMissionConfig(tempConfig, missionType);
             customConfigs.put(missionType, tempConfig);
         }
     }

@@ -13,7 +13,7 @@ import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.core.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.bukkit.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.utils.MultilineBuilder;
 

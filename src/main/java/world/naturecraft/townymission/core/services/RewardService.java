@@ -14,7 +14,7 @@ import world.naturecraft.townymission.core.components.json.reward.CommandRewardJ
 import world.naturecraft.townymission.core.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.ResourceRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.RewardJson;
-import world.naturecraft.townymission.core.config.reward.RewardConfigParser;
+import world.naturecraft.townymission.bukkit.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
 import world.naturecraft.townymission.core.data.dao.SeasonDao;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
