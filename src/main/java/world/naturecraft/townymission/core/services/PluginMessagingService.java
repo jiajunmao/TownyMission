@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The type Plugin messaging service.
@@ -132,6 +135,8 @@ public abstract class PluginMessagingService {
      * @return the plugin message
      */
     public abstract PluginMessage sendAndWait(PluginMessage message);
+
+    public abstract PluginMessage sendAndWait(PluginMessage message, long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException;
 
     public abstract void send(PluginMessage message);
 }
