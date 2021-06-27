@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -107,6 +108,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     } else {
                         // Non main, send PMC instead
                         int number;
+                        Material itemInHand = player.getItemInHand().getType();
                         if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                             number = getTotalAndSetNull(player, Material.valueOf(resourceMissionJson.getType()));
                         } else {
@@ -120,9 +122,23 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                                 .dataSize(5)
                                 .data(new String[]{"doMission", player.getUniqueId().toString(), MissionType.RESOURCE.toString(), player.getItemInHand().getType().name(), String.valueOf(number)});
 
-                        PluginMessagingService.getInstance().send(request);
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
-                                .replace("%number%", String.valueOf(number)).replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
+                        // Since we gotta have the response from the main server, we need send and wait
+                        // And since this is async, we dont need to worry about performance
+
+                        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
+                        if (response.getData()[0].equalsIgnoreCase("false")) {
+                            while (number > 64) {
+                                ItemStack itemStack = new ItemStack(itemInHand, 64);
+                                player.getInventory().addItem(itemStack);
+                                number -= 64;
+                            }
+                            ItemStack itemStack = new ItemStack(itemInHand, number);
+                            player.getInventory().addItem(itemStack);
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNonMainServerFail"));
+                        } else {
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
+                                    .replace("%number%", String.valueOf(number)).replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
+                        }
                     }
                 }
             };

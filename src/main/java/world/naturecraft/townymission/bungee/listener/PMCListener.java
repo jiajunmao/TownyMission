@@ -45,14 +45,6 @@ public class PMCListener implements Listener {
                     .data(new String[]{configValue});
 
             PluginMessagingService.getInstance().send(response);
-        } else if (subChannel.equals("mission:request")) {
-            PluginMessage response = new PluginMessage()
-                    .channel("mission:response")
-                    .messageUUID(msgUUID)
-                    .dataSize(4)
-                    .data(data);
-
-            PluginMessagingService.getInstance().send(response);
         }
     }
 }
