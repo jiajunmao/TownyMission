@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.services.ChatService;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -66,6 +67,18 @@ public class MoneyMissionJson extends MissionJson {
     public List<String> getLore() {
         List<String> loreList = new ArrayList<>();
         loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eReward: &7" + getReward()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
+
+        return loreList;
+    }
+
+    @Override
+    @JsonIgnore
+    public List<String> getStartedLore() {
+        List<String> loreList = new ArrayList<>();
+        loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eCompleted: &7" + getCompleted()));
         loreList.add(ChatService.getInstance().translateColor("&r&eReward: &7" + getReward()));
         loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
 
