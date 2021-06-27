@@ -18,6 +18,7 @@ import world.naturecraft.townymission.core.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
 import world.naturecraft.townymission.core.data.dao.SeasonDao;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
+import world.naturecraft.townymission.core.utils.EntryFilter;
 
 import java.util.List;
 import java.util.Locale;
@@ -72,7 +73,7 @@ public class RewardService extends TownyMissionService {
                     }
                 };
 
-                TaskService.getInstance().runTaskAsync(r);
+                TaskService.getInstance().runTask(r);
                 ClaimDao.getInstance().remove(claimEntry);
                 ChatService.getInstance().sendMsg(playerUUID, instance.getLangEntry("services.reward.onRewardCommand"));
                 break;
@@ -157,7 +158,7 @@ public class RewardService extends TownyMissionService {
                                 rewardJson,
                                 instance.getStatsConfig().getInt("season.current"),
                                 instance.getStatsConfig().getInt("sprint.current"));
-                        ClaimDao.getInstance().add(entry);
+                        addAndMerge(entry);
                     }
                     break;
                 case EQUAL:
@@ -174,7 +175,7 @@ public class RewardService extends TownyMissionService {
                                 copyRewardJseon,
                                 instance.getStatsConfig().getInt("season.current"),
                                 instance.getStatsConfig().getInt("sprint.current"));
-                        ClaimDao.getInstance().add(entry);
+                        addAndMerge(entry);
                     }
                     break;
                 case CONTRIBUTIONS:
@@ -187,7 +188,7 @@ public class RewardService extends TownyMissionService {
                         double percent = averageContribution.get(playerUUID);
                         RewardJson copyRewardJson = RewardJson.deepCopy(rewardJson);
                         copyRewardJson.setAmount((int) (copyRewardJson.getAmount() * percent + 1));
-                        ClaimDao.getInstance().add(
+                        addAndMerge(
                                 new ClaimEntry(
                                         UUID.randomUUID(),
                                         UUID.fromString(playerUUID),
@@ -263,5 +264,24 @@ public class RewardService extends TownyMissionService {
                 }
         }
 
+    }
+
+    private void addAndMerge(ClaimEntry entry) {
+        List<ClaimEntry> compatibleList = ClaimDao.getInstance().getEntries(new EntryFilter<ClaimEntry>() {
+            @Override
+            public boolean include(ClaimEntry data) {
+                return data.getRewardType().equals(entry.getRewardType())
+                        && entry.getRewardType() != RewardType.COMMAND
+                        && data.getPlayerUUID().equals(entry.getPlayerUUID());
+            }
+        });
+
+        if (compatibleList.isEmpty()) {
+            ClaimDao.getInstance().add(entry);
+        } else {
+            ClaimEntry claimEntry = compatibleList.get(0);
+            claimEntry.getRewardJson().setAmount(claimEntry.getRewardJson().getAmount() + entry.getRewardJson().getAmount());
+            ClaimDao.getInstance().update(claimEntry);
+        }
     }
 }
