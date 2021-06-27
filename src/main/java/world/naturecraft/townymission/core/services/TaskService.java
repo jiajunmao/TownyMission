@@ -40,4 +40,6 @@ public abstract class TaskService extends TownyMissionService {
      * @param period the period
      */
     public abstract void runTimerTaskAsync(Runnable r, long delay, long period);
+
+    public abstract void runTask(Runnable r);
 }
