@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.bukkit.listeners.external.mission;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

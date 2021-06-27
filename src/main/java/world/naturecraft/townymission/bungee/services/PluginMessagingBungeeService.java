@@ -4,15 +4,9 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.bukkit.services.PluginMessagingBukkitService;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
-
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PluginMessagingBungeeService extends PluginMessagingService {
 

@@ -20,6 +20,7 @@ import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.TaskService;
 
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 /**
  * The type Mission bukkit service.
@@ -98,14 +99,7 @@ public class MissionBukkitService extends MissionService {
                 DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, false);
                 Bukkit.getPluginManager().callEvent(missionEvent);
                 if (!missionEvent.isCanceled()) {
-
-                    BukkitRunnable runnable = new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            MissionDao.getInstance().update(taskEntry);
-                        }
-                    };
-                    runnable.runTaskAsynchronously(TownyMissionInstance.getInstance());
+                            TaskService.getInstance().runTaskAsync(() -> MissionDao.getInstance().update(taskEntry));
                 }
             }
         };

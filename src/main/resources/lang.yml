@@ -47,4 +47,5 @@ universal:
   onCommandNotFound: "&cCommand not found!"
   onCommandFormatError: "&cCommand format error!"
   onClickDuringRecess: "&cWe are currently in recess! Please wait for the next sprint/season to start!"
+  onNonMainServer: "&cYou are currently not on the main server! Please return to the main server to execute TownyMission commands!"
 

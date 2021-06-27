@@ -7,6 +7,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.MissionType;
@@ -47,6 +48,15 @@ public class PMCListener implements PluginMessageListener {
             OfflinePlayer realPlayer = Bukkit.getOfflinePlayer(UUID.fromString(request.getData()[1]));
             UUID townUUID = TownyUtil.residentOf(realPlayer).getUUID();
             System.out.println("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
+            // Sanity check
+
+            BukkitChecker checker = new BukkitChecker(instance).target(realPlayer).silent(true)
+                    .hasTown()
+                    .hasStarted()
+                    .isMissionType(MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)));
+
+            if (!checker.check()) return;
+
             MissionService.getInstance().doMission(townUUID, realPlayer.getUniqueId(), MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)), Integer.parseInt(request.getData()[3]));
         }
     }

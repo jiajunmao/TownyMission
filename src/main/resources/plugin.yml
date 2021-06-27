@@ -1,8 +1,8 @@
 name: TownyMission
 author: Barbadosian
 main: world.naturecraft.townymission.bukkit.TownyMissionBukkit
-version: 1.0.0
-api-version: 1.16
+version: ${project.version}
+api-version: 1.13
 
 depend:
   - Vault
