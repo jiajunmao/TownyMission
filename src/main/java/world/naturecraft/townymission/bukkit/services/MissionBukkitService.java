@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.events.DoMissionEvent;
@@ -16,6 +17,7 @@ import world.naturecraft.townymission.core.components.json.mission.MissionJson;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.MissionService;
+import world.naturecraft.townymission.core.services.TaskService;
 
 import java.util.UUID;
 
@@ -90,11 +92,24 @@ public class MissionBukkitService extends MissionService {
             return;
         }
 
-        DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, false);
-        Bukkit.getPluginManager().callEvent(missionEvent);
-        if (!missionEvent.isCanceled()) {
-            MissionDao.getInstance().update(taskEntry);
-        }
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, false);
+                Bukkit.getPluginManager().callEvent(missionEvent);
+                if (!missionEvent.isCanceled()) {
 
+                    BukkitRunnable runnable = new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            MissionDao.getInstance().update(taskEntry);
+                        }
+                    };
+                    runnable.runTaskAsynchronously(TownyMissionInstance.getInstance());
+                }
+            }
+        };
+
+        r.runTask(TownyMissionInstance.getInstance());
     }
 }

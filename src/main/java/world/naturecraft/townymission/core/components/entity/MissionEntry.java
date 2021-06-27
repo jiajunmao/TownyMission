@@ -212,12 +212,17 @@ public class MissionEntry extends DataEntity {
         List<String> loreList = new ArrayList<>();
         if (isTimedout() && !isCompleted() && isStarted()) {
             loreList.add(ChatService.getInstance().translateColor("&eStatus: {#DD3322}Timed Out"));
+            loreList.addAll(missionJson.getLore());
         } else if (isCompleted() && isStarted()) {
             loreList.add(ChatService.getInstance().translateColor("&eStatus: &aCompleted"));
+            loreList.addAll(missionJson.getLore());
         } else if (!isTimedout() && !isCompleted() && isStarted()) {
             loreList.add(ChatService.getInstance().translateColor("&eStatus: {#39DBF3}Started"));
+            loreList.addAll(missionJson.getStartedLore());
+        } else {
+            loreList.addAll(missionJson.getLore());
         }
-        loreList.addAll(missionJson.getLore());
+
         meta.setLore(loreList);
 
         stack.setItemMeta(meta);

@@ -26,7 +26,7 @@ public class TownyUtil {
      */
     public static Town mayorOf(Player player) {
         for (Town t : TownyAPI.getInstance().getDataSource().getTowns()) {
-            if (t.hasMayor() && t.getMayor().getPlayer().equals(player)) {
+            if (t.hasMayor() && t.getMayor() != null && t.getMayor().getPlayer() != null && t.getMayor().getPlayer().equals(player)) {
                 return t;
             }
         }

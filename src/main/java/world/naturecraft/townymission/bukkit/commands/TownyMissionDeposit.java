@@ -6,6 +6,7 @@ package world.naturecraft.townymission.bukkit.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -78,7 +79,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         int total = 0;
                         int index = 0;
                         for (ItemStack itemStack : player.getInventory().getContents()) {
-                            if (itemStack != null && itemStack.getType().equals(resourceMissionJson.getType())) {
+                            if (itemStack != null && itemStack.getType().equals(Material.valueOf(resourceMissionJson.getType()))) {
                                 total += itemStack.getAmount();
                                 player.getInventory().setItem(index, null);
                             }
@@ -88,16 +89,14 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         resourceMissionJson.addContribution(player.getUniqueId().toString(), total);
                         resourceMissionJson.addCompleted(total);
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
-                                .replace("%number", String.valueOf(total)
-                                        .replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT))));
+                                .replace("%number%", String.valueOf(total)).replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
                     } else {
                         int number = player.getItemInHand().getAmount();
                         resourceMissionJson.addContribution(player.getUniqueId().toString(), player.getItemInHand().getAmount());
                         resourceMissionJson.addCompleted(number);
                         player.setItemInHand(null);
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
-                                .replace("%number", String.valueOf(number)
-                                        .replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT))));
+                                .replace("%number%", String.valueOf(number)).replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
                     }
 
                     try {
@@ -137,12 +136,12 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .customCheck(() -> {
                     MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
-                    if (player.getItemInHand().getType().equals(resourceMissionJson.getType())) {
+                    if (player.getItemInHand().getType().equals(Material.valueOf(resourceMissionJson.getType()))) {
                         return true;
                     } else {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNotMatch"));
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), "&cIn-hand type: " + instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
                         return false;
                     }
                 })
