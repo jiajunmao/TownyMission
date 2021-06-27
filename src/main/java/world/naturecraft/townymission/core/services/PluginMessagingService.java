@@ -1,23 +1,19 @@
 package world.naturecraft.townymission.core.services;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
-import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.services.PluginMessagingBukkitService;
-import world.naturecraft.townymission.bungee.TownyMissionBungee;
 import world.naturecraft.townymission.bungee.services.PluginMessagingBungeeService;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The type Plugin messaging service.
@@ -121,6 +117,7 @@ public abstract class PluginMessagingService {
 
         completeRequest(respondId, byteData);
     }
+
     /**
      * Gets future.
      *
@@ -138,6 +135,8 @@ public abstract class PluginMessagingService {
      * @return the plugin message
      */
     public abstract PluginMessage sendAndWait(PluginMessage message);
+
+    public abstract PluginMessage sendAndWait(PluginMessage message, long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException;
 
     public abstract void send(PluginMessage message);
 }

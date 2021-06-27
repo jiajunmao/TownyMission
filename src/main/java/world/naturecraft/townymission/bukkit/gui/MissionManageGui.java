@@ -201,7 +201,7 @@ public class MissionManageGui extends TownyMissionGui {
         final ItemStack clickedItem = e.getCurrentItem();
 
         // verify current item is not null
-        if (clickedItem == null || clickedItem.getType().isAir()) return;
+        if (clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
 
         final Player player = (Player) e.getWhoClicked();
         int slot = e.getSlot();

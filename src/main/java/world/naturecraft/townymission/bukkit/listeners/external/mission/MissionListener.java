@@ -4,26 +4,15 @@
 
 package world.naturecraft.townymission.bukkit.listeners.external.mission;
 
-import com.Zrips.CMI.events.CMIUserBalanceChangeEvent;
-import com.palmergames.bukkit.towny.event.TownClaimEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import teozfrank.ultimatevotes.events.VoteRewardEvent;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
-import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.MissionType;
-import world.naturecraft.townymission.core.components.json.mission.MobMissionJson;
-import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
 

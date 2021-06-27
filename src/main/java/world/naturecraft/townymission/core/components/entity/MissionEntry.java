@@ -21,7 +21,8 @@ import java.util.UUID;
 /**
  * The type Task entry.
  */
-public class MissionEntry extends DataEntity {
+public class MissionEntry extends DataEntity implements MissionEntryWrapper {
+
     private final MissionType missionType;
     private final long addedTime;
     private final long allowedTime;
@@ -179,9 +180,9 @@ public class MissionEntry extends DataEntity {
             case RESOURCE:
                 return Material.WHEAT;
             case MOB:
-                return Material.NETHERITE_SWORD;
+                return Material.STONE_SWORD;
             case EXPANSION:
-                return Material.GRASS_PATH;
+                return Material.GRASS_BLOCK;
             case VOTE:
                 return Material.WRITABLE_BOOK;
             case MONEY:

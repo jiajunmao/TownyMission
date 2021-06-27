@@ -1,5 +1,7 @@
 package world.naturecraft.townymission.bukkit;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.TownyMissionInstance;
@@ -12,8 +14,11 @@ import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRel
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminStartSeason;
 import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
-import world.naturecraft.townymission.bukkit.listeners.external.mission.*;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
+import world.naturecraft.townymission.bukkit.listeners.external.mission.ExpansionListener;
+import world.naturecraft.townymission.bukkit.listeners.external.mission.MobListener;
+import world.naturecraft.townymission.bukkit.listeners.external.mission.MoneyListener;
+import world.naturecraft.townymission.bukkit.listeners.external.mission.VoteListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.PMCListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
@@ -28,7 +33,7 @@ import world.naturecraft.townymission.core.services.TimerService;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
@@ -137,30 +142,43 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     /**
      * Register commands.
      */
-    public void registerCommands() {
-        this.rootCmd = new TownyMissionRoot(this);
-        this.getCommand("townymission").setExecutor(rootCmd);
+    private void registerCommands() {
+        if (!isBungeecordEnabled || isMainServer) {
+            this.rootCmd = new TownyMissionRoot(this);
+            this.getCommand("townymission").setExecutor(rootCmd);
 
-        // User commands
-        rootCmd.registerCommand("list", new TownyMissionList(this));
-        rootCmd.registerCommand("abort", new TownyMissionAbort(this));
-        rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
-        rootCmd.registerCommand("claim", new TownyMissionClaim(this));
-        rootCmd.registerCommand("info", new TownyMissionInfo(this));
-        rootCmd.registerCommand("rank", new TownyMissionRank(this));
+            // User commands
+            rootCmd.registerCommand("list", new TownyMissionList(this));
+            rootCmd.registerCommand("abort", new TownyMissionAbort(this));
+            rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
+            rootCmd.registerCommand("claim", new TownyMissionClaim(this));
+            rootCmd.registerCommand("info", new TownyMissionInfo(this));
+            rootCmd.registerCommand("rank", new TownyMissionRank(this));
 
-        // Admin commands
-        TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
-        rootCmd.registerCommand("admin", rootAdminCmd);
-        rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminListMissions(this));
-        rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
-        rootAdminCmd.registerAdminCommand("startSeason", new TownyMissionAdminStartSeason(this));
+            // Admin commands
+            TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
+            rootCmd.registerCommand("admin", rootAdminCmd);
+            rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminListMissions(this));
+            rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
+            rootAdminCmd.registerAdminCommand("startSeason", new TownyMissionAdminStartSeason(this));
+        } else {
+            this.rootCmd = new TownyMissionRoot(this);
+            this.getCommand("townymission").setExecutor(rootCmd);
+
+            rootCmd.registerCommand("list", new TownyMissionNonMain(this));
+            rootCmd.registerCommand("abort", new TownyMissionNonMain(this));
+            rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
+            rootCmd.registerCommand("claim", new TownyMissionNonMain(this));
+            rootCmd.registerCommand("info", new TownyMissionNonMain(this));
+            rootCmd.registerCommand("rank", new TownyMissionNonMain(this));
+            rootCmd.registerCommand("admin", new TownyMissionNonMain(this));
+        }
     }
 
     /**
      * Register listeners.
      */
-    public void registerListeners() {
+    private void registerListeners() {
         // Event listeners
         // If bungee and !main, do not register town related listeners
         if (!isBungeecordEnabled || isMainServer) {
@@ -185,7 +203,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     /**
      * Register pmc.
      */
-    public void registerPMC() {
+    private void registerPMC() {
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "townymission:main");
         Bukkit.getMessenger().registerIncomingPluginChannel(this, "townymission:main", new PMCListener());
@@ -194,7 +212,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     /**
      * Register timers.
      */
-    public void registerTimers() {
+    private void registerTimers() {
         TimerService timerService = TimerService.getInstance();
         logger.info("Started sprint timer");
         timerService.startSprintTimer();
@@ -205,7 +223,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     /**
      * Connect.
      */
-    public void connect() {
+    private void connect() {
         try {
             StorageService.getInstance().connectDb();
         } catch (DbConnectException e) {

@@ -18,6 +18,7 @@ commands:
     onSuccess: "&fYou have successfully deposited %number% of %type%!"
     requiredItem: "&fRequired type: %item%"
     inHandItem: "&fIn-hand type: %item%"
+    onNonMainServerFail: "&cSomething went wrong during deposit. Please try again while on the main server to get detailed reason."
   start:
     onAlreadyStarted: "&cYour town already has a started mission!"
     onStillInCooldown: "&cYour town is still in cooldown for claiming mission! Please wait %time%"
@@ -47,4 +48,5 @@ universal:
   onCommandNotFound: "&cCommand not found!"
   onCommandFormatError: "&cCommand format error!"
   onClickDuringRecess: "&cWe are currently in recess! Please wait for the next sprint/season to start!"
+  onNonMainServer: "&cYou are currently not on the main server! Please return to the main server to execute TownyMission commands!"
 

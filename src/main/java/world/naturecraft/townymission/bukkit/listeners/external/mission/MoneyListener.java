@@ -34,7 +34,7 @@ public class MoneyListener extends MissionListener {
                     .isMissionType(MissionType.MONEY)
                     .customCheck(() -> event.getSource() == null)
                     .customCheck(() -> (event.getTo() - event.getFrom() > 0))
-                    .customCheck(() -> event.getFrom() != 0);;
+                    .customCheck(() -> event.getFrom() != 0);
         } else {
             // This is to make sure that MysqlPlayerBridge events do not cause trouble
             BukkitChecker localCheck = new BukkitChecker(instance).target(player).silent(true)
