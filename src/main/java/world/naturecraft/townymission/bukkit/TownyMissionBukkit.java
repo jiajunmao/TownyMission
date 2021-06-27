@@ -143,7 +143,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
         // User commands
         rootCmd.registerCommand("list", new TownyMissionList(this));
-        rootCmd.registerCommand("start", new TownyMissionStart(this));
         rootCmd.registerCommand("abort", new TownyMissionAbort(this));
         rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
         rootCmd.registerCommand("claim", new TownyMissionClaim(this));
