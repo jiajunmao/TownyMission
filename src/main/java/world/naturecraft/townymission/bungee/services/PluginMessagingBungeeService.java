@@ -8,6 +8,10 @@ import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 public class PluginMessagingBungeeService extends PluginMessagingService {
 
     /**
@@ -36,6 +40,11 @@ public class PluginMessagingBungeeService extends PluginMessagingService {
      */
     @Override
     public PluginMessage sendAndWait(PluginMessage message) {
+        throw new IllegalStateException("Bungeecord should not wait for anything from the server!");
+    }
+
+    @Override
+    public PluginMessage sendAndWait(PluginMessage message, long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
         throw new IllegalStateException("Bungeecord should not wait for anything from the server!");
     }
 
