@@ -73,6 +73,13 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         logger.info("-----------------------------------------------------------------");
 
         TownyMissionInstanceType.serverType = ServerType.BUKKIT;
+        missionEnabled = new HashMap<>();
+
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing main and lang config"));
+        // Main config and lang config needs to be saved regardless
+        mainConfig = new BukkitConfig("config.yml");
+        langConfig = new BukkitConfig("lang.yml");
+        langConfig.updateConfig("lang.yml");
 
         /**
          * Determine bungeecord is enabled, and whether this server is the main server
@@ -116,13 +123,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * This is saving the config.yml (Default config)
          */
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing configuration"));
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission and rewards config"));
         try {
-            // Main config and lang config needs to be saved regardless
-            mainConfig = new BukkitConfig("config.yml");
-            langConfig = new BukkitConfig("lang.yml");
-            langConfig.updateConfig("lang.yml");
-
             // If bungeecord and not main server, don't save
             if (!isBungeecordEnabled || isMainServer) {
                 logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission&stats config"));
@@ -194,6 +196,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             rootCmd.registerCommand("claim", new TownyMissionClaim(this));
             rootCmd.registerCommand("info", new TownyMissionInfo(this));
             rootCmd.registerCommand("rank", new TownyMissionRank(this));
+            rootCmd.registerCommand("reward", new TownyMissionReward(this));
 
             // Admin commands
             TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
@@ -274,6 +277,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     public void reloadConfigs() throws ConfigLoadingException {
         mainConfig = new BukkitConfig("config.yml");
+        this.reloadConfig();
         langConfig = new BukkitConfig("lang.yml");
         missionConfig = new MissionConfig();
         statsConfig = new BukkitConfig("datastore/stats.yml");

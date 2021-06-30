@@ -61,7 +61,7 @@ public class CommandRewardJson extends RewardJson {
 
     @JsonIgnore
     public String getDisplayLine() {
-        return "Command Overview: " + displayName;
+        return displayName;
     }
 
     @JsonIgnore

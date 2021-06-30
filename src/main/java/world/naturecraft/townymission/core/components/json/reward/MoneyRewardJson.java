@@ -55,6 +55,6 @@ public class MoneyRewardJson extends RewardJson {
 
     @JsonIgnore
     public String getDisplayLine() {
-        return "Amount: " + amount;
+        return String.valueOf(amount);
     }
 }

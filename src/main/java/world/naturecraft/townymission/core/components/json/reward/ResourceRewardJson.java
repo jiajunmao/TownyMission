@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.core.components.enums.RewardType;
+import world.naturecraft.townymission.core.utils.Util;
 
 import java.beans.ConstructorProperties;
 import java.util.Locale;
@@ -70,7 +71,6 @@ public class ResourceRewardJson extends RewardJson {
 
     @JsonIgnore
     public String getDisplayLine() {
-        return "ResourceType: " + type.toLowerCase(Locale.ROOT) +
-                ", Amount: " + amount;
+        return Util.capitalizeFirst(type.toLowerCase(Locale.ROOT)) + " x" + amount;
     }
 }
