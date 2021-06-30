@@ -8,10 +8,7 @@ import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingExcepti
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.bukkit.commands.*;
-import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminListMissions;
-import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminReload;
-import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRoot;
-import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminStartSeason;
+import world.naturecraft.townymission.bukkit.commands.admin.*;
 import world.naturecraft.townymission.bukkit.config.BukkitConfig;
 import world.naturecraft.townymission.bukkit.config.reward.RewardConfigValidator;
 import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
@@ -204,6 +201,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminListMissions(this));
             rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
             rootAdminCmd.registerAdminCommand("startSeason", new TownyMissionAdminStartSeason(this));
+            rootAdminCmd.registerAdminCommand("pauseSeason", new TownyMissionAdminPauseSeason(this));
         } else {
             this.rootCmd = new TownyMissionRoot(this);
             this.getCommand("townymission").setExecutor(rootCmd);
@@ -215,6 +213,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             rootCmd.registerCommand("info", new TownyMissionNonMain(this));
             rootCmd.registerCommand("rank", new TownyMissionNonMain(this));
             rootCmd.registerCommand("admin", new TownyMissionNonMain(this));
+            rootCmd.registerCommand("reward", new TownyMissionNonMain(this));
         }
     }
 
