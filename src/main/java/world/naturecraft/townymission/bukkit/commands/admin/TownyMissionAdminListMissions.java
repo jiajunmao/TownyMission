@@ -77,14 +77,18 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
                 MissionType missionType = MissionType.valueOf(args[2].toUpperCase(Locale.ROOT));
-                Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
-                builder.add("&eMission Type&f: " + missionType.name());
-                builder.add(" ");
-                for (MissionJson json : collection) {
-                    builder.add(" " + json.getDisplayLine());
-                }
+                if (instance.isMissionEnabled(missionType)) {
+                    Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
+                    builder.add("&eMission Type&f: " + missionType.name());
+                    builder.add(" ");
+                    for (MissionJson json : collection) {
+                        builder.add(" " + json.getDisplayLine());
+                    }
 
-                ChatService.getInstance().sendMsg(player.getUniqueId(), ChatService.getInstance().translateColor(builder.toString()));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), builder.toString());
+                } else {
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.listMission.onNotEnabled"));
+                }
             }
         }
         return true;

@@ -12,6 +12,7 @@ import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminLis
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminReload;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.bukkit.commands.admin.TownyMissionAdminStartSeason;
+import world.naturecraft.townymission.bukkit.config.BukkitConfig;
 import world.naturecraft.townymission.bukkit.config.reward.RewardConfigValidator;
 import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
 import world.naturecraft.townymission.bukkit.listeners.external.TownFallListener;
@@ -22,17 +23,19 @@ import world.naturecraft.townymission.bukkit.listeners.external.mission.VoteList
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.PMCListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
-import world.naturecraft.townymission.core.config.LangConfig;
-import world.naturecraft.townymission.core.config.MainConfig;
-import world.naturecraft.townymission.core.config.StatsConfig;
 import world.naturecraft.townymission.bukkit.config.mission.MissionConfig;
+import world.naturecraft.townymission.core.config.TownyMissionConfig;
+import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -42,14 +45,19 @@ import java.util.logging.Logger;
 public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstance {
 
     private final Logger logger = this.getLogger();
+
     private MissionConfig missionConfig;
-    private StatsConfig statsConfig;
-    private MainConfig mainConfig;
-    private LangConfig langConfig;
+    private TownyMissionConfig statsConfig;
+    private TownyMissionConfig mainConfig;
+    private TownyMissionConfig langConfig;
+
     private TownyMissionRoot rootCmd;
+
     private StorageType storageType;
     private boolean isMainServer;
     private boolean isBungeecordEnabled;
+
+    private HashMap<MissionType, Boolean> missionEnabled;
 
     @Override
     public void onEnable() {
@@ -81,19 +89,45 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         }
 
         /**
+         * Determine whether the server admin configured the hooks correctly
+         */
+        Collection<String> keys = mainConfig.getKeys("hooks.money");
+        boolean enabled = false;
+        for (String econHook : keys) {
+            String fullPath = "hooks.money." + econHook;
+            enabled = enabled || mainConfig.getBoolean(fullPath);
+        }
+        missionEnabled.put(MissionType.MONEY, enabled);
+        if (!enabled) {
+            logger.warning(BukkitUtil.translateColor("{#FF5241}  You have not enabled any econ hook, disabling money mission type."));
+        }
+
+        enabled = false;
+        keys = mainConfig.getKeys("hooks.vote");
+        for (String voteHook : keys) {
+            String fullPath = "hooks.vote." + voteHook;
+            enabled = enabled || mainConfig.getBoolean(fullPath);
+        }
+        missionEnabled.put(MissionType.VOTE, enabled);
+        if (!enabled) {
+            logger.warning(BukkitUtil.translateColor("{#FF5241}  You have not enabled any vote hook, disabling money mission type."));
+        }
+
+        /**
          * This is saving the config.yml (Default config)
          */
         logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing configuration"));
         try {
             // Main config and lang config needs to be saved regardless
-            mainConfig = new MainConfig();
-            langConfig = new LangConfig();
+            mainConfig = new BukkitConfig("config.yml");
+            langConfig = new BukkitConfig("lang.yml");
+            langConfig.updateConfig("lang.yml");
 
             // If bungeecord and not main server, don't save
             if (!isBungeecordEnabled || isMainServer) {
                 logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission&stats config"));
                 missionConfig = new MissionConfig();
-                statsConfig = new StatsConfig();
+                statsConfig = new BukkitConfig("datastore/stats.yml");
             }
 
             RewardConfigValidator.checkRewardConfig();
@@ -189,21 +223,16 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         // If bungee and !main, do not register town related listeners
         if (!isBungeecordEnabled || isMainServer) {
             getServer().getPluginManager().registerEvents(new ExpansionListener(this), this);
-            getServer().getPluginManager().registerEvents(new MobListener(this), this);
-            getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
-            getServer().getPluginManager().registerEvents(new VoteListener(this), this);
 
             getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
             getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
 
             // GUI listeners
             getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
-        } else {
-            // This means is bungee, but not main server
-            getServer().getPluginManager().registerEvents(new MobListener(this), this);
-            getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
-            getServer().getPluginManager().registerEvents(new VoteListener(this), this);
         }
+        getServer().getPluginManager().registerEvents(new MobListener(this), this);
+        getServer().getPluginManager().registerEvents(new MoneyListener(this), this);
+        getServer().getPluginManager().registerEvents(new VoteListener(this), this);
     }
 
     /**
@@ -244,10 +273,10 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      * @throws ConfigLoadingException the config loading exception
      */
     public void reloadConfigs() throws ConfigLoadingException {
-        mainConfig = new MainConfig();
-        langConfig = new LangConfig();
+        mainConfig = new BukkitConfig("config.yml");
+        langConfig = new BukkitConfig("lang.yml");
         missionConfig = new MissionConfig();
-        statsConfig = new StatsConfig();
+        statsConfig = new BukkitConfig("datastore/stats.yml");
     }
 
     /**
@@ -259,9 +288,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public String getLangEntry(String path) {
         String finalString = "";
-        System.out.println("Lang config: " + langConfig);
-        finalString += langConfig.getLangConfig().getString("prefix") + " ";
-        finalString += langConfig.getLangConfig().getString(path);
+        finalString += langConfig.getString("prefix") + " ";
+        finalString += langConfig.getString(path);
         return finalString;
     }
 
@@ -275,18 +303,13 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     }
 
     @Override
-    public StatsConfig getStatsConfig() {
+    public TownyMissionConfig getStatsConfig() {
         return statsConfig;
     }
 
     @Override
-    public MainConfig getInstanceConfig() {
+    public TownyMissionConfig getInstanceConfig() {
         return mainConfig;
-    }
-
-    @Override
-    public ServerType getServerType() {
-        return ServerType.BUKKIT;
     }
 
     @Override
@@ -321,5 +344,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
     public boolean isMainserver() {
         return !isBungeecordEnabled || isMainServer;
+    }
+
+    public boolean isMissionEnabled(MissionType missionType) {
+        return missionEnabled.getOrDefault(missionType, true);
     }
 }

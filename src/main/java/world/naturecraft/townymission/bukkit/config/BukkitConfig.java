@@ -1,10 +1,12 @@
 package world.naturecraft.townymission.bukkit.config;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.core.config.TownyMissionConfig;
 
 import java.io.File;
@@ -103,12 +105,22 @@ public class BukkitConfig implements TownyMissionConfig {
     }
 
     @Override
+    public Collection<String> getKeys(String path) {
+        ConfigurationSection section = configuration.getConfigurationSection(path);
+        return section.getKeys(false);
+    }
+
+    @Override
     public void set(String path, Object content) {
         configuration.set(path, content);
     }
 
     @Override
-    public void save() throws IOException {
-        configuration.save(configFile);
+    public void save() throws ConfigSavingException {
+        try {
+            configuration.save(configFile);
+        } catch (IOException e) {
+            throw new ConfigSavingException(e);
+        }
     }
 }

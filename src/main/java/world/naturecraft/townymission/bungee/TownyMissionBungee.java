@@ -6,12 +6,11 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.townymission.bungee.config.BungeeConfig;
 import world.naturecraft.townymission.bungee.listener.PMCListener;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
-import world.naturecraft.townymission.core.config.LangConfig;
-import world.naturecraft.townymission.core.config.MainConfig;
-import world.naturecraft.townymission.core.config.StatsConfig;
+import world.naturecraft.townymission.core.config.TownyMissionConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +26,8 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
     private final Logger logger = this.getLogger();
     private Configuration config;
-    private MainConfig mainConfig;
-    private LangConfig langConfig;
+    private TownyMissionConfig mainConfig;
+    private TownyMissionConfig langConfig;
 
     @Override
     public void onEnable() {
@@ -37,8 +36,9 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
         // This is loading in the config file
         logger.info("===> Registering and parsing configs");
         saveDefaultConfig();
-        mainConfig = new MainConfig();
-        langConfig = new LangConfig();
+        mainConfig = new BungeeConfig("bungee/config.yml");
+        langConfig = new BungeeConfig("lang.yml");
+        langConfig.updateConfig("lang.yml");
 
         // Registering plugin messaging channel
         logger.info("===> Registering Listeners and PMC");
@@ -120,22 +120,17 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
     @Override
     public String getLangEntry(String path) {
-        return langConfig.getLangConfig().getString(path);
+        return langConfig.getString(path);
     }
 
     @Override
-    public MainConfig getInstanceConfig() {
+    public TownyMissionConfig getInstanceConfig() {
         return mainConfig;
     }
 
     @Override
-    public StatsConfig getStatsConfig() {
+    public TownyMissionConfig getStatsConfig() {
         return null;
-    }
-
-    @Override
-    public ServerType getServerType() {
-        return ServerType.BUNGEE;
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.bungee.TownyMissionBungee;
 import world.naturecraft.townymission.core.config.TownyMissionConfig;
 
@@ -99,12 +100,21 @@ public class BungeeConfig implements TownyMissionConfig {
         return configuration.getKeys();
     }
 
+    @Override
+    public Collection<String> getKeys(String path) {
+        return configuration.getSection(path).getKeys();
+    }
+
     public void set(String path, Object content) {
         configuration.set(path, content);
     }
 
-    public void save() throws IOException {
-        ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
+    public void save() throws ConfigSavingException {
+        try {
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
+        } catch (IOException e) {
+            throw new ConfigSavingException(e);
+        }
     }
 
 }

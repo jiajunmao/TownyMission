@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.core.services.ChatService;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +74,13 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
             if (instance.getStatsConfig().getLong("season.startedTime") == -1) {
                 Date date = new Date();
                 instance.getStatsConfig().set("season.startedTime", date.getTime());
-                instance.getStatsConfig().save();
+                try {
+                    instance.getStatsConfig().save();
+                } catch (ConfigSavingException e) {
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.startSeason.onFailure"));
+                    e.printStackTrace();
+                    return false;
+                }
                 ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.startSeason.onSuccess"));
                 return true;
             } else {

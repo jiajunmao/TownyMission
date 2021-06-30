@@ -29,8 +29,7 @@ public class ChatBukkitService extends ChatService {
 
 
     public void sendMsg(UUID playerUUID, String message) {
-        Player player = Bukkit.getPlayer(playerUUID);
-        BukkitUtil.sendMsg(playerUUID, message);
+        BukkitUtil.sendMsg(playerUUID, translateColor(message));
     }
 
     /**

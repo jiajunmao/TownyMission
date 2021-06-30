@@ -1,5 +1,7 @@
 package world.naturecraft.townymission.core.config;
 
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
+
 import java.io.IOException;
 import java.util.Collection;
 
@@ -69,6 +71,8 @@ public interface TownyMissionConfig {
      */
     Collection<String> getShallowKeys();
 
+    Collection<String> getKeys(String path);
+
     /**
      * Set.
      *
@@ -80,7 +84,7 @@ public interface TownyMissionConfig {
     /**
      * Save.
      *
-     * @throws IOException the io exception
+     * @throws ConfigSavingException the io exception
      */
-    void save() throws IOException;
+    void save() throws ConfigSavingException;
 }
