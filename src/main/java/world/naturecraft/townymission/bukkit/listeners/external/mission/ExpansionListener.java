@@ -30,7 +30,7 @@ public class ExpansionListener extends MissionListener {
         BukkitChecker checker = null;
 
         if (instance.isMainserver()) {
-            checker = new BukkitChecker(instance).target(e.getResident().getPlayer())
+            checker = new BukkitChecker(instance).target(e.getResident().getPlayer()).silent(true)
                     .hasTown()
                     .hasStarted()
                     .isMissionType(MissionType.EXPANSION)

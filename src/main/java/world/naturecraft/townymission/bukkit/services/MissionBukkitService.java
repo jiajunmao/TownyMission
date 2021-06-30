@@ -99,7 +99,7 @@ public class MissionBukkitService extends MissionService {
                 DoMissionEvent missionEvent = new DoMissionEvent(player, taskEntry, false);
                 Bukkit.getPluginManager().callEvent(missionEvent);
                 if (!missionEvent.isCanceled()) {
-                            TaskService.getInstance().runTaskAsync(() -> MissionDao.getInstance().update(taskEntry));
+                        TaskService.getInstance().runTaskAsync(() -> MissionDao.getInstance().update(taskEntry));
                 }
             }
         };

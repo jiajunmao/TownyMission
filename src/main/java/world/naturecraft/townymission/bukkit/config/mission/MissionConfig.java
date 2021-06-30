@@ -4,7 +4,9 @@
 
 package world.naturecraft.townymission.bukkit.config.mission;
 
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.bukkit.config.BukkitConfig;
 import world.naturecraft.townymission.bungee.config.BungeeConfig;
@@ -36,18 +38,21 @@ public class MissionConfig {
 
     private void createMissionConfig() {
         for (MissionType missionType : MissionType.values()) {
-            String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
-            String filePath = "missions" + File.separator + fileName;
+            TownyMissionBukkit instance = TownyMissionInstance.getInstance();
+            if (instance.isMissionEnabled(missionType)) {
+                String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
+                String filePath = "missions" + File.separator + fileName;
 
-            TownyMissionConfig tempConfig;
-            if (TownyMissionInstanceType.isBukkit()) {
-                tempConfig = new BukkitConfig(filePath);
-            } else {
-                tempConfig = new BungeeConfig(filePath);
+                TownyMissionConfig tempConfig;
+                if (TownyMissionInstanceType.isBukkit()) {
+                    tempConfig = new BukkitConfig(filePath);
+                } else {
+                    tempConfig = new BungeeConfig(filePath);
+                }
+
+                MissionConfigValidator.checkMissionConfig(tempConfig, missionType);
+                customConfigs.put(missionType, tempConfig);
             }
-
-            MissionConfigValidator.checkMissionConfig(tempConfig, missionType);
-            customConfigs.put(missionType, tempConfig);
         }
     }
 

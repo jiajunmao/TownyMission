@@ -19,16 +19,22 @@ public class CommandRewardJson extends RewardJson {
 
     @JsonProperty("command")
     private final String command;
+    @JsonProperty("runDirect")
+    private final boolean runDirect;
+    @JsonProperty("displayName")
+    private final String displayName;
 
     /**
      * Instantiates a new Command reward json.
      *
      * @param command the command
      */
-    @ConstructorProperties({"command"})
-    public CommandRewardJson(String command) {
+    @ConstructorProperties({"command", "runDirect", "displayName"})
+    public CommandRewardJson(String command, boolean runDirect, String displayName) {
         super(RewardType.COMMAND);
         this.command = command;
+        this.runDirect = runDirect;
+        this.displayName = displayName;
     }
 
     /**
@@ -55,7 +61,7 @@ public class CommandRewardJson extends RewardJson {
 
     @JsonIgnore
     public String getDisplayLine() {
-        return "Command: " + command;
+        return "Command Overview: " + displayName;
     }
 
     @JsonIgnore
@@ -66,5 +72,13 @@ public class CommandRewardJson extends RewardJson {
     @JsonIgnore
     public void setAmount(int amount) {
         // Do nothing
+    }
+
+    public boolean isRunDirect() {
+        return runDirect;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }

@@ -7,7 +7,7 @@ import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.core.components.DataHolder;
 import world.naturecraft.townymission.core.components.enums.DbType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
-import world.naturecraft.townymission.core.config.MainConfig;
+import world.naturecraft.townymission.core.config.TownyMissionConfig;
 import world.naturecraft.townymission.core.data.db.Storage;
 import world.naturecraft.townymission.core.data.sql.*;
 import world.naturecraft.townymission.core.data.yaml.*;
@@ -58,7 +58,7 @@ public class StorageService {
      */
     public void connectDb() throws DbConnectException {
 
-        MainConfig mainConfig = instance.getInstanceConfig();
+        TownyMissionConfig mainConfig = instance.getInstanceConfig();
         String dbAddress = mainConfig.getString("database.address");
         String dbPort = mainConfig.getString("database.port");
         String dbName = mainConfig.getString("database.name");
