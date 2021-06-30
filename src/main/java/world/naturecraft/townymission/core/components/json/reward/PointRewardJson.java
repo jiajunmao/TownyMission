@@ -53,6 +53,6 @@ public class PointRewardJson extends RewardJson {
 
     @JsonIgnore
     public String getDisplayLine() {
-        return "Amount: " + amount;
+        return "" + amount;
     }
 }

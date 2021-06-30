@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.gui.MissionManageGui;
+import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.services.ChatService;
 
@@ -33,7 +34,8 @@ public class TownyMissionList extends TownyMissionCommand {
 
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return false;
+        return new BukkitChecker(instance).target(player).silent(true)
+                .hasPermission("townymission.player").check();
     }
 
     /**
