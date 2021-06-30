@@ -134,6 +134,11 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     }
 
     @Override
+    public TownyMissionConfig getMissionCache() {
+        return null;
+    }
+
+    @Override
     public StorageType getStorageType() {
         return StorageType.valueOf(mainConfig.getString("storage").toUpperCase(Locale.ROOT));
     }

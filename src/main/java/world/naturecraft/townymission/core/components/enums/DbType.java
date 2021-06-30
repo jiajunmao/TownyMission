@@ -29,6 +29,8 @@ public enum DbType {
      */
     MISSION_HISTORY,
 
+    MISSION_CACHE,
+
     /**
      * Cooldown db type.
      */

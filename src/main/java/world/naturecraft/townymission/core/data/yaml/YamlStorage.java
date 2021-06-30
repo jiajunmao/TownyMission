@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.core.components.entity.DataEntity;
 import world.naturecraft.townymission.core.components.enums.DbType;
 
@@ -117,6 +118,7 @@ public abstract class YamlStorage<T extends DataEntity> {
             file.save(customConfig);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new ConfigSavingException(e);
         }
     }
 
