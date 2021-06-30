@@ -7,6 +7,7 @@ import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.bukkit.api.exceptions.DbConnectException;
+import world.naturecraft.townymission.bukkit.api.exceptions.PMCReceiveException;
 import world.naturecraft.townymission.bukkit.commands.*;
 import world.naturecraft.townymission.bukkit.commands.admin.*;
 import world.naturecraft.townymission.bukkit.config.BukkitConfig;
@@ -20,12 +21,14 @@ import world.naturecraft.townymission.bukkit.listeners.external.mission.VoteList
 import world.naturecraft.townymission.bukkit.listeners.internal.DoMissionListener;
 import world.naturecraft.townymission.bukkit.listeners.internal.PMCListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
+import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
 import world.naturecraft.townymission.bukkit.config.mission.MissionConfig;
 import world.naturecraft.townymission.core.config.TownyMissionConfig;
 import world.naturecraft.townymission.core.services.ChatService;
+import world.naturecraft.townymission.core.services.PluginMessagingService;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
 import world.naturecraft.townymission.core.tasks.SendCachedMissionTask;
@@ -35,6 +38,10 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
 /**
@@ -86,6 +93,27 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         isMainServer = false;
         if (getConfig().getBoolean("bungeecord.enable")) {
             logger.info(BukkitUtil.translateColor("{#E9B728}===> Running BUNGEECORD mode"));
+            logger.info("Trying to connect to the BungeeCord instance");
+            PluginMessage request = new PluginMessage()
+                    .channel("config:request")
+                    .messageUUID(UUID.randomUUID())
+                    .dataSize(1)
+                    .data(new String[]{"main-server"});
+
+            try {
+                PluginMessage pluginMessage = PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
+                if (pluginMessage.getData()[0] == null || pluginMessage.getData()[0].equalsIgnoreCase("")) {
+                    throw new PMCReceiveException("The main-server setting on the bungee instance is not configured!");
+                }
+            } catch (TimeoutException | InterruptedException | ExecutionException e) {
+                logger.severe("The bungeecord plugin instance is not detected! You must install the jar on bungeecord and configure the main-server!");
+                Bukkit.getPluginManager().disablePlugin(this);
+            } catch (PMCReceiveException e) {
+                logger.severe("The main-server option in the bungeecord instance is not configured! You must configure that option!");
+                Bukkit.getPluginManager().disablePlugin(this);
+            }
+            logger.info("BungeeCord instance detected and connected!");
+
             logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering Bungee Plugin Messaging Channel"));
             // This means that this bukkit instance should respond to the events
             registerPMC();
