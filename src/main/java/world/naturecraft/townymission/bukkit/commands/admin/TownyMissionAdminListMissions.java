@@ -13,7 +13,7 @@ import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.core.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.bukkit.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.utils.MultilineBuilder;
 
@@ -77,14 +77,18 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
                 MissionType missionType = MissionType.valueOf(args[2].toUpperCase(Locale.ROOT));
-                Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
-                builder.add("&eMission Type&f: " + missionType.name());
-                builder.add(" ");
-                for (MissionJson json : collection) {
-                    builder.add(" " + json.getDisplayLine());
-                }
+                if (instance.isMissionEnabled(missionType)) {
+                    Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
+                    builder.add("&eMission Type&f: " + missionType.name());
+                    builder.add(" ");
+                    for (MissionJson json : collection) {
+                        builder.add(" " + json.getDisplayLine());
+                    }
 
-                ChatService.getInstance().sendMsg(player.getUniqueId(), ChatService.getInstance().translateColor(builder.toString()));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), builder.toString());
+                } else {
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.listMission.onNotEnabled"));
+                }
             }
         }
         return true;

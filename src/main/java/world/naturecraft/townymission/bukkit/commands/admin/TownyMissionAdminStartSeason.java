@@ -10,9 +10,12 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.api.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.core.services.ChatService;
+import world.naturecraft.townymission.core.utils.Util;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +45,7 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
         return new BukkitChecker(instance).target(player)
                 .customCheck(() -> {
                     return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
-                            || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.reload").check();
+                            || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.startSeason").check();
                 })
                 .customCheck(() -> {
                     // /tms admin startSeason
@@ -72,9 +75,31 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
             if (instance.getStatsConfig().getLong("season.startedTime") == -1) {
                 Date date = new Date();
                 instance.getStatsConfig().set("season.startedTime", date.getTime());
-                instance.getStatsConfig().save();
+                try {
+                    instance.getStatsConfig().save();
+                } catch (ConfigSavingException e) {
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.startSeason.onFailure"));
+                    e.printStackTrace();
+                    return false;
+                }
                 ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.startSeason.onSuccess"));
                 return true;
+            } else if (instance.getStatsConfig().getLong("season.pausedTime") != -1) {
+                // This means that the season is currently paused
+                long pausedTime = instance.getStatsConfig().getLong("season.pausedTime");
+                long timeNow = new Date().getTime();
+                long elapsedTime = timeNow - pausedTime;
+                long offsetStartedTime = instance.getStatsConfig().getLong("season.startedTime") - elapsedTime;
+                instance.getStatsConfig().set("season.startedTime", offsetStartedTime);
+                instance.getStatsConfig().set("season.pausedTime", -1);
+                try {
+                    instance.getStatsConfig().save();
+                } catch (ConfigSavingException e) {
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.startSeason.onFailure"));
+                    e.printStackTrace();
+                    return false;
+                }
+                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.startSeason.onUnpause").replace("%time%", Util.formatMilliseconds(elapsedTime)));
             } else {
                 ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.startSeason.onAlreadyStarted"));
                 return false;

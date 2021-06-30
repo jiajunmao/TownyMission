@@ -21,7 +21,8 @@ import java.util.UUID;
 /**
  * The type Task entry.
  */
-public class MissionEntry extends DataEntity {
+public class MissionEntry extends DataEntity implements MissionEntryWrapper {
+
     private final MissionType missionType;
     private final long addedTime;
     private final long allowedTime;
@@ -179,9 +180,9 @@ public class MissionEntry extends DataEntity {
             case RESOURCE:
                 return Material.WHEAT;
             case MOB:
-                return Material.NETHERITE_SWORD;
+                return Material.STONE_SWORD;
             case EXPANSION:
-                return Material.GRASS_PATH;
+                return Material.GRASS_BLOCK;
             case VOTE:
                 return Material.WRITABLE_BOOK;
             case MONEY:
@@ -212,12 +213,17 @@ public class MissionEntry extends DataEntity {
         List<String> loreList = new ArrayList<>();
         if (isTimedout() && !isCompleted() && isStarted()) {
             loreList.add(ChatService.getInstance().translateColor("&eStatus: {#DD3322}Timed Out"));
+            loreList.addAll(missionJson.getLore());
         } else if (isCompleted() && isStarted()) {
             loreList.add(ChatService.getInstance().translateColor("&eStatus: &aCompleted"));
+            loreList.addAll(missionJson.getLore());
         } else if (!isTimedout() && !isCompleted() && isStarted()) {
             loreList.add(ChatService.getInstance().translateColor("&eStatus: {#39DBF3}Started"));
+            loreList.addAll(missionJson.getStartedLore());
+        } else {
+            loreList.addAll(missionJson.getLore());
         }
-        loreList.addAll(missionJson.getLore());
+
         meta.setLore(loreList);
 
         stack.setItemMeta(meta);

@@ -161,10 +161,11 @@ public class TimerService extends TownyMissionService {
      */
     public boolean canStart() {
         Date date = new Date();
-        long timeNow = date.getTime();
 
         // This means that season is not started
         if (instance.getStatsConfig().getLong("season.startedTime") == -1) return false;
+
+        if (instance.getStatsConfig().getLong("season.pausedTime") != -1) return false;
 
         return !isInInterval(RankType.SEASON) && !isInInterval(RankType.SPRINT);
     }

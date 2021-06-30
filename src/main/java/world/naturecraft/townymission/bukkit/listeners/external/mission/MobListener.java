@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.bukkit.listeners.external.mission;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,6 @@ public class MobListener extends MissionListener {
         Player killer = e.getEntity().getKiller();
 
         if (killer != null) {
-
             BukkitChecker checker = null;
             if (instance.isMainserver()) {
                 checker = new BukkitChecker(instance).target(killer)
@@ -43,7 +43,7 @@ public class MobListener extends MissionListener {
                         .customCheck(() -> {
                             MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(killer).getUUID(), MissionType.MOB);
                             MobMissionJson mobMissionJson = (MobMissionJson) taskEntry.getMissionJson();
-                            return mobMissionJson.getEntityType().equals(dead.getType());
+                            return EntityType.valueOf(mobMissionJson.getEntityType()).equals(dead.getType());
                         });
             }
 

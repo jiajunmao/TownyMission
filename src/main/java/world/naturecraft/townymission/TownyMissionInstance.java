@@ -4,8 +4,7 @@ import net.md_5.bungee.api.ProxyServer;
 import org.bukkit.Bukkit;
 import world.naturecraft.townymission.core.components.enums.ServerType;
 import world.naturecraft.townymission.core.components.enums.StorageType;
-import world.naturecraft.townymission.core.config.MainConfig;
-import world.naturecraft.townymission.core.config.StatsConfig;
+import world.naturecraft.townymission.core.config.TownyMissionConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,21 +54,14 @@ public interface TownyMissionInstance {
      *
      * @return the instance config
      */
-    MainConfig getInstanceConfig();
+    TownyMissionConfig getInstanceConfig();
 
     /**
      * Gets stats config.
      *
      * @return the stats config
      */
-    StatsConfig getStatsConfig();
-
-    /**
-     * Gets server type.
-     *
-     * @return the server type
-     */
-    ServerType getServerType();
+    TownyMissionConfig getStatsConfig();
 
     /**
      * Gets storage type.

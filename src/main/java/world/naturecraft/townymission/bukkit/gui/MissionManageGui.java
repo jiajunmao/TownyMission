@@ -19,7 +19,7 @@ import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
 import world.naturecraft.townymission.core.components.entity.MissionEntry;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.core.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.bukkit.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.CooldownService;
@@ -201,7 +201,7 @@ public class MissionManageGui extends TownyMissionGui {
         final ItemStack clickedItem = e.getCurrentItem();
 
         // verify current item is not null
-        if (clickedItem == null || clickedItem.getType().isAir()) return;
+        if (clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
 
         final Player player = (Player) e.getWhoClicked();
         int slot = e.getSlot();

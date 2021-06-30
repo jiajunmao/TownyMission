@@ -42,6 +42,7 @@ public class TownyMissionClaim extends TownyMissionCommand {
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
                 .hasTown()
+                .hasPermission("townymission.player")
                 .customCheck(() -> {
                             if (args.length == 1
                                     || (args.length == 2

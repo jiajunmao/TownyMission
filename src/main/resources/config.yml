@@ -11,8 +11,6 @@ bungeecord:
   # Whether this is the main server, remember to fill both the main-server and serverName
   #   Remember to also fill in the main-server name on Bungee config
   main-server: true
-  # The name for this server, the EXACT same as defined in the config.yml for bungeecord
-  serverName: nc-terra-earth
 
 # Database settings
 database:
@@ -95,8 +93,9 @@ season:
     #     whether they actually contributed or not
     # CONTRIBUTIONS means that the reward is distributed according to average contribution
     #     (sum of individual contribution)/(number of mission)
-    # INDIVIDUAL means that the listed rewards are given to EACH OF of the members
+    # INDIVIDUAL means that the listed rewards are given to EACH OF of the members, whether they actually contributed or not
     #     Warning! Watch out your config, EVERYONE will receive EVERYTHING on the list
+    # Command reward type will be given to everyone in EQUAL, and once for people who contributed in CONTRIBUTIONS or INDIVIDUAL
     method: contributions
     # There are only three types, RESOURCE, MONEY, and COMMAND
     # Please use the exact format as the shown in the following default config
@@ -106,7 +105,7 @@ season:
       1:
         - 'resource{"type": "DIAMOND", "amount": 100}'
         - 'money{"amount": 50000}'
-        - 'command{"command": "cmi msg %player% wow you are amazing"}'
+        - 'command{"command": "cmi msg %player% wow you are amazing", "runDirect": "true", "displayName": "You are Amazing"}'
       others:
         - 'resource{"type": "DIAMOND", "amount": 100}'
         - 'money{"amount": 50000}'
@@ -116,7 +115,5 @@ season:
 hooks:
   money:
     CMI: true
-  expansion:
-    Towny: true
   vote:
     UltimateVotes: true

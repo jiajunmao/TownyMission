@@ -89,4 +89,17 @@ public class MobMissionJson extends MissionJson {
 
         return loreList;
     }
+
+    @Override
+    @JsonIgnore
+    public List<String> getStartedLore() {
+        List<String> loreList = new ArrayList<>();
+        loreList.add(ChatService.getInstance().translateColor("&r&eMob Type: &7" + Util.capitalizeFirst(entityType)));
+        loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eCompleted: &7" + getCompleted()));
+        loreList.add(ChatService.getInstance().translateColor("&r&ePoints: &7" + getReward()));
+        loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
+
+        return loreList;
+    }
 }

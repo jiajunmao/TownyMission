@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import world.naturecraft.townymission.core.services.EconomyService;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -15,6 +16,7 @@ public class EconomyBukkitService extends EconomyService {
 
     private static EconomyBukkitService singleton;
     private final Economy economy;
+    private final HashMap<UUID, Double> balanceMap;
 
     /**
      * Instantiates a new Economy bukkit service.
@@ -25,6 +27,7 @@ public class EconomyBukkitService extends EconomyService {
             throw new IllegalStateException("Vault is a hard-dependency!");
         }
         economy = rsp.getProvider();
+        balanceMap = new HashMap<>();
     }
 
     /**

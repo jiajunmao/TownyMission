@@ -1,5 +1,7 @@
 package world.naturecraft.townymission.core.services;
 
+import com.palmergames.bukkit.towny.object.Resident;
+import org.bukkit.Bukkit;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
@@ -14,10 +16,11 @@ import world.naturecraft.townymission.core.components.json.reward.CommandRewardJ
 import world.naturecraft.townymission.core.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.ResourceRewardJson;
 import world.naturecraft.townymission.core.components.json.reward.RewardJson;
-import world.naturecraft.townymission.core.config.reward.RewardConfigParser;
+import world.naturecraft.townymission.bukkit.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.core.data.dao.ClaimDao;
 import world.naturecraft.townymission.core.data.dao.SeasonDao;
 import world.naturecraft.townymission.core.data.dao.SprintDao;
+import world.naturecraft.townymission.core.utils.EntryFilter;
 
 import java.util.List;
 import java.util.Locale;
@@ -72,7 +75,7 @@ public class RewardService extends TownyMissionService {
                     }
                 };
 
-                TaskService.getInstance().runTaskAsync(r);
+                TaskService.getInstance().runTask(r);
                 ClaimDao.getInstance().remove(claimEntry);
                 ChatService.getInstance().sendMsg(playerUUID, instance.getLangEntry("services.reward.onRewardCommand"));
                 break;
@@ -150,31 +153,17 @@ public class RewardService extends TownyMissionService {
                     // This means rewarding everyone in the town everything on the list
                     List<UUID> residents = TownyService.getInstance().getResidents(townUUID);
                     for (UUID resident : residents) {
-                        ClaimEntry entry = new ClaimEntry(
-                                UUID.randomUUID(),
-                                resident,
-                                rewardJson.getRewardType(),
-                                rewardJson,
-                                instance.getStatsConfig().getInt("season.current"),
-                                instance.getStatsConfig().getInt("sprint.current"));
-                        ClaimDao.getInstance().add(entry);
+                        rewardResident(rewardJson, resident);
                     }
                     break;
                 case EQUAL:
                     residents = TownyService.getInstance().getResidents(townUUID);
                     int numResidents = residents.size();
                     int share = rewardJson.getAmount() / numResidents + 1;
-                    RewardJson copyRewardJseon = RewardJson.deepCopy(rewardJson);
-                    copyRewardJseon.setAmount(share);
+                    RewardJson copyRewardJson = RewardJson.deepCopy(rewardJson);
+                    copyRewardJson.setAmount(share);
                     for (UUID resident : residents) {
-                        ClaimEntry entry = new ClaimEntry(
-                                UUID.randomUUID(),
-                                resident,
-                                rewardJson.getRewardType(),
-                                copyRewardJseon,
-                                instance.getStatsConfig().getInt("season.current"),
-                                instance.getStatsConfig().getInt("sprint.current"));
-                        ClaimDao.getInstance().add(entry);
+                        rewardResident(copyRewardJson, resident);
                     }
                     break;
                 case CONTRIBUTIONS:
@@ -185,19 +174,35 @@ public class RewardService extends TownyMissionService {
 
                     for (String playerUUID : averageContribution.keySet()) {
                         double percent = averageContribution.get(playerUUID);
-                        RewardJson copyRewardJson = RewardJson.deepCopy(rewardJson);
+                        copyRewardJson = RewardJson.deepCopy(rewardJson);
                         copyRewardJson.setAmount((int) (copyRewardJson.getAmount() * percent + 1));
-                        ClaimDao.getInstance().add(
-                                new ClaimEntry(
-                                        UUID.randomUUID(),
-                                        UUID.fromString(playerUUID),
-                                        rewardJson.getRewardType(),
-                                        copyRewardJson,
-                                        instance.getStatsConfig().getInt("season.current"),
-                                        instance.getStatsConfig().getInt("sprint.current")));
-
+                        rewardResident(copyRewardJson, UUID.fromString(playerUUID));
                     }
             }
+        }
+    }
+
+    private void rewardResident(RewardJson rewardJson, UUID resident) {
+        boolean stillCreate = true;
+        if (rewardJson instanceof CommandRewardJson) {
+            CommandRewardJson commandRewardJson = (CommandRewardJson) rewardJson;
+            if (commandRewardJson.isRunDirect()) {
+                // This means that the command should be dispatched right away rather than letting player claim
+                String command = commandRewardJson.getCommand();
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                stillCreate = false;
+            }
+        }
+
+        if (!stillCreate) {
+            ClaimEntry entry = new ClaimEntry(
+                    UUID.randomUUID(),
+                    resident,
+                    rewardJson.getRewardType(),
+                    rewardJson,
+                    instance.getStatsConfig().getInt("season.current"),
+                    instance.getStatsConfig().getInt("sprint.current"));
+            ClaimDao.getInstance().addAndMerge(entry);
         }
     }
 
@@ -264,4 +269,6 @@ public class RewardService extends TownyMissionService {
         }
 
     }
+
+
 }

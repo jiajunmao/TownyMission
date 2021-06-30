@@ -4,18 +4,21 @@
 
 package world.naturecraft.townymission.core.services;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.bukkit.services.MissionBukkitService;
-import world.naturecraft.townymission.core.components.entity.MissionEntry;
-import world.naturecraft.townymission.core.components.entity.MissionHistoryEntry;
-import world.naturecraft.townymission.core.components.entity.SeasonEntry;
-import world.naturecraft.townymission.core.components.entity.SprintEntry;
+import world.naturecraft.townymission.core.components.entity.*;
 import world.naturecraft.townymission.core.components.enums.MissionType;
+import world.naturecraft.townymission.core.components.enums.RewardType;
 import world.naturecraft.townymission.core.components.json.mission.MissionJson;
-import world.naturecraft.townymission.core.data.dao.MissionDao;
-import world.naturecraft.townymission.core.data.dao.MissionHistoryDao;
-import world.naturecraft.townymission.core.data.dao.SeasonDao;
-import world.naturecraft.townymission.core.data.dao.SprintDao;
+import world.naturecraft.townymission.core.components.json.mission.MoneyMissionJson;
+import world.naturecraft.townymission.core.components.json.mission.ResourceMissionJson;
+import world.naturecraft.townymission.core.components.json.reward.ResourceRewardJson;
+import world.naturecraft.townymission.core.components.json.reward.RewardJson;
+import world.naturecraft.townymission.core.data.dao.*;
 import world.naturecraft.townymission.core.utils.EntryFilter;
 import world.naturecraft.townymission.core.utils.Util;
 
@@ -133,6 +136,37 @@ public abstract class MissionService extends TownyMissionService {
      */
     public void completeMission(MissionEntry entry) {
         if (entry.isTimedout() && !entry.isCompleted()) return;
+
+        if (entry.getMissionType().equals(MissionType.MONEY)) {
+            MoneyMissionJson moneyMissionJson = (MoneyMissionJson) entry.getMissionJson();
+            if (moneyMissionJson.isReturnable()) {
+                Map<String, Integer> contributions = entry.getMissionJson().getContributions();
+                for (String playerUUID : contributions.keySet()) {
+                    EconomyService.getInstance().depositBalance(UUID.fromString(playerUUID), contributions.get(playerUUID));
+                }
+            }
+        }
+
+        if (entry.getMissionJson().equals(MissionType.RESOURCE)) {
+            ResourceMissionJson resourceMissionJson = (ResourceMissionJson) entry.getMissionJson();
+            if (resourceMissionJson.isReturnable()) {
+                Map<String, Integer> contributions = entry.getMissionJson().getContributions();
+                for (String playerUUID : contributions.keySet()) {
+                    Material resourceType = Material.valueOf(resourceMissionJson.getType());
+                    int amount = contributions.get(playerUUID);
+                    while (amount > 64) {
+                        ResourceRewardJson resourceRewardJson = new ResourceRewardJson(resourceMissionJson.getType(), 64);
+                        ClaimEntry claimEntry = new ClaimEntry(UUID.randomUUID(), UUID.fromString(playerUUID), RewardType.RESOURCE, resourceRewardJson, instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
+                        ClaimDao.getInstance().addAndMerge(claimEntry);
+                        amount -= 64;
+                    }
+
+                    ResourceRewardJson resourceRewardJson = new ResourceRewardJson(resourceMissionJson.getType(), amount);
+                    ClaimEntry claimEntry = new ClaimEntry(UUID.randomUUID(), UUID.fromString(playerUUID), RewardType.RESOURCE, resourceRewardJson, instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
+                    ClaimDao.getInstance().addAndMerge(claimEntry);
+                }
+            }
+        }
 
         MissionDao.getInstance().remove(entry);
         MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, Util.currentTime());

@@ -1,12 +1,23 @@
 package world.naturecraft.townymission.bukkit.listeners.external.mission;
 
 import com.Zrips.CMI.events.CMIUserBalanceChangeEvent;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
+import world.naturecraft.townymission.bukkit.utils.TownyUtil;
+import world.naturecraft.townymission.core.components.entity.MissionEntry;
+import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.MissionType;
+import world.naturecraft.townymission.core.components.json.mission.MoneyMissionJson;
+import world.naturecraft.townymission.core.components.json.reward.MoneyRewardJson;
+import world.naturecraft.townymission.core.data.dao.MissionDao;
+import world.naturecraft.townymission.core.services.EconomyService;
+import world.naturecraft.townymission.core.services.PluginMessagingService;
+
+import java.util.UUID;
 
 public class MoneyListener extends MissionListener {
     /**
@@ -33,7 +44,23 @@ public class MoneyListener extends MissionListener {
                     .hasStarted()
                     .isMissionType(MissionType.MONEY)
                     .customCheck(() -> event.getSource() == null)
-                    .customCheck(() -> (event.getTo() - event.getFrom() > 0));
+                    .customCheck(() -> (event.getTo() - event.getFrom() > 0))
+                    .customCheck(() -> event.getFrom() != 0)
+                    .customCheck(() -> {
+                        // CHANGED LOGIC: Money will be held away from player until the mission ends
+                        //   Then given back depending on the returnable setting
+                        EconomyService.getInstance().withdrawBalance(player.getUniqueId(), event.getTo() - event.getFrom());
+
+                        // Because this is giving a returnable check in doLogic, after the sanity check has passed.
+                        //  This should always return true
+                        return true;
+                    });
+        } else {
+            // This is to make sure that MysqlPlayerBridge events do not cause trouble
+            BukkitChecker localCheck = new BukkitChecker(instance).target(player).silent(true)
+                    .customCheck(() -> (event.getTo() - event.getFrom() > 0))
+                    .customCheck(() -> event.getFrom() != 0);
+            if (!localCheck.check()) return;
         }
 
         doLogic(checker, MissionType.MONEY, event.getUser().getPlayer(), (int) (event.getTo() - event.getFrom()));

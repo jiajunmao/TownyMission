@@ -12,6 +12,9 @@ import world.naturecraft.townymission.core.services.PluginMessagingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class PluginMessagingBukkitService extends PluginMessagingService {
 
@@ -35,12 +38,19 @@ public class PluginMessagingBukkitService extends PluginMessagingService {
 
     public PluginMessage sendAndWait(PluginMessage message) {
         CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
-
         send(message);
 
         Byte[] responseBytes = future.join();
-        PluginMessage response = parseData(responseBytes);
-        return response;
+        return parseData(responseBytes);
+    }
+
+    @Override
+    public PluginMessage sendAndWait(PluginMessage message, long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
+        send(message);
+
+        Byte[] responseBytes = future.get(timeout, unit);
+        return parseData(responseBytes);
     }
 
     public void send(PluginMessage message) {
@@ -63,4 +73,6 @@ public class PluginMessagingBukkitService extends PluginMessagingService {
         TownyMissionBukkit instance = TownyMissionInstance.getInstance();
         player.sendPluginMessage(instance, "townymission:main", out.toByteArray());
     }
+
+
 }

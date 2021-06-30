@@ -92,6 +92,9 @@ public abstract class MissionJson {
     @JsonIgnore
     public abstract List<String> getLore();
 
+    @JsonIgnore
+    public abstract List<String> getStartedLore();
+
     /**
      * Gets reward.
      *

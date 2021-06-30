@@ -1,5 +1,7 @@
 package world.naturecraft.townymission.bukkit.utils;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
 import world.naturecraft.townymission.core.components.enums.MissionType;
@@ -25,7 +27,7 @@ public class BukkitChecker {
     private boolean checkHasStarted;
     private boolean checkIsMissionType;
     private MissionType missionType;
-    private Player player;
+    private OfflinePlayer player;
     private boolean isSilent;
 
     /**
@@ -47,7 +49,7 @@ public class BukkitChecker {
      * @param player the player
      * @return the sanity checker
      */
-    public BukkitChecker target(Player player) {
+    public BukkitChecker target(OfflinePlayer player) {
         this.player = player;
         return this;
     }
@@ -176,9 +178,14 @@ public class BukkitChecker {
 
         if (permissions.size() != 0) {
             for (String s : permissions) {
-                if (!player.hasPermission(s)) {
-                    if (!isSilent)
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoPermission").replace("%permission%", s));
+                if (Bukkit.getPlayer(player.getUniqueId()).isOnline()) {
+                    Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
+                    if (!onlinePlayer.hasPermission(s)) {
+                        if (!isSilent)
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoPermission").replace("%permission%", s));
+                        return false;
+                    }
+                } else {
                     return false;
                 }
             }
