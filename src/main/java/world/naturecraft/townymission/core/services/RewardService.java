@@ -202,7 +202,7 @@ public class RewardService extends TownyMissionService {
                     rewardJson,
                     instance.getStatsConfig().getInt("season.current"),
                     instance.getStatsConfig().getInt("sprint.current"));
-            addAndMerge(entry);
+            ClaimDao.getInstance().addAndMerge(entry);
         }
     }
 
@@ -270,22 +270,5 @@ public class RewardService extends TownyMissionService {
 
     }
 
-    private void addAndMerge(ClaimEntry entry) {
-        List<ClaimEntry> compatibleList = ClaimDao.getInstance().getEntries(new EntryFilter<ClaimEntry>() {
-            @Override
-            public boolean include(ClaimEntry data) {
-                return data.getRewardType().equals(entry.getRewardType())
-                        && entry.getRewardType() != RewardType.COMMAND
-                        && data.getPlayerUUID().equals(entry.getPlayerUUID());
-            }
-        });
 
-        if (compatibleList.isEmpty()) {
-            ClaimDao.getInstance().add(entry);
-        } else {
-            ClaimEntry claimEntry = compatibleList.get(0);
-            claimEntry.getRewardJson().setAmount(claimEntry.getRewardJson().getAmount() + entry.getRewardJson().getAmount());
-            ClaimDao.getInstance().update(claimEntry);
-        }
-    }
 }

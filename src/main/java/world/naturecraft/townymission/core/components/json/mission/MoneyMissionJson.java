@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public class MoneyMissionJson extends MissionJson {
 
+    private final boolean returnable;
+
     /**
      * Instantiates a new Money.
      *
@@ -29,9 +31,10 @@ public class MoneyMissionJson extends MissionJson {
      * @param reward        the reward
      * @param contributions the contributions
      */
-    @ConstructorProperties({"amount", "completed", "hrAllowed", "reward", "contributions"})
-    public MoneyMissionJson(int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    @ConstructorProperties({"amount", "completed", "hrAllowed", "reward", "contributions", "returnable"})
+    public MoneyMissionJson(int amount, int completed, int hrAllowed, int reward, boolean returnable, Map<String, Integer> contributions) {
         super(MissionType.MONEY, amount, completed, hrAllowed, reward, contributions);
+        this.returnable = returnable;
     }
 
     /**
@@ -82,5 +85,9 @@ public class MoneyMissionJson extends MissionJson {
         loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
 
         return loreList;
+    }
+
+    public boolean isReturnable() {
+        return returnable;
     }
 }

@@ -36,7 +36,7 @@ commands:
     onFailure: "&cSomething went wrong during reload. Some config might not be valid. Please check console!"
   startSeason:
     onSuccess: "&fYou have successfully started season!"
-    onAlreadyStarted: "&cYou have already strated season(s)! You cannot start it again!"
+    onAlreadyStarted: "&cYou have already started season(s)! You cannot start it again!"
     onFailure: "&cSomething went wrong during starting the season. Please check console!"
   listMission:
     onNotEnabled: "&cThe mission type you are listing is not enabled!"

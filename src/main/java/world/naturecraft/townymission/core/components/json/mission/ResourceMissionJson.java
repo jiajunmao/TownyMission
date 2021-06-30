@@ -26,6 +26,8 @@ public class ResourceMissionJson extends MissionJson {
     private final boolean isMi;
     @JsonProperty("type")
     private final String type;
+    @JsonProperty("returnable")
+    private final boolean returnable;
 
     /**
      * Instantiates a new Resource.
@@ -38,11 +40,12 @@ public class ResourceMissionJson extends MissionJson {
      * @param reward        the reward
      * @param contributions the contributions
      */
-    @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "contributions"})
-    public ResourceMissionJson(boolean isMi, String type, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "returnable", "contributions"})
+    public ResourceMissionJson(boolean isMi, String type, int amount, int completed, int hrAllowed, int reward, boolean returnable, Map<String, Integer> contributions) {
         super(MissionType.RESOURCE, amount, completed, hrAllowed, reward, contributions);
         this.isMi = isMi;
         this.type = type;
+        this.returnable = returnable;
     }
 
     /**
@@ -63,6 +66,10 @@ public class ResourceMissionJson extends MissionJson {
      */
     public boolean isMi() {
         return isMi;
+    }
+
+    public boolean isReturnable() {
+        return returnable;
     }
 
     /**

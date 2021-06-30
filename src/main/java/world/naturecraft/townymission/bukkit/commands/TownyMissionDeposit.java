@@ -164,6 +164,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
+                    // Holding item in hand mismatch
                     MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
                     if (player.getItemInHand().getType().equals(Material.valueOf(resourceMissionJson.getType()))) {
@@ -176,6 +177,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     }
                 })
                 .customCheck(() -> {
+                    // Mission timeout
                     MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
                     try {
                         if (resourceEntry.isTimedout()) {
@@ -190,6 +192,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     return true;
                 })
                 .customCheck(() -> {
+                    // Command format error
                     if (args.length == 1)
                         return true;
                     if (args.length == 2 && args[1].equalsIgnoreCase("all")) {

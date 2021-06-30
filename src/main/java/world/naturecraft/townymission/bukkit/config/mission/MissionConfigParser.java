@@ -39,11 +39,13 @@ public class MissionConfigParser {
                 MobMissionJson mobMissionJson = new MobMissionJson((mobType), amount, 0, hrAllowed, reward, null);
                 list.add(mobMissionJson);
             } else if (type.equals(MissionType.MONEY)) {
-                list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, null));
+                boolean returnable = fileConfiguration.getBoolean(key + ".returnable");
+                list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, returnable,null));
             } else if (type.equals(MissionType.RESOURCE)) {
                 boolean isMi = fileConfiguration.getBoolean(key + ".isMi");
                 String resourceType = fileConfiguration.getString(key + ".type");
-                list.add(new ResourceMissionJson(isMi, resourceType, amount, 0, hrAllowed, reward, null));
+                boolean returnable = fileConfiguration.getBoolean(key + ".returnable");
+                list.add(new ResourceMissionJson(isMi, resourceType, amount, 0, hrAllowed, reward, returnable,null));
             } else if (type.equals(MissionType.VOTE)) {
                 list.add(new VoteMissionJson(amount, 0, hrAllowed, reward, null));
             }
