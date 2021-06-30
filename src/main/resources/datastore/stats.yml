@@ -5,4 +5,5 @@ sprint:
 
 season:
   current: 1
+  pausedTime: -1
   startedTime: -1
