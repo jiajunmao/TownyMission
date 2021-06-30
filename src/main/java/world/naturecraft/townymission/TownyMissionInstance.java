@@ -63,6 +63,8 @@ public interface TownyMissionInstance {
      */
     TownyMissionConfig getStatsConfig();
 
+    TownyMissionConfig getMissionCache();
+
     /**
      * Gets storage type.
      *

@@ -57,18 +57,23 @@ public class PMCListener implements PluginMessageListener {
                     .isMissionType(MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)));
 
             if (!checker.check()) {
-                // If its resource, we gotta return
-                if (MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)).equals(MissionType.RESOURCE)) {
-                    PluginMessage response = new PluginMessage()
-                            .channel("mission:response")
-                            .messageUUID(request.getMessageUUID())
-                            .dataSize(1)
-                            .data(new String[]{"false"});
-                    PluginMessagingService.getInstance().send(response);
-                }
+                // If not passing sanity check, return false
+                PluginMessage response = new PluginMessage()
+                        .channel("mission:response")
+                        .messageUUID(request.getMessageUUID())
+                        .dataSize(1)
+                        .data(new String[]{"false"});
+                PluginMessagingService.getInstance().send(response);
             }
 
             MissionService.getInstance().doMission(townUUID, realPlayer.getUniqueId(), MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)), Integer.parseInt(request.getData()[3]));
+
+            PluginMessage response = new PluginMessage()
+                    .channel("mission:response")
+                    .messageUUID(request.getMessageUUID())
+                    .dataSize(1)
+                    .data(new String[]{"true"});
+            PluginMessagingService.getInstance().send(response);
         } else if (subchannel.equalsIgnoreCase("mission:response")) {
             // This means we have got response for our deposit command
             PluginMessagingService.getInstance().completeRequest(request.getMessageUUID().toString(), message);

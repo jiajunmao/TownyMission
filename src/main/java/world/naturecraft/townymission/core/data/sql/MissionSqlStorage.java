@@ -76,7 +76,7 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
 
                 while (result.next()) {
                     try {
-                        list.add(new MissionEntry(UUID.fromString(result.getString("id")),
+                        list.add(new MissionEntry(UUID.fromString(result.getString("uuid")),
                                 result.getString("task_type"),
                                 result.getLong("added_time"),
                                 result.getLong("started_time"),

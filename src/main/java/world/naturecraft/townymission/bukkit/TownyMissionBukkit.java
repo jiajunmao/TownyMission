@@ -28,6 +28,7 @@ import world.naturecraft.townymission.core.config.TownyMissionConfig;
 import world.naturecraft.townymission.core.services.ChatService;
 import world.naturecraft.townymission.core.services.StorageService;
 import world.naturecraft.townymission.core.services.TimerService;
+import world.naturecraft.townymission.core.tasks.SendCachedMissionTask;
 
 import java.io.File;
 import java.io.InputStream;
@@ -47,6 +48,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     private TownyMissionConfig statsConfig;
     private TownyMissionConfig mainConfig;
     private TownyMissionConfig langConfig;
+    private TownyMissionConfig doMissionCache;
 
     private TownyMissionRoot rootCmd;
 
@@ -127,6 +129,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                 logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission&stats config"));
                 missionConfig = new MissionConfig();
                 statsConfig = new BukkitConfig("datastore/stats.yml");
+            } else {
+                // This means that it is not the main server
+                doMissionCache = new BukkitConfig("datastore/missionCache.yml");
             }
 
             RewardConfigValidator.checkRewardConfig();
@@ -162,6 +167,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             registerListeners();
             logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
             registerTimers();
+            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering tasks"));
+            registerTasks();
         } else {
             registerListeners();
         }
@@ -257,6 +264,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         timerService.startSeasonTimer();
     }
 
+    private void registerTasks() {
+        SendCachedMissionTask.registerTask();
+        logger.info("Started send cache task");
+    }
+
     /**
      * Connect.
      */
@@ -308,6 +320,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public TownyMissionConfig getStatsConfig() {
         return statsConfig;
+    }
+
+    @Override
+    public TownyMissionConfig getMissionCache() {
+        return doMissionCache;
     }
 
     @Override

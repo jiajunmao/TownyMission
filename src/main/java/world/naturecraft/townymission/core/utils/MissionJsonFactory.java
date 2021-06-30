@@ -12,28 +12,6 @@ import world.naturecraft.townymission.core.components.json.mission.*;
  * The type Mission json factory.
  */
 public class MissionJsonFactory {
-    /**
-     * To class class.
-     *
-     * @param type the type
-     * @return the class
-     */
-    public static Class<? extends MissionJson> toClass(MissionType type) {
-        switch (type.name()) {
-            case "VOTE":
-                return VoteMissionJson.class;
-            case "MONEY":
-                return MoneyMissionJson.class;
-            case "EXPANSION":
-                return ExpansionMissionJson.class;
-            case "MOB":
-                return MobMissionJson.class;
-            case "RESOURCE":
-                return ResourceMissionJson.class;
-            default:
-                return null;
-        }
-    }
 
     /**
      * Gets json.

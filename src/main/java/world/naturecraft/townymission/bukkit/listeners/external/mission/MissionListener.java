@@ -8,15 +8,24 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.api.exceptions.PMCReceiveException;
 import world.naturecraft.townymission.bukkit.listeners.TownyMissionListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
 import world.naturecraft.townymission.bukkit.utils.TownyUtil;
+import world.naturecraft.townymission.core.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.MissionType;
+import world.naturecraft.townymission.core.components.json.mission.*;
+import world.naturecraft.townymission.core.data.dao.MissionCacheDao;
+import world.naturecraft.townymission.core.data.sql.MissionCacheSqlStorage;
 import world.naturecraft.townymission.core.services.MissionService;
 import world.naturecraft.townymission.core.services.PluginMessagingService;
+import world.naturecraft.townymission.core.utils.MissionJsonFactory;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The type Mission listener.
@@ -74,8 +83,21 @@ public abstract class MissionListener extends TownyMissionListener {
                             .dataSize(4)
                             .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
 
-                    // No need for reply
-                    PluginMessagingService.getInstance().send(request);
+                    // Check for reply and timeout to determine mission cache
+                    try {
+                        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
+                        if (response.getData()[0].equalsIgnoreCase("true")) {
+                            throw new PMCReceiveException("Something wrong when receiving and PMC message");
+                        }
+                    } catch (TimeoutException | InterruptedException | ExecutionException | PMCReceiveException e) {
+                        // This means no response is received, or something went wrong, we need to cache
+                        MissionCacheEntry missionCacheEntry = new MissionCacheEntry(UUID.randomUUID(),
+                                player.getUniqueId(),
+                                missionType,
+                                amount);
+
+                        MissionCacheDao.getInstance().add(missionCacheEntry);
+                    }
                 }
             };
 
