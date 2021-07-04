@@ -43,6 +43,26 @@ mission:
   cooldown: 30
   # How many missions a town can see
   amount: 14
+  # Configure whether the missions are enabled or not
+  types:
+    money:
+      enable: true
+      # You have to one of the hooks set to true for the mission to be enabled
+      #  Even if you set enable to true and CMI/EssentialsX to false, money mission would be disabled
+      hooks:
+        CMI: true
+        EssentialsX: false
+    vote:
+      enable: true
+      hooks:
+        NuVotifier: false
+        UltimateVotes: true
+    mob:
+      enable: true
+    expansion:
+      enable: true
+    resource:
+      enable: true
 
 # Sprint settings
 sprint:
@@ -110,10 +130,3 @@ season:
         - 'resource{"type": "DIAMOND", "amount": 100}'
         - 'money{"amount": 50000}'
         - 'command{"command": "cmi msg %player% wow you are amazing"}'
-# The hooks that enable certain mission types
-# In each section, one hook must be enabled to enable the mission type
-hooks:
-  money:
-    CMI: true
-  vote:
-    UltimateVotes: true

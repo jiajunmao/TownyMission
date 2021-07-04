@@ -50,9 +50,6 @@ public class PluginMessagingBungeeService extends PluginMessagingService {
 
 
     public void send(PluginMessage message) {
-        TownyMissionInstance instance = TownyMissionInstance.getInstance();
-        String mainSrvStr = instance.getInstanceConfig().getString("main-server");
-        ServerInfo info = ProxyServer.getInstance().getServerInfo(mainSrvStr);
 
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(message.getChannel());
@@ -62,6 +59,9 @@ public class PluginMessagingBungeeService extends PluginMessagingService {
             out.writeUTF(str);
         }
 
-        info.sendData("townymission:main", out.toByteArray());
+        for (ServerInfo info : ProxyServer.getInstance().getServers().values()) {
+            info.sendData("townymission:main", out.toByteArray());
+            System.out.println("Sending message to " + info.getName());
+        }
     }
 }

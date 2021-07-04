@@ -1,31 +1,22 @@
-package world.naturecraft.townymission.bukkit.listeners.external.mission;
+package world.naturecraft.townymission.bukkit.listeners.mission.money;
 
 import com.Zrips.CMI.events.CMIUserBalanceChangeEvent;
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;
+import world.naturecraft.townymission.bukkit.listeners.mission.MissionListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitChecker;
-import world.naturecraft.townymission.bukkit.utils.TownyUtil;
-import world.naturecraft.townymission.core.components.entity.MissionEntry;
-import world.naturecraft.townymission.core.components.entity.PluginMessage;
 import world.naturecraft.townymission.core.components.enums.MissionType;
-import world.naturecraft.townymission.core.components.json.mission.MoneyMissionJson;
-import world.naturecraft.townymission.core.components.json.reward.MoneyRewardJson;
-import world.naturecraft.townymission.core.data.dao.MissionDao;
 import world.naturecraft.townymission.core.services.EconomyService;
-import world.naturecraft.townymission.core.services.PluginMessagingService;
 
-import java.util.UUID;
-
-public class MoneyListener extends MissionListener {
+public class CMIMoneyListener extends MissionListener {
     /**
      * Instantiates a new Towny mission listener.
      *
      * @param instance the instance
      */
-    public MoneyListener(TownyMissionBukkit instance) {
+    public CMIMoneyListener(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -44,7 +35,7 @@ public class MoneyListener extends MissionListener {
                     .hasStarted()
                     .isMissionType(MissionType.MONEY)
                     .customCheck(() -> event.getSource() == null)
-                    .customCheck(() -> (event.getTo() - event.getFrom() > 0))
+                    .customCheck(() -> ((event.getTo() - event.getFrom()) > 0))
                     .customCheck(() -> event.getFrom() != 0)
                     .customCheck(() -> {
                         // CHANGED LOGIC: Money will be held away from player until the mission ends

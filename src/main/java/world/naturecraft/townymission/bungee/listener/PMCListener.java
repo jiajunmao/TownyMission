@@ -35,6 +35,7 @@ public class PMCListener implements Listener {
             data[i] = in.readUTF();
         }
 
+        System.out.println("Received message " + msgUUID);
         TownyMissionBungee instance = TownyMissionInstance.getInstance();
         if (subChannel.equals("config:request")) {
             String configValue = instance.getConfig().getString(data[0]);

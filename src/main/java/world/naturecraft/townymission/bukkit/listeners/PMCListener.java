@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.bukkit.listeners.internal;
+package world.naturecraft.townymission.bukkit.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -34,13 +34,16 @@ public class PMCListener implements PluginMessageListener {
     @Override
     public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, @NotNull byte[] message) {
 
+        System.out.println("Received a PMC message");
         if (!channel.equalsIgnoreCase("townymission:main")) return;
+        System.out.println("Received something on townymission:main");
 
         TownyMissionBukkit instance = TownyMissionInstance.getInstance();
         PluginMessage request = PluginMessagingService.parseData(message);
         String subchannel = request.getChannel();
 
         if (subchannel.equalsIgnoreCase("config:response")) {
+            System.out.println("Received a message at " + request.getMessageUUID().toString());
             PluginMessagingService.getInstance().completeRequest(request.getMessageUUID().toString(), message);
         } else if (subchannel.equalsIgnoreCase("mission:request")) {
             // If this is not the main server, just ignore, otherwise this infinite looping
