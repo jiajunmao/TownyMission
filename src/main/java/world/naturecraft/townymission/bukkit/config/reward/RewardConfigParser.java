@@ -38,10 +38,10 @@ public class RewardConfigParser {
         for (String rank : rankList) {
             String fullpath = rankType.name().toLowerCase(Locale.ROOT) + ".rewards.rewards." + rank;
             List<String> rankedRewardList = instance.getConfig().getStringList(fullpath);
-            System.out.println("Parsing reward - Rank: " + rank + ", reward list lenght: " + rankedRewardList.size());
+            //System.out.println("Parsing reward - Rank: " + rank + ", reward list lenght: " + rankedRewardList.size());
 
             for (String rankedReward : rankedRewardList) {
-                System.out.println("Parsing RewardJson: " + rankedReward);
+                //System.out.println("Parsing RewardJson: " + rankedReward);
                 int middleIdx = rankedReward.indexOf("{");
                 RewardType rewardType = RewardType.valueOf(rankedReward.substring(0, middleIdx).toUpperCase(Locale.ROOT));
                 String actualRewardString = rankedReward.substring(middleIdx);
@@ -74,7 +74,7 @@ public class RewardConfigParser {
      */
     public static Map<Integer, List<RewardJson>> getRankRewardsMap(RankType rankType) {
         List<RewardJson> allRewards = parseAllRewards(rankType);
-        System.out.println("RewardJson list length: " + allRewards.size());
+        //System.out.println("RewardJson list length: " + allRewards.size());
         Map<Integer, List<RewardJson>> rewardsMap = new HashMap<>();
 
         for (RewardJson rewardJson : allRewards) {

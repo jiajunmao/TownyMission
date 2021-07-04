@@ -22,6 +22,8 @@ public class BukkitConfig implements TownyMissionConfig {
 
     private FileConfiguration configuration;
     private File configFile;
+    private String sourcePath;
+    private String targetPath;
 
     /**
      * Instantiates a new Bukkit config.
@@ -29,18 +31,26 @@ public class BukkitConfig implements TownyMissionConfig {
      * @param path the path
      */
     public BukkitConfig(String path) {
+        this.sourcePath = path;
+        this.targetPath = path;
         createConfig(path);
+    }
+
+    public BukkitConfig(String sourcePath, String targetPath) {
+        this.sourcePath = sourcePath;
+        this.targetPath = targetPath;
+        createConfig(sourcePath);
     }
 
     @Override
     public void createConfig(String path) {
         try {
             TownyMissionInstance instance = TownyMissionInstance.getInstance();
-            configFile = new File(instance.getInstanceDataFolder(), path);
+            configFile = new File(instance.getInstanceDataFolder(), targetPath);
             if (!configFile.exists()) {
                 configFile.getParentFile().getParentFile().mkdirs();
                 configFile.getParentFile().mkdirs();
-                instance.saveInstanceResource(path, false);
+                instance.saveInstanceResource(sourcePath, false);
             }
 
             configuration = new YamlConfiguration();
@@ -107,6 +117,8 @@ public class BukkitConfig implements TownyMissionConfig {
     @Override
     public Collection<String> getKeys(String path) {
         ConfigurationSection section = configuration.getConfigurationSection(path);
+        if (section == null)
+            return null;
         return section.getKeys(false);
     }
 

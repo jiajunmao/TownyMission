@@ -22,6 +22,8 @@ public class BungeeConfig implements TownyMissionConfig {
 
     private Configuration configuration;
     private File configFile;
+    private String pluginPath;
+    private String folderPath;
 
     /**
      * Instantiates a new Bungee config.
@@ -29,23 +31,30 @@ public class BungeeConfig implements TownyMissionConfig {
      * @param path the path
      */
     public BungeeConfig(String path) {
+        this.pluginPath = path;
+        this.folderPath = path;
         createConfig(path);
     }
 
+    public BungeeConfig(String pluginPath, String folderPath) {
+        this.pluginPath = pluginPath;
+        this.folderPath = folderPath;
+        createConfig(pluginPath);
+    }
     @Override
     public void createConfig(String path) {
         try {
             TownyMissionBungee instance = TownyMissionInstance.getInstance();
-            configFile = new File(instance.getInstanceDataFolder(), path);
+            configFile = new File(instance.getInstanceDataFolder(), folderPath);
             if (!configFile.exists()) {
-                try (InputStream in = instance.getResourceAsStream(path)) {
+                try (InputStream in = instance.getResourceAsStream(pluginPath)) {
                     Files.copy(in, configFile.toPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(instance.getInstanceDataFolder(), path));
+            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(instance.getInstanceDataFolder(), folderPath));
         } catch (IOException e) {
             throw new ConfigLoadingException(e);
         }
@@ -55,7 +64,6 @@ public class BungeeConfig implements TownyMissionConfig {
     public void updateConfig(String path) {
         try {
             TownyMissionBungee instance = TownyMissionInstance.getInstance();
-            File langFile = new File(instance.getInstanceDataFolder(), path);
 
             Configuration currLangConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(instance.getInstanceDataFolder(), path));
             Configuration pluginConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(instance.getResourceAsStream(path));

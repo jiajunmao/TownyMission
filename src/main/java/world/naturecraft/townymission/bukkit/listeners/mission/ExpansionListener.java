@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.bukkit.listeners.external.mission;
+package world.naturecraft.townymission.bukkit.listeners.mission;
 
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;

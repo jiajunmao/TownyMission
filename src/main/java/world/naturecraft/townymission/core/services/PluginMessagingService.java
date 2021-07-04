@@ -93,6 +93,7 @@ public abstract class PluginMessagingService {
      * @return the completable future
      */
     public CompletableFuture<Byte[]> registerRequest(String respondId) {
+        System.out.println("Registering " + respondId);
         CompletableFuture<Byte[]> future = new CompletableFuture<>();
         this.response.put(respondId, future);
 
@@ -106,6 +107,9 @@ public abstract class PluginMessagingService {
      * @param data       the data
      */
     public void completeRequest(String responseId, Byte[] data) {
+        System.out.println("Completing request: " + responseId);
+        System.out.println("Response hashmap contains key: " + response.containsKey(responseId));
+        if (!response.containsKey(responseId)) return;
         this.response.get(responseId).complete(data);
     }
 

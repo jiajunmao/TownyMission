@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.bukkit.listeners.internal;
+package world.naturecraft.townymission.bukkit.listeners;
 
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.bukkit.TownyMissionBukkit;

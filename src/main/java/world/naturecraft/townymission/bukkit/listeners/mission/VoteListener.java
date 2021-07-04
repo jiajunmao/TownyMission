@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.bukkit.listeners.external.mission;
+package world.naturecraft.townymission.bukkit.listeners.mission;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
