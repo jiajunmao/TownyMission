@@ -35,7 +35,7 @@ public class CMIMoneyListener extends MissionListener {
                     .hasStarted()
                     .isMissionType(MissionType.MONEY)
                     .customCheck(() -> event.getSource() == null)
-                    .customCheck(() -> (event.getTo() - event.getFrom() > 0))
+                    .customCheck(() -> ((event.getTo() - event.getFrom()) > 0))
                     .customCheck(() -> event.getFrom() != 0)
                     .customCheck(() -> {
                         // CHANGED LOGIC: Money will be held away from player until the mission ends
