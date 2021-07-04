@@ -19,6 +19,7 @@ import world.naturecraft.townymission.bukkit.listeners.mission.money.CMIMoneyLis
 import world.naturecraft.townymission.bukkit.listeners.mission.VoteListener;
 import world.naturecraft.townymission.bukkit.listeners.DoMissionListener;
 import world.naturecraft.townymission.bukkit.listeners.PMCListener;
+import world.naturecraft.townymission.bukkit.listeners.mission.money.EssentialMoneyListener;
 import world.naturecraft.townymission.bukkit.utils.BukkitUtil;
 import world.naturecraft.townymission.core.components.enums.MissionType;
 import world.naturecraft.townymission.core.components.enums.ServerType;
@@ -258,7 +259,10 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         // Event listeners
         // If bungee and !main, do not register town related listeners
         if (!isBungeecordEnabled || isMainServer) {
-            getServer().getPluginManager().registerEvents(new ExpansionListener(this), this);
+            if (isMissionEnabled(MissionType.EXPANSION)) {
+                logger.info("Hooked into Towny Expansion Events");
+                getServer().getPluginManager().registerEvents(new ExpansionListener(this), this);
+            }
 
             getServer().getPluginManager().registerEvents(new TownFallListener(this), this);
             getServer().getPluginManager().registerEvents(new DoMissionListener(this), this);
@@ -266,9 +270,27 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             // GUI listeners
             getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
         }
-        getServer().getPluginManager().registerEvents(new MobListener(this), this);
-        getServer().getPluginManager().registerEvents(new CMIMoneyListener(this), this);
-        getServer().getPluginManager().registerEvents(new VoteListener(this), this);
+
+        if (isMissionEnabled(MissionType.MOB)) {
+            logger.info("Hooked into Vanilla Mob Events");
+            getServer().getPluginManager().registerEvents(new MobListener(this), this);
+        }
+
+        if (isMissionEnabled(MissionType.MONEY)) {
+            if (missionAndHooks.get(MissionType.MONEY).contains("CMI")) {
+                logger.info("Hooked into CMI Moeny Events");
+                getServer().getPluginManager().registerEvents(new CMIMoneyListener(this), this);
+            }
+            if (missionAndHooks.get(MissionType.MONEY).contains("EssentialsX")) {
+                logger.info("Hooked into EssentialsX Money Events");
+                getServer().getPluginManager().registerEvents(new EssentialMoneyListener(this), this);
+            }
+        }
+
+        if (isMissionEnabled(MissionType.VOTE)) {
+            logger.info("Hooked into UltimateVotes Vote Events");
+            getServer().getPluginManager().registerEvents(new VoteListener(this), this);
+        }
     }
 
     /**
