@@ -1,0 +1,4 @@
+world/naturecraft/townymission/services/PluginMessagingBungeeService.class
+world/naturecraft/townymission/config/BungeeConfig.class
+world/naturecraft/townymission/TownyMissionBungee.class
+world/naturecraft/townymission/listener/PMCListener.class

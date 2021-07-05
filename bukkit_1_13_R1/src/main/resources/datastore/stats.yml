@@ -1,0 +1,9 @@
+# This file will exist regardless of storage method. Please do not touch anything in this file unless you know exactly what you are doing.
+
+sprint:
+  current: 1
+
+season:
+  current: 1
+  pausedTime: -1
+  startedTime: -1

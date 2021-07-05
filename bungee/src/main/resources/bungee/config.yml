@@ -1,0 +1,25 @@
+# Main Server setting
+main-server: nc-terra-earth
+
+# Database settings
+database:
+  # The address of the database, in IP or domain name
+  address: colo.server.naturecraft.world
+  # The port of the database, default should be 3306
+  port:
+  # The name of the database
+  name:
+  # The username to access the database
+  username:
+  # The password to access the database
+  password:
+
+# The hooks that enable certain mission types
+# In each section, one hook must be enabled to enable the mission type
+hooks:
+  money:
+    CMI: true
+  expansion:
+    Towny: true
+  vote:
+    UltimateVotes: true

@@ -1,0 +1,10 @@
+1:
+  amount: 20000
+  reward: 1000
+  timeAllowed: 2
+  returnable: false
+2:
+  amount: 50000
+  reward: 2000
+  timeAllowed: 4
+  returnable: false

@@ -3,8 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>world.naturecraft</groupId>
-    <artifactId>TownyMission</artifactId>
-    <version>1.0.12-SNAPSHOT</version>
+    <artifactId>TownyMission-parent</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
+    <name>TownyMission</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>core</module>
+        <module>bungee</module>
+        <module>bukkit_1_13_R1</module>
+        <module>dist</module>
+    </modules>
 
     <scm>
         <connection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git</connection>
@@ -15,7 +24,7 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <mainClass>world.naturecraft.townymission.bukkit.TownyMissionBukkit</mainClass>
+        <mainClass>bukkit.src.main.java.world.naturecraft.townymission.TownyMissionBukkit</mainClass>
     </properties>
 
     <distributionManagement>
@@ -125,19 +134,22 @@
     <repositories>
 
         <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <layout>default</layout>
-            <url>https://repo1.maven.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>gitlab-dep-repo</id>
+            <name>NC-Staff-Backend</name>
+            <url>https://git.naturecraft.world/api/v4/projects/10/packages/maven</url>
         </repository>
 
         <repository>
             <id>gitlab-maven</id>
+            <name>NC-TownyMission</name>
             <!--suppress UnresolvedMavenProperty -->
             <url>https://git.naturecraft.world/api/v4/projects/5/packages/maven</url>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <name>maven-central</name>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
 
         <repository>
@@ -229,22 +241,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.12.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zrip</groupId>
-            <artifactId>CMIAPI</artifactId>
-            <version>8.7.8.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/dependencies/CMIAPI8.7.8.2.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>net.teozfrank</groupId>
-            <artifactId>UltimateVotes</artifactId>
-            <version>0.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/dependencies/UltimateVotes.jar</systemPath>
         </dependency>
 
         <dependency>
