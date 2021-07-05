@@ -18,9 +18,9 @@ import java.util.UUID;
 
 public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implements MissionCacheStorage {
 
-    private MissionCacheSqlStorage singleton;
+    private static MissionCacheSqlStorage singleton;
 
-    public MissionCacheSqlStorage getInstance() {
+    public static MissionCacheSqlStorage getInstance() {
         if (singleton == null) {
             singleton = new MissionCacheSqlStorage(StorageService.getInstance().getDataSource(), Util.getDbName(DbType.MISSION_CACHE));
         }

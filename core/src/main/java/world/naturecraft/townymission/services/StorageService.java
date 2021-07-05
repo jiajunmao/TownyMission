@@ -152,16 +152,19 @@ public class StorageService {
                         dbMap.put(DbType.CLAIM, ClaimYamlStorage.getInstance());
                     else
                         dbMap.put(DbType.CLAIM, ClaimSqlStorage.getInstance());
+                    break;
                 case MISSION:
                     if (storageType.equals(StorageType.YAML))
                         dbMap.put(DbType.MISSION, MissionYamlStorage.getInstance());
                     else
                         dbMap.put(DbType.MISSION, MissionSqlStorage.getInstance());
+                    break;
                 case COOLDOWN:
                     if (storageType.equals(StorageType.YAML))
                         dbMap.put(DbType.COOLDOWN, CooldownYamlStorage.getInstance());
                     else
                         dbMap.put(DbType.COOLDOWN, CooldownSqlStorage.getInstance());
+                    break;
                 case SEASON_HISTORY:
                     if (storageType.equals(StorageType.YAML))
                         dbMap.put(DbType.SEASON_HISTORY, SeasonHistoryYamlStorage.getInstance());
@@ -172,11 +175,19 @@ public class StorageService {
                         dbMap.put(DbType.SPRINT_HISTORY, SprintHistoryYamlStorage.getInstance());
                     else
                         dbMap.put(DbType.SPRINT_HISTORY, SprintHistorySqlStorage.getInstance());
+                    break;
                 case MISSION_HISTORY:
                     if (storageType.equals(StorageType.YAML))
                         dbMap.put(DbType.MISSION_HISTORY, MissionHistoryYamlStorage.getInstance());
                     else
                         dbMap.put(DbType.MISSION_HISTORY, MissionHistorySqlStorage.getInstance());
+                    break;
+                case MISSION_CACHE:
+                    if (storageType.equals(StorageType.YAML))
+                        dbMap.put(DbType.MISSION_CACHE, MissionCacheYamlStorage.getInstance());
+                    else
+                        dbMap.put(DbType.MISSION_CACHE, MissionCacheSqlStorage.getInstance());
+                    break;
             }
         }
     }

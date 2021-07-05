@@ -39,7 +39,7 @@ public class MissionConfig {
             TownyMissionBukkit instance = TownyMissionInstance.getInstance();
             if (instance.isMissionEnabled(missionType)) {
                 String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
-                String filePath = "world/naturecraft/townymission/bukkit/src/main/resources/missions" + File.separator + fileName;
+                String filePath = "missions" + File.separator + fileName;
 
                 TownyMissionConfig tempConfig = new BukkitConfig(filePath);
 

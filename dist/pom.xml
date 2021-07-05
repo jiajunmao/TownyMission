@@ -7,13 +7,11 @@
     <parent>
         <groupId>world.naturecraft</groupId>
         <artifactId>TownyMission-parent</artifactId>
-        <version>1.0.12-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
     <build>
         <directory>../target</directory>
-        <finalName>TownyMission-${project.version}</finalName>
-
-
+        <finalName>TownyMission-${project.parent.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

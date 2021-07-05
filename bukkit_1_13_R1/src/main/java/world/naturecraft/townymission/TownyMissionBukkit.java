@@ -46,7 +46,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     private TownyMissionConfig statsConfig;
     private TownyMissionConfig mainConfig;
     private TownyMissionConfig langConfig;
-    private TownyMissionConfig doMissionCache;
 
     private TownyMissionRoot rootCmd;
 
@@ -123,10 +122,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             if (!isBungeecordEnabled || isMainServer) {
                 logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission&stats config"));
                 missionConfig = new MissionConfig();
-                statsConfig = new BukkitConfig("world/naturecraft/townymission/bukkit/src/main/resources/datastore/stats.yml");
-            } else {
-                // This means that it is not the main server
-                doMissionCache = new BukkitConfig("world/naturecraft/townymission/bukkit/src/main/resources/datastore/mission_cache.yml");
+                statsConfig = new BukkitConfig("datastore/stats.yml");
             }
 
             RewardConfigValidator.checkRewardConfig();
@@ -369,11 +365,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public TownyMissionConfig getStatsConfig() {
         return statsConfig;
-    }
-
-    @Override
-    public TownyMissionConfig getMissionCache() {
-        return doMissionCache;
     }
 
     @Override

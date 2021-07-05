@@ -61,7 +61,7 @@ public abstract class YamlStorage<T extends DataEntity> {
      */
     protected void createConfig() throws ConfigLoadingException {
         String fileName = dbType.toString().toLowerCase(Locale.ROOT) + ".yml";
-        String filePath = "world/naturecraft/townymission/bukkit/src/main/resources/datastore" + File.separator + fileName;
+        String filePath = "datastore" + File.separator + fileName;
         customConfig = new File(instance.getInstanceDataFolder(), filePath);
         if (!customConfig.exists()) {
             customConfig.getParentFile().getParentFile().mkdirs();

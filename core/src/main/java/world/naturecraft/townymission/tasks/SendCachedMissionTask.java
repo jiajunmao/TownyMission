@@ -19,6 +19,7 @@ public class SendCachedMissionTask {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
+
                 for (MissionCacheEntry entry : MissionCacheDao.getInstance().getEntries()) {
                     PluginMessage request = new PluginMessage()
                             .channel("mission:request")
