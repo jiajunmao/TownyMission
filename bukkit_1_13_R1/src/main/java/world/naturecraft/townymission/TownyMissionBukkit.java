@@ -310,8 +310,10 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     }
 
     private void registerTasks() {
-        SendCachedMissionTask.registerTask();
-        logger.info("Started send cache task");
+        if (!isMainserver()) {
+            SendCachedMissionTask.registerTask();
+            logger.info("Started send cache task");
+        }
     }
 
     /**
