@@ -85,7 +85,7 @@ pages:
   dependencies:
     - build
   script:
-    - mvn javadoc:javadoc
+    - mvn javadoc:aggregate
     - mv target/site/apidocs public
   artifacts:
     paths:

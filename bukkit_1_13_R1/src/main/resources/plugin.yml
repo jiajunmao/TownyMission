@@ -1,0 +1,63 @@
+name: TownyMission
+author: Barbadosian
+main: world.naturecraft.townymission.TownyMissionBukkit
+version: ${project.version}
+api-version: 1.13
+
+depend:
+  - Vault
+  - Towny
+
+softdepend:
+  - CMI
+  - UltimateVotes
+  - MMOItems
+
+permissions:
+  townymission.player:
+    description: Default player commands
+    default: true
+  townymission.admin:
+    description: Default admin commands
+    default: op
+  townymission.premium:
+    description: premium reward track
+    default: op
+  townymission.boost.:
+    description: boost permission
+  townymission.commands.addpoint:
+    description: Add point
+    default: op
+  townymission.commands.rmpoint:
+    description: Remove point
+    default: op
+  townymission.commands.setpoint:
+    description: Set point
+    default: op
+  townymission.commands.checkpoint:
+    description: Check the point
+    default: op
+  townymission.commands.listall:
+    description: Check the point
+    default: op
+
+commands:
+  townymission:
+    description: Root command
+    aliases: tms
+  townymission info:
+    description: overview
+  townymission rank:
+    description: show the current ranking
+  townymission list:
+    description: list the current missions
+  townymission help:
+    description: help page
+  townymission addPoint:
+    description: add point
+  townymission rmPoint:
+    description: remove point
+  townymission setPoint:
+    description: set point
+  townymission checkPoint:
+    description: check point
