@@ -10,7 +10,7 @@ variables:
 
 default:
   tags:
-    - docker
+    - shell
 
 stages:
   - test
