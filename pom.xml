@@ -126,6 +126,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <show>private</show>
+                    <aggregate>true</aggregate> <!-- this enables aggretation -->
                 </configuration>
             </plugin>
         </plugins>
@@ -168,19 +169,10 @@
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
 
-        <repository>
-            <id>lumine-repo</id>
-            <url>https://mvn.lumine.io/repository/maven-public/</url>
-        </repository>
 
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-
-        <repository>
-            <id>bungeecord-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
 
         <repository>
@@ -191,6 +183,11 @@
         <repository>
             <id>paper-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
 
     </repositories>
@@ -258,22 +255,6 @@
         </dependency>
 
         <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.5-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.5-SNAPSHOT</version>
-            <type>javadoc</type>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>8.1.0</version>
@@ -294,12 +275,20 @@
         </dependency>
 
         <dependency>
-            <groupId>net.Indyuce</groupId>
-            <artifactId>MMOItems</artifactId>
-            <version>6.5</version>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.16-R0.5-SNAPSHOT</version>
+            <type>jar</type>
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.16-R0.5-SNAPSHOT</version>
+            <type>javadoc</type>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 

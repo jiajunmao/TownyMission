@@ -59,12 +59,29 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/dependencies/UltimateVotes-0.1.jar</systemPath>
         </dependency>
+
+
+        <dependency>
+            <groupId>net.Indyuce</groupId>
+            <artifactId>MMOItems</artifactId>
+            <version>6.5</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
+
+
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+
+        <repository>
+            <id>lumine-repo</id>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+
     </repositories>
 
 </project>
