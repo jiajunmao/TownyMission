@@ -41,7 +41,6 @@
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/services/TimerService.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/data/dao/SeasonDao.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/TownyMissionInstanceType.java
-/home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/utils/RewardJsonFactory.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/components/entity/PluginMessage.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/data/sql/SeasonHistorySqlStorage.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/data/dao/SprintDao.java
@@ -109,6 +108,7 @@
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/config/reward/RewardConfigValidator.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/components/json/mission/MissionJson.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/components/entity/MissionEntryWrapper.java
+/home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/config/reward/RewardJsonFactory.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/components/enums/RewardMethod.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/data/dao/SprintHistoryDao.java
 /home/aaronmao/programming/TownyMissions/core/src/main/java/world/naturecraft/townymission/components/json/mission/MobMissionJson.java

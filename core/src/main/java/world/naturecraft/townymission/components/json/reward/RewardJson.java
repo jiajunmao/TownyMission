@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RewardType;
-import world.naturecraft.townymission.utils.RewardJsonFactory;
+import world.naturecraft.townymission.config.reward.RewardJsonFactory;
 
 /**
  * The type Reward json.

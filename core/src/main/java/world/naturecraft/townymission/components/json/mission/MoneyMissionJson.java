@@ -31,7 +31,7 @@ public class MoneyMissionJson extends MissionJson {
      * @param reward        the reward
      * @param contributions the contributions
      */
-    @ConstructorProperties({"amount", "completed", "hrAllowed", "reward", "contributions", "returnable"})
+    @ConstructorProperties({"amount", "completed", "hrAllowed", "reward", "returnable", "contributions"})
     public MoneyMissionJson(int amount, int completed, int hrAllowed, int reward, boolean returnable, Map<String, Integer> contributions) {
         super(MissionType.MONEY, amount, completed, hrAllowed, reward, contributions);
         this.returnable = returnable;

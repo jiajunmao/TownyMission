@@ -27,6 +27,7 @@ commands:
     onNoTown: "&cYou do not belong to a town!"
     onNotMayor: "&cYou are not the mayor!"
     onNoStartedMission: "&cYour town does not have a started mission!"
+    onMissionTimedOut: "&cYour current mission is already timed out!"
     onMissionTypeMismatch: "&cYour town's started mission type is not %missionType%"
     onNoPermission: "&cYou do not have the '%permission%' permission!"
   complete:

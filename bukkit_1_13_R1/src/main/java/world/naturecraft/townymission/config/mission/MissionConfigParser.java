@@ -44,8 +44,9 @@ public class MissionConfigParser {
             } else if (type.equals(MissionType.RESOURCE)) {
                 boolean isMi = fileConfiguration.getBoolean(key + ".isMi");
                 String resourceType = fileConfiguration.getString(key + ".type");
+                String miId = fileConfiguration.getString(key + ".miID");
                 boolean returnable = fileConfiguration.getBoolean(key + ".returnable");
-                list.add(new ResourceMissionJson(isMi, resourceType, amount, 0, hrAllowed, reward, returnable,null));
+                list.add(new ResourceMissionJson(isMi, resourceType, miId, amount, 0, hrAllowed, reward, returnable,null));
             } else if (type.equals(MissionType.VOTE)) {
                 list.add(new VoteMissionJson(amount, 0, hrAllowed, reward, null));
             }

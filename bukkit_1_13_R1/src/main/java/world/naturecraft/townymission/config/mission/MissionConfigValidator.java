@@ -4,6 +4,10 @@
 
 package world.naturecraft.townymission.config.mission;
 
+import net.Indyuce.mmoitems.MMOItems;
+import net.Indyuce.mmoitems.api.Type;
+import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
+import net.Indyuce.mmoitems.manager.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -51,11 +55,22 @@ public class MissionConfigValidator {
 
                         path = key + ".type";
                         String type = missionConfig.getString(path);
+                        path = key + ".miID";
+                        String miID = missionConfig.getString(path);
 
-                        try {
-                            Material.valueOf(type);
-                        } catch (IllegalArgumentException e) {
-                            throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
+                        if (isMi.equalsIgnoreCase("true")) {
+                            Type miType = Type.get(type);
+                            try {
+                                MMOItem item = MMOItems.plugin.getMMOItem(miType, miID);
+                            } catch (NullPointerException e) {
+                                throwException(missionConfig, key, "ResourceType(MI) " + type + " for entry " + key + " is invalid", e);
+                            }
+                        } else {
+                            try {
+                                Material.valueOf(type);
+                            } catch (IllegalArgumentException e) {
+                                throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
+                            }
                         }
                         break;
                     case MOB:

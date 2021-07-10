@@ -26,6 +26,8 @@ public class ResourceMissionJson extends MissionJson {
     private final boolean isMi;
     @JsonProperty("type")
     private final String type;
+    @JsonProperty("miID")
+    private final String miID;
     @JsonProperty("returnable")
     private final boolean returnable;
 
@@ -40,11 +42,12 @@ public class ResourceMissionJson extends MissionJson {
      * @param reward        the reward
      * @param contributions the contributions
      */
-    @ConstructorProperties({"mi", "type", "amount", "completed", "hrAllowed", "reward", "returnable", "contributions"})
-    public ResourceMissionJson(boolean isMi, String type, int amount, int completed, int hrAllowed, int reward, boolean returnable, Map<String, Integer> contributions) {
+    @ConstructorProperties({"mi", "type", "miID", "amount", "completed", "hrAllowed", "reward", "returnable", "contributions"})
+    public ResourceMissionJson(boolean isMi, String type, String miID, int amount, int completed, int hrAllowed, int reward, boolean returnable, Map<String, Integer> contributions) {
         super(MissionType.RESOURCE, amount, completed, hrAllowed, reward, contributions);
         this.isMi = isMi;
         this.type = type;
+        this.miID = miID;
         this.returnable = returnable;
     }
 
@@ -81,6 +84,10 @@ public class ResourceMissionJson extends MissionJson {
         return type;
     }
 
+    public String getMiID() {
+        return miID;
+    }
+
     /**
      * Get the formatted display line when needed to be displayed in MC chat
      *
@@ -101,7 +108,11 @@ public class ResourceMissionJson extends MissionJson {
     @JsonIgnore
     public List<String> getLore() {
         List<String> loreList = new ArrayList<>();
-        loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(type)));
+        if (isMi) {
+            loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(miID)));
+        } else {
+            loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(type)));
+        }
         loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
         loreList.add(ChatService.getInstance().translateColor("&r&eReward: &7" + getReward()));
         loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
@@ -113,7 +124,11 @@ public class ResourceMissionJson extends MissionJson {
     @JsonIgnore
     public List<String> getStartedLore() {
         List<String> loreList = new ArrayList<>();
-        loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(type)));
+        if (isMi) {
+            loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(miID)));
+        } else {
+            loreList.add(ChatService.getInstance().translateColor("&r&eItem Type: &7" + Util.capitalizeFirst(type)));
+        }
         loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
         loreList.add(ChatService.getInstance().translateColor("&r&eCompleted: &7" + getCompleted()));
         loreList.add(ChatService.getInstance().translateColor("&r&ePoints: &7" + getReward()));

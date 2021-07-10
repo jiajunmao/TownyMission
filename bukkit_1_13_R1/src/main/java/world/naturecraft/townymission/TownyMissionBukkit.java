@@ -116,11 +116,10 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * This is saving the config.yml (Default config)
          */
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission and rewards config"));
         try {
             // If bungeecord and not main server, don't save
             if (!isBungeecordEnabled || isMainServer) {
-                logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission&stats config"));
+                logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission and rewards config"));
                 missionConfig = new MissionConfig();
                 statsConfig = new BukkitConfig("datastore/stats.yml");
             }
@@ -338,7 +337,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         this.reloadConfig();
         langConfig = new BukkitConfig("lang.yml");
         missionConfig = new MissionConfig();
-        statsConfig = new BukkitConfig("world/naturecraft/townymission/bukkit/src/main/resources/datastore/stats.yml");
+        statsConfig = new BukkitConfig("datastore/stats.yml");
     }
 
     /**

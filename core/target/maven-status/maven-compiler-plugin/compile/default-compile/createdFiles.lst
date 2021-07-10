@@ -29,6 +29,7 @@ world/naturecraft/townymission/api/events/DoMissionEvent.class
 world/naturecraft/townymission/data/sql/SqlStorage$ConnectionCallBack.class
 world/naturecraft/townymission/data/yaml/MissionYamlStorage.class
 world/naturecraft/townymission/components/enums/RewardType.class
+world/naturecraft/townymission/config/reward/RewardJsonFactory$1.class
 world/naturecraft/townymission/components/enums/ServerType.class
 world/naturecraft/townymission/components/enums/StorageType.class
 world/naturecraft/townymission/components/entity/MissionEntry$1.class
@@ -44,7 +45,6 @@ world/naturecraft/townymission/api/exceptions/NotEnoughInvSlotException.class
 world/naturecraft/townymission/utils/BooleanChecker.class
 world/naturecraft/townymission/data/dao/Dao.class
 world/naturecraft/townymission/data/sql/CooldownSqlStorage.class
-world/naturecraft/townymission/utils/RewardJsonFactory.class
 world/naturecraft/townymission/components/json/cooldown/CooldownJson.class
 world/naturecraft/townymission/data/dao/ClaimDao.class
 world/naturecraft/townymission/components/entity/MissionHistoryEntry.class
@@ -82,7 +82,6 @@ world/naturecraft/townymission/data/dao/MissionDao$1.class
 world/naturecraft/townymission/data/dao/MissionCacheDao.class
 world/naturecraft/townymission/data/db/MissionCacheStorage.class
 world/naturecraft/townymission/services/SprintService.class
-world/naturecraft/townymission/utils/RewardJsonFactory$1.class
 world/naturecraft/townymission/services/TownyMissionService.class
 world/naturecraft/townymission/services/CommandService.class
 world/naturecraft/townymission/components/json/mission/MissionJson.class
@@ -129,3 +128,4 @@ world/naturecraft/townymission/services/StorageService$2.class
 world/naturecraft/townymission/api/exceptions/DataProcessException.class
 world/naturecraft/townymission/data/dao/ClaimDao$1.class
 world/naturecraft/townymission/components/json/reward/MoneyRewardJson.class
+world/naturecraft/townymission/config/reward/RewardJsonFactory.class

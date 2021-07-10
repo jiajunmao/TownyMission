@@ -56,6 +56,5 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.checkerframework:checker-qual:3.14.0" level="project" />
     <orderEntry type="library" name="Maven: org.bstats:bstats-bukkit:2.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.bstats:bstats-base:2.2.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.Indyuce:MMOItems:6.5" level="project" />
   </component>
 </module>

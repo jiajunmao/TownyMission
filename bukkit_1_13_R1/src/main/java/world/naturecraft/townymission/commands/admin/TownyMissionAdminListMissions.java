@@ -113,15 +113,9 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
         List<String> tabList = new ArrayList<>();
 
         if (args.length == 3) {
-            if (!args[2].equals("")) {
-                for (MissionType e : MissionType.values()) {
-                    if (e.name().contains(args[2].toUpperCase(Locale.ROOT))) {
-                        tabList.add(e.name().toUpperCase(Locale.ROOT));
-                    }
-                }
-            } else {
-                for (MissionType e : MissionType.values()) {
-                    tabList.add(e.name().toUpperCase(Locale.ROOT));
+            for (MissionType e : MissionType.values()) {
+                if (e.name().contains(args[2])) {
+                    tabList.add(e.name());
                 }
             }
         }
