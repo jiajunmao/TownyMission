@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import net.Indyuce.mmoitems.api.Type;
 import net.mmogroup.mmolib.api.item.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,15 +13,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
-import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.entity.PluginMessage;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -30,8 +26,11 @@ import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.MMOService;
 import world.naturecraft.townymission.services.PluginMessagingService;
 import world.naturecraft.townymission.services.TimerService;
+import world.naturecraft.townymission.utils.BukkitChecker;
+import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
@@ -87,8 +86,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         int number;
                         if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                             if (resourceMissionJson.isMi()) {
-                                Type type = Type.get(resourceMissionJson.getType());
-                                number = getTotalAndSetNull(player, type, resourceMissionJson.getMiID());
+                                number = MMOService.getInstance().getTotalAndSetNull(player.getUniqueId(), resourceMissionJson.getType(), resourceMissionJson.getMiID());
                             } else {
                                 number = getTotalAndSetNull(player, Material.valueOf(resourceMissionJson.getType()));
                             }
@@ -242,23 +240,6 @@ public class TownyMissionDeposit extends TownyMissionCommand {
             }
             index++;
         }
-        return total;
-    }
-
-    private int getTotalAndSetNull(Player player, Type miType, String miId) {
-        int total = 0;
-        int index = 0;
-        for (ItemStack itemStack : player.getInventory().getContents()) {
-            NBTItem nbtItem = NBTItem.get(itemStack);
-            if (nbtItem.hasType()
-                    && nbtItem.getType().equalsIgnoreCase(miType.getName())
-                    && nbtItem.getString("MMOITEMS_ITEM_ID").equalsIgnoreCase(miId)) {
-                total += itemStack.getAmount();
-                player.getInventory().setItem(index, null);
-            }
-            index++;
-        }
-
         return total;
     }
 

@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.services;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.components.entity.*;
 import world.naturecraft.townymission.components.enums.MissionType;

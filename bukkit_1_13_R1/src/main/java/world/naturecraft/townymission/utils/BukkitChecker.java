@@ -8,7 +8,6 @@ import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.utils.BooleanChecker;
 
 import java.util.ArrayList;
 import java.util.List;

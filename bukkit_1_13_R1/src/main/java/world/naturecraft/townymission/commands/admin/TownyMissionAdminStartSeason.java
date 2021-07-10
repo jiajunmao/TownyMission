@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
-import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.Date;

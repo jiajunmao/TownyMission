@@ -44,6 +44,6 @@ public class SendCachedMissionTask {
         };
 
         // Looping every minute
-        r.runTaskTimerAsynchronously(TownyMissionInstance.getInstance(), 60*20, 1*60*20);
+        r.runTaskTimerAsynchronously(TownyMissionInstance.getInstance(), 60 * 20, 1 * 60 * 20);
     }
 }

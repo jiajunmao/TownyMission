@@ -4,10 +4,10 @@ import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.utils.BukkitChecker;
 
 public class ExpansionListener extends MissionListener {
 

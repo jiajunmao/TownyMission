@@ -5,13 +5,13 @@
 package world.naturecraft.townymission.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.utils.RankUtil;
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.rank.RankJson;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SeasonHistoryDao;
+import world.naturecraft.townymission.utils.RankUtil;
 
 import java.util.List;
 import java.util.UUID;

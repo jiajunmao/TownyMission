@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.services;
 
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
@@ -94,7 +93,7 @@ public class RewardService extends TownyMissionService {
                 if (PlayerService.getInstance().getNumEmptySlot(playerUUID) >= slotsRequired) {
                     while (amount > 64) {
                         if (resourceRewardJson.isMi()) {
-                            PlayerService.getInstance().addMiItem(playerUUID, material, miID, 64);
+                            MMOService.getInstance().addMiItem(playerUUID, material, miID, 64);
                         } else {
                             PlayerService.getInstance().addItem(playerUUID, material, 64);
                         }
@@ -102,7 +101,7 @@ public class RewardService extends TownyMissionService {
                     }
 
                     if (resourceRewardJson.isMi()) {
-                        PlayerService.getInstance().addMiItem(playerUUID, material, miID, amount);
+                        MMOService.getInstance().addMiItem(playerUUID, material, miID, amount);
                     } else {
                         PlayerService.getInstance().addItem(playerUUID, material, amount);
                     }

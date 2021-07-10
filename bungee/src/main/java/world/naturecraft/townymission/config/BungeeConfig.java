@@ -3,11 +3,10 @@ package world.naturecraft.townymission.config;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import world.naturecraft.townymission.TownyMissionBungee;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
-import world.naturecraft.townymission.TownyMissionBungee;
-import world.naturecraft.townymission.config.TownyMissionConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +40,7 @@ public class BungeeConfig implements TownyMissionConfig {
         this.folderPath = folderPath;
         createConfig(pluginPath);
     }
+
     @Override
     public void createConfig(String path) {
         try {

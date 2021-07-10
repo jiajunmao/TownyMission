@@ -5,7 +5,6 @@ import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import world.naturecraft.townymission.components.entity.PluginMessage;
-import world.naturecraft.townymission.services.PluginMessagingService;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;

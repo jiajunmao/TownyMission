@@ -5,8 +5,8 @@ import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionBungee;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.PluginMessage;
 import world.naturecraft.townymission.services.PluginMessagingService;
 

@@ -53,7 +53,5 @@ public abstract class PlayerService {
      */
     public abstract void addItem(UUID playerUUID, String material, int amount);
 
-    public abstract void addMiItem(UUID playerUUID, String category, String id, int amount);
-
     public abstract String getPlayerName(UUID playerUUID);
 }

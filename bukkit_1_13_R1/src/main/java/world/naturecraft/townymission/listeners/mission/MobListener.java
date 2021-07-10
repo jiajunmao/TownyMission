@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MobMissionJson;
 import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.utils.BukkitChecker;
+import world.naturecraft.townymission.utils.TownyUtil;
 
 public class MobListener extends MissionListener {
     /**

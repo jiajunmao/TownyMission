@@ -4,7 +4,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import world.naturecraft.townymission.services.EconomyService;
 
 import java.util.HashMap;
 import java.util.UUID;

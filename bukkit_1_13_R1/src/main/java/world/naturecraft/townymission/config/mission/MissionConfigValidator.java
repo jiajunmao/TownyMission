@@ -4,10 +4,6 @@
 
 package world.naturecraft.townymission.config.mission;
 
-import net.Indyuce.mmoitems.MMOItems;
-import net.Indyuce.mmoitems.api.Type;
-import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
-import net.Indyuce.mmoitems.manager.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -15,6 +11,7 @@ import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.TownyMissionConfig;
+import world.naturecraft.townymission.services.MMOService;
 import world.naturecraft.townymission.utils.Util;
 
 /**
@@ -59,11 +56,8 @@ public class MissionConfigValidator {
                         String miID = missionConfig.getString(path);
 
                         if (isMi.equalsIgnoreCase("true")) {
-                            Type miType = Type.get(type);
-                            try {
-                                MMOItem item = MMOItems.plugin.getMMOItem(miType, miID);
-                            } catch (NullPointerException e) {
-                                throwException(missionConfig, key, "ResourceType(MI) " + type + " for entry " + key + " is invalid", e);
+                            if (!MMOService.getInstance().validate(type, miID)) {
+                                throwException(missionConfig, key, "ResourceType(MI) " + type + " for entry " + key + " is invalid");
                             }
                         } else {
                             try {

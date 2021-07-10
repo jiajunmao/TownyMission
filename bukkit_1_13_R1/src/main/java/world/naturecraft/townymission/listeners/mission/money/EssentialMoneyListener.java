@@ -4,10 +4,10 @@ import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.listeners.mission.MissionListener;
-import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.listeners.mission.MissionListener;
 import world.naturecraft.townymission.services.EconomyService;
+import world.naturecraft.townymission.utils.BukkitChecker;
 
 import java.math.BigDecimal;
 
@@ -34,11 +34,14 @@ public class EssentialMoneyListener extends MissionListener {
                     .customCheck(() -> {
                         return !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_ECO)
                                 && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_PAY)
-                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL); })
+                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL);
+                    })
                     .customCheck(() -> {
-                        return (event.getNewBalance().subtract(event.getOldBalance()).compareTo(BigDecimal.ZERO) > 0); })
+                        return (event.getNewBalance().subtract(event.getOldBalance()).compareTo(BigDecimal.ZERO) > 0);
+                    })
                     .customCheck(() -> {
-                        return event.getOldBalance().compareTo(BigDecimal.ZERO) != 0; })
+                        return event.getOldBalance().compareTo(BigDecimal.ZERO) != 0;
+                    })
                     .customCheck(() -> {
                         // CHANGED LOGIC: Money will be held away from player until the mission ends
                         //   Then given back depending on the returnable setting
@@ -53,13 +56,15 @@ public class EssentialMoneyListener extends MissionListener {
                     .customCheck(() -> {
                         return !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_ECO)
                                 && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_PAY)
-                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL); })
+                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL);
+                    })
                     .customCheck(() -> {
-                        return (event.getNewBalance().subtract(event.getOldBalance()).compareTo(BigDecimal.ZERO) > 0); });
+                        return (event.getNewBalance().subtract(event.getOldBalance()).compareTo(BigDecimal.ZERO) > 0);
+                    });
 
             if (!localCheck.check()) return;
         }
 
-        doLogic(checker, MissionType.MONEY, player, (int)(event.getNewBalance().subtract(event.getOldBalance())).intValue());
+        doLogic(checker, MissionType.MONEY, player, (int) (event.getNewBalance().subtract(event.getOldBalance())).intValue());
     }
 }
