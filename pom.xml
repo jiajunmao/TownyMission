@@ -119,6 +119,8 @@
                     <checkModificationExcludes>
                         <checkModificationExclude>pom.xml</checkModificationExclude>
                     </checkModificationExcludes>
+                    <goals>deploy</goals>
+                    <autoversionsubmodules>true</autoversionsubmodules>
                 </configuration>
             </plugin>
 
