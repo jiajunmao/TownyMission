@@ -20,13 +20,6 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
 
     private static MissionCacheSqlStorage singleton;
 
-    public static MissionCacheSqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new MissionCacheSqlStorage(StorageService.getInstance().getDataSource(), Util.getDbName(DbType.MISSION_CACHE));
-        }
-
-        return singleton;
-    }
     /**
      * Instantiates a new Database.
      *
@@ -35,6 +28,14 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
      */
     public MissionCacheSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
+    }
+
+    public static MissionCacheSqlStorage getInstance() {
+        if (singleton == null) {
+            singleton = new MissionCacheSqlStorage(StorageService.getInstance().getDataSource(), Util.getDbName(DbType.MISSION_CACHE));
+        }
+
+        return singleton;
     }
 
     @Override

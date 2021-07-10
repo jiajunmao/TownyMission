@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.services;
 
 import world.naturecraft.townymission.utils.BukkitUtil;
-import world.naturecraft.townymission.services.ChatService;
 
 import java.util.UUID;
 

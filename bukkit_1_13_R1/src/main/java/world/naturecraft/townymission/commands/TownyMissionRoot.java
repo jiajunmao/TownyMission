@@ -59,8 +59,13 @@ public class TownyMissionRoot extends TownyMissionCommand {
 
             if (args.length == 1) {
                 // This is only /tms
-                tabList = arguments;
-            } else if (commands.containsKey(args[0])) {
+                tabList = new ArrayList<>();
+                for (String str : commands.keySet()) {
+                    if (str.contains(args[0])) {
+                        tabList.add(str);
+                    }
+                }
+            } else if (args.length == 2 && commands.containsKey(args[0])) {
                 tabList = commands.get(args[0]).onTabComplete(sender, command, alias, args);
             } else {
                 tabList = null;

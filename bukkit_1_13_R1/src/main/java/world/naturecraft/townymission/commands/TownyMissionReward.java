@@ -6,11 +6,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.config.reward.RewardConfigParser;
-import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.reward.RewardJson;
+import world.naturecraft.townymission.config.reward.RewardConfigParser;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.Util;
 

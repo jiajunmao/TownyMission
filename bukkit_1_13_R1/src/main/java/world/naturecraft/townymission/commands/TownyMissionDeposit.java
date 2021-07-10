@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import net.mmogroup.mmolib.api.item.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -14,12 +15,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
-import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.entity.PluginMessage;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -27,8 +26,12 @@ import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.MMOService;
 import world.naturecraft.townymission.services.PluginMessagingService;
 import world.naturecraft.townymission.services.TimerService;
+import world.naturecraft.townymission.utils.BukkitChecker;
+import world.naturecraft.townymission.utils.TownyUtil;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,9 +85,14 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
                         int number;
                         if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
-                            number = getTotalAndSetNull(player, Material.valueOf(resourceMissionJson.getType()));
+                            if (resourceMissionJson.isMi()) {
+                                number = MMOService.getInstance().getTotalAndSetNull(player.getUniqueId(), resourceMissionJson.getType(), resourceMissionJson.getMiID());
+                            } else {
+                                number = getTotalAndSetNull(player, Material.valueOf(resourceMissionJson.getType()));
+                            }
                         } else {
                             number = player.getItemInHand().getAmount();
+                            player.setItemInHand(null);
                         }
 
                         resourceMissionJson.addContribution(player.getUniqueId().toString(), number);
@@ -163,15 +171,21 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)
                 .customCheck(() -> {
-                    // Holding item in hand mismatch
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
-                    ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
-                    if (player.getItemInHand().getType().equals(Material.valueOf(resourceMissionJson.getType()))) {
+                    // Recess check
+                    if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
+                        return false;
+                    }
+                    return true;
+                })
+                .customCheck(() -> {
+                    // Command format error
+                    if (args.length == 1)
+                        return true;
+                    if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
                         return true;
                     } else {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNotMatch"));
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", player.getItemInHand().getType().name().toLowerCase(Locale.ROOT)));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                 })
@@ -190,24 +204,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     }
                     return true;
                 })
-                .customCheck(() -> {
-                    // Command format error
-                    if (args.length == 1)
-                        return true;
-                    if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
-                        return true;
-                    } else {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
-                        return false;
-                    }
-                })
-                .customCheck(() -> {
-                    if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
-                        return false;
-                    }
-                    return true;
-                }).check();
+                .customCheck(() -> checkItemMismatch(player)).check();
     }
 
     /**
@@ -233,7 +230,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
         return tabList;
     }
 
-    public int getTotalAndSetNull(Player player, Material material) {
+    private int getTotalAndSetNull(Player player, Material material) {
         int total = 0;
         int index = 0;
         for (ItemStack itemStack : player.getInventory().getContents()) {
@@ -244,5 +241,44 @@ public class TownyMissionDeposit extends TownyMissionCommand {
             index++;
         }
         return total;
+    }
+
+    private boolean checkItemMismatch(Player player) {
+        // Holding item in hand mismatch
+        MissionEntry resourceEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
+        ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
+
+        ItemStack inHand = player.getItemInHand();
+        boolean mismatch = true;
+        if (resourceMissionJson.isMi()) {
+            // This means that this mission is MI
+            NBTItem miItem = NBTItem.get(inHand);
+            if (miItem.hasType()) {
+                // This means that this item is indeed MI
+                String miType = miItem.getType();
+                String ID = miItem.getString("MMOITEMS_ITEM_ID");
+                if (miType.equalsIgnoreCase(resourceMissionJson.getType())
+                        && ID.equalsIgnoreCase(resourceMissionJson.getMiID())) {
+                    mismatch = false;
+                }
+            }
+        } else {
+            if (inHand.getType().equals(Material.valueOf(resourceMissionJson.getType()))) {
+                mismatch = false;
+            }
+        }
+
+        if (mismatch) {
+            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNotMatch"));
+            if (resourceMissionJson.isMi()) {
+                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", "&e" + Util.capitalizeFirst(resourceMissionJson.getMiID())));
+            } else {
+                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.requiredItem").replace("%item%", "&e" + Util.capitalizeFirst(resourceMissionJson.getType())));
+            }
+            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.inHandItem").replace("%item%", "&e" + Util.capitalizeFirst(player.getItemInHand().getType().name())));
+            return false;
+        } else {
+            return true;
+        }
     }
 }

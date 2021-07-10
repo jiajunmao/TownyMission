@@ -4,10 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.utils.BooleanChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,7 @@ public class BukkitChecker {
     private boolean checkHasTown;
     private boolean checkIsMayor;
     private boolean checkHasStarted;
+    private boolean checkIsTimedOut;
     private boolean checkIsMissionType;
     private MissionType missionType;
     private OfflinePlayer player;
@@ -95,6 +96,11 @@ public class BukkitChecker {
         return this;
     }
 
+    public BukkitChecker isTimedOut() {
+        checkIsTimedOut = true;
+        return this;
+    }
+
     /**
      * Is mission type sanity checker.
      *
@@ -162,6 +168,20 @@ public class BukkitChecker {
             if (missionDao.getStartedMission(TownyUtil.residentOf(player).getUUID()) == null) {
                 if (!isSilent)
                     ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoStartedMission"));
+                return false;
+            }
+        }
+
+        if (checkIsTimedOut) {
+            if (!checkHasTown)
+                return false;
+            if (!checkHasStarted)
+                return false;
+
+            MissionEntry entry = MissionDao.getInstance().getStartedMission(TownyUtil.residentOf(player).getUUID());
+            if (entry.isTimedout()) {
+                if (!isSilent)
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onMissionTimedOut"));
                 return false;
             }
         }

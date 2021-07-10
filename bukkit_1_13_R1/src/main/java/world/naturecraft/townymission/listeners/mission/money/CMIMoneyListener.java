@@ -5,10 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.listeners.mission.MissionListener;
-import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.listeners.mission.MissionListener;
 import world.naturecraft.townymission.services.EconomyService;
+import world.naturecraft.townymission.utils.BukkitChecker;
 
 public class CMIMoneyListener extends MissionListener {
     /**

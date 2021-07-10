@@ -11,7 +11,6 @@ import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.enums.RewardMethod;
 import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.components.json.reward.RewardJson;
-import world.naturecraft.townymission.utils.RewardJsonFactory;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.*;

@@ -11,6 +11,7 @@ import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.TownyMissionConfig;
+import world.naturecraft.townymission.services.MMOService;
 import world.naturecraft.townymission.utils.Util;
 
 /**
@@ -51,11 +52,19 @@ public class MissionConfigValidator {
 
                         path = key + ".type";
                         String type = missionConfig.getString(path);
+                        path = key + ".miID";
+                        String miID = missionConfig.getString(path);
 
-                        try {
-                            Material.valueOf(type);
-                        } catch (IllegalArgumentException e) {
-                            throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
+                        if (isMi.equalsIgnoreCase("true")) {
+                            if (!MMOService.getInstance().validate(type, miID)) {
+                                throwException(missionConfig, key, "ResourceType(MI) " + type + " for entry " + key + " is invalid");
+                            }
+                        } else {
+                            try {
+                                Material.valueOf(type);
+                            } catch (IllegalArgumentException e) {
+                                throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
+                            }
                         }
                         break;
                     case MOB:

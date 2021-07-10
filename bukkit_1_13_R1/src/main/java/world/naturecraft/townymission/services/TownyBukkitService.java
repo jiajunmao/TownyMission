@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.utils.TownyUtil;
-import world.naturecraft.townymission.services.TownyService;
 
 import java.util.ArrayList;
 import java.util.List;

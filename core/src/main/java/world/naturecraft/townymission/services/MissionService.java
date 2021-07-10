@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.services;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.components.entity.*;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -13,6 +12,7 @@ import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.json.mission.MoneyMissionJson;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
+import world.naturecraft.townymission.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.components.json.reward.ResourceRewardJson;
 import world.naturecraft.townymission.data.dao.*;
 import world.naturecraft.townymission.utils.EntryFilter;
@@ -144,26 +144,20 @@ public abstract class MissionService extends TownyMissionService {
             if (moneyMissionJson.isReturnable()) {
                 Map<String, Integer> contributions = entry.getMissionJson().getContributions();
                 for (String playerUUID : contributions.keySet()) {
-                    EconomyService.getInstance().depositBalance(UUID.fromString(playerUUID), contributions.get(playerUUID));
+                    MoneyRewardJson moneyRewardJson = new MoneyRewardJson(contributions.get(playerUUID));
+                    ClaimEntry claimEntry = new ClaimEntry(UUID.randomUUID(), UUID.fromString(playerUUID), RewardType.MONEY, moneyRewardJson, instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
+                    ClaimDao.getInstance().addAndMerge(claimEntry);
                 }
             }
         }
 
-        if (entry.getMissionJson().equals(MissionType.RESOURCE)) {
+        if (entry.getMissionType().equals(MissionType.RESOURCE)) {
             ResourceMissionJson resourceMissionJson = (ResourceMissionJson) entry.getMissionJson();
             if (resourceMissionJson.isReturnable()) {
                 Map<String, Integer> contributions = entry.getMissionJson().getContributions();
                 for (String playerUUID : contributions.keySet()) {
-                    Material resourceType = Material.valueOf(resourceMissionJson.getType());
                     int amount = contributions.get(playerUUID);
-                    while (amount > 64) {
-                        ResourceRewardJson resourceRewardJson = new ResourceRewardJson(resourceMissionJson.getType(), 64);
-                        ClaimEntry claimEntry = new ClaimEntry(UUID.randomUUID(), UUID.fromString(playerUUID), RewardType.RESOURCE, resourceRewardJson, instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
-                        ClaimDao.getInstance().addAndMerge(claimEntry);
-                        amount -= 64;
-                    }
-
-                    ResourceRewardJson resourceRewardJson = new ResourceRewardJson(resourceMissionJson.getType(), amount);
+                    ResourceRewardJson resourceRewardJson = new ResourceRewardJson(resourceMissionJson.isMi(), resourceMissionJson.getType(), resourceMissionJson.getMiID(), amount);
                     ClaimEntry claimEntry = new ClaimEntry(UUID.randomUUID(), UUID.fromString(playerUUID), RewardType.RESOURCE, resourceRewardJson, instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
                     ClaimDao.getInstance().addAndMerge(claimEntry);
                 }

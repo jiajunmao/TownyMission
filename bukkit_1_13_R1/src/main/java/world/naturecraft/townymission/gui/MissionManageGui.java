@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.config.mission.MissionConfigParser;
@@ -25,6 +24,7 @@ import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
+import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;

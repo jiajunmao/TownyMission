@@ -10,11 +10,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 
 import java.util.ArrayList;
@@ -113,15 +113,9 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
         List<String> tabList = new ArrayList<>();
 
         if (args.length == 3) {
-            if (!args[2].equals("")) {
-                for (MissionType e : MissionType.values()) {
-                    if (e.name().contains(args[2].toUpperCase(Locale.ROOT))) {
-                        tabList.add(e.name().toUpperCase(Locale.ROOT));
-                    }
-                }
-            } else {
-                for (MissionType e : MissionType.values()) {
-                    tabList.add(e.name().toUpperCase(Locale.ROOT));
+            for (MissionType e : MissionType.values()) {
+                if (e.name().contains(args[2])) {
+                    tabList.add(e.name());
                 }
             }
         }

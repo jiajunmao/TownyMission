@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.utils.RankUtil;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.RankType;
@@ -13,6 +12,7 @@ import world.naturecraft.townymission.components.json.rank.RankJson;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.data.dao.SprintHistoryDao;
+import world.naturecraft.townymission.utils.RankUtil;
 
 import java.util.List;
 import java.util.UUID;

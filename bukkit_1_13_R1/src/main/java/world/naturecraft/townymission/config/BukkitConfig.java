@@ -7,7 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
-import world.naturecraft.townymission.config.TownyMissionConfig;
 
 import java.io.File;
 import java.io.IOException;

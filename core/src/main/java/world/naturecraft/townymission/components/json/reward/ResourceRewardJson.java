@@ -19,8 +19,12 @@ import java.util.Locale;
  */
 public class ResourceRewardJson extends RewardJson {
 
+    @JsonProperty("isMi")
+    private final boolean isMi;
     @JsonProperty("type")
     private final String type;
+    @JsonProperty("miID")
+    private final String miID;
     @JsonProperty("amount")
     private int amount;
 
@@ -30,10 +34,21 @@ public class ResourceRewardJson extends RewardJson {
      * @param type   the type
      * @param amount the amount
      */
+    @ConstructorProperties({"isMi", "type", "miID", "amount"})
+    public ResourceRewardJson(boolean isMi, String type, String miID, int amount) {
+        super(RewardType.RESOURCE);
+        this.isMi = isMi;
+        this.type = type;
+        this.miID = miID;
+        this.amount = amount;
+    }
+
     @ConstructorProperties({"type", "amount"})
     public ResourceRewardJson(String type, int amount) {
         super(RewardType.RESOURCE);
+        this.isMi = false;
         this.type = type;
+        this.miID = null;
         this.amount = amount;
     }
 
@@ -49,6 +64,11 @@ public class ResourceRewardJson extends RewardJson {
         return new ObjectMapper().readValue(json, ResourceRewardJson.class);
     }
 
+    @JsonProperty("isMi")
+    public boolean isMi() {
+        return isMi;
+    }
+
     /**
      * Gets type.
      *
@@ -57,6 +77,11 @@ public class ResourceRewardJson extends RewardJson {
     @JsonProperty("type")
     public String getType() {
         return type;
+    }
+
+    @JsonProperty("miID")
+    public String getMiID() {
+        return miID;
     }
 
     @JsonProperty("amount")
@@ -71,6 +96,9 @@ public class ResourceRewardJson extends RewardJson {
 
     @JsonIgnore
     public String getDisplayLine() {
-        return Util.capitalizeFirst(type.toLowerCase(Locale.ROOT)) + " x" + amount;
+        if (isMi) {
+            return "&3" + Util.capitalizeFirst(miID.toLowerCase(Locale.ROOT)) + " &fx" + amount;
+        }
+        return "&3" + Util.capitalizeFirst(type.toLowerCase(Locale.ROOT)) + " &fx" + amount;
     }
 }

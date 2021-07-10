@@ -2,33 +2,31 @@ package world.naturecraft.townymission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.*;
-import world.naturecraft.townymission.config.BukkitConfig;
-import world.naturecraft.townymission.config.reward.RewardConfigValidator;
-import world.naturecraft.townymission.gui.MissionManageGui;
-import world.naturecraft.townymission.listeners.TownFallListener;
-import world.naturecraft.townymission.listeners.mission.ExpansionListener;
-import world.naturecraft.townymission.listeners.mission.MobListener;
-import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
-import world.naturecraft.townymission.listeners.mission.VoteListener;
-import world.naturecraft.townymission.listeners.DoMissionListener;
-import world.naturecraft.townymission.listeners.PMCListener;
-import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
-import world.naturecraft.townymission.utils.BukkitUtil;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.enums.ServerType;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.config.mission.MissionConfig;
+import world.naturecraft.townymission.config.BukkitConfig;
 import world.naturecraft.townymission.config.TownyMissionConfig;
+import world.naturecraft.townymission.config.mission.MissionConfig;
+import world.naturecraft.townymission.config.reward.RewardConfigValidator;
+import world.naturecraft.townymission.gui.MissionManageGui;
+import world.naturecraft.townymission.listeners.DoMissionListener;
+import world.naturecraft.townymission.listeners.PMCListener;
+import world.naturecraft.townymission.listeners.TownFallListener;
+import world.naturecraft.townymission.listeners.mission.ExpansionListener;
+import world.naturecraft.townymission.listeners.mission.MobListener;
+import world.naturecraft.townymission.listeners.mission.VoteListener;
+import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
+import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.tasks.SendCachedMissionTask;
+import world.naturecraft.townymission.utils.BukkitUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -116,11 +114,10 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * This is saving the config.yml (Default config)
          */
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission and rewards config"));
         try {
             // If bungeecord and not main server, don't save
             if (!isBungeecordEnabled || isMainServer) {
-                logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission&stats config"));
+                logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission and rewards config"));
                 missionConfig = new MissionConfig();
                 statsConfig = new BukkitConfig("datastore/stats.yml");
             }
@@ -338,7 +335,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         this.reloadConfig();
         langConfig = new BukkitConfig("lang.yml");
         missionConfig = new MissionConfig();
-        statsConfig = new BukkitConfig("world/naturecraft/townymission/bukkit/src/main/resources/datastore/stats.yml");
+        statsConfig = new BukkitConfig("datastore/stats.yml");
     }
 
     /**

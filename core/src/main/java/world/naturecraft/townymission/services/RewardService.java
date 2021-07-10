@@ -86,16 +86,25 @@ public class RewardService extends TownyMissionService {
             case RESOURCE:
                 ResourceRewardJson resourceRewardJson = (ResourceRewardJson) rewardJson;
                 String material = resourceRewardJson.getType();
+                String miID = resourceRewardJson.getMiID();
                 int amount = resourceRewardJson.getAmount();
                 int slotsRequired = amount / 64 + 1;
 
                 if (PlayerService.getInstance().getNumEmptySlot(playerUUID) >= slotsRequired) {
                     while (amount > 64) {
-                        PlayerService.getInstance().addItem(playerUUID, material, 64);
+                        if (resourceRewardJson.isMi()) {
+                            MMOService.getInstance().addMiItem(playerUUID, material, miID, 64);
+                        } else {
+                            PlayerService.getInstance().addItem(playerUUID, material, 64);
+                        }
                         amount -= 64;
                     }
 
-                    PlayerService.getInstance().addItem(playerUUID, material, amount);
+                    if (resourceRewardJson.isMi()) {
+                        MMOService.getInstance().addMiItem(playerUUID, material, miID, amount);
+                    } else {
+                        PlayerService.getInstance().addItem(playerUUID, material, amount);
+                    }
                     ClaimDao.getInstance().remove(claimEntry);
                 } else {
                     throw new NotEnoughInvSlotException();

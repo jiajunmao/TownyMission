@@ -1,9 +1,8 @@
 package world.naturecraft.townymission.services;
 
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.services.TaskService;
+import world.naturecraft.townymission.TownyMissionInstance;
 
 /**
  * The type Task service.

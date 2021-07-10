@@ -6,8 +6,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.utils.BukkitChecker;
 
 import java.util.Date;
 import java.util.List;
@@ -46,7 +46,7 @@ public class TownyMissionAdminPauseSeason extends TownyMissionAdminCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (commandSender instanceof Player) {
-            Player player = (Player)commandSender;
+            Player player = (Player) commandSender;
             if (!sanityCheck(player, strings)) return false;
 
             instance.getStatsConfig().set("season.pausedTime", new Date().getTime());

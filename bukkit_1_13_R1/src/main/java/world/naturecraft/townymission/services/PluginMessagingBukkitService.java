@@ -4,10 +4,9 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.PluginMessage;
-import world.naturecraft.townymission.services.PluginMessagingService;
 
 import java.util.ArrayList;
 import java.util.List;
