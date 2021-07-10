@@ -35,6 +35,7 @@
             <groupId>world.naturecraft</groupId>
             <artifactId>TownyMission-core</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
