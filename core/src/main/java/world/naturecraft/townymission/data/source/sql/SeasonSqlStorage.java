@@ -1,6 +1,8 @@
 package world.naturecraft.townymission.data.source.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -100,8 +102,20 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
         if (cached) {
             SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, seasonPoint, season);
             memCache.put(seasonEntry.getId(), seasonEntry);
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(townUUID, seasonPoint, season);
+                }
+            };
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
+
+        addRemote(townUUID, seasonPoint, season);
+    }
+
+    private void addRemote(UUID townUUID, int seasonPoint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -126,8 +140,21 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
         if (cached) {
             SeasonEntry seasonEntry = new SeasonEntry(uuid, townUUID, seasonPoint, season);
             memCache.put(seasonEntry.getId(), seasonEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(uuid, townUUID, seasonPoint, season);
+                }
+            };
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
+
+        updateRemote(uuid, townUUID, seasonPoint, season);
+    }
+
+    private void updateRemote(UUID uuid, UUID townUUID, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +
@@ -138,5 +165,9 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
             p.executeUpdate();
             return null;
         });
+    }
+
+    public void update(SeasonEntry data) {
+        update(data.getId(), data.getTownUUID(), data.getSeasonPoint(), data.getSeason());
     }
 }

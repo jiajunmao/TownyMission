@@ -6,6 +6,8 @@ package world.naturecraft.townymission.data.source.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -104,9 +106,20 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
         if (cached) {
             CooldownEntry cooldownEntry = new CooldownEntry(UUID.randomUUID(), townUUID, cooldownJsonList);
             memCache.put(cooldownEntry.getId(), cooldownEntry);
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(townUUID, cooldownJsonList);
+                }
+            };
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        addRemote(townUUID, cooldownJsonList);
+    }
+
+    private void addRemote(UUID townUUID, String cooldownJsonList) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -128,9 +141,21 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
         if (cached) {
             CooldownEntry cooldownEntry = new CooldownEntry(uuid, townUUID, cooldownJsonList);
             memCache.put(cooldownEntry.getId(), cooldownEntry);
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(uuid, townUUID, cooldownJsonList);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        updateRemote(uuid, townUUID, cooldownJsonList);
+    }
+
+    private void updateRemote(UUID uuid, UUID townUUID, String cooldownJsonList) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_uuid='" + townUUID +
@@ -140,5 +165,9 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
             p.executeUpdate();
             return null;
         });
+    }
+
+    public void update(CooldownEntry data) {
+        update(data.getId(), data.getTownUUID(), data.getCooldownsAsString());
     }
 }

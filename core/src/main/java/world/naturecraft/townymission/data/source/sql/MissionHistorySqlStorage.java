@@ -2,6 +2,8 @@ package world.naturecraft.townymission.data.source.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -123,9 +125,21 @@ public class MissionHistorySqlStorage extends SqlStorage<MissionHistoryEntry> im
                     UUID.randomUUID(), missionType, addedTime, startedTime, allowedTime,
                     taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
             memCache.put(missionHistoryEntry.getId(), missionHistoryEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+                }
+            };
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        addRemote(missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+    }
+
+    private void addRemote(String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -168,9 +182,22 @@ public class MissionHistorySqlStorage extends SqlStorage<MissionHistoryEntry> im
                     uuid, missionType, addedTime, startedTime, allowedTime,
                     taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
             memCache.put(missionHistoryEntry.getId(), missionHistoryEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(uuid, missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        updateRemote(uuid, missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+    }
+
+    private void updateRemote(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET task_type='" + missionType +
@@ -189,5 +216,9 @@ public class MissionHistorySqlStorage extends SqlStorage<MissionHistoryEntry> im
             p.executeUpdate();
             return null;
         });
+    }
+
+    public void update(MissionHistoryEntry data) {
+        update(data.getId(), data.getMissionType().name(), data.getAddedTime(), data.getStartedTime(), data.getAllowedTime(), data.getMissionJson().toJson(), data.getTownUUID(), data.getStartedPlayerUUID(), data.getCompletedTime(), data.isClaimed(), data.getSprint(), data.getSeason());
     }
 }

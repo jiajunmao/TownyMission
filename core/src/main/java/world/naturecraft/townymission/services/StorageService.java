@@ -2,6 +2,7 @@ package world.naturecraft.townymission.services;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.components.DataHolder;
@@ -33,8 +34,16 @@ public class StorageService {
     public StorageService() {
         this.instance = TownyMissionInstance.getInstance();
         this.storageType = instance.getStorageType();
+        boolean cache = instance.getInstanceConfig().getBoolean("database.mem-cache");
         dbMap = new HashMap<>();
         initializeMap();
+
+        if (storageType.equals(StorageType.MYSQL) && cache) {
+            instance.getInstanceLogger().info("&f Memory caching databases");
+            for (DbType dbType : DbType.values()) {
+                ((SqlStorage)dbMap.get(dbType)).cacheData();
+            }
+        }
     }
 
 

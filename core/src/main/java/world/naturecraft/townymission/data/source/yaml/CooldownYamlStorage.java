@@ -74,15 +74,11 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
             return entryList;
 
         for (String key : file.getConfigurationSection("").getKeys(false)) {
-            try {
-                entryList.add(new CooldownEntry(
-                        UUID.fromString(key),
-                        UUID.fromString(file.getString(key + ".townUUID")),
-                        file.getString(key + ".cooldownListJson")
-                ));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            entryList.add(new CooldownEntry(
+                    UUID.fromString(key),
+                    UUID.fromString(file.getString(key + ".townUUID")),
+                    file.getString(key + ".cooldownListJson")
+            ));
         }
 
         return entryList;

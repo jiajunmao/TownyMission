@@ -1,6 +1,8 @@
 package world.naturecraft.townymission.data.source.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -104,8 +106,22 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
         if (cached) {
             SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), townUUID, naturePoints, sprint, season);
             memCache.put(sprintEntry.getId(), sprintEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(townUUID, naturePoints, sprint, season);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
+
+        addRemote(townUUID, naturePoints, sprint, season);
+    }
+
+    private void addRemote(UUID townUUID, int naturePoints, int sprint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -132,8 +148,22 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
         if (cached) {
             SprintEntry sprintEntry = new SprintEntry(uuid, townUUID, naturePoints, sprint, season);
             memCache.put(sprintEntry.getId(), sprintEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(uuid, townUUID, naturePoints, sprint, season);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
+
+        updateRemote(uuid, townUUID, naturePoints, sprint, season);
+    }
+
+    private void updateRemote(UUID uuid, UUID townUUID, int naturePoints, int sprint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +
@@ -145,5 +175,9 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
             p.executeUpdate();
             return null;
         });
+    }
+
+    public void update(SprintEntry data) {
+        update(data.getId(), data.getTownUUID(), data.getNaturepoints(), data.getSprint(), data.getSeason());
     }
 }

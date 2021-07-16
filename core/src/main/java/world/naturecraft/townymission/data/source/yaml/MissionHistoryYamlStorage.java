@@ -113,24 +113,20 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
             return entryList;
 
         for (String key : file.getConfigurationSection("").getKeys(false)) {
-            try {
-                entryList.add(new MissionHistoryEntry(
-                        UUID.fromString(key),
-                        file.getString(key + ".missionType"),
-                        file.getLong(key + ".addedTime"),
-                        file.getLong(key + ".startedTime"),
-                        file.getLong(key + ".allowedTime"),
-                        file.getString(key + ".missionJson"),
-                        UUID.fromString(file.getString(key + ".townUUID")),
-                        UUID.fromString(file.getString(key + ".startedPlayerUUID")),
-                        file.getLong(key + ".completedTime"),
-                        file.getBoolean(key + ".isClaimed"),
-                        file.getInt(key + ".sprint"),
-                        file.getInt(key + ".season")
-                ));
-            } catch (JsonProcessingException e) {
-                throw new ConfigParsingException(e);
-            }
+            entryList.add(new MissionHistoryEntry(
+                    UUID.fromString(key),
+                    file.getString(key + ".missionType"),
+                    file.getLong(key + ".addedTime"),
+                    file.getLong(key + ".startedTime"),
+                    file.getLong(key + ".allowedTime"),
+                    file.getString(key + ".missionJson"),
+                    UUID.fromString(file.getString(key + ".townUUID")),
+                    UUID.fromString(file.getString(key + ".startedPlayerUUID")),
+                    file.getLong(key + ".completedTime"),
+                    file.getBoolean(key + ".isClaimed"),
+                    file.getInt(key + ".sprint"),
+                    file.getInt(key + ".season")
+            ));
         }
 
         return entryList;

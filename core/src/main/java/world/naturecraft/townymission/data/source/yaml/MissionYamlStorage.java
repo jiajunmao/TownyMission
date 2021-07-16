@@ -99,21 +99,17 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
             return entryList;
 
         for (String key : file.getConfigurationSection("").getKeys(false)) {
-            try {
-                String startedPlayerUUID = file.getString(key + ".startedPlayerUUID");
-                entryList.add(new MissionEntry(
-                        UUID.fromString(key),
-                        file.getString(key + ".missionType"),
-                        file.getLong(key + ".addedTime"),
-                        file.getLong(key + ".startedTime"),
-                        file.getLong(key + ".allowedTime"),
-                        file.getString(key + ".missionJson"),
-                        UUID.fromString(file.getString(key + ".townUUID")),
-                        startedPlayerUUID == null ? null : UUID.fromString(file.getString(key + ".startedPlayerUUID"))
-                ));
-            } catch (JsonProcessingException e) {
-                throw new ConfigParsingException(e);
-            }
+            String startedPlayerUUID = file.getString(key + ".startedPlayerUUID");
+            entryList.add(new MissionEntry(
+                    UUID.fromString(key),
+                    file.getString(key + ".missionType"),
+                    file.getLong(key + ".addedTime"),
+                    file.getLong(key + ".startedTime"),
+                    file.getLong(key + ".allowedTime"),
+                    file.getString(key + ".missionJson"),
+                    UUID.fromString(file.getString(key + ".townUUID")),
+                    startedPlayerUUID == null ? null : UUID.fromString(file.getString(key + ".startedPlayerUUID"))
+            ));
         }
 
         return entryList;

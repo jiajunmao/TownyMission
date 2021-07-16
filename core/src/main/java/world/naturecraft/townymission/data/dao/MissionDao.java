@@ -137,18 +137,14 @@ public class MissionDao extends Dao<MissionEntry> {
      * @throws DataProcessException the json processing exception
      */
     public void add(MissionEntry entry) {
-        try {
-            db.add(
-                    entry.getMissionType().name(),
-                    entry.getAddedTime(),
-                    entry.getStartedTime(),
-                    entry.getAllowedTime(),
-                    entry.getMissionJson().toJson(),
-                    entry.getTownUUID(),
-                    entry.getStartedPlayerUUID());
-        } catch (JsonProcessingException e) {
-            throw new DataProcessException(e);
-        }
+        db.add(
+                entry.getMissionType().name(),
+                entry.getAddedTime(),
+                entry.getStartedTime(),
+                entry.getAllowedTime(),
+                entry.getMissionJson().toJson(),
+                entry.getTownUUID(),
+                entry.getStartedPlayerUUID());
     }
 
     /**
@@ -172,7 +168,6 @@ public class MissionDao extends Dao<MissionEntry> {
      * @throws DataProcessException the json processing exception
      */
     public void update(MissionEntry entry) {
-        try {
             db.update(
                     entry.getId(),
                     entry.getMissionType().name(),
@@ -182,8 +177,5 @@ public class MissionDao extends Dao<MissionEntry> {
                     entry.getMissionJson().toJson(),
                     entry.getTownUUID(),
                     entry.getStartedPlayerUUID());
-        } catch (JsonProcessingException e) {
-            throw new DataProcessException(e);
-        }
     }
 }

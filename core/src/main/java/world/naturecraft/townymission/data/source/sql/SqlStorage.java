@@ -1,6 +1,7 @@
 package world.naturecraft.townymission.data.source.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.DataEntity;
 import world.naturecraft.townymission.components.entity.SprintEntry;
@@ -8,6 +9,7 @@ import world.naturecraft.townymission.components.entity.SprintEntry;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -88,7 +90,7 @@ public abstract class SqlStorage<T extends DataEntity> {
         T doConnection(Connection conn) throws SQLException;
     }
 
-    protected void cacheData() {
+    public void cacheData() {
         memCache = new HashMap<>();
         for (T entry : getEntries()) {
             memCache.put(entry.getId(), entry);
@@ -99,9 +101,22 @@ public abstract class SqlStorage<T extends DataEntity> {
     public void remove(UUID id) {
         if (cached) {
             memCache.remove(id);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    removeRemote(id);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        removeRemote(id);
+    }
+
+    public void removeRemote(UUID id) {
         execute(conn -> {
             String sql = "DELETE FROM " + tableName + " WHERE (" +
                     "uuid='" + id + "');";
@@ -109,5 +124,16 @@ public abstract class SqlStorage<T extends DataEntity> {
             p.executeUpdate();
             return null;
         });
+    }
+
+    public abstract void update(T data);
+
+    public void writeBack() {
+        if (!cached) return;
+
+        List<T> list = new ArrayList<>(memCache.values());
+        for (T entry : list) {
+            update(entry);
+        }
     }
 }

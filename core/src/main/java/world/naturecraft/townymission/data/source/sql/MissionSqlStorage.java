@@ -2,6 +2,7 @@ package world.naturecraft.townymission.data.source.sql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -116,9 +117,20 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
             MissionEntry missionEntry = new MissionEntry(
                     UUID.randomUUID(), missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
             memCache.put(missionEntry.getId(), missionEntry);
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+                }
+            };
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+    }
+
+    private void addRemote(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -152,9 +164,22 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
             MissionEntry missionEntry = new MissionEntry(
                     id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
             memCache.put(missionEntry.getId(), missionEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+                }
+            };
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
+
             return;
         }
 
+        updateRemote(id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+    }
+
+    private void updateRemote(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET task_type='" + missionType +
@@ -169,5 +194,9 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
             p.executeUpdate();
             return null;
         });
+    }
+
+    public void update(MissionEntry data) {
+        update(data.getId(), data.getMissionType().name(), data.getAddedTime(), data.getStartedTime(), data.getAllowedTime(), data.getMissionJson().toJson(), data.getTownUUID(), data.getStartedPlayerUUID());
     }
 }

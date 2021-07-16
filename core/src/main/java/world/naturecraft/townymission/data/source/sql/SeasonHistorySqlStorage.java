@@ -1,6 +1,10 @@
 package world.naturecraft.townymission.data.source.sql;
 
+import com.earth2me.essentials.signs.SignBuy;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -96,8 +100,22 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
         if (cached) {
             SeasonHistoryEntry seasonHistoryEntry = new SeasonHistoryEntry(UUID.randomUUID(), season, startedTime, rankJson);
             memCache.put(seasonHistoryEntry.getId(), seasonHistoryEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(season, startedTime, rankJson);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
+
+        addRemote(season, startedTime, rankJson);
+    }
+
+    private void addRemote(int season, long startedTime, String rankJson) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -122,9 +140,22 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
         if (cached) {
             SeasonHistoryEntry seasonHistoryEntry = new SeasonHistoryEntry(uuid, season, startedTime, rankJson);
             memCache.put(seasonHistoryEntry.getId(), seasonHistoryEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(uuid, season, startedTime, rankJson);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        updateRemote(uuid, season, startedTime, rankJson);
+    }
+
+    private void updateRemote(UUID uuid, int season, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + season +
@@ -135,5 +166,10 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
             p.executeUpdate();
             return null;
         });
+    }
+
+
+    public void update(SeasonHistoryEntry data) {
+        update(data.getId(), data.getSeason(), data.getStartTime(), data.getRankJson());
     }
 }

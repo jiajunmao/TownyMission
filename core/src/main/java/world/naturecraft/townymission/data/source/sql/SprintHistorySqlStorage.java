@@ -1,6 +1,8 @@
 package world.naturecraft.townymission.data.source.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -99,8 +101,22 @@ public class SprintHistorySqlStorage extends SqlStorage<SprintHistoryEntry> impl
         if (cached) {
             SprintHistoryEntry sprintHistoryEntry = new SprintHistoryEntry(UUID.randomUUID(), season, sprint, startedTime, rankJson);
             memCache.put(sprintHistoryEntry.getId(), sprintHistoryEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(season, sprint, startedTime, rankJson);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
+
+        addRemote(season, sprint, startedTime, rankJson);
+    }
+
+    public void addRemote(int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -127,8 +143,22 @@ public class SprintHistorySqlStorage extends SqlStorage<SprintHistoryEntry> impl
         if (cached) {
             SprintHistoryEntry sprintHistoryEntry = new SprintHistoryEntry(uuid, season, sprint, startedTime, rankJson);
             memCache.put(sprintHistoryEntry.getId(), sprintHistoryEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(uuid, season, sprint, startedTime, rankJson);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
+
+        updateRemote(uuid, season, sprint, startedTime, rankJson);
+    }
+
+    private void updateRemote(UUID uuid, int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + season +
@@ -140,5 +170,9 @@ public class SprintHistorySqlStorage extends SqlStorage<SprintHistoryEntry> impl
             p.executeUpdate();
             return null;
         });
+    }
+
+    public void update(SprintHistoryEntry data) {
+        update(data.getId(), data.getSeason(), data.getSprint(), data.getStartedTime(), data.getRankJson());
     }
 }

@@ -26,8 +26,6 @@ database:
   password:
   # Set this to true to cache database in memory, faster operation at the cost of more memory usage
   mem-cache: true
-  # Period where the data in memory is wrote back to db
-  writeback: 600
 
 # Settings for participants in the sprint/season
 participants:

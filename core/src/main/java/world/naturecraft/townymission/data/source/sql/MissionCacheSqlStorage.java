@@ -1,6 +1,8 @@
 package world.naturecraft.townymission.data.source.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -86,9 +88,22 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
         if (cached) {
             MissionCacheEntry missionCacheEntry = new MissionCacheEntry(UUID.randomUUID(), playerUUID, missionType, amount);
             memCache.put(missionCacheEntry.getId(), missionCacheEntry);
+
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addRemote(playerUUID, missionType, amount);
+                }
+            };
+
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
+        addRemote(playerUUID, missionType, amount);
+    }
+
+    private void addRemote(UUID playerUUID, MissionType missionType, int amount) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -101,15 +116,25 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
         });
     }
 
-    /**
-     * Remove.
-     *
-     * @param id the id
-     */
-
-
     @Override
     public void update(UUID uuid, UUID playerUUID, MissionType missionType, int amount) {
+        if (cached) {
+            MissionCacheEntry missionCacheEntry = new MissionCacheEntry(uuid, playerUUID, missionType, amount);
+            memCache.put(missionCacheEntry.getId(), missionCacheEntry);
+            BukkitRunnable r = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    updateRemote(uuid, playerUUID, missionType, amount);
+                }
+            };
+            r.runTaskAsynchronously(TownyMissionInstance.getInstance());
+            return;
+        }
+
+        updateRemote(uuid, playerUUID, missionType, amount);
+    }
+
+    private void updateRemote(UUID uuid, UUID playerUUID, MissionType missionType, int amount) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET player_uuid='" + playerUUID.toString() +
@@ -120,5 +145,9 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
             p.executeUpdate();
             return null;
         });
+    }
+
+    public void update(MissionCacheEntry data) {
+        update(data.getId(), data.getPlayerUUID(), data.getMissionType(), data.getAmount());
     }
 }
