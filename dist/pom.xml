@@ -2,12 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>world.naturecraft</groupId>
     <artifactId>TownyMission-dist</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>world.naturecraft</groupId>
         <artifactId>TownyMission-parent</artifactId>
-        <version>1.1.2-SNAPSHOT</version>
+        <version>1.1.2</version>
     </parent>
     <build>
         <directory>../target</directory>
