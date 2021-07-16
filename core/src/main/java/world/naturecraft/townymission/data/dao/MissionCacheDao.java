@@ -7,7 +7,7 @@ package world.naturecraft.townymission.data.dao;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.db.MissionCacheStorage;
+import world.naturecraft.townymission.data.storage.MissionCacheStorage;
 import world.naturecraft.townymission.services.StorageService;
 
 /**
@@ -71,5 +71,10 @@ public class MissionCacheDao extends Dao<MissionCacheEntry> {
                 entry.getPlayerUUID(),
                 entry.getMissionType(),
                 entry.getAmount());
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new MissionCacheDao();
     }
 }

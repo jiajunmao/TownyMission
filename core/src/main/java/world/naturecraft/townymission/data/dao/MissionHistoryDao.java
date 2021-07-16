@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.db.MissionHistoryStorage;
+import world.naturecraft.townymission.data.storage.MissionHistoryStorage;
 import world.naturecraft.townymission.services.StorageService;
 
 import java.util.ArrayList;
@@ -63,43 +63,40 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
     }
 
     public void add(MissionHistoryEntry entry) {
-        try {
-            db.add(entry.getMissionType().name(),
-                    entry.getAddedTime(),
-                    entry.getStartedTime(),
-                    entry.getAllowedTime(),
-                    entry.getMissionJson().toJson(),
-                    entry.getTownUUID(),
-                    entry.getStartedPlayerUUID(),
-                    entry.getCompletedTime(),
-                    entry.isClaimed(),
-                    entry.getSprint(),
-                    entry.getSeason());
-        } catch (JsonProcessingException e) {
-            throw new DataProcessException(e);
-        }
+        db.add(entry.getMissionType().name(),
+                entry.getAddedTime(),
+                entry.getStartedTime(),
+                entry.getAllowedTime(),
+                entry.getMissionJson().toJson(),
+                entry.getTownUUID(),
+                entry.getStartedPlayerUUID(),
+                entry.getCompletedTime(),
+                entry.isClaimed(),
+                entry.getSprint(),
+                entry.getSeason());
     }
 
     public void remove(MissionHistoryEntry entry) {
         db.remove(entry.getId());
     }
 
+    @Override
+    public void reloadDb() {
+        singleton = new MissionHistoryDao();
+    }
+
     public void update(MissionHistoryEntry entry) {
-        try {
-            db.update(entry.getId(),
-                    entry.getMissionType().name(),
-                    entry.getAddedTime(),
-                    entry.getStartedTime(),
-                    entry.getAllowedTime(),
-                    entry.getMissionJson().toJson(),
-                    entry.getTownUUID(),
-                    entry.getStartedPlayerUUID(),
-                    entry.getCompletedTime(),
-                    entry.isClaimed(),
-                    entry.getSprint(),
-                    entry.getSeason());
-        } catch (JsonProcessingException e) {
-            throw new DataProcessException(e);
-        }
+        db.update(entry.getId(),
+                entry.getMissionType().name(),
+                entry.getAddedTime(),
+                entry.getStartedTime(),
+                entry.getAllowedTime(),
+                entry.getMissionJson().toJson(),
+                entry.getTownUUID(),
+                entry.getStartedPlayerUUID(),
+                entry.getCompletedTime(),
+                entry.isClaimed(),
+                entry.getSprint(),
+                entry.getSeason());
     }
 }

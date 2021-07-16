@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.db.SeasonHistoryStorage;
+import world.naturecraft.townymission.data.storage.SeasonHistoryStorage;
 import world.naturecraft.townymission.services.StorageService;
 
 import java.util.List;
@@ -85,5 +85,10 @@ public class SeasonHistoryDao extends Dao<SeasonHistoryEntry> {
     @Override
     public void remove(SeasonHistoryEntry data) {
         db.remove(data.getId());
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new SeasonHistoryDao();
     }
 }

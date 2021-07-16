@@ -83,9 +83,9 @@ public class ClaimEntry extends DataEntity {
     /**
      * Sets player uuid.
      *
-     * @param player the player
+     * @param playerUUID the player
      */
-    public void setPlayerUUID(Player player) {
+    public void setPlayerUUID(UUID playerUUID) {
         this.playerUUID = playerUUID;
     }
 

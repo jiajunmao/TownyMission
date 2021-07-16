@@ -5,7 +5,7 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.entity.DataEntity;
-import world.naturecraft.townymission.data.db.Storage;
+import world.naturecraft.townymission.data.storage.Storage;
 import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.ArrayList;
@@ -76,4 +76,6 @@ public abstract class Dao<T extends DataEntity> {
      * @param data the data
      */
     public abstract void remove(T data);
+
+    public abstract void reloadDb();
 }

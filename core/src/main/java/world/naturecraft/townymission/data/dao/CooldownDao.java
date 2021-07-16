@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.db.CooldownStorage;
+import world.naturecraft.townymission.data.storage.CooldownStorage;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.utils.EntryFilter;
 
@@ -85,5 +85,10 @@ public class CooldownDao extends Dao<CooldownEntry> {
         for (CooldownEntry entry : entries) {
             remove(entry);
         }
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new CooldownDao();
     }
 }

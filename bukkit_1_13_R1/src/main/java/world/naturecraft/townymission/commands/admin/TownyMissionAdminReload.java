@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.data.yaml.*;
+import world.naturecraft.townymission.data.source.yaml.*;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
