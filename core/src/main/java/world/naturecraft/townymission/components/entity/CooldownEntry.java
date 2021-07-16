@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.json.cooldown.CooldownListJson;
 
@@ -38,12 +39,16 @@ public class CooldownEntry extends DataEntity {
      * @param id               the id
      * @param townUUID         the town uuid
      * @param cooldownJsonList the cooldown json list
-     * @throws JsonProcessingException the json processing exception
+     * @throws ConfigParsingException the json processing exception
      */
-    public CooldownEntry(UUID id, UUID townUUID, String cooldownJsonList) throws JsonProcessingException {
+    public CooldownEntry(UUID id, UUID townUUID, String cooldownJsonList) {
         super(id, DbType.COOLDOWN);
         this.townUUID = townUUID;
-        this.cooldownJsonList = CooldownListJson.parse(cooldownJsonList);
+        try {
+            this.cooldownJsonList = CooldownListJson.parse(cooldownJsonList);
+        } catch (JsonProcessingException e) {
+            throw new ConfigParsingException(e);
+        }
     }
 
     /**

@@ -6,7 +6,7 @@ package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.db.SprintHistoryStorage;
+import world.naturecraft.townymission.data.storage.SprintHistoryStorage;
 import world.naturecraft.townymission.services.StorageService;
 
 import java.util.List;
@@ -86,5 +86,10 @@ public class SprintHistoryDao extends Dao<SprintHistoryEntry> {
     @Override
     public void remove(SprintHistoryEntry data) {
         db.remove(data.getId());
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new SprintHistoryDao();
     }
 }

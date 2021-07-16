@@ -5,7 +5,7 @@ import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.RewardType;
-import world.naturecraft.townymission.data.db.ClaimStorage;
+import world.naturecraft.townymission.data.storage.ClaimStorage;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.utils.EntryFilter;
 
@@ -81,6 +81,11 @@ public class ClaimDao extends Dao<ClaimEntry> {
     @Override
     public void remove(ClaimEntry data) {
         db.remove(data.getId());
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new ClaimDao();
     }
 
     public void addAndMerge(ClaimEntry entry) {

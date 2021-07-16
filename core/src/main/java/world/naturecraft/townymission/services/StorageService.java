@@ -8,9 +8,9 @@ import world.naturecraft.townymission.components.DataHolder;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.config.TownyMissionConfig;
-import world.naturecraft.townymission.data.db.Storage;
-import world.naturecraft.townymission.data.sql.*;
-import world.naturecraft.townymission.data.yaml.*;
+import world.naturecraft.townymission.data.storage.Storage;
+import world.naturecraft.townymission.data.source.sql.*;
+import world.naturecraft.townymission.data.source.yaml.*;
 
 import java.util.HashMap;
 import java.util.Map;

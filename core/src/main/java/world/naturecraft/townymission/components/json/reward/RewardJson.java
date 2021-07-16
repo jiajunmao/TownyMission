@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RewardType;
@@ -102,11 +103,14 @@ public abstract class RewardJson implements Rankable {
      * To json string.
      *
      * @return the string
-     * @throws JsonProcessingException the json processing exception
      */
     @JsonIgnore
-    public String toJson() throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(this);
+    public String toJson() {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new ConfigParsingException(e);
+        }
     }
 
     /**

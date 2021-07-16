@@ -2,6 +2,7 @@ package world.naturecraft.townymission.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
@@ -74,13 +75,17 @@ public class MissionHistoryEntry extends DataEntity {
      * @param claimed           the claimed
      * @param sprint            the sprint
      * @param season            the season
-     * @throws JsonProcessingException the json processing exception
+     * @throws ConfigParsingException the json processing exception
      */
     public MissionHistoryEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime,
                                String missionJson, UUID townUUID, UUID startedPlayerUUID, long completedTime,
-                               boolean claimed, int sprint, int season) throws JsonProcessingException {
+                               boolean claimed, int sprint, int season) throws ConfigParsingException {
         this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, townUUID, startedPlayerUUID, completedTime, claimed, sprint, season);
-        this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
+        try {
+            this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
+        } catch (JsonProcessingException e) {
+            throw new ConfigParsingException(e);
+        }
     }
 
     /**

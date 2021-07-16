@@ -9,7 +9,7 @@ import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.data.db.MissionStorage;
+import world.naturecraft.townymission.data.storage.MissionStorage;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.utils.EntryFilter;
 
@@ -158,6 +158,11 @@ public class MissionDao extends Dao<MissionEntry> {
      */
     public void remove(MissionEntry entry) {
         db.remove(entry.getId());
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new MissionDao();
     }
 
     /**
