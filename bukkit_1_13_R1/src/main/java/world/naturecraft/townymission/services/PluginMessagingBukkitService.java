@@ -64,6 +64,7 @@ public class PluginMessagingBukkitService extends PluginMessagingService {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(message.getChannel());
         out.writeUTF(message.getMessageUUID().toString());
+        out.writeLong(message.getTimestamp());
         out.writeInt(message.getSize());
         for (String str : message.getData()) {
             out.writeUTF(str);

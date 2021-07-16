@@ -91,6 +91,10 @@ public class Util {
         return milliseconds / 1000 * 20;
     }
 
+    public static long msToS(long milliseconds) {
+        return milliseconds/1000;
+    }
+
     public static String formatMilliseconds(long millis) {
         return String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(millis),

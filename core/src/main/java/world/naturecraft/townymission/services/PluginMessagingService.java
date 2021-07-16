@@ -42,20 +42,16 @@ public abstract class PluginMessagingService {
      */
     public static PluginMessagingService getInstance() {
         if (singleton == null) {
-            if (TownyMissionInstanceType.isBukkit()) {
+            try {
                 String packageName = PluginMessagingService.class.getPackage().getName();
-                try {
+
+                if (TownyMissionInstanceType.isBukkit()) {
                     singleton = (PluginMessagingService) Class.forName(packageName + "." + "PluginMessagingBukkitService").newInstance();
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                String packageName = PluginMessagingService.class.getPackage().getName();
-                try {
+                } else {
                     singleton = (PluginMessagingService) Class.forName(packageName + "." + "PluginMessagingBungeeService").newInstance();
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
                 }
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
 
@@ -82,6 +78,7 @@ public abstract class PluginMessagingService {
         PluginMessage message = new PluginMessage()
                 .channel(in.readUTF())
                 .messageUUID(UUID.fromString(in.readUTF()))
+                .timestamp(in.readLong())
                 .dataSize(in.readInt());
 
         int size = message.getSize();

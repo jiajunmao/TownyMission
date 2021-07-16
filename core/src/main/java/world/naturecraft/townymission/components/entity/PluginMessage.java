@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.components.entity;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -8,6 +9,7 @@ import java.util.UUID;
 public class PluginMessage {
 
     private String channel;
+    private long timestamp;
     private UUID messageUUID;
     private int size;
     private String[] data;
@@ -25,6 +27,8 @@ public class PluginMessage {
         this.messageUUID = messageUUID;
         this.size = size;
         this.data = data;
+        // Create the timestamp this message is created
+        timestamp = new Date().getTime();
     }
 
     /**
@@ -52,6 +56,11 @@ public class PluginMessage {
      */
     public PluginMessage messageUUID(UUID id) {
         this.messageUUID = id;
+        return this;
+    }
+
+    public PluginMessage timestamp(long timestamp) {
+        this.timestamp = timestamp;
         return this;
     }
 
@@ -111,5 +120,9 @@ public class PluginMessage {
      */
     public String[] getData() {
         return data;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 }

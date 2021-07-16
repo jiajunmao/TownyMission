@@ -13,7 +13,9 @@ import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.PluginMessagingService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
+import world.naturecraft.townymission.utils.Util;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -33,12 +35,15 @@ public class PMCListener implements PluginMessageListener {
     @Override
     public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, @NotNull byte[] message) {
 
-        System.out.println("Received a PMC message");
         if (!channel.equalsIgnoreCase("townymission:main")) return;
-        System.out.println("Received something on townymission:main");
 
         TownyMissionBukkit instance = TownyMissionInstance.getInstance();
         PluginMessage request = PluginMessagingService.parseData(message);
+
+        // Ignore if the message has been sent 3 seconds ago, 5s is the mark for other server to cache
+        long timeDiff = new Date().getTime() - request.getTimestamp();
+        if (Util.msToS(timeDiff) > 3) return;
+
         String subchannel = request.getChannel();
 
         if (subchannel.equalsIgnoreCase("config:response")) {
