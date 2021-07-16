@@ -2,12 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>world.naturecraft</groupId>
     <artifactId>TownyMission-bungee</artifactId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.1.3</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>world.naturecraft</groupId>
         <artifactId>TownyMission-parent</artifactId>
-        <version>1.1.3-SNAPSHOT</version>
+        <version>1.1.3</version>
     </parent>
 
     <build>
