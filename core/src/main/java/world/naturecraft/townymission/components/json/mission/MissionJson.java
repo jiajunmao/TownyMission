@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.util.HashMap;
@@ -70,10 +71,14 @@ public abstract class MissionJson {
      * To json string.
      *
      * @return the string
-     * @throws JsonProcessingException the json processing exception
+     * @throws ConfigParsingException the json processing exception
      */
-    public String toJson() throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(this);
+    public String toJson() throws ConfigParsingException {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new ConfigParsingException(e);
+        }
     }
 
     /**

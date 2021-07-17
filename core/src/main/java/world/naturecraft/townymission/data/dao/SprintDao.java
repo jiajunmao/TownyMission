@@ -7,7 +7,7 @@ package world.naturecraft.townymission.data.dao;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
-import world.naturecraft.townymission.data.db.SprintStorage;
+import world.naturecraft.townymission.data.storage.SprintStorage;
 import world.naturecraft.townymission.services.StorageService;
 
 import java.util.ArrayList;
@@ -51,6 +51,11 @@ public class SprintDao extends Dao<SprintEntry> {
     @Override
     public void remove(SprintEntry data) {
         database.remove(data.getId());
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new SprintDao();
     }
 
     public void add(SprintEntry entry) {

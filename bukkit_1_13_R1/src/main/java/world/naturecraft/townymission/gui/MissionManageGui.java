@@ -85,22 +85,18 @@ public class MissionManageGui extends TownyMissionGui {
         for (int i = 0; i < diff; i++) {
             int index = rand.nextInt(size);
             MissionJson mission = missions.get(index);
-            try {
-                MissionEntry entry = new MissionEntry(
-                        UUID.randomUUID(),
-                        mission.getMissionType().name(),
-                        Util.currentTime(),
-                        0,
-                        Util.hrToMs(mission.getHrAllowed()),
-                        mission.toJson(),
-                        town.getUUID(),
-                        null);
-                newlyAddedMissions.add(entry);
-                // Async this in the future and handle concurrency issue with click event
-                MissionDao.getInstance().add(entry);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            MissionEntry entry = new MissionEntry(
+                    UUID.randomUUID(),
+                    mission.getMissionType().name(),
+                    Util.currentTime(),
+                    0,
+                    Util.hrToMs(mission.getHrAllowed()),
+                    mission.toJson(),
+                    town.getUUID(),
+                    null);
+            newlyAddedMissions.add(entry);
+            // Async this in the future and handle concurrency issue with click event
+            MissionDao.getInstance().add(entry);
         }
 
 

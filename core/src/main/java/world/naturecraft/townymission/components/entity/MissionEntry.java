@@ -6,6 +6,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
@@ -66,13 +67,17 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      * @param missionJson       the mission json
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player name
-     * @throws JsonProcessingException the json processing exception
+     * @throws ConfigParsingException the json processing exception
      */
-    public MissionEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) throws JsonProcessingException {
+    public MissionEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
         this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, townUUID, startedPlayerUUID);
 
         //TODO: replace with polymorphism
-        this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
+        try {
+            this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
+        } catch (JsonProcessingException e) {
+            throw new ConfigParsingException(e);
+        }
     }
 
     /**

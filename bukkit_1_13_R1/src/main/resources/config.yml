@@ -24,6 +24,8 @@ database:
   username:
   # The password to access the database
   password:
+  # Set this to true to cache database in memory, faster operation at the cost of more memory usage
+  mem-cache: true
 
 # Settings for participants in the sprint/season
 participants:

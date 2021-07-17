@@ -5,7 +5,7 @@ import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.RewardType;
-import world.naturecraft.townymission.data.db.ClaimStorage;
+import world.naturecraft.townymission.data.storage.ClaimStorage;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.utils.EntryFilter;
 
@@ -47,15 +47,11 @@ public class ClaimDao extends Dao<ClaimEntry> {
      */
     @Override
     public void add(ClaimEntry data) {
-        try {
-            db.add(data.getPlayerUUID(),
-                    data.getRewardType().name(),
-                    data.getRewardJson().toJson(),
-                    data.getSeason(),
-                    data.getSprint());
-        } catch (JsonProcessingException e) {
-            throw new DataProcessException(e);
-        }
+        db.add(data.getPlayerUUID(),
+                data.getRewardType().name(),
+                data.getRewardJson().toJson(),
+                data.getSeason(),
+                data.getSprint());
     }
 
     /**
@@ -65,12 +61,8 @@ public class ClaimDao extends Dao<ClaimEntry> {
      */
     @Override
     public void update(ClaimEntry data) {
-        try {
-            db.update(data.getId(), data.getPlayerUUID(), data.getRewardType().name(),
-                    data.getRewardJson().toJson(), data.getSeason(), data.getSprint());
-        } catch (JsonProcessingException e) {
-            throw new DataProcessException(e);
-        }
+        db.update(data.getId(), data.getPlayerUUID(), data.getRewardType().name(),
+                data.getRewardJson().toJson(), data.getSeason(), data.getSprint());
     }
 
     /**
@@ -81,6 +73,11 @@ public class ClaimDao extends Dao<ClaimEntry> {
     @Override
     public void remove(ClaimEntry data) {
         db.remove(data.getId());
+    }
+
+    @Override
+    public void reloadDb() {
+        singleton = new ClaimDao();
     }
 
     public void addAndMerge(ClaimEntry entry) {
