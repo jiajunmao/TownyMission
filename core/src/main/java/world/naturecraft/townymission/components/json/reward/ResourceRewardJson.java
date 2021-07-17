@@ -4,8 +4,10 @@
 
 package world.naturecraft.townymission.components.json.reward;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.RewardType;
@@ -20,11 +22,11 @@ import java.util.Locale;
 public class ResourceRewardJson extends RewardJson {
 
     @JsonProperty("isMi")
-    private final boolean isMi;
+    private boolean isMi;
     @JsonProperty("type")
-    private final String type;
+    private String type;
     @JsonProperty("miID")
-    private final String miID;
+    private String miID;
     @JsonProperty("amount")
     private int amount;
 
@@ -34,7 +36,7 @@ public class ResourceRewardJson extends RewardJson {
      * @param type   the type
      * @param amount the amount
      */
-    @ConstructorProperties({"isMi", "type", "miID", "amount"})
+    @JsonIgnore
     public ResourceRewardJson(boolean isMi, String type, String miID, int amount) {
         super(RewardType.RESOURCE);
         this.isMi = isMi;
@@ -74,24 +76,40 @@ public class ResourceRewardJson extends RewardJson {
      *
      * @return the type
      */
-    @JsonProperty("type")
+    @JsonGetter("type")
     public String getType() {
         return type;
     }
 
-    @JsonProperty("miID")
+    @JsonGetter("miID")
     public String getMiID() {
         return miID;
     }
 
-    @JsonProperty("amount")
+    @JsonGetter("amount")
     public int getAmount() {
         return amount;
     }
 
+    @JsonSetter("amount")
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @JsonSetter("isMi")
+    public void setMi(boolean mi) {
+        isMi = mi;
+    }
+
+    @JsonSetter("type")
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @JsonSetter("miID")
+    public void setMiID(String miID) {
+        this.miID = miID;
     }
 
     @JsonIgnore
