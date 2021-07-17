@@ -63,7 +63,7 @@ public class RewardService extends TownyMissionService {
             case COMMAND:
                 CommandRewardJson commandRewardJson = (CommandRewardJson) rewardJson;
                 String command = commandRewardJson.getCommand().replace("%player%", playerName);
-                System.out.println("Dispatching command: " + command);
+                instance.getInstanceLogger().info("Dispatching command: " + command);
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
@@ -223,8 +223,8 @@ public class RewardService extends TownyMissionService {
             case SPRINT:
                 List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
                 Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
-                System.out.println("SprintEntries length: " + sprintEntries.size());
-                System.out.println("RewardMap size: " + rewardsMap.keySet().size());
+                instance.getInstanceLogger().info("SprintEntries length: " + sprintEntries.size());
+                instance.getInstanceLogger().info("RewardMap size: " + rewardsMap.keySet().size());
                 for (Integer currentRank : rewardsMap.keySet()) {
                     List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
 

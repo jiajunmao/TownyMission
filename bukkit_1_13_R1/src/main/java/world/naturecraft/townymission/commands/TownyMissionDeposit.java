@@ -20,7 +20,7 @@ import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.entity.MissionEntry;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;

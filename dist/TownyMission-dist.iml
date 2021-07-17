@@ -9,9 +9,6 @@
     <orderEntry type="module" module-name="TownyMission-core" />
     <orderEntry type="module" module-name="TownyMission-bukkit_1_13_R1" />
     <orderEntry type="module" module-name="TownyMission-bungee" />
-    <orderEntry type="module" module-name="TownyMission-core" />
-    <orderEntry type="module" module-name="TownyMission-bukkit_1_13_R1" />
-    <orderEntry type="module" module-name="TownyMission-bungee" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.0-alpha1" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.34" level="project" />

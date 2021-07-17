@@ -1,16 +1,13 @@
 package world.naturecraft.townymission.listener;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import world.naturecraft.townymission.TownyMissionBungee;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.services.PluginMessagingService;
-
-import java.util.UUID;
+import world.naturecraft.townymission.services.TownyMissionService;
 
 /**
  * The type Pmc listener.
@@ -25,27 +22,22 @@ public class PMCListener implements Listener {
     @EventHandler
     public void onPluginMessageEvent(PluginMessageEvent event) {
         if (!event.getTag().equalsIgnoreCase("townymission:main")) return;
+        PluginMessage message = PluginMessagingService.parseData(event.getData());
 
-        ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
-        String subChannel = in.readUTF();
-        UUID msgUUID = UUID.fromString(in.readUTF());
-        int requestSize = in.readInt();
-        String[] data = new String[requestSize];
-        for (int i = 0; i < requestSize; i++) {
-            data[i] = in.readUTF();
-        }
 
-        System.out.println("Received message " + msgUUID);
+        TownyMissionInstance.getInstance().getInstanceLogger().info("Bungee received message " + message.getMessageUUID());
         TownyMissionBungee instance = TownyMissionInstance.getInstance();
-        if (subChannel.equals("config:request")) {
-            String configValue = instance.getConfig().getString(data[0]);
+        if (message.getChannel().equals("config:request")) {
+            String configValue = instance.getConfig().getString(message.getData()[0]);
             PluginMessage response = new PluginMessage()
                     .channel("config:response")
-                    .messageUUID(msgUUID)
+                    .messageUUID(message.getMessageUUID())
                     .dataSize(1)
                     .data(new String[]{configValue});
 
             PluginMessagingService.getInstance().send(response);
+        } else if (message.getChannel().equals("mission:request")) {
+            PluginMessagingService.getInstance().send(message);
         }
     }
 }

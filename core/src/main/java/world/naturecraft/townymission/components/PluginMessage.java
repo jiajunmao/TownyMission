@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.components.entity;
+package world.naturecraft.townymission.components;
 
 import java.util.Date;
 import java.util.UUID;
@@ -35,6 +35,7 @@ public class PluginMessage {
      * Instantiates a new Plugin message.
      */
     public PluginMessage() {
+        timestamp = new Date().getTime();
     }
 
     /**

@@ -4,7 +4,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.components.PluginMessage;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -52,6 +53,7 @@ public class PluginMessagingBungeeService extends PluginMessagingService {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(message.getChannel());
         out.writeUTF(message.getMessageUUID().toString());
+        out.writeLong(message.getTimestamp());
         out.writeInt(message.getSize());
         for (String str : message.getData()) {
             out.writeUTF(str);
@@ -59,7 +61,7 @@ public class PluginMessagingBungeeService extends PluginMessagingService {
 
         for (ServerInfo info : ProxyServer.getInstance().getServers().values()) {
             info.sendData("townymission:main", out.toByteArray());
-            System.out.println("Sending message to " + info.getName());
+            TownyMissionInstance.getInstance().getInstanceLogger().info("Sending message to " + info.getName());
         }
     }
 }

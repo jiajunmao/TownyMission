@@ -84,30 +84,32 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * Configure data storage, yaml, or mysql
          */
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Connecting to datastore"));
+        String storage = getConfig().getString("storage");
+        storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
+
+        if (storageType.equals(StorageType.MYSQL)) {
+            logger.info("Using MYSQL as storage backend");
+            connect();
+        } else {
+            logger.info("Using YAML flat file as storage backend");
+        }
+
+        /**
+         * Configure listeners, timers, and tasks
+         */
         // If is bungee, and not main, do nothing here except for the listeners
         if (!isBungeecordEnabled || isMainServer) {
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Connecting to datastore"));
-            String storage = getConfig().getString("storage");
-            storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
-
-            if (storageType.equals(StorageType.MYSQL)) {
-                logger.info("Using MYSQL as storage backend");
-                connect();
-            } else {
-                logger.info("Using YAML flat file as storage backend");
-            }
-
             logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering commands"));
             registerCommands();
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering listeners"));
-            registerListeners();
             logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
             registerTimers();
             logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering tasks"));
             registerTasks();
-        } else {
-            registerListeners();
         }
+
+        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering listeners"));
+        registerListeners();
     }
 
     private void additionalConfigs() {
