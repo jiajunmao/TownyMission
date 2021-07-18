@@ -106,14 +106,28 @@ public class RewardService extends TownyMissionService {
                         PlayerService.getInstance().addItem(playerUUID, material, amount);
                     }
                     ClaimDao.getInstance().remove(claimEntry);
+                    ChatService.getInstance().sendMsg(playerUUID,
+                            instance.getLangEntry("services.reward.onRewardResource")
+                                    .replace("%amount%", String.valueOf(resourceRewardJson.getAmount()))
+                                    .replace("%type%", resourceRewardJson.getType().toLowerCase(Locale.ROOT)));
                 } else {
-                    throw new NotEnoughInvSlotException();
-                }
+                    // This means the player has less slots than the amount of items claimable
+                    int availSlots = PlayerService.getInstance().getNumEmptySlot(playerUUID);
+                    for (int i = 0; i < availSlots; i++) {
+                        if (resourceRewardJson.isMi()) {
+                            MMOService.getInstance().addMiItem(playerUUID, material, miID, 64);
+                        } else {
+                            PlayerService.getInstance().addItem(playerUUID, material, 64);
+                        }
+                    }
 
-                ChatService.getInstance().sendMsg(playerUUID,
-                        instance.getLangEntry("services.reward.onRewardResource")
-                                .replace("%amount%", String.valueOf(resourceRewardJson.getAmount()))
-                                .replace("%type%", resourceRewardJson.getType().toLowerCase(Locale.ROOT)));
+                    claimEntry.getRewardJson().setAmount(claimEntry.getRewardJson().getAmount() - availSlots * 64);
+                    ClaimDao.getInstance().update(claimEntry);
+                    ChatService.getInstance().sendMsg(playerUUID,
+                            instance.getLangEntry("services.reward.onRewardResource")
+                                    .replace("%amount%", String.valueOf(availSlots * 64))
+                                    .replace("%type%", resourceRewardJson.getType().toLowerCase(Locale.ROOT)));
+                }
                 break;
         }
     }
