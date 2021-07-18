@@ -109,6 +109,9 @@ public class SprintEntry extends DataEntity implements Rankable {
     }
 
     @Override
+    public String getRankingId() { return townUUID.toString(); }
+
+    @Override
     public int compareTo(@NotNull Rankable rankable) {
         return naturepoints - rankable.getRankingFactor();
     }
