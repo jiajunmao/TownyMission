@@ -7,6 +7,7 @@ import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.*;
+import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.enums.ServerType;
 import world.naturecraft.townymission.components.enums.StorageType;
@@ -133,6 +134,27 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             logger.severe("There are errors in the reward section in config.yml! Please correct them and then reload plugin!");
             e.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(this);
+        }
+
+        // Remove the config if bungee && non-main
+        if (isBungeecordEnabled && !isMainServer) {
+            File dataFolder = getDataFolder();
+            for (DbType dbType : DbType.values()) {
+                if (!dbType.equals(DbType.MISSION_CACHE)) {
+                    File file = new File(dataFolder, "datastore/" + dbType.name().toLowerCase(Locale.ROOT) + ".yml");
+                    file.delete();
+                }
+            }
+
+            File file = new File(dataFolder, "datastore/stats.yml");
+            file.delete();
+
+            File missionFolder = new File(dataFolder, "missions");
+            for (String s : missionFolder.list()) {
+                File yaml = new File(missionFolder, s);
+                yaml.delete();
+            }
+            missionFolder.delete();
         }
     }
 

@@ -38,6 +38,8 @@ public class PMCListener implements Listener {
             PluginMessagingService.getInstance().send(response);
         } else if (message.getChannel().equals("mission:request")) {
             PluginMessagingService.getInstance().send(message);
+        } else if (message.getChannel().equals("mission:response")) {
+            PluginMessagingService.getInstance().send(message);
         }
     }
 }
