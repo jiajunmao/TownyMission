@@ -37,6 +37,7 @@ public class TownFallListener extends TownyMissionListener {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
+                // Remove all
                 for (MissionEntry entry : MissionDao.getInstance().getTownMissions(town.getUUID())) {
                     MissionDao.getInstance().remove(entry);
                 }

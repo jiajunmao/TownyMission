@@ -54,7 +54,6 @@ public class TownyMissionRoot extends TownyMissionCommand {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (command.getName().equalsIgnoreCase("townymission") || alias.equalsIgnoreCase("tm")) {
-            List<String> arguments = new ArrayList<>(commands.keySet());
             List<String> tabList;
 
             if (args.length == 1) {
@@ -63,6 +62,13 @@ public class TownyMissionRoot extends TownyMissionCommand {
                 for (String str : commands.keySet()) {
                     if (str.contains(args[0])) {
                         tabList.add(str);
+                    }
+                }
+
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    if (!player.hasPermission("townymission.admin")) {
+                        tabList.remove("admin");
                     }
                 }
             } else if (args.length == 2 && commands.containsKey(args[0])) {
