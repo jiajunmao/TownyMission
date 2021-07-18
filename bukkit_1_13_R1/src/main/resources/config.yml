@@ -27,6 +27,10 @@ database:
   # Set this to true to cache database in memory, faster operation at the cost of more memory usage
   mem-cache: true
 
+##########################################################
+# The following settings should ONLY be set on main server
+##########################################################
+
 # Settings for participants in the sprint/season
 participants:
   # How many points does each town has to earn regardless to enter the ranking

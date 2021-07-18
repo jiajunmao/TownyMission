@@ -30,7 +30,7 @@ public class VoteListener extends MissionListener {
         Player player = e.getPlayer();
 
         BukkitChecker bukkitChecker = null;
-        if (instance.isMainserver()) {
+        if (instance.isMainServer()) {
             bukkitChecker = new BukkitChecker(instance).target(player).silent(true)
                     .hasTown()
                     .hasStarted()

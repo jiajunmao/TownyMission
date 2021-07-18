@@ -23,8 +23,6 @@ import java.util.UUID;
  */
 public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStorage {
 
-    private static ClaimSqlStorage singleton;
-
     /**
      * Instantiates a new Database.
      *
@@ -33,21 +31,6 @@ public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStor
      */
     public ClaimSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static ClaimSqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new ClaimSqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.CLAIM));
-        }
-
-        return singleton;
     }
 
     /**

@@ -29,7 +29,7 @@ public class CMIMoneyListener extends MissionListener {
     public void onMoneyReceive(CMIUserBalanceChangeEvent event) {
         Player player = event.getUser().getPlayer();
         BukkitChecker checker = null;
-        if (instance.isMainserver()) {
+        if (instance.isMainServer()) {
             checker = new BukkitChecker(instance).target(player).silent(true)
                     .hasTown()
                     .hasStarted()

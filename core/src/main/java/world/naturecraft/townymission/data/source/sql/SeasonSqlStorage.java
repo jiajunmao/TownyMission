@@ -22,8 +22,6 @@ import java.util.UUID;
  */
 public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonStorage {
 
-    private static SeasonSqlStorage singleton;
-
     /**
      * Instantiates a new Season database.
      *
@@ -32,20 +30,6 @@ public class SeasonSqlStorage extends SqlStorage<SeasonEntry> implements SeasonS
      */
     public SeasonSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonSqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new SeasonSqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.SEASON));
-        }
-        return singleton;
     }
 
     @Override

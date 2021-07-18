@@ -44,12 +44,11 @@ public abstract class YamlStorage<T extends DataEntity> {
     /**
      * Instantiates a new Yaml storage.
      *
-     * @param instance the instance
      * @param dbType   the db type
      * @throws ConfigLoadingException the config loading exception
      */
-    public YamlStorage(TownyMissionInstance instance, DbType dbType) throws ConfigLoadingException {
-        this.instance = instance;
+    public YamlStorage(DbType dbType) throws ConfigLoadingException {
+        this.instance = TownyMissionInstance.getInstance();
         this.dbType = dbType;
         createConfig();
     }
