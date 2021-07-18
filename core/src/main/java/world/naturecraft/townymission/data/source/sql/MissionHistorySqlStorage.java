@@ -22,8 +22,6 @@ import java.util.UUID;
  */
 public class MissionHistorySqlStorage extends SqlStorage<MissionHistoryEntry> implements MissionHistoryStorage {
 
-    private static MissionHistorySqlStorage singleton;
-
     /**
      * Instantiates a new Task history database.
      *
@@ -32,20 +30,6 @@ public class MissionHistorySqlStorage extends SqlStorage<MissionHistoryEntry> im
      */
     public MissionHistorySqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionHistorySqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new MissionHistorySqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.MISSION_HISTORY));
-        }
-        return singleton;
     }
 
     @Override

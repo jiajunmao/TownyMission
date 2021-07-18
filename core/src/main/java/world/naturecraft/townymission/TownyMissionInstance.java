@@ -70,6 +70,8 @@ public interface TownyMissionInstance {
      */
     StorageType getStorageType();
 
+    boolean isMainServer();
+
     /**
      * Gets instance data folder.
      *

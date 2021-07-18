@@ -18,28 +18,12 @@ import java.util.UUID;
  */
 public class SprintHistoryYamlStorage extends YamlStorage<SprintHistoryEntry> implements SprintHistoryStorage {
 
-    private static SprintHistoryYamlStorage singleton;
 
     /**
      * Instantiates a new Sprint history yaml.
-     *
-     * @param instance the instance
      */
-    public SprintHistoryYamlStorage(TownyMissionInstance instance) {
-        super(instance, DbType.SPRINT_HISTORY);
-        singleton = this;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintHistoryYamlStorage getInstance() {
-        if (singleton == null) {
-            new SprintHistoryYamlStorage(TownyMissionInstance.getInstance());
-        }
-        return singleton;
+    public SprintHistoryYamlStorage() {
+        super(DbType.SPRINT_HISTORY);
     }
 
     /**

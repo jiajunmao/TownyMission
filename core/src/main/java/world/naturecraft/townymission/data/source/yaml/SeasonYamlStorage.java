@@ -18,28 +18,12 @@ import java.util.UUID;
  */
 public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements SeasonStorage {
 
-    private static SeasonYamlStorage singleton;
-
     /**
      * Instantiates a new Season yaml.
      *
-     * @param instance the instance
      */
-    public SeasonYamlStorage(TownyMissionInstance instance) {
-        super(instance, DbType.SEASON);
-        singleton = this;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonYamlStorage getInstance() {
-        if (singleton == null) {
-            new SeasonYamlStorage(TownyMissionInstance.getInstance());
-        }
-        return singleton;
+    public SeasonYamlStorage() {
+        super(DbType.SEASON);
     }
 
     /**

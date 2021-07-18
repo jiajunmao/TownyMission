@@ -7,6 +7,7 @@ import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.*;
+import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.enums.ServerType;
 import world.naturecraft.townymission.components.enums.StorageType;
@@ -76,9 +77,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         langConfig.updateConfig("lang.yml");
 
         determineBungeeCord();
-
         determineMissionEnabled();
-
         additionalConfigs();
 
         /**
@@ -133,6 +132,24 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             logger.severe("There are errors in the reward section in config.yml! Please correct them and then reload plugin!");
             e.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(this);
+        }
+
+        // Remove the config if bungee && non-main
+        if (isBungeecordEnabled && !isMainServer) {
+            File dataFolder = getDataFolder();
+            for (DbType dbType : DbType.values()) {
+                if (!dbType.equals(DbType.MISSION_CACHE)) {
+                    File file = new File(dataFolder, "datastore/" + dbType.name().toLowerCase(Locale.ROOT) + ".yml");
+                    file.delete();
+                }
+            }
+
+            File missionFolder = new File(dataFolder, "missions");
+            for (String s : missionFolder.list()) {
+                File yaml = new File(missionFolder, s);
+                yaml.delete();
+            }
+            missionFolder.delete();
         }
     }
 
@@ -309,7 +326,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     }
 
     private void registerTasks() {
-        if (!isMainserver()) {
+        if (!isMainServer()) {
             SendCachedMissionTask.registerTask();
             logger.info("Started send cache task");
         }
@@ -379,6 +396,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     }
 
     @Override
+    public boolean isMainServer() {
+        return !isBungeecordEnabled || isMainServer;
+    }
+
+    @Override
     public File getInstanceDataFolder() {
         return this.getDataFolder();
     }
@@ -401,10 +423,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public Logger getInstanceLogger() {
         return this.getLogger();
-    }
-
-    public boolean isMainserver() {
-        return !isBungeecordEnabled || isMainServer;
     }
 
     public boolean isMissionEnabled(MissionType missionType) {

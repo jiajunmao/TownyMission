@@ -20,28 +20,12 @@ import java.util.UUID;
  */
 public class MissionYamlStorage extends YamlStorage<MissionEntry> implements MissionStorage {
 
-    private static MissionYamlStorage singleton;
-
     /**
      * Instantiates a new Mission yaml.
      *
-     * @param instance the instance
      */
-    public MissionYamlStorage(TownyMissionInstance instance) {
-        super(instance, DbType.MISSION);
-        singleton = this;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionYamlStorage getInstance() {
-        if (singleton == null) {
-            new MissionYamlStorage(TownyMissionInstance.getInstance());
-        }
-        return singleton;
+    public MissionYamlStorage() {
+        super(DbType.MISSION);
     }
 
     /**
