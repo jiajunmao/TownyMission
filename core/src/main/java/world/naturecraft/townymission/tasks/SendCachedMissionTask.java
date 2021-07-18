@@ -19,27 +19,24 @@ public class SendCachedMissionTask {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
+            for (MissionCacheEntry entry : MissionCacheDao.getInstance().getEntries()) {
+                PluginMessage request = new PluginMessage()
+                        .channel("mission:request")
+                        .messageUUID(UUID.randomUUID())
+                        .dataSize(4)
+                        .data(new String[]{"doMission", entry.getPlayerUUID().toString(), entry.getMissionType().name(), String.valueOf(entry.getAmount())});
 
-                for (MissionCacheEntry entry : MissionCacheDao.getInstance().getEntries()) {
-                    PluginMessage request = new PluginMessage()
-                            .channel("mission:request")
-                            .messageUUID(UUID.randomUUID())
-                            .dataSize(4)
-                            .data(new String[]{"doMission", entry.getPlayerUUID().toString(), entry.getMissionType().name(), String.valueOf(entry.getAmount())});
-
-                    try {
-                        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
-                        if (response.getData()[0].equalsIgnoreCase("false")) {
-                            throw new PMCReceiveException("Something went wrong on the PMC receiver");
-                        } else {
-                            // This means this cache got sent
-                            MissionCacheDao.getInstance().remove(entry);
-                        }
-                    } catch (TimeoutException | ExecutionException | InterruptedException | PMCReceiveException e) {
-                        // This means that the sending keeps failing for some reason lol
-                        //   Do nothing
+                try {
+                    PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
+                    if (response.getData()[0].equalsIgnoreCase("false")) {
+                        throw new PMCReceiveException("Something went wrong on the PMC receiver");
                     }
+                    MissionCacheDao.getInstance().remove(entry);
+                } catch (TimeoutException | ExecutionException | InterruptedException | PMCReceiveException e) {
+                    // This means that the sending keeps failing for some reason
+                    // Do nothing
                 }
+            }
             }
         };
 
