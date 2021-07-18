@@ -31,7 +31,7 @@ public class VoteListener extends MissionListener {
 
         BukkitChecker bukkitChecker = null;
         if (instance.isMainserver()) {
-            bukkitChecker = new BukkitChecker(instance).target(player)
+            bukkitChecker = new BukkitChecker(instance).target(player).silent(true)
                     .hasTown()
                     .hasStarted()
                     .isMissionType(MissionType.VOTE);
