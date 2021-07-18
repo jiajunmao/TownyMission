@@ -120,25 +120,19 @@ public abstract class MissionService extends TownyMissionService {
     /**
      * Abort mission.
      *
-     * @param playerUUID the player
+     * @param player the player
      * @param entry      the entry
      */
-    public void abortMission(UUID playerUUID, MissionEntry entry) {
-        if (!canAbortMission(playerUUID, entry))
+    public void abortMission(UUID player, MissionEntry entry) {
+        if (!canAbortMission(player, entry))
             return;
 
+        giveBack(entry);
         MissionDao.getInstance().remove(entry);
         CooldownService.getInstance().startCooldown(entry.getTownUUID(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
     }
 
-    /**
-     * Complete mission.
-     *
-     * @param entry the entry
-     */
-    public void completeMission(MissionEntry entry) {
-        if (entry.isTimedout() && !entry.isCompleted()) return;
-
+    private void giveBack(MissionEntry entry) {
         if (entry.getMissionType().equals(MissionType.MONEY)) {
             MoneyMissionJson moneyMissionJson = (MoneyMissionJson) entry.getMissionJson();
             if (moneyMissionJson.isReturnable()) {
@@ -163,6 +157,17 @@ public abstract class MissionService extends TownyMissionService {
                 }
             }
         }
+    }
+
+    /**
+     * Complete mission.
+     *
+     * @param entry the entry
+     */
+    public void completeMission(MissionEntry entry) {
+        if (entry.isTimedout() && !entry.isCompleted()) return;
+
+        giveBack(entry);
 
         MissionDao.getInstance().remove(entry);
         MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, Util.currentTime());
