@@ -23,8 +23,6 @@ import java.util.UUID;
  */
 public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> implements SeasonHistoryStorage {
 
-    private static SeasonHistorySqlStorage singleton;
-
     /**
      * Instantiates a new Season history database.
      *
@@ -33,20 +31,6 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
      */
     public SeasonHistorySqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SeasonHistorySqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new SeasonHistorySqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.SEASON_HISTORY));
-        }
-        return singleton;
     }
 
     @Override

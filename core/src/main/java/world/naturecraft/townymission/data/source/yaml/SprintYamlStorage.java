@@ -19,29 +19,13 @@ import java.util.UUID;
  */
 public class SprintYamlStorage extends YamlStorage<SprintEntry> implements SprintStorage {
 
-    private static SprintYamlStorage singleton;
-
     /**
      * Instantiates a new Sprint yaml.
      *
-     * @param instance the instance
      * @throws ConfigLoadingException the config loading exception
      */
-    public SprintYamlStorage(TownyMissionInstance instance) throws ConfigLoadingException {
-        super(instance, DbType.SPRINT);
-        singleton = this;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintYamlStorage getInstance() {
-        if (singleton == null) {
-            new SprintYamlStorage(TownyMissionInstance.getInstance());
-        }
-        return singleton;
+    public SprintYamlStorage() throws ConfigLoadingException {
+        super(DbType.SPRINT);
     }
 
     /**

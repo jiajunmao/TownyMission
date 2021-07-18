@@ -35,8 +35,8 @@ public class MobListener extends MissionListener {
 
         if (killer != null) {
             BukkitChecker checker = null;
-            if (instance.isMainserver()) {
-                checker = new BukkitChecker(instance).target(killer)
+            if (instance.isMainServer()) {
+                checker = new BukkitChecker(instance).target(killer).silent(true)
                         .hasTown()
                         .hasStarted()
                         .isMissionType(MissionType.MOB)

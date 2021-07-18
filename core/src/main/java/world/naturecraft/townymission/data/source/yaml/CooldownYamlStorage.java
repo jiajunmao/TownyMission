@@ -19,28 +19,12 @@ import java.util.UUID;
  */
 public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements CooldownStorage {
 
-    private static CooldownYamlStorage singleton;
-
     /**
      * Instantiates a new Cooldown yaml.
      *
-     * @param instance the instance
      */
-    public CooldownYamlStorage(TownyMissionInstance instance) {
-        super(instance, DbType.COOLDOWN);
-        singleton = this;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownYamlStorage getInstance() {
-        if (singleton == null) {
-            new CooldownYamlStorage(TownyMissionInstance.getInstance());
-        }
-        return singleton;
+    public CooldownYamlStorage() {
+        super(DbType.COOLDOWN);
     }
 
     /**

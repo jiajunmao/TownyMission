@@ -12,8 +12,10 @@ import world.naturecraft.townymission.config.TownyMissionConfig;
 import world.naturecraft.townymission.data.storage.Storage;
 import world.naturecraft.townymission.data.source.sql.*;
 import world.naturecraft.townymission.data.source.yaml.*;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -143,60 +145,26 @@ public class StorageService {
      */
     public void initializeMap() {
         for (DbType dbType : DbType.values()) {
-            switch (dbType) {
-                case SEASON:
-                    if (storageType.equals(StorageType.MYSQL))
-                        dbMap.put(DbType.SEASON, SeasonSqlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.SEASON, SeasonYamlStorage.getInstance());
-                    break;
-                case SPRINT:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.SPRINT, SprintYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.SPRINT, SprintSqlStorage.getInstance());
-                    break;
-                case CLAIM:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.CLAIM, ClaimYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.CLAIM, ClaimSqlStorage.getInstance());
-                    break;
-                case MISSION:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.MISSION, MissionYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.MISSION, MissionSqlStorage.getInstance());
-                    break;
-                case COOLDOWN:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.COOLDOWN, CooldownYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.COOLDOWN, CooldownSqlStorage.getInstance());
-                    break;
-                case SEASON_HISTORY:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.SEASON_HISTORY, SeasonHistoryYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.SEASON_HISTORY, SeasonHistorySqlStorage.getInstance());
-                case SPRINT_HISTORY:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.SPRINT_HISTORY, SprintHistoryYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.SPRINT_HISTORY, SprintHistorySqlStorage.getInstance());
-                    break;
-                case MISSION_HISTORY:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.MISSION_HISTORY, MissionHistoryYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.MISSION_HISTORY, MissionHistorySqlStorage.getInstance());
-                    break;
-                case MISSION_CACHE:
-                    if (storageType.equals(StorageType.YAML))
-                        dbMap.put(DbType.MISSION_CACHE, MissionCacheYamlStorage.getInstance());
-                    else
-                        dbMap.put(DbType.MISSION_CACHE, MissionCacheSqlStorage.getInstance());
-                    break;
+            if (instance.isMainServer() || !dbType.equals(DbType.MISSION_CACHE)) {
+                String packageName = "world.naturecraft.townymission.data.source." + storageType.name().toLowerCase(Locale.ROOT);
+                String className = "";
+                if (dbType.name().indexOf('_') != -1) {
+                    int index = dbType.name().indexOf('_');
+                    className += Util.capitalizeFirst(dbType.name().substring(0, index));
+                    className += Util.capitalizeFirst(dbType.name().substring(index + 1));
+                } else {
+                    className += Util.capitalizeFirst(dbType.name());
+                }
+                className += Util.capitalizeFirst(storageType.name()) + "Storage";
+
+                String fullPath = packageName + "." + className;
+
+                try {
+                    Storage storage = (Storage) Class.forName(fullPath).newInstance();
+                    dbMap.put(dbType, storage);
+                } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

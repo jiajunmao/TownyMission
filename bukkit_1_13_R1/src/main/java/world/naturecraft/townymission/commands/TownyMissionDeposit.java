@@ -78,7 +78,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
 
                     TownyMissionBukkit instance = TownyMissionInstance.getInstance();
-                    if (instance.isMainserver()) {
+                    if (instance.isMainServer()) {
                         // This means that this is the main server, directly interact with the services
 
                         if (!sanityCheck(player, args)) return;

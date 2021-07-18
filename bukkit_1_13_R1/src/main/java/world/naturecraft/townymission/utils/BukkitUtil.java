@@ -17,24 +17,7 @@ import java.util.regex.Pattern;
  */
 public class BukkitUtil {
 
-    /**
-     * Gets ranking points.
-     *
-     * @param numResident the num resident
-     * @param naturePoint the nature point
-     * @param instance    the instance
-     * @return the ranking points
-     */
-    public static int getRankingPoints(int numResident, int naturePoint, TownyMissionBukkit instance) {
-        int baseline = instance.getConfig().getInt("participants.sprintRewardBaseline");
-        int memberScale = instance.getConfig().getInt("participants.sprintRewardMemberScale");
-        int baselineCap = instance.getConfig().getInt("participants.sprintRewardBaselineCap");
-        int increment = instance.getConfig().getInt("participants.sprintBaselineIncrement");
-        int currentSprint = instance.getStatsConfig().getInt("sprint.current");
 
-        int realBaseline = Math.min(baseline + memberScale * (numResident - 1), baselineCap) + increment * (currentSprint - 1);
-        return (naturePoint - realBaseline) / numResident;
-    }
 
     /**
      * Gets num empty slots in inventory.

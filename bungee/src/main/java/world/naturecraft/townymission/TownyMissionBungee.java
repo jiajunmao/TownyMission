@@ -137,6 +137,11 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     }
 
     @Override
+    public boolean isMainServer() {
+        return false;
+    }
+
+    @Override
     public File getInstanceDataFolder() {
         return this.getDataFolder();
     }
