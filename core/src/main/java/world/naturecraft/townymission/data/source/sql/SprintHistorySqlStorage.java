@@ -21,8 +21,6 @@ import java.util.UUID;
  */
 public class SprintHistorySqlStorage extends SqlStorage<SprintHistoryEntry> implements SprintHistoryStorage {
 
-    private static SprintHistorySqlStorage singleton;
-
     /**
      * Instantiates a new Sprint history database.
      *
@@ -31,20 +29,6 @@ public class SprintHistorySqlStorage extends SqlStorage<SprintHistoryEntry> impl
      */
     public SprintHistorySqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintHistorySqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new SprintHistorySqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.SPRINT_HISTORY));
-        }
-        return singleton;
     }
 
     @Override

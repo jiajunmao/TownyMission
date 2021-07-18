@@ -26,7 +26,7 @@ public class EssentialMoneyListener extends MissionListener {
         Player player = event.getPlayer();
         BukkitChecker checker = null;
 
-        if (instance.isMainserver()) {
+        if (instance.isMainServer()) {
             checker = new BukkitChecker(instance).target(player).silent(true)
                     .hasTown()
                     .hasStarted()

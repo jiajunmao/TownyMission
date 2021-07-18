@@ -27,8 +27,6 @@ import java.util.UUID;
  */
 public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements CooldownStorage {
 
-    private static CooldownSqlStorage singleton;
-
     /**
      * Instantiates a new Database.
      *
@@ -37,20 +35,6 @@ public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements Coo
      */
     public CooldownSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static CooldownSqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new CooldownSqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.COOLDOWN));
-        }
-        return singleton;
     }
 
     /**

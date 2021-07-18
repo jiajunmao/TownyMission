@@ -83,6 +83,9 @@ public class SeasonEntry extends DataEntity implements Rankable {
     }
 
     @Override
+    public String getRankingId() { return townUUID.toString(); }
+
+    @Override
     public int getRankingFactor() {
         return getSeasonPoint();
     }

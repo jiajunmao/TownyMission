@@ -18,8 +18,6 @@ import java.util.*;
 
 public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implements MissionCacheStorage {
 
-    private static MissionCacheSqlStorage singleton;
-
     /**
      * Instantiates a new Database.
      *
@@ -28,14 +26,6 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
      */
     public MissionCacheSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    public static MissionCacheSqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new MissionCacheSqlStorage(StorageService.getInstance().getDataSource(), Util.getDbName(DbType.MISSION_CACHE));
-        }
-
-        return singleton;
     }
 
     @Override

@@ -14,28 +14,13 @@ import java.util.UUID;
  */
 public class ClaimYamlStorage extends YamlStorage<ClaimEntry> implements ClaimStorage {
 
-    private static ClaimYamlStorage singleton;
 
     /**
      * Instantiates a new Yaml storage.
      *
-     * @param instance the instance
      */
-    public ClaimYamlStorage(TownyMissionInstance instance) {
-        super(instance, DbType.CLAIM);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static ClaimYamlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new ClaimYamlStorage(TownyMissionInstance.getInstance());
-        }
-
-        return singleton;
+    public ClaimYamlStorage() {
+        super(DbType.CLAIM);
     }
 
     /**

@@ -22,8 +22,6 @@ import java.util.UUID;
  */
 public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintStorage {
 
-    private static SprintSqlStorage singleton;
-
     /**
      * Instantiates a new Sprint database.
      *
@@ -32,20 +30,6 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
      */
     public SprintSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static SprintSqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new SprintSqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.SPRINT));
-        }
-        return singleton;
     }
 
     @Override
