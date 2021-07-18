@@ -67,13 +67,14 @@ public class PMCListener implements PluginMessageListener {
                     .isMissionType(MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)));
 
             if (!checker.check()) {
-                // If not passing sanity check, return false
+                // If not passing sanity check, return false, and break, do not try to doMission()
                 PluginMessage response = new PluginMessage()
                         .channel("mission:response")
                         .messageUUID(request.getMessageUUID())
                         .dataSize(1)
                         .data(new String[]{"false"});
                 PluginMessagingService.getInstance().send(response);
+                return;
             }
 
             MissionService.getInstance().doMission(townUUID, realPlayer.getUniqueId(), MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)), Integer.parseInt(request.getData()[3]));

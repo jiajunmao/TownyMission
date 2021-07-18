@@ -73,25 +73,6 @@ public abstract class MissionListener extends TownyMissionListener {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-//                    instance.getInstanceLogger().info("Sending main-server check");
-//                    PluginMessage request1 = new PluginMessage()
-//                            .channel("config:request")
-//                            .messageUUID(UUID.randomUUID())
-//                            .dataSize(1)
-//                            .data(new String[]{"main-server"});
-//
-//                    try {
-//                        PluginMessage pluginMessage = PluginMessagingService.getInstance().sendAndWait(request1, 5, TimeUnit.SECONDS);
-//                        instance.getInstanceLogger().info("main-server: " + pluginMessage.getData()[0]);
-//                    } catch (ExecutionException e) {
-//                        e.printStackTrace();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    } catch (TimeoutException e) {
-//                        e.printStackTrace();
-//                    }
-
-
                     PluginMessage request = new PluginMessage()
                         .channel("mission:request")
                         .messageUUID(UUID.randomUUID())
