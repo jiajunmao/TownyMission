@@ -7,4 +7,4 @@
   amount: 50000
   reward: 2000
   timeAllowed: 4
-  returnable: false
+  returnable: true

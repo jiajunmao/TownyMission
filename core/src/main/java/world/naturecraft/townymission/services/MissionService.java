@@ -127,19 +127,24 @@ public abstract class MissionService extends TownyMissionService {
         if (!canAbortMission(player, entry))
             return;
 
+        System.out.println("Aborting mission");
         giveBack(entry);
+        System.out.println("Removing entry");
         MissionDao.getInstance().remove(entry);
         CooldownService.getInstance().startCooldown(entry.getTownUUID(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
     }
 
     private void giveBack(MissionEntry entry) {
+        System.out.println("Giving back entry");
         if (entry.getMissionType().equals(MissionType.MONEY)) {
+            System.out.println("Is money mission");
             MoneyMissionJson moneyMissionJson = (MoneyMissionJson) entry.getMissionJson();
             if (moneyMissionJson.isReturnable()) {
                 Map<String, Integer> contributions = entry.getMissionJson().getContributions();
                 for (String playerUUID : contributions.keySet()) {
                     MoneyRewardJson moneyRewardJson = new MoneyRewardJson(contributions.get(playerUUID));
                     ClaimEntry claimEntry = new ClaimEntry(UUID.randomUUID(), UUID.fromString(playerUUID), RewardType.MONEY, moneyRewardJson, instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
+                    System.out.println("Adding to claimDb");
                     ClaimDao.getInstance().addAndMerge(claimEntry);
                 }
             }
