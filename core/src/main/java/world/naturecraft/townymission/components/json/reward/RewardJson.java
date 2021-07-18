@@ -126,6 +126,12 @@ public abstract class RewardJson implements Rankable {
 
     @Override
     @JsonIgnore
+    public String getRankingId() {
+        return String.valueOf(getRank());
+    }
+
+    @Override
+    @JsonIgnore
     public int compareTo(@NotNull Rankable rankable) {
         return getRank() - rankable.getRankingFactor();
     }

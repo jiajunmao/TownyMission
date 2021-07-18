@@ -94,6 +94,9 @@ public class TownRankJson implements Rankable {
         return points;
     }
 
+    @Override
+    public String getRankingId() { return townUUID.toString(); }
+
     /**
      * Gets town id.
      *
