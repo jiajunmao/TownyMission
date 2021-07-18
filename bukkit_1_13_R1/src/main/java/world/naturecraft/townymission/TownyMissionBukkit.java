@@ -331,7 +331,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     }
 
     private void registerTasks() {
-        if (!isMainserver()) {
+        if (!isMainServer()) {
             SendCachedMissionTask.registerTask();
             logger.info("Started send cache task");
         }
@@ -401,6 +401,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     }
 
     @Override
+    public boolean isMainServer() {
+        return !isBungeecordEnabled || isMainServer;
+    }
+
+    @Override
     public File getInstanceDataFolder() {
         return this.getDataFolder();
     }
@@ -423,10 +428,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public Logger getInstanceLogger() {
         return this.getLogger();
-    }
-
-    public boolean isMainserver() {
-        return !isBungeecordEnabled || isMainServer;
     }
 
     public boolean isMissionEnabled(MissionType missionType) {

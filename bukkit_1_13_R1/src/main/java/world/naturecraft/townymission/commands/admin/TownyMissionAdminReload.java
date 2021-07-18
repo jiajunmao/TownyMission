@@ -14,6 +14,7 @@ import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.data.source.yaml.*;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
 import java.util.List;
@@ -75,16 +76,6 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand {
 
             try {
                 instance.reloadConfigs();
-
-                if (instance.getStorageType().equals(StorageType.YAML)) {
-                    new CooldownYamlStorage(instance);
-                    new MissionHistoryYamlStorage(instance);
-                    new MissionYamlStorage(instance);
-                    new SeasonYamlStorage(instance);
-                    new SeasonHistoryYamlStorage(instance);
-                    new SprintYamlStorage(instance);
-                    new SprintHistoryYamlStorage(instance);
-                }
             } catch (ConfigLoadingException e) {
                 e.printStackTrace();
                 ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.reload.onFailure"));

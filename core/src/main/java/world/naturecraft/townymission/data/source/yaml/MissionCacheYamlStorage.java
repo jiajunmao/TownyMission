@@ -20,28 +20,12 @@ import java.util.UUID;
  */
 public class MissionCacheYamlStorage extends YamlStorage<MissionCacheEntry> implements MissionCacheStorage {
 
-    private static MissionCacheYamlStorage singleton;
-
     /**
      * Instantiates a new Mission yaml.
      *
-     * @param instance the instance
      */
-    public MissionCacheYamlStorage(TownyMissionInstance instance) {
-        super(instance, DbType.MISSION_CACHE);
-        singleton = this;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionCacheYamlStorage getInstance() {
-        if (singleton == null) {
-            new MissionCacheYamlStorage(TownyMissionInstance.getInstance());
-        }
-        return singleton;
+    public MissionCacheYamlStorage() {
+        super(DbType.MISSION_CACHE);
     }
 
     @Override

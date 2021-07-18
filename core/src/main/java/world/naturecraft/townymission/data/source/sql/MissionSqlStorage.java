@@ -23,8 +23,6 @@ import java.util.UUID;
  */
 public class MissionSqlStorage extends SqlStorage<MissionEntry> implements MissionStorage {
 
-    private static MissionSqlStorage singleton;
-
     /**
      * Instantiates a new Task database.
      *
@@ -33,20 +31,6 @@ public class MissionSqlStorage extends SqlStorage<MissionEntry> implements Missi
      */
     public MissionSqlStorage(HikariDataSource db, String tableName) {
         super(db, tableName);
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static MissionSqlStorage getInstance() {
-        if (singleton == null) {
-            singleton = new MissionSqlStorage(
-                    StorageService.getInstance().getDataSource(),
-                    Util.getDbName(DbType.MISSION));
-        }
-        return singleton;
     }
 
     @Override
