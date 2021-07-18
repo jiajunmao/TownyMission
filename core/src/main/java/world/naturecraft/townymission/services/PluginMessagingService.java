@@ -2,8 +2,9 @@ package world.naturecraft.townymission.services;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.components.PluginMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeoutException;
  * The type Plugin messaging service.
  */
 @SuppressWarnings("UnstableApiUsage")
-public abstract class PluginMessagingService {
+public abstract class PluginMessagingService extends TownyMissionService {
 
     /**
      * The constant singleton.
@@ -98,9 +99,9 @@ public abstract class PluginMessagingService {
      * @return the completable future
      */
     public CompletableFuture<Byte[]> registerRequest(String respondId) {
-        System.out.println("Registering " + respondId);
+        instance.getInstanceLogger().info("Registering " + respondId);
         CompletableFuture<Byte[]> future = new CompletableFuture<>();
-        this.response.put(respondId, future);
+        response.put(respondId, future);
 
         return future;
     }
@@ -112,8 +113,11 @@ public abstract class PluginMessagingService {
      * @param data       the data
      */
     public void completeRequest(String responseId, Byte[] data) {
-        System.out.println("Completing request: " + responseId);
-        System.out.println("Response hashmap contains key: " + response.containsKey(responseId));
+        instance.getInstanceLogger().info("Completing request: " + responseId);
+        for (String key : response.keySet()) {
+            instance.getInstanceLogger().info(key);
+        }
+        instance.getInstanceLogger().info("Response hashmap contains key: " + response.containsKey(responseId));
         if (!response.containsKey(responseId)) return;
         this.response.get(responseId).complete(data);
     }

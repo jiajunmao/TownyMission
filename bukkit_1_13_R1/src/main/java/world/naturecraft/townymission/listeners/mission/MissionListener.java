@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.PMCReceiveException;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionCacheDao;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
@@ -55,7 +55,6 @@ public abstract class MissionListener extends TownyMissionListener {
             // This means either the bungeecord is not enabled
             //  or bungeecord is enabled and this is main server
             //  directly interact with the DAOs
-            instance.getLogger().warning("Main towny server, directing storage");
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -74,11 +73,30 @@ public abstract class MissionListener extends TownyMissionListener {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
+//                    instance.getInstanceLogger().info("Sending main-server check");
+//                    PluginMessage request1 = new PluginMessage()
+//                            .channel("config:request")
+//                            .messageUUID(UUID.randomUUID())
+//                            .dataSize(1)
+//                            .data(new String[]{"main-server"});
+//
+//                    try {
+//                        PluginMessage pluginMessage = PluginMessagingService.getInstance().sendAndWait(request1, 5, TimeUnit.SECONDS);
+//                        instance.getInstanceLogger().info("main-server: " + pluginMessage.getData()[0]);
+//                    } catch (ExecutionException e) {
+//                        e.printStackTrace();
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    } catch (TimeoutException e) {
+//                        e.printStackTrace();
+//                    }
+
+
                     PluginMessage request = new PluginMessage()
-                            .channel("mission:request")
-                            .messageUUID(UUID.randomUUID())
-                            .dataSize(4)
-                            .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
+                        .channel("mission:request")
+                        .messageUUID(UUID.randomUUID())
+                        .dataSize(4)
+                        .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
 
                     // Check for reply and timeout to determine mission cache
                     try {
@@ -88,6 +106,7 @@ public abstract class MissionListener extends TownyMissionListener {
                         }
                     } catch (TimeoutException | InterruptedException | ExecutionException | PMCReceiveException e) {
                         // This means no response is received, or something went wrong, we need to cache
+                        instance.getInstanceLogger().info("Main server did not respond, caching mission");
                         MissionCacheEntry missionCacheEntry = new MissionCacheEntry(UUID.randomUUID(),
                                 player.getUniqueId(),
                                 missionType,

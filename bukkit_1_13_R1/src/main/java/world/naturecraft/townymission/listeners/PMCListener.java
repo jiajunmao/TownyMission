@@ -7,7 +7,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.PluginMessagingService;
@@ -40,14 +40,17 @@ public class PMCListener implements PluginMessageListener {
         TownyMissionBukkit instance = TownyMissionInstance.getInstance();
         PluginMessage request = PluginMessagingService.parseData(message);
 
+        instance.getInstanceLogger().info("Received PMC on townymission:main");
         // Ignore if the message has been sent 3 seconds ago, 5s is the mark for other server to cache
         long timeDiff = new Date().getTime() - request.getTimestamp();
-        if (Util.msToS(timeDiff) > 3) return;
+        if (Util.msToS(timeDiff) > 3) {
+            instance.getInstanceLogger().info("PMC older than 3 seconds, disgarding. Time diff: " + Util.msToS(timeDiff) + "s");
+            return;
+        }
 
         String subchannel = request.getChannel();
 
         if (subchannel.equalsIgnoreCase("config:response")) {
-            System.out.println("Received a message at " + request.getMessageUUID().toString());
             PluginMessagingService.getInstance().completeRequest(request.getMessageUUID().toString(), message);
         } else if (subchannel.equalsIgnoreCase("mission:request")) {
             // If this is not the main server, just ignore, otherwise this infinite looping
@@ -55,7 +58,7 @@ public class PMCListener implements PluginMessageListener {
 
             OfflinePlayer realPlayer = Bukkit.getOfflinePlayer(UUID.fromString(request.getData()[1]));
             UUID townUUID = TownyUtil.residentOf(realPlayer).getUUID();
-            System.out.println("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
+            instance.getInstanceLogger().info("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
             // Sanity check
 
             BukkitChecker checker = new BukkitChecker(instance).target(realPlayer).silent(true)

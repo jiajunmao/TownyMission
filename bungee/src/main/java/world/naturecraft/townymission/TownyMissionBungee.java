@@ -34,7 +34,7 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
         // This is loading in the config file
         logger.info("===> Registering and parsing configs");
         saveDefaultConfig();
-        mainConfig = new BungeeConfig("world/naturecraft/townymission/bungee/src/main/resources/bungee/config.yml", "config.yml");
+        mainConfig = new BungeeConfig("bungee/config.yml", "config.yml");
         langConfig = new BungeeConfig("lang.yml");
         langConfig.updateConfig("lang.yml");
 

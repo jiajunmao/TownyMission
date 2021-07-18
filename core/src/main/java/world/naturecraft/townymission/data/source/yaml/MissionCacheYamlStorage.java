@@ -48,14 +48,14 @@ public class MissionCacheYamlStorage extends YamlStorage<MissionCacheEntry> impl
     public void add(UUID playerUUID, MissionType missionType, int amount) {
         String uuid = UUID.randomUUID().toString();
 
-        add(uuid + ".playerUUID", playerUUID);
+        add(uuid + ".playerUUID", playerUUID.toString());
         add(uuid + ".missionType", missionType.name());
         add(uuid + ".amount", amount);
     }
 
     @Override
     public void update(UUID uuid, UUID playerUUID, MissionType missionType, int amount) {
-        add(uuid + ".playerUUID", playerUUID);
+        add(uuid + ".playerUUID", playerUUID.toString());
         add(uuid + ".missionType", missionType.name());
         add(uuid + ".amount", amount);
     }

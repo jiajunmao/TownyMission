@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.components.PluginMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,24 +16,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class PluginMessagingBukkitService extends PluginMessagingService {
-
-    /**
-     * The constant singleton.
-     */
-    public static PluginMessagingBukkitService singleton;
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static PluginMessagingBukkitService getInstance() {
-        if (singleton == null) {
-            singleton = new PluginMessagingBukkitService();
-        }
-
-        return singleton;
-    }
 
     public PluginMessage sendAndWait(PluginMessage message) {
         CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());

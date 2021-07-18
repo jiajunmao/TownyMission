@@ -106,7 +106,7 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
     private void addRemote(UUID playerUUID, MissionType missionType, int amount) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
                     playerUUID.toString() + "', '" +
                     missionType.name() + "', '" +
                     amount + "');";
@@ -140,7 +140,7 @@ public class MissionCacheSqlStorage extends SqlStorage<MissionCacheEntry> implem
                     " SET player_uuid='" + playerUUID.toString() +
                     "', mission_type='" + missionType.name() +
                     "', amount='" + amount +
-                    "' WHERE uuid='" + uuid + "';";
+                    "' WHERE uuid='" + uuid.toString() + "';";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;

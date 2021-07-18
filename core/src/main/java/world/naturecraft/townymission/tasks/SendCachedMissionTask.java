@@ -4,7 +4,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.PMCReceiveException;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
-import world.naturecraft.townymission.components.entity.PluginMessage;
+import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.data.dao.MissionCacheDao;
 import world.naturecraft.townymission.services.PluginMessagingService;
 
