@@ -55,7 +55,6 @@ public abstract class MissionListener extends TownyMissionListener {
             // This means either the bungeecord is not enabled
             //  or bungeecord is enabled and this is main server
             //  directly interact with the DAOs
-            instance.getLogger().warning("Main towny server, directing storage");
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {

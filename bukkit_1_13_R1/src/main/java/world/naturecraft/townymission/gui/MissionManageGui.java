@@ -283,6 +283,7 @@ public class MissionManageGui extends TownyMissionGui {
                 };
                 runnable.runTaskAsynchronously(instance);
             }
+
             // This means complete the mission
             else if (entry.isCompleted() && entry.isStarted()) {
                 player.setItemOnCursor(null);
@@ -298,6 +299,7 @@ public class MissionManageGui extends TownyMissionGui {
                 };
                 runnable.runTaskAsynchronously(instance);
             }
+
             // If on going, and right click, that means abort
             else if (entry.isStarted() && e.getClick().equals(ClickType.RIGHT)) {
                 player.setItemOnCursor(null);

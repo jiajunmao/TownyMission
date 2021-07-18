@@ -37,6 +37,7 @@ public class PMCListener implements Listener {
 
             PluginMessagingService.getInstance().send(response);
         } else if (message.getChannel().equals("mission:request")) {
+            TownyMissionInstance.getInstance().getInstanceLogger().warning("Sending " + message.getMessageUUID() + " to all servers");
             PluginMessagingService.getInstance().send(message);
         }
     }
