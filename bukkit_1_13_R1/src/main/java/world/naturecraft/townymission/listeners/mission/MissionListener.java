@@ -69,7 +69,7 @@ public abstract class MissionListener extends TownyMissionListener {
         } else if (instance.getConfig().getBoolean("bungeecord.enable") && !instance.getConfig().getBoolean("bungeecord.main-server")) {
             // This means that bungeecord is enabled, but this is not the main server
             //    send the package to the main server instead
-            instance.getLogger().warning("Not main towny server, passing PMC");
+            //instance.getLogger().warning("Not main towny server, passing PMC");
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -82,12 +82,9 @@ public abstract class MissionListener extends TownyMissionListener {
                     // Check for reply and timeout to determine mission cache
                     try {
                         PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
-                        if (response.getData()[0].equalsIgnoreCase("true")) {
-                            throw new PMCReceiveException("Something wrong when receiving and PMC message");
-                        }
-                    } catch (TimeoutException | InterruptedException | ExecutionException | PMCReceiveException e) {
+                    } catch (TimeoutException | InterruptedException | ExecutionException e) {
                         // This means no response is received, or something went wrong, we need to cache
-                        instance.getInstanceLogger().info("Main server did not respond, caching mission");
+                        //instance.getInstanceLogger().info("Main server did not respond, caching mission");
                         MissionCacheEntry missionCacheEntry = new MissionCacheEntry(UUID.randomUUID(),
                                 player.getUniqueId(),
                                 missionType,

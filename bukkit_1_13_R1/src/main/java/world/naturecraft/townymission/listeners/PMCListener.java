@@ -40,7 +40,6 @@ public class PMCListener implements PluginMessageListener {
         TownyMissionBukkit instance = TownyMissionInstance.getInstance();
         PluginMessage request = PluginMessagingService.parseData(message);
 
-        instance.getInstanceLogger().info("Received PMC on townymission:main");
         // Ignore if the message has been sent 3 seconds ago, 5s is the mark for other server to cache
         long timeDiff = new Date().getTime() - request.getTimestamp();
         if (Util.msToS(timeDiff) > 3) {
@@ -58,7 +57,7 @@ public class PMCListener implements PluginMessageListener {
 
             OfflinePlayer realPlayer = Bukkit.getOfflinePlayer(UUID.fromString(request.getData()[1]));
             UUID townUUID = TownyUtil.residentOf(realPlayer).getUUID();
-            instance.getInstanceLogger().info("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
+            //instance.getInstanceLogger().info("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
             // Sanity check
 
             BukkitChecker checker = new BukkitChecker(instance).target(realPlayer).silent(true)

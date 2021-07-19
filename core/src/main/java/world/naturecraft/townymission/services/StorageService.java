@@ -145,7 +145,7 @@ public class StorageService {
      */
     public void initializeMap() {
         for (DbType dbType : DbType.values()) {
-            if (instance.isMainServer() || !dbType.equals(DbType.MISSION_CACHE)) {
+            if (instance.isMainServer() || dbType.equals(DbType.MISSION_CACHE)) {
                 String packageName = "world.naturecraft.townymission.data.source." + storageType.name().toLowerCase(Locale.ROOT);
                 String className = "";
                 if (dbType.name().indexOf('_') != -1) {
