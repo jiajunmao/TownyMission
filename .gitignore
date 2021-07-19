@@ -5,6 +5,5 @@ target/
 bukkit_1_13_R1/target/
 bungee/target/
 core/target/
-
-bungee/target/maven-archiver/pom.properties
 bukkit_1_13_R1/target/maven-archiver/pom.properties
+bungee/target/maven-archiver/pom.properties
