@@ -52,13 +52,16 @@ public class MissionCacheYamlStorage extends YamlStorage<MissionCacheEntry> impl
             return entryList;
 
         for (String key : file.getConfigurationSection("").getKeys(false)) {
-            String startedPlayerUUID = file.getString(key + ".startedPlayerUUID");
-            entryList.add(new MissionCacheEntry(
-                    UUID.fromString(key),
-                    UUID.fromString(file.getString(key + ".playerUUID")),
-                    MissionType.valueOf(file.getString(key + ".missionType").toUpperCase(Locale.ROOT)),
-                    file.getInt(key + ".amount")
-            ));
+            try {
+                entryList.add(new MissionCacheEntry(
+                        UUID.fromString(key),
+                        UUID.fromString(file.getString(key + ".playerUUID")),
+                        MissionType.valueOf(file.getString(key + ".missionType").toUpperCase(Locale.ROOT)),
+                        file.getInt(key + ".amount")
+                ));
+            } catch (NullPointerException e) {
+                remove(UUID.fromString(key));
+            }
         }
 
         return entryList;

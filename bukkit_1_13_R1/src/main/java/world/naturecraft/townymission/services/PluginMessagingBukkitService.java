@@ -22,6 +22,7 @@ public class PluginMessagingBukkitService extends PluginMessagingService {
         send(message);
 
         Byte[] responseBytes = future.join();
+        response.remove(message.getMessageUUID().toString());
         return parseData(responseBytes);
     }
 
@@ -31,6 +32,7 @@ public class PluginMessagingBukkitService extends PluginMessagingService {
         send(message);
 
         Byte[] responseBytes = future.get(timeout, unit);
+        response.remove(message.getMessageUUID().toString());
         return parseData(responseBytes);
     }
 
@@ -38,7 +40,7 @@ public class PluginMessagingBukkitService extends PluginMessagingService {
         // Selecting a random player
         List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
         if (players.size() == 0) {
-            TownyMissionInstance.getInstance().getInstanceLogger().warning("No player online, cannot send plugin message");
+            //TownyMissionInstance.getInstance().getInstanceLogger().warning("No player online, cannot send plugin message");
             return;
         }
         Player player = players.get(0);

@@ -61,7 +61,6 @@ public class PluginMessagingBungeeService extends PluginMessagingService {
 
         for (ServerInfo info : ProxyServer.getInstance().getServers().values()) {
             info.sendData("townymission:main", out.toByteArray());
-            TownyMissionInstance.getInstance().getInstanceLogger().info("Sending message to " + info.getName());
         }
     }
 }

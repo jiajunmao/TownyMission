@@ -99,7 +99,7 @@ public abstract class PluginMessagingService extends TownyMissionService {
      * @return the completable future
      */
     public CompletableFuture<Byte[]> registerRequest(String respondId) {
-        instance.getInstanceLogger().info("Registering " + respondId);
+        //instance.getInstanceLogger().info("Registering " + respondId);
         CompletableFuture<Byte[]> future = new CompletableFuture<>();
         response.put(respondId, future);
 
@@ -113,11 +113,6 @@ public abstract class PluginMessagingService extends TownyMissionService {
      * @param data       the data
      */
     public void completeRequest(String responseId, Byte[] data) {
-        instance.getInstanceLogger().info("Completing request: " + responseId);
-        for (String key : response.keySet()) {
-            instance.getInstanceLogger().info(key);
-        }
-        instance.getInstanceLogger().info("Response hashmap contains key: " + response.containsKey(responseId));
         if (!response.containsKey(responseId)) return;
         this.response.get(responseId).complete(data);
     }
