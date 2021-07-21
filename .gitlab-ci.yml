@@ -33,7 +33,7 @@ build:
   dependencies:
     - test
   script:
-    - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml clean package'
+    - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml clean package -U'
   artifacts:
     paths:
       - target/TownyMission*.jar
@@ -47,7 +47,7 @@ release:
   only:
     - master
   script:
-    - 'mvn -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s ci_settings.xml release:prepare release:perform'
+    - 'mvn -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s ci_settings.xml release:prepare release:perform -U'
   artifacts:
     paths:
       - target/TownyMission*.jar
