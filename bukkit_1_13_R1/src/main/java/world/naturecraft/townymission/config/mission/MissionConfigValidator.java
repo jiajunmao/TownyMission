@@ -4,8 +4,8 @@
 
 package world.naturecraft.townymission.config.mission;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
@@ -61,7 +61,7 @@ public class MissionConfigValidator {
                             }
                         } else {
                             try {
-                                Material.valueOf(type);
+                                XMaterial.valueOf(type);
                             } catch (IllegalArgumentException e) {
                                 throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid", e);
                             }
