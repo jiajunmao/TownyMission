@@ -22,7 +22,7 @@ stages:
 test:
   stage: test
   script:
-    - 'mvn -s ci_settings.xml clean test'
+    - 'mvn -s ci_settings.xml clean test -U'
   artifacts:
     when: always
     reports:
