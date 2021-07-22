@@ -28,7 +28,7 @@ public class PMCListener implements Listener {
         //TownyMissionInstance.getInstance().getInstanceLogger().info("Bungee received message " + message.getMessageUUID());
         TownyMissionBungee instance = TownyMissionInstance.getInstance();
         if (message.getChannel().equals("config:request")) {
-            String configValue = instance.getConfig().getString(message.getData()[0]);
+            String configValue = instance.getInstanceConfig().getString(message.getData()[0]);
             PluginMessage response = new PluginMessage()
                     .channel("config:response")
                     .messageUUID(message.getMessageUUID())

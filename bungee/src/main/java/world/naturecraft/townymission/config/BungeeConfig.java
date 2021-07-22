@@ -1,8 +1,10 @@
 package world.naturecraft.townymission.config;
 
+import com.tchristofferson.configupdater.ConfigUpdater;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import world.naturecraft.townymission.TownyMissionBungee;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
@@ -12,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -21,8 +24,8 @@ public class BungeeConfig implements TownyMissionConfig {
 
     private Configuration configuration;
     private File configFile;
-    private String pluginPath;
-    private String folderPath;
+    private String targetPath;
+    private String sourcePath;
 
     /**
      * Instantiates a new Bungee config.
@@ -30,43 +33,44 @@ public class BungeeConfig implements TownyMissionConfig {
      * @param path the path
      */
     public BungeeConfig(String path) {
-        this.pluginPath = path;
-        this.folderPath = path;
-        createConfig(path);
+        this.targetPath = path;
+        this.sourcePath = path;
+        createConfig();
     }
 
-    public BungeeConfig(String pluginPath, String folderPath) {
-        this.pluginPath = pluginPath;
-        this.folderPath = folderPath;
-        createConfig(pluginPath);
+    public BungeeConfig(String targetPath, String sourcePath) {
+        this.targetPath = targetPath;
+        this.sourcePath = sourcePath;
+        createConfig();
     }
 
     @Override
-    public void createConfig(String path) {
+    public void createConfig() {
         try {
             TownyMissionBungee instance = TownyMissionInstance.getInstance();
-            configFile = new File(instance.getInstanceDataFolder(), folderPath);
+            configFile = new File(instance.getInstanceDataFolder(), targetPath);
             if (!configFile.exists()) {
-                try (InputStream in = instance.getResourceAsStream(pluginPath)) {
+                try (InputStream in = instance.getResourceAsStream(sourcePath)) {
                     Files.copy(in, configFile.toPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(instance.getInstanceDataFolder(), folderPath));
+            configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(instance.getInstanceDataFolder(), targetPath));
         } catch (IOException e) {
             throw new ConfigLoadingException(e);
         }
     }
 
     @Override
-    public void updateConfig(String path) {
+    public void updateConfig() {
         try {
+            System.out.println("Updating " + targetPath);
             TownyMissionBungee instance = TownyMissionInstance.getInstance();
 
-            Configuration currLangConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(instance.getInstanceDataFolder(), path));
-            Configuration pluginConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(instance.getResourceAsStream(path));
+            Configuration currLangConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(instance.getInstanceDataFolder(), targetPath));
+            Configuration pluginConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(instance.getResourceAsStream(sourcePath));
 
             for (String key : pluginConfig.getKeys()) {
                 if (currLangConfig.getString(key) == null) {
@@ -113,6 +117,19 @@ public class BungeeConfig implements TownyMissionConfig {
         return configuration.getSection(path).getKeys();
     }
 
+    @Override
+    public Collection<String> getDeepKeys(String path) {
+        ArrayList<String> list = new ArrayList<>();
+        Collection<String> keys = configuration.getSection(path).getKeys();
+        if (!keys.isEmpty()) {
+            for (String key : keys) {
+                list.addAll(getDeepKeys(path + "." + key));
+            }
+        } else {
+            list.add(path);
+        }
+        return list;
+    }
     @Override
     public Collection<String> getStringList(String path) {
         return configuration.getStringList(path);

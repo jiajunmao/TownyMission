@@ -73,8 +73,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing main and lang config"));
         // Main config and lang config needs to be saved regardless
         mainConfig = new BukkitConfig("config.yml");
+        mainConfig.updateConfig();
         langConfig = new BukkitConfig("lang.yml");
-        langConfig.updateConfig("lang.yml");
+        langConfig.updateConfig();
 
         determineBungeeCord();
 
@@ -86,7 +87,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
          * Configure data storage, yaml, or mysql
          */
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Connecting to datastore"));
-        String storage = getConfig().getString("storage");
+        String storage = getInstanceConfig().getString("storage");
         storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
 
         if (storageType.equals(StorageType.MYSQL)) {
@@ -169,7 +170,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
          * Determine bungeecord is enabled, and whether this server is the main server
          */
         isMainServer = false;
-        if (getConfig().getBoolean("bungeecord.enable")) {
+        if (getInstanceConfig().getBoolean("bungeecord.enable")) {
             getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Running BUNGEECORD mode"));
             getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering Bungee Plugin Messaging Channel"));
             registerPMC();
@@ -177,7 +178,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             getServer().getConsoleSender().sendMessage("BungeeCord detected and enabled");
             isBungeecordEnabled = true;
 
-            isMainServer = getConfig().getBoolean("bungeecord.main-server");
+            isMainServer = getInstanceConfig().getBoolean("bungeecord.main-server");
         }
     }
 
@@ -370,7 +371,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     public void reloadConfigs() throws ConfigLoadingException {
         mainConfig = new BukkitConfig("config.yml");
-        this.reloadConfig();
         langConfig = new BukkitConfig("lang.yml");
         missionConfig = new MissionConfig();
         statsConfig = new BukkitConfig("datastore/stats.yml");
