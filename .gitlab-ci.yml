@@ -69,6 +69,23 @@ success_notification:
       - target/TownyMission*
     expire_in: 1 week
 
+success_notification_public:
+  stage: notification
+  tags:
+    - shell
+  only:
+    - master
+  dependencies:
+    - build
+  script:
+    - chmod +x ./send.sh
+    - bash send.sh success $WEBHOOK_URL_PUBLIC
+  when: on_success
+  artifacts:
+    paths:
+      - target/TownyMission*
+    expire_in: 1 week
+
 fail_notification:
   stage: notification
   tags:
