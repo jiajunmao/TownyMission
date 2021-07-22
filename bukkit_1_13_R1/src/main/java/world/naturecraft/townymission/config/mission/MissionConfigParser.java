@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.config.mission;
 
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.*;
 import world.naturecraft.townymission.config.TownyMissionConfig;
@@ -26,6 +27,7 @@ public class MissionConfigParser {
      */
     public static List<MissionJson> parse(MissionType type, TownyMissionConfig fileConfiguration) {
         List<MissionJson> list = new ArrayList<>();
+        System.out.println("Parsing: " + type.name());
         for (String key : fileConfiguration.getShallowKeys()) {
             int amount = fileConfiguration.getInt(key + ".amount");
             int reward = fileConfiguration.getInt(key + ".reward");
@@ -75,8 +77,10 @@ public class MissionConfigParser {
     public static List<MissionJson> parseAll(TownyMissionBukkit instance) {
         List<MissionJson> all = new ArrayList<>();
         for (MissionType missionType : MissionType.values()) {
-            List<MissionJson> customList = parse(missionType, instance);
-            all.addAll(customList);
+            if (instance.isMissionEnabled(missionType)) {
+                List<MissionJson> customList = parse(missionType, instance);
+                all.addAll(customList);
+            }
         }
 
         return all;

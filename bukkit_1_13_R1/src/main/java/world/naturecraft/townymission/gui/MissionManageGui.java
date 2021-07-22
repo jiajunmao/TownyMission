@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.gui;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
@@ -155,7 +156,7 @@ public class MissionManageGui extends TownyMissionGui {
      * Place filler.
      */
     public void placeFiller() {
-        ItemStack itemStack = new ItemStack(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+        ItemStack itemStack = new ItemStack(new ItemStack(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial(), 1));
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(ChatService.getInstance().translateColor("&r"));
         itemStack.setItemMeta(meta);
