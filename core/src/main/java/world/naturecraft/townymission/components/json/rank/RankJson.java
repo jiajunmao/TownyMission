@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.townymission.components.enums.RankType;
 
 import java.beans.ConstructorProperties;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,8 @@ public class RankJson {
      */
     @JsonIgnore
     public List<TownRankJson> getTownRankJsons() {
-        return List.copyOf(ranks.values());
+        List<TownRankJson> list = new ArrayList<>(ranks.values());
+        return list;
     }
 
     /**
