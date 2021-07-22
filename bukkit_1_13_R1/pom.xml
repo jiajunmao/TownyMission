@@ -2,12 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>world.naturecraft</groupId>
     <artifactId>TownyMission-bukkit_1_13_R1</artifactId>
-    <version>2.0.11</version>
+    <version>2.0.12-SNAPSHOT</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>world.naturecraft</groupId>
         <artifactId>TownyMission-parent</artifactId>
-        <version>2.0.11</version>
+        <version>2.0.12-SNAPSHOT</version>
     </parent>
 
     <build>
