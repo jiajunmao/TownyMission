@@ -57,20 +57,20 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     @Override
     public void onEnable() {
 
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "  _______                        __  __ _         _             "));
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + " |__   __|                      |  \\/  (_)       (_)            "));
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ "));
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |"));
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|"));
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "                            __/ |                               "));
-        logger.info(BukkitUtil.translateColor("{#22DDBA}" + "                           |___/                                "));
-        logger.info("-----------------------------------------------------------------");
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "  _______                        __  __ _         _             "));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + " |__   __|                      |  \\/  (_)       (_)            "));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "    | |/ _ \\ \\ /\\ / / '_ \\| | | | |\\/| | / __/ __| |/ _ \\| '_ \\ "));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "    | | (_) \\ V  V /| | | | |_| | |  | | \\__ \\__ \\ | (_) | | | |"));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "    |_|\\___/ \\_/\\_/ |_| |_|\\__, |_|  |_|_|___/___/_|\\___/|_| |_|"));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "                            __/ |                               "));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "                           |___/                                "));
+        getServer().getConsoleSender().sendMessage("-----------------------------------------------------------------");
 
         TownyMissionInstanceType.serverType = ServerType.BUKKIT;
         missionAndHooks = new HashMap<>();
 
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing main and lang config"));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing main and lang config"));
         // Main config and lang config needs to be saved regardless
         mainConfig = new BukkitConfig("config.yml");
         langConfig = new BukkitConfig("lang.yml");
@@ -85,15 +85,15 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * Configure data storage, yaml, or mysql
          */
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Connecting to datastore"));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Connecting to datastore"));
         String storage = getConfig().getString("storage");
         storageType = StorageType.valueOf(storage.toUpperCase(Locale.ROOT));
 
         if (storageType.equals(StorageType.MYSQL)) {
-            logger.info("Using MYSQL as storage backend");
+            getServer().getConsoleSender().sendMessage("Using MYSQL as storage backend");
             connect();
         } else {
-            logger.info("Using YAML flat file as storage backend");
+            getServer().getConsoleSender().sendMessage("Using YAML flat file as storage backend");
         }
 
         /**
@@ -101,15 +101,15 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
          */
         // If is bungee, and not main, do nothing here except for the listeners
         if (!isBungeecordEnabled || isMainServer) {
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering commands"));
+            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering commands"));
             registerCommands();
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering timers"));
+            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering timers"));
             registerTimers();
         }
 
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering listeners"));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering listeners"));
         registerListeners();
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering tasks"));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering tasks"));
         registerTasks();
     }
 
@@ -120,7 +120,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         try {
             // If bungeecord and not main server, don't save
             if (!isBungeecordEnabled || isMainServer) {
-                logger.info(BukkitUtil.translateColor("{#E9B728}===> Parsing mission and rewards config"));
+                getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing mission and rewards config"));
                 missionConfig = new MissionConfig();
                 statsConfig = new BukkitConfig("datastore/stats.yml");
             }
@@ -170,11 +170,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
          */
         isMainServer = false;
         if (getConfig().getBoolean("bungeecord.enable")) {
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Running BUNGEECORD mode"));
-            logger.info(BukkitUtil.translateColor("{#E9B728}===> Registering Bungee Plugin Messaging Channel"));
+            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Running BUNGEECORD mode"));
+            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering Bungee Plugin Messaging Channel"));
             registerPMC();
             // This means that this bukkit instance should respond to the events
-            logger.info("BungeeCord detected and enabled");
+            getServer().getConsoleSender().sendMessage("BungeeCord detected and enabled");
             isBungeecordEnabled = true;
 
             isMainServer = getConfig().getBoolean("bungeecord.main-server");
@@ -185,7 +185,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         /**
          * Determine whether the server admin configured the hooks correctly
          */
-        logger.info(BukkitUtil.translateColor("{#E9B728}===> Determining Enabled Mission Type"));
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Determining Enabled Mission Type"));
         Collection<String> keys = mainConfig.getKeys("mission.types");
         for (String key : keys) {
             MissionType missionType = MissionType.valueOf(key.toUpperCase(Locale.ROOT));
@@ -218,14 +218,14 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
         for (MissionType missionType : MissionType.values()) {
             if (missionAndHooks.containsKey(missionType)) {
-                logger.info(BukkitUtil.translateColor("&d" + missionType + " &fis enabled!"));
+                getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&d" + missionType + " &fis enabled!"));
             }
         }
     }
 
     @Override
     public void onDisable() {
-        logger.info("=========   TOWNYMISSION DISABLING   =========");
+        getServer().getConsoleSender().sendMessage("=========   TOWNYMISSION DISABLING   =========");
         if (storageType == null) {
             return;
         }
@@ -283,7 +283,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         // If bungee and !main, do not register town related listeners
         if (!isBungeecordEnabled || isMainServer) {
             if (isMissionEnabled(MissionType.EXPANSION)) {
-                logger.info("Hooked into Towny Expansion Events");
+                getServer().getConsoleSender().sendMessage("Hooked into Towny Expansion Events");
                 getServer().getPluginManager().registerEvents(new ExpansionListener(this), this);
             }
 
@@ -295,23 +295,23 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         }
 
         if (isMissionEnabled(MissionType.MOB)) {
-            logger.info("Hooked into Vanilla Mob Events");
+            getServer().getConsoleSender().sendMessage("Hooked into Vanilla Mob Events");
             getServer().getPluginManager().registerEvents(new MobListener(this), this);
         }
 
         if (isMissionEnabled(MissionType.MONEY)) {
             if (missionAndHooks.get(MissionType.MONEY).contains("CMI")) {
-                logger.info("Hooked into CMI Moeny Events");
+                getServer().getConsoleSender().sendMessage("Hooked into CMI Moeny Events");
                 getServer().getPluginManager().registerEvents(new CMIMoneyListener(this), this);
             }
             if (missionAndHooks.get(MissionType.MONEY).contains("EssentialsX")) {
-                logger.info("Hooked into EssentialsX Money Events");
+                getServer().getConsoleSender().sendMessage("Hooked into EssentialsX Money Events");
                 getServer().getPluginManager().registerEvents(new EssentialMoneyListener(this), this);
             }
         }
 
         if (isMissionEnabled(MissionType.VOTE)) {
-            logger.info("Hooked into UltimateVotes Vote Events");
+            getServer().getConsoleSender().sendMessage("Hooked into UltimateVotes Vote Events");
             getServer().getPluginManager().registerEvents(new VoteListener(this), this);
         }
     }
@@ -330,16 +330,16 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     private void registerTimers() {
         TimerService timerService = TimerService.getInstance();
-        logger.info("Started sprint timer");
+        getServer().getConsoleSender().sendMessage("Started sprint timer");
         timerService.startSprintTimer();
-        logger.info("Started season timer");
+        getServer().getConsoleSender().sendMessage("Started season timer");
         timerService.startSeasonTimer();
     }
 
     private void registerTasks() {
         if (!isMainServer()) {
             SendCachedMissionTask.registerTask();
-            logger.info("Started send cache task");
+            getServer().getConsoleSender().sendMessage("Started send cache task");
         }
     }
 

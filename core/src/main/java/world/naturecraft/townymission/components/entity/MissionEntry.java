@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.components.entity;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -186,18 +187,18 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
             case RESOURCE:
                 ResourceMissionJson resourceMissionJson = (ResourceMissionJson) missionJson;
                 if (resourceMissionJson.isMi()) {
-                    return Material.GLOWSTONE_DUST;
+                    return XMaterial.GLOWSTONE_DUST.parseMaterial();
                 } else {
-                    return Material.WHEAT;
+                    return XMaterial.WHEAT.parseMaterial();
                 }
             case MOB:
-                return Material.STONE_SWORD;
+                return XMaterial.NETHERITE_SWORD.parseMaterial();
             case EXPANSION:
-                return Material.GRASS_BLOCK;
+                return XMaterial.DIRT_PATH.parseMaterial();
             case VOTE:
-                return Material.WRITABLE_BOOK;
+                return XMaterial.WRITABLE_BOOK.parseMaterial();
             case MONEY:
-                return Material.PAPER;
+                return XMaterial.PAPER.parseMaterial();
             default:
                 return null;
         }
