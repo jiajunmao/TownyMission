@@ -51,10 +51,10 @@ mission:
   amount: 14
   # Configure whether the missions are enabled or not
   types:
+    # You have to one of the hooks set to true for missions to be enabled
+    #  Example: Even if you set enable to true and CMI/EssentialsX to false, money mission would be disabled
     money:
       enable: true
-      # You have to one of the hooks set to true for the mission to be enabled
-      #  Even if you set enable to true and CMI/EssentialsX to false, money mission would be disabled
       hooks:
         CMI: true
         EssentialsX: false
@@ -69,6 +69,7 @@ mission:
       enable: true
     resource:
       enable: true
+      # **Exception! Even if MMOItems is false, you can still enable VANILLA resource mission by setting enable to true
       hooks:
         MMOItems: true
 

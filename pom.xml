@@ -198,6 +198,11 @@
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
 
+        <repository>
+            <id>maven-central</id>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -318,6 +323,13 @@
             <type>javadoc</type>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.tchristofferson</groupId>
+            <artifactId>ConfigUpdater</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>

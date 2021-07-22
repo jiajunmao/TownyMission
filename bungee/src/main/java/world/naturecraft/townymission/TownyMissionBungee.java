@@ -33,28 +33,15 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
         TownyMissionInstanceType.serverType = ServerType.BUNGEE;
         // This is loading in the config file
         logger.info("===> Registering and parsing configs");
-        saveDefaultConfig();
-        mainConfig = new BungeeConfig("bungee/config.yml", "config.yml");
+        mainConfig = new BungeeConfig("config.yml", "bungee/config.yml");
+        mainConfig.updateConfig();
         langConfig = new BungeeConfig("lang.yml");
-        langConfig.updateConfig("lang.yml");
+        langConfig.updateConfig();
 
         // Registering plugin messaging channel
         logger.info("===> Registering Listeners and PMC");
         registerChannel();
         registerListener();
-    }
-
-    /**
-     * Save default config.
-     */
-    public void saveDefaultConfig() {
-        try {
-            createPlugin();
-            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder(), "config.yml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            onDisable();
-        }
     }
 
     /**
@@ -67,53 +54,25 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     @Override
     public void onDisable() {
         logger.info("===> Disabling TownyMission");
-        getProxy().unregisterChannel("townymission:main");
+        deregisterChannel();
         getProxy().getPluginManager().unregisterCommands(this);
         getProxy().getPluginManager().unregisterListeners(this);
-    }
-
-    /**
-     * Create plugin.
-     *
-     * @throws IOException the io exception
-     */
-    public void createPlugin() throws IOException {
-        if (!getDataFolder().exists())
-            getDataFolder().mkdir();
-
-        File file = new File(getDataFolder(), "config.yml");
-
-        if (!file.exists()) {
-            InputStream in = getResourceAsStream("world/naturecraft/townymission/bungee/src/main/resources/bungee/config.yml");
-            Files.copy(in, file.toPath());
-        }
     }
 
     /**
      * Register channel.
      */
     public void registerChannel() {
-        TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
-        townyMissionBungee.getProxy().registerChannel("townymission:main");
-        townyMissionBungee.logger.info("townymission:main PMC channel registered");
+        getProxy().registerChannel("townymission:main");
+        logger.info("townymission:main PMC channel registered");
     }
 
     /**
      * Deregister channel.
      */
     public void deregisterChannel() {
-        TownyMissionBungee townyMissionBungee = TownyMissionInstance.getInstance();
-        townyMissionBungee.getProxy().unregisterChannel("townymission:main");
-        townyMissionBungee.logger.info("townymission:main PMC channel unregistered");
-    }
-
-    /**
-     * Gets config.
-     *
-     * @return the config
-     */
-    public Configuration getConfig() {
-        return config;
+        getProxy().unregisterChannel("townymission:main");
+        logger.info("townymission:main PMC channel unregistered");
     }
 
     @Override

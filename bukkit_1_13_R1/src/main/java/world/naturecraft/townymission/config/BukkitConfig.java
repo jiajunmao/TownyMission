@@ -1,9 +1,11 @@
 package world.naturecraft.townymission.config;
 
+import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
@@ -12,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -32,17 +35,17 @@ public class BukkitConfig implements TownyMissionConfig {
     public BukkitConfig(String path) {
         this.sourcePath = path;
         this.targetPath = path;
-        createConfig(path);
+        createConfig();
     }
 
     public BukkitConfig(String sourcePath, String targetPath) {
         this.sourcePath = sourcePath;
         this.targetPath = targetPath;
-        createConfig(sourcePath);
+        createConfig();
     }
 
     @Override
-    public void createConfig(String path) {
+    public void createConfig() {
         try {
             TownyMissionInstance instance = TownyMissionInstance.getInstance();
             configFile = new File(instance.getInstanceDataFolder(), targetPath);
@@ -60,24 +63,18 @@ public class BukkitConfig implements TownyMissionConfig {
     }
 
     @Override
-    public void updateConfig(String path) {
+    public void updateConfig() {
         try {
-            TownyMissionInstance instance = TownyMissionInstance.getInstance();
-            File langFile = new File(instance.getInstanceDataFolder(), path);
-            FileConfiguration currLangConfig = new YamlConfiguration();
-            currLangConfig.load(langFile);
+            TownyMissionBukkit instance = TownyMissionInstance.getInstance();
 
-            FileConfiguration pluginConfig = new YamlConfiguration();
-            Reader reader = new InputStreamReader(instance.getInstanceResource(path));
-            pluginConfig.load(reader);
+            File currFile = new File(instance.getInstanceDataFolder(), targetPath);
+            FileConfiguration currConfig = new YamlConfiguration();
+            currConfig.load(currFile);
 
-            for (String key : pluginConfig.getConfigurationSection("").getKeys(true)) {
-                if (currLangConfig.getString(key) == null) {
-                    currLangConfig.createSection(key);
-                    currLangConfig.set(key, pluginConfig.getString(key));
-                }
-            }
-            currLangConfig.save(langFile);
+            System.out.println("Updating " + targetPath);
+            ConfigUpdater.update(instance, sourcePath, currFile, new ArrayList<>());
+
+            instance.reloadConfigs();
         } catch (IOException | InvalidConfigurationException e) {
             throw new ConfigLoadingException(e);
         }
@@ -119,6 +116,11 @@ public class BukkitConfig implements TownyMissionConfig {
         if (section == null)
             return null;
         return section.getKeys(false);
+    }
+
+    @Override
+    public Collection<String> getDeepKeys(String path) {
+        return configuration.getConfigurationSection(path).getKeys(true);
     }
 
     @Override

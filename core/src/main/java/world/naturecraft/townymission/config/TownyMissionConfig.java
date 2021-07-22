@@ -11,17 +11,13 @@ public interface TownyMissionConfig {
 
     /**
      * Create config.
-     *
-     * @param path the path
      */
-    void createConfig(String path);
+    void createConfig();
 
     /**
      * Update config.
-     *
-     * @param path the path
      */
-    void updateConfig(String path);
+    void updateConfig();
 
     /**
      * Gets int.
@@ -71,6 +67,8 @@ public interface TownyMissionConfig {
     Collection<String> getShallowKeys();
 
     Collection<String> getKeys(String path);
+
+    Collection<String> getDeepKeys(String path);
 
     Collection<String> getStringList(String path);
 
