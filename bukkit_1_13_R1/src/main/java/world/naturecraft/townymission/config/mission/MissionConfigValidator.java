@@ -8,10 +8,12 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.TownyMissionConfig;
+import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.MMOService;
 import world.naturecraft.townymission.utils.Util;
 
@@ -57,8 +59,12 @@ public class MissionConfigValidator {
                         String miID = missionConfig.getString(path);
 
                         if (isMi.equalsIgnoreCase("true")) {
-                            if (!MMOService.getInstance().validate(type, miID)) {
-                                throwException(missionConfig, key, "ResourceType(MI) " + type + " for entry " + key + " is invalid");
+                            if (((TownyMissionBukkit) TownyMissionInstance.getInstance()).getHooks(MissionType.RESOURCE).contains("MMOItems")) {
+                                if (!MMOService.getInstance().validate(type, miID)) {
+                                    throwException(missionConfig, key, "ResourceType(MI) " + type + " for entry " + key + " is invalid");
+                                }
+                            } else {
+                                throwException(missionConfig, key, "ResourceType " + type + " for entry " + key + " is invalid");
                             }
                         } else {
                             try {
@@ -99,7 +105,7 @@ public class MissionConfigValidator {
                 }
             } catch (ConfigParsingException e) {
                 TownyMissionInstance instance = TownyMissionInstance.getInstance();
-                instance.getInstanceLogger().warning(e.getMessage());
+                ((TownyMissionBukkit) instance).getServer().getConsoleSender().sendMessage(ChatService.getInstance().translateColor("&c" + e.getMessage()));
             }
         }
     }

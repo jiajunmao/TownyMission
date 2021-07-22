@@ -33,24 +33,30 @@ public class MissionConfigParser {
             int reward = fileConfiguration.getInt(key + ".reward");
             int hrAllowed = fileConfiguration.getInt(key + ".timeAllowed");
 
-            if (type.equals(MissionType.EXPANSION)) {
-                String world = fileConfiguration.getString(key + ".world");
-                list.add(new ExpansionMissionJson(world, amount, 0, hrAllowed, reward, null));
-            } else if (type.equals(MissionType.MOB)) {
-                String mobType = fileConfiguration.getString(key + ".type");
-                MobMissionJson mobMissionJson = new MobMissionJson((mobType), amount, 0, hrAllowed, reward, null);
-                list.add(mobMissionJson);
-            } else if (type.equals(MissionType.MONEY)) {
-                boolean returnable = fileConfiguration.getBoolean(key + ".returnable");
-                list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, returnable, null));
-            } else if (type.equals(MissionType.RESOURCE)) {
-                boolean isMi = fileConfiguration.getBoolean(key + ".isMi");
-                String resourceType = fileConfiguration.getString(key + ".type");
-                String miId = fileConfiguration.getString(key + ".miID");
-                boolean returnable = fileConfiguration.getBoolean(key + ".returnable");
-                list.add(new ResourceMissionJson(isMi, resourceType, miId, amount, 0, hrAllowed, reward, returnable, null));
-            } else if (type.equals(MissionType.VOTE)) {
-                list.add(new VoteMissionJson(amount, 0, hrAllowed, reward, null));
+            switch (type) {
+                case EXPANSION:
+                    String world = fileConfiguration.getString(key + ".world");
+                    list.add(new ExpansionMissionJson(world, amount, 0, hrAllowed, reward, null));
+                    break;
+                case MOB:
+                    String mobType = fileConfiguration.getString(key + ".type");
+                    MobMissionJson mobMissionJson = new MobMissionJson((mobType), amount, 0, hrAllowed, reward, null);
+                    list.add(mobMissionJson);
+                    break;
+                case MONEY:
+                    boolean returnable = fileConfiguration.getBoolean(key + ".returnable");
+                    list.add(new MoneyMissionJson(amount, 0, hrAllowed, reward, returnable, null));
+                    break;
+                case RESOURCE:
+                    boolean isMi = fileConfiguration.getBoolean(key + ".isMi");
+                    TownyMissionBukkit instance = TownyMissionInstance.getInstance();
+                    String resourceType = fileConfiguration.getString(key + ".type");
+                    String miId = fileConfiguration.getString(key + ".miID");
+                    returnable = fileConfiguration.getBoolean(key + ".returnable");
+                    list.add(new ResourceMissionJson(isMi, resourceType, miId, amount, 0, hrAllowed, reward, returnable, null));
+                    break;
+                case VOTE:
+                    list.add(new VoteMissionJson(amount, 0, hrAllowed, reward, null));
             }
         }
 

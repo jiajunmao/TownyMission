@@ -56,6 +56,11 @@ public class PMCListener implements PluginMessageListener {
             if (!instance.getConfig().getBoolean("bungeecord.main-server")) return;
 
             OfflinePlayer realPlayer = Bukkit.getOfflinePlayer(UUID.fromString(request.getData()[1]));
+            if (TownyUtil.residentOf(realPlayer) == null) {
+                // This means that the player does not have a town
+                return;
+            }
+
             UUID townUUID = TownyUtil.residentOf(realPlayer).getUUID();
             //instance.getInstanceLogger().info("Received PMC request for player: " + realPlayer.getName() + " of mission type " + request.getData()[2]);
             // Sanity check

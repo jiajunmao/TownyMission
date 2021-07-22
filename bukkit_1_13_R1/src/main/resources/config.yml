@@ -69,6 +69,8 @@ mission:
       enable: true
     resource:
       enable: true
+      hooks:
+        MMOItems: true
 
 # Sprint settings
 sprint:

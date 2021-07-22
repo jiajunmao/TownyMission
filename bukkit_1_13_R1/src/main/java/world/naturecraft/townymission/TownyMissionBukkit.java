@@ -189,19 +189,27 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         Collection<String> keys = mainConfig.getKeys("mission.types");
         for (String key : keys) {
             MissionType missionType = MissionType.valueOf(key.toUpperCase(Locale.ROOT));
+
             if (mainConfig.getKeys("mission.types." + key + ".hooks") == null
                     || mainConfig.getKeys("mission.types." + key + ".hooks").size() == 0) {
                 // This means that this mission does not have hooks, check enabled or not
                 if (mainConfig.getBoolean("mission.types." + key + ".enable")) {
-                    missionAndHooks.put(missionType, null);
+                    missionAndHooks.put(missionType, new ArrayList<>());
                 }
             } else {
                 // This means this type has hooks, one of the hooks has to be enabled for it to be enabled
+
+                // Special corner case: RESOURCE needs to enabled vanilla with hooks
+                if (missionType.equals(MissionType.RESOURCE) && mainConfig.getBoolean("mission.types." + key + ".enable")) {
+                    missionAndHooks.put(MissionType.RESOURCE, new ArrayList<>());
+                }
+
                 Collection<String> hooks = mainConfig.getKeys("mission.types." + key + ".hooks");
                 for (String hook : hooks) {
                     if (Bukkit.getPluginManager().isPluginEnabled(hook)
                             && mainConfig.getBoolean("mission.types." + key + ".hooks." + hook)
                             && mainConfig.getBoolean("mission.types." + key + ".enable")) {
+                        System.out.println("Hook enabled");
                         if (missionAndHooks.containsKey(missionType)) {
                             List<String> hookList = missionAndHooks.get(missionType);
                             hookList.add(hook);
@@ -380,6 +388,10 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         finalString += langConfig.getString("prefix") + " ";
         finalString += langConfig.getString(path);
         return finalString;
+    }
+
+    public String getLangEntryNoPrefix(String path) {
+        return langConfig.getString(path);
     }
 
     /**

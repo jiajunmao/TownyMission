@@ -24,7 +24,7 @@ public class SendCachedMissionTask {
         BukkitRunnable r = new BukkitRunnable() {
             @Override
             public void run() {
-                if (previousComplete.getData() == false) return;
+                if (!previousComplete.getData()) return;
 
                 previousComplete.setData(false);
                 TownyMissionInstance.getInstance().getInstanceLogger().info("Attempting to send cached missions");
