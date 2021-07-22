@@ -78,6 +78,13 @@ public class MissionManageGui extends TownyMissionGui {
             return;
         }
 
+        if (size == 0) {
+            placeFiller();
+            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.list.onNoConfiguredMission"));
+            instance.getInstanceLogger().severe(ChatService.getInstance().translateColor(instance.getLangEntryNoPrefix("commands.list.onNoConfiguredMission")));
+            return;
+        }
+
         int numAddable = CooldownService.getInstance().getNumAddable(town.getUUID());
         diff = Math.min(numAddable, diff);
 

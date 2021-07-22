@@ -45,7 +45,8 @@ commands:
     onAlreadyPaused: "&cThe season has already paused! You cannot pause it again."
   listMission:
     onNotEnabled: "&cThe mission type you are listing is not enabled!"
-
+  list:
+    onNoConfiguredMission: "&cThere is 0 mission configured! Please configure mission before starting season!"
 services:
   reward:
     onRewardMoney: "&fYou have claimed your $%amount% reward!"
