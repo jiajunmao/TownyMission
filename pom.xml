@@ -4,7 +4,7 @@
 
     <groupId>world.naturecraft</groupId>
     <artifactId>TownyMission-parent</artifactId>
-    <version>2.0.11-SNAPSHOT</version>
+    <version>2.0.11</version>
     <name>TownyMission</name>
     <packaging>pom</packaging>
 
@@ -19,7 +19,7 @@
         <connection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git</connection>
         <developerConnection>scm:git:https://git.naturecraft.world/naturecraft-dev/TownyMission.git
         </developerConnection>
-        <tag>v1.0.0</tag>
+        <tag>v2.0.11</tag>
     </scm>
 
     <properties>
