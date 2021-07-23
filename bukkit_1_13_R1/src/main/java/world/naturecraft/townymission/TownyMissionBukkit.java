@@ -1,5 +1,6 @@
 package world.naturecraft.townymission;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
@@ -112,6 +113,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         registerListeners();
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering tasks"));
         registerTasks();
+
+        int pluginId = 12167;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     private void additionalConfigs() {
