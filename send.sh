@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Force build
 case $1 in
   "success" )
     EMBED_COLOR=3066993
