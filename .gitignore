@@ -2,6 +2,7 @@
 */target/**
 **/META-INF/
 !.mvn/wrapper/maven-wrapper.jar
+release.properties
 
 ### STS ###
 .apt_generated
