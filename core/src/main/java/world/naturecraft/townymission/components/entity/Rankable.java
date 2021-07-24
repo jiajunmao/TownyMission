@@ -12,15 +12,6 @@ import world.naturecraft.townymission.TownyMissionInstance;
 public interface Rankable extends Comparable<Rankable> {
 
     /**
-     * Gets point.
-     *
-     * @return the point
-     */
-    int getRankingFactor();
-
-    String getRankingId();
-
-    /**
      * Gets ranking points.
      *
      * @param numResident the num resident
@@ -28,7 +19,7 @@ public interface Rankable extends Comparable<Rankable> {
      * @param instance    the instance
      * @return the ranking points
      */
-     static int getRankingPoints(int numResident, int naturePoint, TownyMissionInstance instance) {
+    static int getRankingPoints(int numResident, int naturePoint, TownyMissionInstance instance) {
         int baseline = instance.getInstanceConfig().getInt("participants.sprintRewardBaseline");
         int memberScale = instance.getInstanceConfig().getInt("participants.sprintRewardMemberScale");
         int baselineCap = instance.getInstanceConfig().getInt("participants.sprintRewardBaselineCap");
@@ -39,4 +30,13 @@ public interface Rankable extends Comparable<Rankable> {
 
         return Math.max(0, (naturePoint - realBaseline) / numResident);
     }
+
+    /**
+     * Gets point.
+     *
+     * @return the point
+     */
+    int getRankingFactor();
+
+    String getRankingId();
 }

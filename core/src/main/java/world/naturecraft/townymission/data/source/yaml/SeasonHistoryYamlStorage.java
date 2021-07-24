@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.SeasonHistoryStorage;
@@ -21,7 +20,6 @@ public class SeasonHistoryYamlStorage extends YamlStorage<SeasonHistoryEntry> im
 
     /**
      * Instantiates a new Season history yaml.
-     *
      */
     public SeasonHistoryYamlStorage() {
         super(DbType.SEASON_HISTORY);

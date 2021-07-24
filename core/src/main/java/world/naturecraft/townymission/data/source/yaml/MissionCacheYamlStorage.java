@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -22,7 +21,6 @@ public class MissionCacheYamlStorage extends YamlStorage<MissionCacheEntry> impl
 
     /**
      * Instantiates a new Mission yaml.
-     *
      */
     public MissionCacheYamlStorage() {
         super(DbType.MISSION_CACHE);

@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -168,14 +167,14 @@ public class MissionDao extends Dao<MissionEntry> {
      * @throws DataProcessException the json processing exception
      */
     public void update(MissionEntry entry) {
-            db.update(
-                    entry.getId(),
-                    entry.getMissionType().name(),
-                    entry.getAddedTime(),
-                    entry.getStartedTime(),
-                    entry.getAllowedTime(),
-                    entry.getMissionJson().toJson(),
-                    entry.getTownUUID(),
-                    entry.getStartedPlayerUUID());
+        db.update(
+                entry.getId(),
+                entry.getMissionType().name(),
+                entry.getAddedTime(),
+                entry.getStartedTime(),
+                entry.getAllowedTime(),
+                entry.getMissionJson().toJson(),
+                entry.getTownUUID(),
+                entry.getStartedPlayerUUID());
     }
 }

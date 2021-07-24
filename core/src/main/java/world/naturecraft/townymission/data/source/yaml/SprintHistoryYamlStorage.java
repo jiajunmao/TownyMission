@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.SprintHistoryStorage;

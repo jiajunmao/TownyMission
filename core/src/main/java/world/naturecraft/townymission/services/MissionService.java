@@ -121,7 +121,7 @@ public abstract class MissionService extends TownyMissionService {
      * Abort mission.
      *
      * @param player the player
-     * @param entry      the entry
+     * @param entry  the entry
      */
     public void abortMission(UUID player, MissionEntry entry) {
         if (!canAbortMission(player, entry))

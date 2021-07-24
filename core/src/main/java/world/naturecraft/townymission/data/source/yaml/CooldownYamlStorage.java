@@ -4,8 +4,6 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.CooldownStorage;
@@ -21,7 +19,6 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
 
     /**
      * Instantiates a new Cooldown yaml.
-     *
      */
     public CooldownYamlStorage() {
         super(DbType.COOLDOWN);

@@ -1,10 +1,8 @@
 package world.naturecraft.townymission.config;
 
-import com.tchristofferson.configupdater.ConfigUpdater;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import org.bukkit.configuration.file.FileConfiguration;
 import world.naturecraft.townymission.TownyMissionBungee;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
@@ -130,6 +128,7 @@ public class BungeeConfig implements TownyMissionConfig {
         }
         return list;
     }
+
     @Override
     public Collection<String> getStringList(String path) {
         return configuration.getStringList(path);

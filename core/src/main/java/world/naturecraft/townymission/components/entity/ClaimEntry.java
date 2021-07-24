@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.bukkit.entity.Player;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.components.json.reward.*;

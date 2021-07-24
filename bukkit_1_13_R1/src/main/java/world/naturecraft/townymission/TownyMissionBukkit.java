@@ -1,5 +1,7 @@
 package world.naturecraft.townymission;
 
+import com.Zrips.CMI.Modules.Placeholders.Placeholder;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
@@ -21,6 +23,7 @@ import world.naturecraft.townymission.listeners.mission.MobListener;
 import world.naturecraft.townymission.listeners.mission.VoteListener;
 import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
 import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
+import world.naturecraft.townymission.services.PlaceholderBukkitService;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.tasks.SendCachedMissionTask;
@@ -123,6 +126,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         registerListeners();
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering tasks"));
         registerTasks();
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering placeholders"));
+        new PlaceholderBukkitService().register();
+
+        int pluginId = 12167;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     private void additionalConfigs() {
