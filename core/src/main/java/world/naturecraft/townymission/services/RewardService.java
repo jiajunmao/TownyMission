@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.services;
 
 import world.naturecraft.townymission.TownyMissionInstanceType;
-import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;

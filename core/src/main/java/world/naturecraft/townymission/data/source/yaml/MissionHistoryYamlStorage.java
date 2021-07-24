@@ -4,9 +4,6 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionHistoryStorage;
@@ -22,7 +19,6 @@ public class MissionHistoryYamlStorage extends YamlStorage<MissionHistoryEntry> 
 
     /**
      * Instantiates a new Mission history yaml.
-     *
      */
     public MissionHistoryYamlStorage() {
         super(DbType.MISSION_HISTORY);

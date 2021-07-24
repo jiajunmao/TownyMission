@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.DataEntity;
-import world.naturecraft.townymission.components.entity.SprintEntry;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,13 +20,13 @@ import java.util.UUID;
  */
 public abstract class SqlStorage<T extends DataEntity> {
 
+    protected final String tableName;
+    private final HikariDataSource db;
     /**
      * The Table name.
      */
     protected boolean cached;
     protected HashMap<UUID, T> memCache;
-    protected final String tableName;
-    private final HikariDataSource db;
 
     /**
      * Instantiates a new Database.
@@ -72,22 +71,6 @@ public abstract class SqlStorage<T extends DataEntity> {
         } catch (SQLException e) {
             throw new IllegalStateException("Error during execution", e);
         }
-    }
-
-    /**
-     * The interface Connection call back.
-     *
-     * @param <T> the type parameter
-     */
-    public interface ConnectionCallBack<T> {
-        /**
-         * Do connection t.
-         *
-         * @param conn the conn
-         * @return the t
-         * @throws SQLException the sql exception
-         */
-        T doConnection(Connection conn) throws SQLException;
     }
 
     public void cacheData() {
@@ -135,5 +118,21 @@ public abstract class SqlStorage<T extends DataEntity> {
         for (T entry : list) {
             update(entry);
         }
+    }
+
+    /**
+     * The interface Connection call back.
+     *
+     * @param <T> the type parameter
+     */
+    public interface ConnectionCallBack<T> {
+        /**
+         * Do connection t.
+         *
+         * @param conn the conn
+         * @return the t
+         * @throws SQLException the sql exception
+         */
+        T doConnection(Connection conn) throws SQLException;
     }
 }

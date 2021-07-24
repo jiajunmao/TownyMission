@@ -8,9 +8,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.api.exceptions.PMCReceiveException;
-import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.PluginMessage;
+import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionCacheDao;
 import world.naturecraft.townymission.listeners.TownyMissionListener;
@@ -74,10 +73,10 @@ public abstract class MissionListener extends TownyMissionListener {
                 @Override
                 public void run() {
                     PluginMessage request = new PluginMessage()
-                        .channel("mission:request")
-                        .messageUUID(UUID.randomUUID())
-                        .dataSize(4)
-                        .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
+                            .channel("mission:request")
+                            .messageUUID(UUID.randomUUID())
+                            .dataSize(4)
+                            .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
 
                     // Check for reply and timeout to determine mission cache
                     try {

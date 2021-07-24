@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.data.source.yaml;
 
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.ClaimStorage;
@@ -17,7 +16,6 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> implements ClaimSt
 
     /**
      * Instantiates a new Yaml storage.
-     *
      */
     public ClaimYamlStorage() {
         super(DbType.CLAIM);

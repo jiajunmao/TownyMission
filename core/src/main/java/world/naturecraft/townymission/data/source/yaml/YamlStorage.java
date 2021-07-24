@@ -44,7 +44,7 @@ public abstract class YamlStorage<T extends DataEntity> {
     /**
      * Instantiates a new Yaml storage.
      *
-     * @param dbType   the db type
+     * @param dbType the db type
      * @throws ConfigLoadingException the config loading exception
      */
     public YamlStorage(DbType dbType) throws ConfigLoadingException {

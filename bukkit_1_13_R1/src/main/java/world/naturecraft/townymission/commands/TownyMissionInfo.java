@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.ChatService;
@@ -141,7 +142,8 @@ public class TownyMissionInfo extends TownyMissionCommand {
                         int realBaseline = baseline + (town.getNumResidents() - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
                         realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
-                        int naturepoints = SprintDao.getInstance().get(town.getUUID()).getNaturepoints();
+                        SprintEntry sprintEntry = SprintDao.getInstance().get(town.getUUID());
+                        int naturepoints = sprintEntry == null ? 0 : sprintEntry.getNaturepoints();
 
                         builder.add("&eTotal Points: &f" + naturepoints);
                         builder.add("&eBaseline: &f" + realBaseline);

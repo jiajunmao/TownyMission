@@ -71,6 +71,11 @@ public class ResourceRewardJson extends RewardJson {
         return isMi;
     }
 
+    @JsonSetter("isMi")
+    public void setMi(boolean mi) {
+        isMi = mi;
+    }
+
     /**
      * Gets type.
      *
@@ -81,9 +86,19 @@ public class ResourceRewardJson extends RewardJson {
         return type;
     }
 
+    @JsonSetter("type")
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @JsonGetter("miID")
     public String getMiID() {
         return miID;
+    }
+
+    @JsonSetter("miID")
+    public void setMiID(String miID) {
+        this.miID = miID;
     }
 
     @JsonGetter("amount")
@@ -95,21 +110,6 @@ public class ResourceRewardJson extends RewardJson {
     @Override
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    @JsonSetter("isMi")
-    public void setMi(boolean mi) {
-        isMi = mi;
-    }
-
-    @JsonSetter("type")
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @JsonSetter("miID")
-    public void setMiID(String miID) {
-        this.miID = miID;
     }
 
     @JsonIgnore

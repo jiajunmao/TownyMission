@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.config.mission;
 
-import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;

@@ -57,4 +57,13 @@ public class TownyBukkitService extends TownyService {
             return null;
         }
     }
+
+    @Override
+    public Integer getNumResidents(UUID townUUID) {
+        try {
+            return TownyAPI.getInstance().getDataSource().getTown(townUUID).getNumResidents();
+        } catch (NotRegisteredException e) {
+            return null;
+        }
+    }
 }

@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.DbType;

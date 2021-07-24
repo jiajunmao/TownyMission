@@ -92,7 +92,7 @@ public class Util {
     }
 
     public static long msToS(long milliseconds) {
-        return milliseconds/1000;
+        return milliseconds / 1000;
     }
 
     public static String formatMilliseconds(long millis) {

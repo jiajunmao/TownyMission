@@ -2,8 +2,6 @@ package world.naturecraft.townymission;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 import world.naturecraft.townymission.components.enums.ServerType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.config.BungeeConfig;

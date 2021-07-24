@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
-import world.naturecraft.townymission.TownyMissionBukkit;
 
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -16,7 +15,6 @@ import java.util.regex.Pattern;
  * The type Util.
  */
 public class BukkitUtil {
-
 
 
     /**

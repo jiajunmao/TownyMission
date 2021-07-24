@@ -2,7 +2,6 @@ package world.naturecraft.townymission.services;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.components.PluginMessage;
 

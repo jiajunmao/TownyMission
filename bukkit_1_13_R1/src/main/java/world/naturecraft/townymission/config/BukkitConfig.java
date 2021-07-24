@@ -12,8 +12,6 @@ import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 

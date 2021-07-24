@@ -7,7 +7,6 @@ import world.naturecraft.townymission.TownyMissionBungee;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.services.PluginMessagingService;
-import world.naturecraft.townymission.services.TownyMissionService;
 
 /**
  * The type Pmc listener.

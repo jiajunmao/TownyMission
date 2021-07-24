@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.commands;
 
-import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.Rankable;
-import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
@@ -83,40 +81,40 @@ public class TownyMissionRank extends TownyMissionCommand {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                Player player = (Player) sender;
-                if (sanityCheck(player, args)) {
-                    List<Rankable> entryList;
-                    if (args[1].equalsIgnoreCase("sprint"))
-                        entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
-                    else
-                        entryList = (List<Rankable>) RankUtil.sort(SeasonDao.getInstance().getEntries());
-                    MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: " + Util.capitalizeFirst(args[1]) + " Rank&7------");
+                    Player player = (Player) sender;
+                    if (sanityCheck(player, args)) {
+                        List<Rankable> entryList;
+                        if (args[1].equalsIgnoreCase("sprint"))
+                            entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
+                        else
+                            entryList = (List<Rankable>) RankUtil.sort(SeasonDao.getInstance().getEntries());
+                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: " + Util.capitalizeFirst(args[1]) + " Rank&7------");
 
-                    int index = 1;
-                    for (Rankable entry : entryList) {
-                        Town town = null;
+                        int index = 1;
+                        for (Rankable entry : entryList) {
+                            Town town = null;
 
-                        try {
-                            town = TownyUtil.getTown(UUID.fromString(entry.getRankingId()));
-                        } catch (NotRegisteredException e) {
-                            e.printStackTrace();
+                            try {
+                                town = TownyUtil.getTown(UUID.fromString(entry.getRankingId()));
+                            } catch (NotRegisteredException e) {
+                                e.printStackTrace();
+                            }
+
+                            switch (RankType.valueOf(args[1].toUpperCase(Locale.ROOT))) {
+                                case SPRINT:
+                                    builder.add("&e" + index + ". &3" + town.getName() + " &f: "
+                                            + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
+                                            + " points");
+                                    break;
+                                case SEASON:
+                                    builder.add("&e" + index + ". &3" + town.getName() + " &f: " + entry.getRankingFactor() + " points");
+                                    break;
+                            }
+
+                            index++;
                         }
-
-                        switch (RankType.valueOf(args[1].toUpperCase(Locale.ROOT))) {
-                            case SPRINT:
-                                builder.add("&e" + index + ". &3" + town.getName() + " &f: "
-                                        + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
-                                        + " points");
-                                break;
-                            case SEASON:
-                                builder.add("&e" + index + ". &3" + town.getName() + " &f: " + entry.getRankingFactor() + " points");
-                                break;
-                        }
-
-                        index++;
-                    }
-                    String finalString = builder.toString();
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), finalString);
+                        String finalString = builder.toString();
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), finalString);
                     }
                 }
             };

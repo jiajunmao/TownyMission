@@ -2,16 +2,14 @@ package world.naturecraft.townymission.services;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.components.DataHolder;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.config.TownyMissionConfig;
+import world.naturecraft.townymission.data.source.sql.SqlStorage;
 import world.naturecraft.townymission.data.storage.Storage;
-import world.naturecraft.townymission.data.source.sql.*;
-import world.naturecraft.townymission.data.source.yaml.*;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.HashMap;
@@ -43,7 +41,7 @@ public class StorageService {
         if (storageType.equals(StorageType.MYSQL) && cache) {
             instance.getInstanceLogger().info("&f Memory caching databases");
             for (DbType dbType : DbType.values()) {
-                ((SqlStorage)dbMap.get(dbType)).cacheData();
+                ((SqlStorage) dbMap.get(dbType)).cacheData();
             }
         }
     }

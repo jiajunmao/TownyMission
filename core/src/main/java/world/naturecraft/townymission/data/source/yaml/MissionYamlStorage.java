@@ -4,9 +4,6 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionStorage;
@@ -22,7 +19,6 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
 
     /**
      * Instantiates a new Mission yaml.
-     *
      */
     public MissionYamlStorage() {
         super(DbType.MISSION);
