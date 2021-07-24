@@ -1,6 +1,9 @@
 # Choose mysql and yaml, MySql is recommended for best compatibility
 storage: yaml
 
+# Please make sure that this matches EXACTLY with the file name for the language file without the .yml
+language: en_US
+
 # **I would sincerely suggest reading the wiki for what this section means**
 # Whether your towny server is spanned across multiple servers
 bungeecord:
