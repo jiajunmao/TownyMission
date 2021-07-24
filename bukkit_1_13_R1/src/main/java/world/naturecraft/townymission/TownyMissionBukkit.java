@@ -8,10 +8,7 @@ import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.*;
-import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.components.enums.ServerType;
-import world.naturecraft.townymission.components.enums.StorageType;
+import world.naturecraft.townymission.components.enums.*;
 import world.naturecraft.townymission.config.BukkitConfig;
 import world.naturecraft.townymission.config.TownyMissionConfig;
 import world.naturecraft.townymission.config.mission.MissionConfig;
@@ -72,10 +69,24 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         missionAndHooks = new HashMap<>();
 
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing main and lang config"));
-        // Main config and lang config needs to be saved regardless
+        // Main configs
         mainConfig = new BukkitConfig("config.yml");
         mainConfig.updateConfig();
-        langConfig = new BukkitConfig("lang.yml");
+
+        // Saving new language file if there isn't one already
+        for (LangType lang : LangType.values()) {
+            String targetPath = "lang/" + lang.name() + ".yml";
+            File targetFile = new File(getInstanceDataFolder(), targetPath);
+            if (!targetFile.exists()) {
+                targetFile.getParentFile().getParentFile().mkdirs();
+                targetFile.getParentFile().mkdirs();
+                saveInstanceResource(targetPath, false);
+            }
+        }
+
+        String langFile = "lang/" + mainConfig.getString("language") + ".yml";
+        System.out.println("Loading language file " + langFile);
+        langConfig = new BukkitConfig(langFile);
         langConfig.updateConfig();
 
         determineBungeeCord();
@@ -375,7 +386,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     public void reloadConfigs() throws ConfigLoadingException {
         mainConfig = new BukkitConfig("config.yml");
-        langConfig = new BukkitConfig("lang.yml");
+        String langFile = "lang/" + mainConfig.getString("language") + ".yml";
+        langConfig = new BukkitConfig(langFile);
         missionConfig = new MissionConfig();
         statsConfig = new BukkitConfig("datastore/stats.yml");
     }

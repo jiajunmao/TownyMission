@@ -43,16 +43,7 @@ public abstract class TownyMissionCommand implements TabExecutor, CommandExecuto
      * @param sender the sender
      */
     public void onUnknown(Player sender) {
-        ChatService.getInstance().sendMsg(sender.getUniqueId(), "&c The command you are looking for does not exist");
-    }
-
-    /**
-     * On no permission.
-     *
-     * @param sender the sender
-     */
-    public void onNoPermission(Player sender) {
-        ChatService.getInstance().sendMsg(sender.getUniqueId(), "&c You do not have the permission to execute this command");
+        ChatService.getInstance().sendMsg(sender.getUniqueId(), instance.getLangEntry("universal.onCommandNotFound"));
     }
 
     /**
