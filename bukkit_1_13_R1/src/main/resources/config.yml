@@ -23,6 +23,10 @@ database:
   port:
   # The name of the database
   name:
+  # The prefix for the database tables, can be used for sharing a single db for different servers
+  #   Before v2.1.7, the builtin prefix is townymission_, do not change if you are only running spigot mode
+  #    or do not plan on sharing a single db for different servers
+  prefix: "townymission_"
   # The username to access the database
   username:
   # The password to access the database
