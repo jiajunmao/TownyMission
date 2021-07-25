@@ -27,7 +27,7 @@ public class MissionConfigParser {
      */
     public static List<MissionJson> parse(MissionType type, TownyMissionConfig fileConfiguration) {
         List<MissionJson> list = new ArrayList<>();
-        System.out.println("Parsing: " + type.name());
+        //System.out.println("Parsing: " + type.name());
         for (String key : fileConfiguration.getShallowKeys()) {
             int amount = fileConfiguration.getInt(key + ".amount");
             int reward = fileConfiguration.getInt(key + ".reward");

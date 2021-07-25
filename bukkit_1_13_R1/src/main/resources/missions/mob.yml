@@ -1,7 +1,11 @@
 1:
+  # The type of mob to kill
   type: ZOMBIE
+  # The amount of the mob to kill
   amount: 1000
+  # The sprint points the town get after completing this mission
   reward: 500
+  # The time allowed in hours before this mission time out
   timeAllowed: 2
 2:
   type: VINDICATOR

@@ -1,11 +1,22 @@
 # If it is a MI item, use type for MI type, and ID for MI ID. If not, just put isMi as false and ignore the rest
 1:
+  # Whether this resource is an MMOItems item
   isMi: false
+  # The type of this resource
+  #    Vanilla: just the Minecraft item name
+  #    MMOItems: the MI category
   type: BAMBOO
+  # The MMOItem item ID of this resource
+  #    Vanilla: this option will be ignored, set to whatever
+  #    MMOItems: the MI ID (Item name)
   miID: -1
+  # The amount of the item required
   amount: 100000
+  # The sprint points the town get after completing this mission
   reward: 500
+  # The time allowed in hours before this mission time out
   timeAllowed: 2
+  # Whether the 100000 bamboo will be returned to the contributors when the mission is completed
   returnable: false
 2:
   isMi: true
