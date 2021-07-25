@@ -6,7 +6,6 @@ api-version: 1.13
 
 depend:
   - Vault
-  - Towny
 
 softdepend:
   - CMI
@@ -14,6 +13,7 @@ softdepend:
   - UltimateVotes
   - MMOItems
   - PlaceholderAPI
+  - Towny
 
 permissions:
   townymission.player:
