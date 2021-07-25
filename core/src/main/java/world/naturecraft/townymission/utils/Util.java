@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.utils;
 
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.DbType;
 
 import java.util.Locale;
@@ -111,6 +112,6 @@ public class Util {
      * @return the db name
      */
     public static String getDbName(DbType dbType) {
-        return "townymission_" + dbType.name().toLowerCase(Locale.ROOT);
+        return TownyMissionInstance.getInstance().getStatsConfig().getString("database.prefix") + dbType.name().toLowerCase(Locale.ROOT);
     }
 }
