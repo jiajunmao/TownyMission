@@ -85,7 +85,7 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
 
         if (town == null) return "N/A";
 
-        Integer rank = RankingService.getInstance().getSprintRank(town.getUUID());
+        Integer rank = RankingService.getInstance().getRank(town.getUUID(), RankType.SPRINT);
 
         if (rank == null) return "N/A";
 
@@ -97,7 +97,7 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
 
         if (town == null) return "N/A";
 
-        Integer rank = RankingService.getInstance().getSeasonRank(town.getUUID());
+        Integer rank = RankingService.getInstance().getRank(town.getUUID(), RankType.SEASON);
 
         if (rank == null) return "N/A";
 

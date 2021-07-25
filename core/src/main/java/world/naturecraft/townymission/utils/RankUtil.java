@@ -5,7 +5,10 @@
 package world.naturecraft.townymission.utils;
 
 import world.naturecraft.townymission.components.entity.Rankable;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.entity.SprintEntry;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +20,6 @@ public class RankUtil {
      * Sort list.
      *
      * @param list the list
-     * @return the list
      */
     public static List<? extends Rankable> sort(List<? extends Rankable> list) {
         Collections.sort(list);

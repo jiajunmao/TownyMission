@@ -6,6 +6,9 @@ package world.naturecraft.townymission.components.entity;
 
 import world.naturecraft.townymission.TownyMissionInstance;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * The interface Rankable.
  */

@@ -2,6 +2,7 @@ package world.naturecraft.townymission.services;
 
 import world.naturecraft.townymission.TownyMissionInstanceType;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
+import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.RankType;
@@ -234,10 +235,10 @@ public class RewardService extends TownyMissionService {
 
         switch (rankType) {
             case SPRINT:
-                List<SprintEntry> sprintEntries = (List<SprintEntry>) RankUtil.sort(SprintDao.getInstance().getEntries());
+                // This should get rid of all the 0 ranking point towns
+                List<SprintEntry> sprintEntries = RankingService.getInstance().getRanks(RankType.SPRINT);
                 Map<Integer, List<RewardJson>> rewardsMap = RewardConfigParser.getRankRewardsMap(RankType.SPRINT);
-                instance.getInstanceLogger().info("SprintEntries length: " + sprintEntries.size());
-                instance.getInstanceLogger().info("RewardMap size: " + rewardsMap.keySet().size());
+
                 for (Integer currentRank : rewardsMap.keySet()) {
                     List<RewardJson> rewardJsonList = rewardsMap.get(currentRank);
 
