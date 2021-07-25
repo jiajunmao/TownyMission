@@ -1,7 +1,11 @@
 1:
+  # The total amount required for town members to collect
   amount: 20000
+  # The sprint points the town get after completing this mission
   reward: 1000
+  # The time allowed in hours before this mission time out
   timeAllowed: 2
+  # Whether the 20000 will be returned back to the contributors after the mission is aborted or completed
   returnable: false
 2:
   amount: 50000

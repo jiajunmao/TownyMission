@@ -1,5 +1,8 @@
 1:
+  # The total number of votes to make
   amount: 15
+  # The sprint points the town get after completing this mission
   reward: 1000
+  # The time allowed in hours before this mission time out
   timeAllowed: 2
 

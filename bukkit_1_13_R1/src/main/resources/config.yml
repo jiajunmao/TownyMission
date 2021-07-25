@@ -50,7 +50,7 @@ participants:
 mission:
   # Cooldown between abort/complete and town getting new mission, in minutes
   cooldown: 30
-  # How many missions a town can see
+  # How many missions a town can see, DO NOT CONFIGURE THIS AT THE MOMENT
   amount: 14
   # Configure whether the missions are enabled or not
   types:
@@ -100,6 +100,8 @@ sprint:
     # Placeholders
     #   - %player%: the name of the player, only works in COMMAND type
     rewards:
+      # Its a little bit lengthy to put the reward json explanation here.
+      # For the details, please visit wiki here https://git.naturecraft.world/naturecraft-dev/townymission/-/wikis/home
       1:
         - 'resource{"type": "DIAMOND", "amount": 100}'
         - 'money{"amount": 50000}'
@@ -134,6 +136,8 @@ season:
     # Placeholders
     #   - %player%: the name of the player, only works in COMMAND type
     rewards:
+      # Its a little bit lengthy to put the reward json explanation here.
+      # For the details, please visit wiki here https://git.naturecraft.world/naturecraft-dev/townymission/-/wikis/home
       1:
         - 'resource{"type": "DIAMOND", "amount": 100}'
         - 'money{"amount": 50000}'
