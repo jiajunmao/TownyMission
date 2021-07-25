@@ -9,7 +9,7 @@ commands:
     onSuccess: "&f任务已被终止"
     onNotMayorOrStarter: "&c只有镇长或者任务发起人才能终止任务!"
   claim:
-    onNotFound: "&c你的城镇没有进行中的任务!"
+    onNotFound: "&c你没有可以领取的内容!"
     onNotEnoughSlot: "&c你的背包容量不足!"
     onSuccess: "&f你成功的领取了此项."
   deposit:

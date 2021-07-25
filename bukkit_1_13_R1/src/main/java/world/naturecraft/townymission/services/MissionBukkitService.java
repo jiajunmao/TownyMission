@@ -64,6 +64,12 @@ public class MissionBukkitService extends MissionService {
                 .hasStarted()
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
+                    // If timed out, everyone can abort
+                    MissionEntry missionEntry = MissionDao.getInstance().getStartedMission(TownyService.getInstance().residentOf(playerUUID));
+                    if (missionEntry.isTimedout())
+                        return true;
+
+                    // If mayor, can abort any mission
                     if (TownyUtil.mayorOf(player) != null)
                         return true;
 
