@@ -43,8 +43,8 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand {
                 .customCheck(() -> new BukkitChecker(instance).target(player).hasPermission("tms.admin").check()
                         || new BukkitChecker(instance).target(player).hasPermission("tms.commands.reload").check())
                 .customCheck(() -> {
-                    // /tms admin reload
-                    if (args.length == 2 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("reload"))
+                    // /tmsa reload
+                    if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
                         return true;
 
                     ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));

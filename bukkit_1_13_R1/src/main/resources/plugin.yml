@@ -55,6 +55,9 @@ commands:
     description: list the current missions
   townymission help:
     description: help page
+  townymissionadmin:
+    description: Admin root command
+    aliases: tmsa
   townymission addPoint:
     description: add point
   townymission rmPoint:

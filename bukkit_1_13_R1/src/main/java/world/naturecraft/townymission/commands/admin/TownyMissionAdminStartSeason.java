@@ -48,7 +48,7 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
                 })
                 .customCheck(() -> {
                     // /tms admin startSeason
-                    return (args.length == 2 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("startSeason"));
+                    return (args.length == 1 && args[0].equalsIgnoreCase("startSeason"));
                 }).check();
     }
 

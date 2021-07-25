@@ -41,14 +41,9 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (args.length == 1) {
-                // This means the input is /tms admin, which is false
-                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
-                return false;
-            }
 
-            if (commands.containsKey(args[1])) {
-                getExecutor(args[1]).onCommand(sender, command, alias, args);
+            if (commands.containsKey(args[0])) {
+                getExecutor(args[0]).onCommand(sender, command, alias, args);
             } else {
                 onUnknown(player);
             }
@@ -64,11 +59,10 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
         List<String> arguments = new ArrayList<>(commands.keySet());
         List<String> tabList;
 
-        if (args.length == 2) {
-            // This is only /tms admin
+        if (args.length == 1) {
             tabList = arguments;
-        } else if (commands.containsKey(args[1])) {
-            tabList = commands.get(args[1]).onTabComplete(sender, command, alias, args);
+        } else if (commands.containsKey(args[0])) {
+            tabList = commands.get(args[0]).onTabComplete(sender, command, alias, args);
         } else {
             tabList = null;
         }
