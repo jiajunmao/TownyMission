@@ -2,6 +2,7 @@ package world.naturecraft.townymission.components.entity;
 
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.services.RankingService;
 
 import java.util.UUID;
 
@@ -105,7 +106,8 @@ public class SprintEntry extends DataEntity implements Rankable {
 
     @Override
     public int getRankingFactor() {
-        return naturepoints;
+        // This should return the calculated rank points, rather than just the nature points
+        return RankingService.getInstance().getRankingPoints(townUUID);
     }
 
     @Override

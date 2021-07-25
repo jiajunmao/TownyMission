@@ -18,9 +18,11 @@ import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.RankingService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -82,40 +84,39 @@ public class TownyMissionRank extends TownyMissionCommand {
                 @Override
                 public void run() {
                     Player player = (Player) sender;
-                    if (sanityCheck(player, args)) {
-                        List<Rankable> entryList;
-                        if (args[1].equalsIgnoreCase("sprint"))
-                            entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
-                        else
-                            entryList = (List<Rankable>) RankUtil.sort(SeasonDao.getInstance().getEntries());
-                        MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: " + Util.capitalizeFirst(args[1]) + " Rank&7------");
+                    if (!sanityCheck(player, args)) return;
 
-                        int index = 1;
-                        for (Rankable entry : entryList) {
-                            Town town = null;
+                    RankType rankType = RankType.valueOf(args[1].toUpperCase(Locale.ROOT));
+                    List<Rankable> entryList = RankingService.getInstance().getRanks(rankType);
 
-                            try {
-                                town = TownyUtil.getTown(UUID.fromString(entry.getRankingId()));
-                            } catch (NotRegisteredException e) {
-                                e.printStackTrace();
-                            }
+                    MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: " + Util.capitalizeFirst(args[1]) + " Rank&7------");
 
-                            switch (RankType.valueOf(args[1].toUpperCase(Locale.ROOT))) {
-                                case SPRINT:
-                                    builder.add("&e" + index + ". &3" + town.getName() + " &f: "
-                                            + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
-                                            + " points");
-                                    break;
-                                case SEASON:
-                                    builder.add("&e" + index + ". &3" + town.getName() + " &f: " + entry.getRankingFactor() + " points");
-                                    break;
-                            }
+                    int index = 1;
+                    for (Rankable entry : entryList) {
+                        Town town = null;
 
-                            index++;
+                        try {
+                            town = TownyUtil.getTown(UUID.fromString(entry.getRankingId()));
+                        } catch (NotRegisteredException e) {
+                            e.printStackTrace();
                         }
-                        String finalString = builder.toString();
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), finalString);
+
+                        switch (RankType.valueOf(args[1].toUpperCase(Locale.ROOT))) {
+                            case SPRINT:
+                                builder.add("&e" + index + ". &3" + town.getName() + " &f: "
+                                        + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
+                                        + " points");
+                                break;
+                            case SEASON:
+                                builder.add("&e" + index + ". &3" + town.getName() + " &f: " + entry.getRankingFactor() + " points");
+                                break;
+                        }
+
+                        index++;
                     }
+                    String finalString = builder.toString();
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), finalString);
+
                 }
             };
 

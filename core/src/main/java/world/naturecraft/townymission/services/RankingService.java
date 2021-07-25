@@ -2,10 +2,14 @@ package world.naturecraft.townymission.services;
 
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.Rankable;
+import world.naturecraft.townymission.components.entity.SprintEntry;
+import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.utils.RankUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,16 +45,37 @@ public class RankingService {
         return rankingPoints;
     }
 
-    public Integer getSprintRank(UUID townUUID) {
-        return getRank(townUUID, true);
+    public <T extends Rankable> List<T> getRanks(RankType rankType) {
+        List<T> rankables = null;
+        switch (rankType) {
+            case SPRINT:
+                rankables = new ArrayList<T>((Collection<? extends T>) RankUtil.sort(SprintDao.getInstance().getEntries()));
+            case SEASON:
+                rankables = new ArrayList<T>((Collection<? extends T>) RankUtil.sort(SeasonDao.getInstance().getEntries()));
+        }
+
+        List<T> finalList = new ArrayList<>();
+        for (T r : rankables) {
+            if (r.getRankingFactor() != 0) {
+                finalList.add(r);
+            }
+        }
+
+        return finalList;
     }
 
-    public Integer getSeasonRank(UUID townUUID) {
-        return getRank(townUUID, false);
+    public Integer getRank(UUID townUUID, RankType rankType) {
+        switch (rankType) {
+            case SPRINT:
+                return getRank(townUUID, true);
+            case SEASON:
+                return getRank(townUUID, false);
+            default:
+                return null;
+        }
     }
 
     private Integer getRank(UUID townUUID, boolean isSprint) {
-
         List<Rankable> entryList;
         if (isSprint) {
             entryList = (List<Rankable>) RankUtil.sort(SprintDao.getInstance().getEntries());
