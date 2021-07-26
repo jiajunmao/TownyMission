@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.commands.admin;
+package world.naturecraft.townymission.commands.admin.mission;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.TownyMissionCommand;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.config.mission.MissionConfigParser;
@@ -25,14 +26,14 @@ import java.util.Locale;
 /**
  * The type Towny mission list all.
  */
-public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
+public class TownyMissionAdminMissionList extends TownyMissionCommand {
 
     /**
      * Instantiates a new Towny mission command.
      *
      * @param instance the instance
      */
-    public TownyMissionAdminListMissions(TownyMissionBukkit instance) {
+    public TownyMissionAdminMissionList(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -112,10 +113,10 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
 
-        // /tmsa listMission
-        if (args.length == 2) {
+        // /tmsa mission list <#type>
+        if (args.length == 3) {
             for (MissionType e : MissionType.values()) {
-                if (e.name().contains(args[1])) {
+                if (e.name().contains(args[2])) {
                     tabList.add(e.name());
                 }
             }

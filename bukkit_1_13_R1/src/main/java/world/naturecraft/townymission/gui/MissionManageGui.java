@@ -285,7 +285,7 @@ public class MissionManageGui extends TownyMissionGui {
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MissionService.getInstance().abortMission(player.getUniqueId(), entry);
+                        MissionService.getInstance().abortMission(player.getUniqueId(), entry, false);
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.abort.onSuccess"));
                     }
                 };
@@ -314,7 +314,7 @@ public class MissionManageGui extends TownyMissionGui {
                 initializeItems(player);
                 inv.setItem(slot, null);
                 player.openInventory(inv);
-                MissionService.getInstance().abortMission(player.getUniqueId(), entry);
+                MissionService.getInstance().abortMission(player.getUniqueId(), entry, false);
                 ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.abort.onSuccess"));
             }
         }

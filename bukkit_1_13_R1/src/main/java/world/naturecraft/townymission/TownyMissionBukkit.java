@@ -8,6 +8,7 @@ import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.*;
+import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionList;
 import world.naturecraft.townymission.commands.admin.season.*;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
@@ -290,7 +291,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
             // Admin commands
             this.getCommand("townymissionadmin").setExecutor(rootAdminCmd);
-            rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminListMissions(this));
+            rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminMissionList(this));
             rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
             rootAdminCmd.registerAdminCommand("info", new TownyMissionAdminInfo(this));
             rootAdminCmd.registerAdminCommand("season", seasonRoot);

@@ -122,14 +122,15 @@ public abstract class MissionService extends TownyMissionService {
      *
      * @param player the player
      * @param entry  the entry
+     * @param force when this is set to true, the function will not check whether player is eligible for aborting the mission. The player UUID can be null.
      */
-    public void abortMission(UUID player, MissionEntry entry) {
-        if (!canAbortMission(player, entry))
-            return;
+    public void abortMission(UUID player, MissionEntry entry, boolean force) {
+        if (!force) {
+            if (!canAbortMission(player, entry))
+                return;
+        }
 
-        System.out.println("Aborting mission");
         giveBack(entry);
-        System.out.println("Removing entry");
         MissionDao.getInstance().remove(entry);
         CooldownService.getInstance().startCooldown(entry.getTownUUID(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
     }
