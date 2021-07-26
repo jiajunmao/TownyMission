@@ -1,8 +1,4 @@
-/*
- * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
- */
-
-package world.naturecraft.townymission.commands.admin;
+package world.naturecraft.townymission.commands.admin.season;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,17 +6,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * The type Towny mission admin root.
- */
-public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
+public class TownyMissionAdminSeasonRoot extends TownyMissionAdminCommand {
 
     /**
      * The Commands.
@@ -32,7 +25,7 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
      *
      * @param instance the instance
      */
-    public TownyMissionAdminRoot(TownyMissionBukkit instance) {
+    public TownyMissionAdminSeasonRoot(TownyMissionBukkit instance) {
         super(instance);
         commands = new HashMap<>();
     }
@@ -42,8 +35,9 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (commands.containsKey(args[0])) {
-                getExecutor(args[0]).onCommand(sender, command, alias, args);
+            // /tmsa season something
+            if (commands.containsKey(args[1])) {
+                getExecutor(args[1]).onCommand(sender, command, alias, args);
             } else {
                 onUnknown(player);
             }
@@ -59,11 +53,11 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
         List<String> arguments = new ArrayList<>(commands.keySet());
         List<String> tabList;
 
-        // /tmsa
-        if (args.length == 1) {
+        // /tmsa season
+        if (args.length == 2) {
             tabList = arguments;
-        } else if (commands.containsKey(args[0])) {
-            tabList = commands.get(args[0]).onTabComplete(sender, command, alias, args);
+        } else if (commands.containsKey(args[1])) {
+            tabList = commands.get(args[1]).onTabComplete(sender, command, alias, args);
         } else {
             tabList = null;
         }

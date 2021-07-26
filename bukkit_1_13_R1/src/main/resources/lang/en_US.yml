@@ -47,6 +47,13 @@ commands:
     onNotEnabled: "&cThe mission type you are listing is not enabled!"
   list:
     onNoConfiguredMission: "&cThere is 0 mission configured! Please configure mission before starting season!"
+
+adminCommands:
+  season_point:
+    onSuccess: "&fYou have successfully %action% %amount% season points to %town%"
+  sprint_point:
+    onSuccess: "&fYou have successfully %action% %amount% sprint points to %town%"
+
 services:
   reward:
     onRewardMoney: "&fYou have claimed your $%amount% reward!"
@@ -58,4 +65,5 @@ universal:
   onCommandFormatError: "&cCommand format error!"
   onClickDuringRecess: "&cWe are currently in recess! Please wait for the next sprint/season to start!"
   onNonMainServer: "&cYou are currently not on the main server! Please return to the main server to execute TownyMission commands!"
-
+  onTownNameInvalid: "&cThe name of the town is not found"
+  onUnrankedTown: "&cThe town does not exists in the TMS system. Likely due to not participating."

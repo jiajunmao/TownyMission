@@ -30,6 +30,7 @@ commands:
     onMissionTimedOut: "&c当前任务已经超时！"
     onMissionTypeMismatch: "&c当前任务类别不符，要求的任务类别为 %missionType%"
     onNoPermission: "&c你没有 '%permission%' 权限！"
+    townNameInvalid: "&cThe name of the town is not found"
   complete:
     onSuccess: "&f任务成功完成！"
   reload:

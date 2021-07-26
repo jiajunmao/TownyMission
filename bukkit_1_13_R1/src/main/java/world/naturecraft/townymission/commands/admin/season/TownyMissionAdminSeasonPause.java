@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.commands.admin;
+package world.naturecraft.townymission.commands.admin.season;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -6,19 +6,20 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
 import java.util.Date;
 import java.util.List;
 
-public class TownyMissionAdminPauseSeason extends TownyMissionAdminCommand {
+public class TownyMissionAdminSeasonPause extends TownyMissionAdminCommand {
     /**
      * Instantiates a new Towny mission command.
      *
      * @param instance the instance
      */
-    public TownyMissionAdminPauseSeason(TownyMissionBukkit instance) {
+    public TownyMissionAdminSeasonPause(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -38,8 +39,12 @@ public class TownyMissionAdminPauseSeason extends TownyMissionAdminCommand {
                     return true;
                 })
                 .customCheck(() -> {
-                    // /tms admin startSeason
-                    return (args.length == 1 && args[0].equalsIgnoreCase("pauseSeason"));
+                    // /tmsa season pause
+                    if (args.length != 2 || !args[0].equalsIgnoreCase("season") || !args[1].equalsIgnoreCase("pause")) {
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                    return true;
                 }).check();
     }
 

@@ -1,6 +1,5 @@
 package world.naturecraft.townymission;
 
-import com.Zrips.CMI.Modules.Placeholders.Placeholder;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,6 +8,10 @@ import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.*;
+import world.naturecraft.townymission.commands.admin.season.*;
+import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
+import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
+import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
 import world.naturecraft.townymission.components.enums.*;
 import world.naturecraft.townymission.config.BukkitConfig;
 import world.naturecraft.townymission.config.TownyMissionConfig;
@@ -269,7 +272,12 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     private void registerCommands() {
         if (!isBungeecordEnabled || isMainServer) {
-            this.rootCmd = new TownyMissionRoot(this);
+            TownyMissionRoot root = new TownyMissionRoot(this);
+            TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
+            TownyMissionAdminSeasonRoot seasonRoot = new TownyMissionAdminSeasonRoot(this);
+            TownyMissionAdminSprintRoot sprintRoot = new TownyMissionAdminSprintRoot(this);
+
+            this.rootCmd = root;
             this.getCommand("townymission").setExecutor(rootCmd);
 
             // User commands
@@ -281,12 +289,22 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             rootCmd.registerCommand("reward", new TownyMissionReward(this));
 
             // Admin commands
-            TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
             this.getCommand("townymissionadmin").setExecutor(rootAdminCmd);
             rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminListMissions(this));
             rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
-            rootAdminCmd.registerAdminCommand("startSeason", new TownyMissionAdminStartSeason(this));
-            rootAdminCmd.registerAdminCommand("pauseSeason", new TownyMissionAdminPauseSeason(this));
+            rootAdminCmd.registerAdminCommand("info", new TownyMissionAdminInfo(this));
+            rootAdminCmd.registerAdminCommand("season", seasonRoot);
+            rootAdminCmd.registerAdminCommand("sprint", sprintRoot);
+
+            // Admin season commands
+            seasonRoot.registerAdminCommand("start", new TownyMissionAdminSeasonStart(this));
+            seasonRoot.registerAdminCommand("pause", new TownyMissionAdminSeasonPause(this));
+            seasonRoot.registerAdminCommand("point", new TownyMissionAdminSeasonPoint(this));
+            seasonRoot.registerAdminCommand("rank", new TownyMissionAdminSeasonRank(this));
+
+            // Admin sprint commands
+            sprintRoot.registerAdminCommand("point", new TownyMissionAdminSprintPoint(this));
+            sprintRoot.registerAdminCommand("rank", new TownyMissionAdminSprintRank(this));
         } else {
             this.rootCmd = new TownyMissionRoot(this);
             this.getCommand("townymission").setExecutor(rootCmd);
