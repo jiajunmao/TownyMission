@@ -43,10 +43,10 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
                     return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
                             || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
                 }).customCheck(() -> {
-                    // /tms admin listMission #type
-                    if (args.length == 3) {
+                    // /tmsa listMission #type
+                    if (args.length == 2) {
                         for (MissionType missionType : MissionType.values()) {
-                            if (args[2].equalsIgnoreCase(missionType.name())) {
+                            if (args[1].equalsIgnoreCase(missionType.name())) {
                                 return true;
                             }
                         }
@@ -76,7 +76,7 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
             if (sanityCheck(player, args)) {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
-                MissionType missionType = MissionType.valueOf(args[2].toUpperCase(Locale.ROOT));
+                MissionType missionType = MissionType.valueOf(args[1].toUpperCase(Locale.ROOT));
                 if (instance.isMissionEnabled(missionType)) {
                     Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
                     builder.add("&eMission Type&f: " + missionType.name());
@@ -112,9 +112,10 @@ public class TownyMissionAdminListMissions extends TownyMissionAdminCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
 
-        if (args.length == 3) {
+        // /tmsa listMission
+        if (args.length == 2) {
             for (MissionType e : MissionType.values()) {
-                if (e.name().contains(args[2])) {
+                if (e.name().contains(args[1])) {
                     tabList.add(e.name());
                 }
             }

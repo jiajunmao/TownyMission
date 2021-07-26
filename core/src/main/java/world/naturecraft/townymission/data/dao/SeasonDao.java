@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
+import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
@@ -68,6 +69,7 @@ public class SeasonDao extends Dao<SeasonEntry> {
      * @param townUUID the town uuid
      * @return the season entry
      */
+    @Nullable
     public SeasonEntry get(UUID townUUID) {
         if (database.getEntries() == null)
             return null;

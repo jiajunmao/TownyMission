@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.OfflinePlayer;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -60,9 +61,24 @@ public class TownyUtil {
      *
      * @param townUUID the town uuid
      * @return the town
-     * @throws NotRegisteredException the not registered exception
      */
-    public static Town getTown(UUID townUUID) throws NotRegisteredException {
-        return TownyAPI.getInstance().getDataSource().getTown(townUUID);
+    public static Town getTown(UUID townUUID) {
+        try {
+            return TownyAPI.getInstance().getDataSource().getTown(townUUID);
+        } catch (NotRegisteredException e) {
+            return null;
+        }
+    }
+
+    public static Town getTown(String townName) {
+        try {
+            return TownyAPI.getInstance().getDataSource().getTown(townName);
+        } catch (NotRegisteredException e) {
+            return null;
+        }
+    }
+
+    public static List<Town> getTowns() {
+        return TownyAPI.getInstance().getDataSource().getTowns();
     }
 }

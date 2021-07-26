@@ -1,5 +1,10 @@
-package world.naturecraft.townymission.commands;
+/*
+ * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
+ */
 
+package world.naturecraft.townymission.commands.archives;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,30 +13,30 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
-import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Towny mission abort.
+ * The type Towny mission start.
  */
-public class TownyMissionAbort extends TownyMissionCommand {
+public class TownyMissionStart extends TownyMissionCommand {
+
     /**
      * Instantiates a new Towny mission command.
      *
      * @param instance the instance
      */
-    public TownyMissionAbort(TownyMissionBukkit instance) {
+    public TownyMissionStart(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -49,26 +54,24 @@ public class TownyMissionAbort extends TownyMissionCommand {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        // /townymission start <number>
         if (sender instanceof Player) {
-            Player player = (Player) sender;
-            // /tms abort #num
-            // /tms abort all
-            // /tms abort -> this is WRONG
-
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    Player player = (Player) sender;
                     if (sanityCheck(player, args)) {
                         Town town = TownyUtil.residentOf(player);
-                        if (Util.isInt(args[1])) {
-                            MissionEntry entry = MissionDao.getInstance().getIndexedMission(town.getUUID(), Integer.parseInt(args[1]));
-                            MissionService.getInstance().abortMission(player.getUniqueId(), entry);
-                        } else {
-                            for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town.getUUID())) {
-                                MissionService.getInstance().abortMission(player.getUniqueId(), entry);
-                            }
+                        MissionEntry entry = MissionDao.getInstance().getStartedMission(town.getUUID());
+                        MissionService.getInstance().startMission(player.getUniqueId(), Integer.parseInt(args[1]));
+
+                        try {
+                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.start.onSuccess")
+                                    .replace("%type%", entry.getMissionType().name())
+                                    .replace("%details%", entry.getDisplayLine()));
+                        } catch (JsonProcessingException exception) {
+                            exception.printStackTrace();
                         }
-                        CooldownService.getInstance().startCooldown(town.getUUID(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
                     }
                 }
             };
@@ -82,61 +85,30 @@ public class TownyMissionAbort extends TownyMissionCommand {
     /**
      * Sanity check boolean.
      *
-     * @param player the player
+     * @param player the sender
+     * @param args   the args
      * @return the boolean
      */
-    public boolean sanityCheck(@NotNull Player player, String[] args) {
-
-        BukkitChecker checker = new BukkitChecker(instance).target(player)
+    @Override
+    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+        // /tm start <num>
+        return new BukkitChecker(instance).target(player)
                 .hasTown()
-                .hasStarted()
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
-                    if (args.length != 2 ||
-                            (!Util.isInt(args[1])
-                                    || !args[1].equalsIgnoreCase("all")
-                                    || (Util.isInt(args[1]) && Integer.parseInt(args[1]) < 1 && Integer.parseInt(args[1]) > 15))) {
+                    if (args.length == 1 ||
+                            (Integer.parseInt(args[1]) > instance.getConfig().getInt("mission.amount") || Integer.parseInt(args[1]) < 1)) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
-                })
-                .customCheck(() -> {
-                    Town town = TownyUtil.residentOf(player);
-                    if (TownyUtil.mayorOf(player) != null)
-                        return true;
-
-                    if (Util.isInt(args[1])) {
-                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town.getUUID(), Integer.parseInt(args[1]));
-                        if (entry.getStartedPlayerUUID().equals(player.getUniqueId())) {
-                            return true;
-                        } else {
-                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
-                            return false;
-                        }
-                    } else {
-                        boolean result = true;
-                        for (MissionEntry entry : MissionDao.getInstance().getStartedMissions(town.getUUID())) {
-                            result = result && entry.getStartedPlayerUUID().equals(player.getUniqueId());
-                        }
-
-                        if (result) {
-                            return true;
-                        } else {
-                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.abort.onNotMayorOrStarter"));
-                            return false;
-                        }
-                    }
-                })
-                .customCheck(() -> {
+                }).customCheck(() -> {
                     if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
                         return false;
                     }
                     return true;
-                });
-
-        return checker.check();
+                }).check();
     }
 
     /**
@@ -152,12 +124,14 @@ public class TownyMissionAbort extends TownyMissionCommand {
      * @return A List of possible completions for the final argument, or null
      * to default to the command executor
      */
+    @Nullable
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
         if (args.length == 2) {
-            tabList.add("#num");
-            tabList.add("all");
+            for (int i = 1; i <= instance.getConfig().getInt("mission.amount"); i++) {
+                tabList.add(String.valueOf(i));
+            }
         }
         return tabList;
     }

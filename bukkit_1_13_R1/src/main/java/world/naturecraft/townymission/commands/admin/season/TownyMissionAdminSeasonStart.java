@@ -2,7 +2,7 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.commands.admin;
+package world.naturecraft.townymission.commands.admin.season;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.Util;
@@ -21,14 +22,14 @@ import java.util.List;
 /**
  * The type Towny mission admin start season.
  */
-public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
+public class TownyMissionAdminSeasonStart extends TownyMissionAdminCommand {
 
     /**
      * Instantiates a new Towny mission command.
      *
      * @param instance the instance
      */
-    public TownyMissionAdminStartSeason(TownyMissionBukkit instance) {
+    public TownyMissionAdminSeasonStart(TownyMissionBukkit instance) {
         super(instance);
     }
 
@@ -47,8 +48,13 @@ public class TownyMissionAdminStartSeason extends TownyMissionAdminCommand {
                             || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.startSeason").check();
                 })
                 .customCheck(() -> {
-                    // /tms admin startSeason
-                    return (args.length == 2 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("startSeason"));
+                    // /tmsa season start
+                    if (args.length != 2 || !args[0].equalsIgnoreCase("season") || !args[1].equalsIgnoreCase("start")) {
+                        System.out.println("It's ME!");
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                    return true;
                 }).check();
     }
 

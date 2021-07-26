@@ -93,13 +93,7 @@ public class TownyMissionRank extends TownyMissionCommand {
 
                     int index = 1;
                     for (Rankable entry : entryList) {
-                        Town town = null;
-
-                        try {
-                            town = TownyUtil.getTown(UUID.fromString(entry.getRankingId()));
-                        } catch (NotRegisteredException e) {
-                            e.printStackTrace();
-                        }
+                        Town town = TownyUtil.getTown(UUID.fromString(entry.getRankingId()));
 
                         switch (RankType.valueOf(args[1].toUpperCase(Locale.ROOT))) {
                             case SPRINT:
