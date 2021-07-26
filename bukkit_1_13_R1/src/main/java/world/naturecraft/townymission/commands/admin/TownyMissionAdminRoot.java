@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.TownyMissionCommand;
 import world.naturecraft.townymission.services.ChatService;
 
 import java.util.ArrayList;
@@ -20,12 +21,12 @@ import java.util.Map;
 /**
  * The type Towny mission admin root.
  */
-public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
+public class TownyMissionAdminRoot extends TownyMissionCommand {
 
     /**
      * The Commands.
      */
-    Map<String, TownyMissionAdminCommand> commands;
+    Map<String, TownyMissionCommand> commands;
 
     /**
      * Instantiates a new Towny mission command.
@@ -76,7 +77,7 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
      * @param name         the name
      * @param adminCommand the admin command
      */
-    public void registerAdminCommand(String name, TownyMissionAdminCommand adminCommand) {
+    public void registerAdminCommand(String name, TownyMissionCommand adminCommand) {
         commands.put(name, adminCommand);
     }
 
@@ -86,7 +87,7 @@ public class TownyMissionAdminRoot extends TownyMissionAdminCommand {
      * @param name the name
      * @return the executor
      */
-    public TownyMissionAdminCommand getExecutor(String name) {
+    public TownyMissionCommand getExecutor(String name) {
         return commands.getOrDefault(name, null);
     }
 

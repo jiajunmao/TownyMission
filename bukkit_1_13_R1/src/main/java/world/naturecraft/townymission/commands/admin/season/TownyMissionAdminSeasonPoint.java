@@ -7,11 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.admin.TownyMissionAdminCommand;
+import world.naturecraft.townymission.commands.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.services.TownyService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -21,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class TownyMissionAdminSeasonPoint extends TownyMissionAdminCommand {
+public class TownyMissionAdminSeasonPoint extends TownyMissionCommand {
     /**
      * Instantiates a new Towny mission command.
      *

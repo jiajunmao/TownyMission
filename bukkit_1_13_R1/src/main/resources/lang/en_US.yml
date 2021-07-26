@@ -53,6 +53,9 @@ adminCommands:
     onSuccess: "&fYou have successfully %action% %amount% season points to %town%"
   sprint_point:
     onSuccess: "&fYou have successfully %action% %amount% sprint points to %town%"
+  mission_abort:
+    onNoStartedMission: "&cThere is no started mission for town %town%"
+    onSuccess: "&fYou have successfully aborted the mission for town %town%"
 
 services:
   reward:

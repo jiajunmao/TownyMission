@@ -6,12 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.admin.TownyMissionAdminCommand;
+import world.naturecraft.townymission.commands.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
-import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
-import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.RankingService;
 import world.naturecraft.townymission.utils.BukkitChecker;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TownyMissionAdminSeasonRank extends TownyMissionAdminCommand {
+public class TownyMissionAdminSeasonRank extends TownyMissionCommand {
     /**
      * Instantiates a new Towny mission command.
      *
