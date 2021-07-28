@@ -119,9 +119,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
          * Configure listeners, timers, and tasks
          */
         // If is bungee, and not main, do nothing here except for the listeners
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering commands"));
+        registerCommands();
         if (!isBungeecordEnabled || isMainServer) {
-            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering commands"));
-            registerCommands();
             getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering timers"));
             registerTimers();
         }
@@ -276,6 +276,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     private void registerCommands() {
         if (!isBungeecordEnabled || isMainServer) {
+            getServer().getConsoleSender().sendMessage("Registering main server commands");
             TownyMissionRoot root = new TownyMissionRoot(this);
             TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
             TownyMissionAdminSeasonRoot seasonRoot = new TownyMissionAdminSeasonRoot(this);
@@ -310,6 +311,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             sprintRoot.registerAdminCommand("point", new TownyMissionAdminSprintPoint(this));
             sprintRoot.registerAdminCommand("rank", new TownyMissionAdminSprintRank(this));
         } else {
+            getServer().getConsoleSender().sendMessage("Registering non-main server commands");
             this.rootCmd = new TownyMissionRoot(this);
             this.getCommand("townymission").setExecutor(rootCmd);
 
