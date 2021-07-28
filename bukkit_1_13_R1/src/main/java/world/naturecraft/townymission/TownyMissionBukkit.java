@@ -130,8 +130,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         registerListeners();
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering tasks"));
         registerTasks();
-        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering placeholders"));
-        new PlaceholderBukkitService().register();
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering placeholders"));
+            new PlaceholderBukkitService().register();
+        }
 
         int pluginId = 12167;
         Metrics metrics = new Metrics(this, pluginId);
