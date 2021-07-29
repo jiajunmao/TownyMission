@@ -48,18 +48,7 @@ public class PluginMessagingBungeeService extends PluginMessagingService {
 
 
     public void send(PluginMessage message) {
-
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF(message.getChannel());
-        out.writeUTF(message.getMessageUUID().toString());
-        out.writeLong(message.getTimestamp());
-        out.writeInt(message.getSize());
-        for (String str : message.getData()) {
-            out.writeUTF(str);
-        }
-
-        for (ServerInfo info : ProxyServer.getInstance().getServers().values()) {
-            info.sendData("townymission:main", out.toByteArray());
-        }
+        ServerInfo destination = ProxyServer.getInstance().getServerInfo(message.getDestination());
+        destination.sendData("townymission:main", message.asByteArray());
     }
 }

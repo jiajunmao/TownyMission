@@ -1,10 +1,11 @@
-package world.naturecraft.townymission.data.source.sql;
+package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.components.entity.SprintEntry;
-import world.naturecraft.townymission.data.storage.SprintStorage;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.data.storage.SeasonStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,18 +15,17 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Sprint database.
+ * The type Season database.
  */
-public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintStorage {
+public class SeasonMysqlStorage extends MysqlStorage<SeasonEntry> implements SeasonStorage {
 
     /**
-     * Instantiates a new Sprint database.
+     * Instantiates a new Season database.
      *
      * @param db        the db
-     * @param tableName the table name
      */
-    public SprintSqlStorage(HikariDataSource db, String tableName) {
-        super(db, tableName);
+    public SeasonMysqlStorage(HikariDataSource db) {
+        super(db, DbType.SEASON);
     }
 
     @Override
@@ -34,8 +34,7 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`uuid` VARCHAR(255) NOT NULL ," +
                     "`town_id` VARCHAR(255) NOT NULL ," +
-                    "`naturepoints` INT NOT NULL, " +
-                    "`sprint` INT NOT NULL ," +
+                    "`seasonpoints` INT NOT NULL, " +
                     "`season` INT NOT NULL ," +
                     "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -45,31 +44,29 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
     }
 
     @Override
-    public List<SprintEntry> getEntries() {
+    public List<SeasonEntry> getEntries() {
         if (cached) {
-            List<SprintEntry> list = new ArrayList<>(memCache.values());
+            List<SeasonEntry> list = new ArrayList<>(memCache.values());
             return list;
         }
-        List<SprintEntry> list = new ArrayList<>();
+        List<SeasonEntry> list = new ArrayList<>();
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName + ";";
             PreparedStatement p = conn.prepareStatement(sql);
             try {
                 ResultSet result = p.executeQuery();
-
                 while (result.next()) {
-                    SprintEntry entry = new SprintEntry(UUID.fromString(result.getString("uuid")),
+                    list.add(new SeasonEntry(
+                            UUID.fromString(result.getString("uuid")),
                             UUID.fromString(result.getString("town_id")),
-                            result.getInt("naturepoints"),
-                            result.getInt("sprint"),
-                            result.getInt("season"));
-                    list.add(entry);
+                            result.getInt("seasonpoints"),
+                            result.getInt("season")));
                 }
+                return null;
             } catch (SQLException e) {
+                e.printStackTrace();
                 return null;
             }
-
-            return null;
         });
         return list;
     }
@@ -77,37 +74,33 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
     /**
      * Add.
      *
-     * @param townUUID     the town uuid
-     * @param naturePoints the nature points
-     * @param sprint       the sprint
-     * @param season       the season
+     * @param townUUID    the town uuid
+     * @param seasonPoint the season point
+     * @param season      the season
      */
-    public void add(UUID townUUID, int naturePoints, int sprint, int season) {
+    public void add(UUID townUUID, int seasonPoint, int season) {
         if (cached) {
-            SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), townUUID, naturePoints, sprint, season);
-            memCache.put(sprintEntry.getId(), sprintEntry);
-
+            SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, seasonPoint, season);
+            memCache.put(seasonEntry.getId(), seasonEntry);
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(townUUID, naturePoints, sprint, season);
+                    addRemote(townUUID, seasonPoint, season);
                 }
             };
-
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        addRemote(townUUID, naturePoints, sprint, season);
+        addRemote(townUUID, seasonPoint, season);
     }
 
-    private void addRemote(UUID townUUID, int naturePoints, int sprint, int season) {
+    private void addRemote(UUID townUUID, int seasonPoint, int season) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
                     townUUID + "', '" +
-                    naturePoints + "', '" +
-                    sprint + "', '" +
+                    seasonPoint + "', '" +
                     season + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -118,37 +111,34 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
     /**
      * Update.
      *
-     * @param uuid         the id
-     * @param townUUID     the town uuid
-     * @param naturePoints the nature points
-     * @param sprint       the sprint
-     * @param season       the season
+     * @param uuid        the id
+     * @param townUUID    the town uuid
+     * @param seasonPoint the season point
+     * @param season      the season
      */
-    public void update(UUID uuid, UUID townUUID, int naturePoints, int sprint, int season) {
+    public void update(UUID uuid, UUID townUUID, int seasonPoint, int season) {
         if (cached) {
-            SprintEntry sprintEntry = new SprintEntry(uuid, townUUID, naturePoints, sprint, season);
-            memCache.put(sprintEntry.getId(), sprintEntry);
+            SeasonEntry seasonEntry = new SeasonEntry(uuid, townUUID, seasonPoint, season);
+            memCache.put(seasonEntry.getId(), seasonEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    updateRemote(uuid, townUUID, naturePoints, sprint, season);
+                    updateRemote(uuid, townUUID, seasonPoint, season);
                 }
             };
-
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        updateRemote(uuid, townUUID, naturePoints, sprint, season);
+        updateRemote(uuid, townUUID, seasonPoint, season);
     }
 
-    private void updateRemote(UUID uuid, UUID townUUID, int naturePoints, int sprint, int season) {
+    private void updateRemote(UUID uuid, UUID townUUID, int seasonPoint, int season) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET town_id='" + townUUID +
-                    "', naturepoints='" + naturePoints +
-                    "', sprint='" + sprint +
+                    "', seasonpoints='" + seasonPoint +
                     "', season='" + season +
                     "' WHERE uuid='" + uuid + "';";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -157,7 +147,7 @@ public class SprintSqlStorage extends SqlStorage<SprintEntry> implements SprintS
         });
     }
 
-    public void update(SprintEntry data) {
-        update(data.getId(), data.getTownUUID(), data.getNaturepoints(), data.getSprint(), data.getSeason());
+    public void update(SeasonEntry data) {
+        update(data.getId(), data.getTownUUID(), data.getSeasonPoint(), data.getSeason());
     }
 }

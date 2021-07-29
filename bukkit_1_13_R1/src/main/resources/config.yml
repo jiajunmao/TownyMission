@@ -14,23 +14,34 @@ bungeecord:
   # Whether this is the main server, remember to fill both the main-server and serverName
   #   Remember to also fill in the main-server name on Bungee config
   main-server: true
+  # You MUST set this config option after build v2.2.1. Otherwise your plugin will not work.
+  server-name: lobby
+  # If a cached mission entry fail to send, how long should the server wait before trying to resend them?
+  #    The unit is in seconds
+  resend-interval: 60
+  # There are two options: FIXED and INCREMENTAL
+  #    FIXED: for every set resend-interval, the cached missions will be sent again
+  #    INCREMENTAl: for every resend-interval*failed-count, the cached mission will be sent again
+  resend-method: INCREMENTAL
+  # The maximum failed counted for a mission before it is discarded
+  hard-discard: -1
 
 # Database settings
 database:
   # The address of the database, in IP or domain name
-  address:
+  address: my_db
   # The port of the database, default should be 3306
-  port:
+  port: 3336
   # The name of the database
-  name:
+  name: townymission_db
   # The prefix for the database tables, can be used for sharing a single db for different servers
-  #   Before v2.1.7, the builtin prefix is townymission_, do not change if you are only running spigot mode
-  #    or do not plan on sharing a single db for different servers
+  # Before v2.1.7, the builtin prefix is townymission_, do not change if you are only running spigot mode
+  # or do not plan on sharing a single db for different servers
   prefix: "townymission_"
   # The username to access the database
-  username:
+  username: admin
   # The password to access the database
-  password:
+  password: admin
   # Set this to true to cache database in memory, faster operation at the cost of more memory usage
   mem-cache: true
 

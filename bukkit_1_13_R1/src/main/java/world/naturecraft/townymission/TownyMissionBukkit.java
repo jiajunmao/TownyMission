@@ -1,5 +1,6 @@
 package world.naturecraft.townymission;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -110,7 +111,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
         if (storageType.equals(StorageType.MYSQL)) {
             getServer().getConsoleSender().sendMessage("Using MYSQL as storage backend");
-            connect();
+            StorageService.getInstance();
         } else {
             getServer().getConsoleSender().sendMessage("Using YAML flat file as storage backend");
         }
@@ -236,7 +237,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                     if (Bukkit.getPluginManager().isPluginEnabled(hook)
                             && mainConfig.getBoolean("mission.types." + key + ".hooks." + hook)
                             && mainConfig.getBoolean("mission.types." + key + ".enable")) {
-                        System.out.println("Hook enabled");
                         if (missionAndHooks.containsKey(missionType)) {
                             List<String> hookList = missionAndHooks.get(missionType);
                             hookList.add(hook);
@@ -391,18 +391,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         if (!isMainServer()) {
             SendCachedMissionTask.registerTask();
             getServer().getConsoleSender().sendMessage("Started send cache task");
-        }
-    }
-
-    /**
-     * Connect.
-     */
-    private void connect() {
-        try {
-            StorageService.getInstance().connectDb();
-        } catch (DbConnectException e) {
-            e.printStackTrace();
-            onDisable();
         }
     }
 

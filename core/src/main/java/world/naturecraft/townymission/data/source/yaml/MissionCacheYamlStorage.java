@@ -27,19 +27,23 @@ public class MissionCacheYamlStorage extends YamlStorage<MissionCacheEntry> impl
     }
 
     @Override
-    public void add(UUID playerUUID, MissionType missionType, int amount) {
+    public void add(UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".playerUUID", playerUUID.toString());
         add(uuid + ".missionType", missionType.name());
         add(uuid + ".amount", amount);
+        add(uuid + ".lastAttempted", lastAttempted);
+        add(uuid + ".retryCount", retryCount);
     }
 
     @Override
-    public void update(UUID uuid, UUID playerUUID, MissionType missionType, int amount) {
+    public void update(UUID uuid, UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount) {
         add(uuid + ".playerUUID", playerUUID.toString());
         add(uuid + ".missionType", missionType.name());
         add(uuid + ".amount", amount);
+        add(uuid + ".lastAttempted", lastAttempted);
+        add(uuid + ".retryCount", retryCount);
     }
 
     @Override
@@ -55,7 +59,9 @@ public class MissionCacheYamlStorage extends YamlStorage<MissionCacheEntry> impl
                         UUID.fromString(key),
                         UUID.fromString(file.getString(key + ".playerUUID")),
                         MissionType.valueOf(file.getString(key + ".missionType").toUpperCase(Locale.ROOT)),
-                        file.getInt(key + ".amount")
+                        file.getInt(key + ".amount"),
+                        file.getLong(key + ".lastAttempted"),
+                        file.getInt(key + ".retryCount")
                 ));
             } catch (NullPointerException e) {
                 remove(UUID.fromString(key));

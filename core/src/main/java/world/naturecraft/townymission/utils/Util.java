@@ -112,6 +112,7 @@ public class Util {
      * @return the db name
      */
     public static String getDbName(DbType dbType) {
-        return TownyMissionInstance.getInstance().getStatsConfig().getString("database.prefix") + dbType.name().toLowerCase(Locale.ROOT);
+        String name = TownyMissionInstance.getInstance().getInstanceConfig().getString("database.prefix") + dbType.name().toLowerCase(Locale.ROOT);
+        return name;
     }
 }

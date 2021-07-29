@@ -3,15 +3,17 @@ package world.naturecraft.townymission.services;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.components.DataHolder;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.config.TownyMissionConfig;
-import world.naturecraft.townymission.data.source.sql.SqlStorage;
+import world.naturecraft.townymission.data.source.mysql.MysqlStorage;
 import world.naturecraft.townymission.data.storage.Storage;
 import world.naturecraft.townymission.utils.Util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -34,14 +36,21 @@ public class StorageService {
     public StorageService() {
         this.instance = TownyMissionInstance.getInstance();
         this.storageType = instance.getStorageType();
+        if (storageType.equals(StorageType.MYSQL)) {
+            try {
+                connectDb();
+            } catch (DbConnectException e) {
+                throw new DataProcessException(e);
+            }
+        }
         boolean cache = instance.getInstanceConfig().getBoolean("database.mem-cache");
         dbMap = new HashMap<>();
         initializeMap();
 
         if (storageType.equals(StorageType.MYSQL) && cache) {
-            instance.getInstanceLogger().info("&f Memory caching databases");
+            instance.getInstanceLogger().info("Memory caching databases");
             for (DbType dbType : DbType.values()) {
-                ((SqlStorage) dbMap.get(dbType)).cacheData();
+                ((MysqlStorage) dbMap.get(dbType)).cacheData();
             }
         }
     }
@@ -158,9 +167,14 @@ public class StorageService {
                 String fullPath = packageName + "." + className;
 
                 try {
-                    Storage storage = (Storage) Class.forName(fullPath).newInstance();
+                    Storage storage;
+                    if (TownyMissionInstance.getInstance().getStorageType().equals(StorageType.MYSQL)) {
+                        storage = (Storage) Class.forName(fullPath).getDeclaredConstructor(HikariDataSource.class).newInstance(dataSource);
+                    } else {
+                        storage = (Storage) Class.forName(fullPath).newInstance();
+                    }
                     dbMap.put(dbType, storage);
-                } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }

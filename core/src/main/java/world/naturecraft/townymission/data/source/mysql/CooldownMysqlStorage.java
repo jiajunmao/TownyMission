@@ -2,12 +2,13 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.data.source.sql;
+package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
+import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.CooldownStorage;
 
 import java.sql.PreparedStatement;
@@ -19,16 +20,15 @@ import java.util.UUID;
 /**
  * The type Cooldown database.
  */
-public class CooldownSqlStorage extends SqlStorage<CooldownEntry> implements CooldownStorage {
+public class CooldownMysqlStorage extends MysqlStorage<CooldownEntry> implements CooldownStorage {
 
     /**
      * Instantiates a new Database.
      *
      * @param db        the db
-     * @param tableName the table name
      */
-    public CooldownSqlStorage(HikariDataSource db, String tableName) {
-        super(db, tableName);
+    public CooldownMysqlStorage(HikariDataSource db) {
+        super(db, DbType.COOLDOWN);
     }
 
     /**

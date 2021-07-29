@@ -1,9 +1,10 @@
-package world.naturecraft.townymission.data.source.sql;
+package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionStorage;
 
 import java.sql.PreparedStatement;
@@ -16,16 +17,15 @@ import java.util.UUID;
 /**
  * The type Task database.
  */
-public class MissionSqlStorage extends SqlStorage<MissionEntry> implements MissionStorage {
+public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements MissionStorage {
 
     /**
      * Instantiates a new Task database.
      *
      * @param db        the db
-     * @param tableName the table name
      */
-    public MissionSqlStorage(HikariDataSource db, String tableName) {
-        super(db, tableName);
+    public MissionMysqlStorage(HikariDataSource db) {
+        super(db, DbType.MISSION);
     }
 
     @Override
