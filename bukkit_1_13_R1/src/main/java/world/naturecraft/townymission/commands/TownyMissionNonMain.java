@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.services.ChatService;
 
+import javax.swing.*;
 import java.util.List;
 
 public class TownyMissionNonMain extends TownyMissionCommand {
@@ -34,8 +35,10 @@ public class TownyMissionNonMain extends TownyMissionCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        Player player = (Player) command;
-        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onNonMainServer"));
+        if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
+            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onNonMainServer"));
+        }
         return true;
     }
 

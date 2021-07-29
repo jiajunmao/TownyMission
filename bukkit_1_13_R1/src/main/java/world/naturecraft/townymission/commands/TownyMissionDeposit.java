@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The type Towny mission deposit.
@@ -123,28 +126,38 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                             player.setItemInHand(null);
                         }
 
-                        PluginMessage request = new PluginMessage()
-                                .channel("mission:request")
+                        PluginMessage mainSrvRequest = new PluginMessage()
+                                .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                                .destination(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                                .channel("config:request")
                                 .messageUUID(UUID.randomUUID())
-                                .dataSize(5)
-                                .data(new String[]{"doMission", player.getUniqueId().toString(), MissionType.RESOURCE.toString(), player.getItemInHand().getType().name(), String.valueOf(number)});
+                                .dataSize(1)
+                                .data(new String[]{"main-server"});
 
-                        // Since we gotta have the response from the main server, we need send and wait
-                        // And since this is async, we dont need to worry about performance
 
-                        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request);
-                        if (response.getData()[0].equalsIgnoreCase("false")) {
-                            while (number > 64) {
-                                ItemStack itemStack = new ItemStack(itemInHand, 64);
-                                player.getInventory().addItem(itemStack);
-                                number -= 64;
+                        String mainServer = null;
+
+                        try {
+                            PluginMessage mainSrvResponse = PluginMessagingService.getInstance().sendAndWait(mainSrvRequest, 3, TimeUnit.SECONDS);
+                            mainServer = mainSrvResponse.getData()[0];
+
+                            PluginMessage request = new PluginMessage()
+                                    .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                                    .destination(mainServer)
+                                    .channel("mission:request")
+                                    .messageUUID(UUID.randomUUID())
+                                    .dataSize(5)
+                                    .data(new String[]{"doMission", player.getUniqueId().toString(), MissionType.RESOURCE.toString(), player.getItemInHand().getType().name(), String.valueOf(number)});
+
+                            PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
+                            if (response.getData()[0].equalsIgnoreCase("false")) {
+                                giveBackDueToError(player, number, itemInHand);
+                            } else {
+                                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
+                                        .replace("%number%", String.valueOf(number)).replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
                             }
-                            ItemStack itemStack = new ItemStack(itemInHand, number);
-                            player.getInventory().addItem(itemStack);
-                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNonMainServerFail"));
-                        } else {
-                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
-                                    .replace("%number%", String.valueOf(number)).replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
+                        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+                            giveBackDueToError(player, number, itemInHand);
                         }
                     }
                 }
@@ -153,6 +166,17 @@ public class TownyMissionDeposit extends TownyMissionCommand {
             r.runTaskAsynchronously(instance);
         }
         return true;
+    }
+
+    public void giveBackDueToError(Player player, int number, Material itemInHand) {
+        while (number > 64) {
+            ItemStack itemStack = new ItemStack(itemInHand, 64);
+            player.getInventory().addItem(itemStack);
+            number -= 64;
+        }
+        ItemStack itemStack = new ItemStack(itemInHand, number);
+        player.getInventory().addItem(itemStack);
+        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNonMainServerFail"));
     }
 
     /**

@@ -17,25 +17,6 @@ import java.util.concurrent.TimeoutException;
 
 public class PluginMessagingBukkitService extends PluginMessagingService {
 
-    public PluginMessage sendAndWait(PluginMessage message) {
-        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
-        send(message);
-
-        Byte[] responseBytes = future.join();
-        response.remove(message.getMessageUUID().toString());
-        return parseData(responseBytes);
-    }
-
-    @Override
-    public PluginMessage sendAndWait(PluginMessage message, long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
-        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
-        send(message);
-
-        Byte[] responseBytes = future.get(timeout, unit);
-        response.remove(message.getMessageUUID().toString());
-        return parseData(responseBytes);
-    }
-
     public void send(PluginMessage message) {
         // Selecting a random player
         List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
@@ -45,18 +26,8 @@ public class PluginMessagingBukkitService extends PluginMessagingService {
         }
         Player player = players.get(0);
 
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF(message.getChannel());
-        out.writeUTF(message.getMessageUUID().toString());
-        out.writeLong(message.getTimestamp());
-        out.writeInt(message.getSize());
-        for (String str : message.getData()) {
-            out.writeUTF(str);
-        }
-
         TownyMissionBukkit instance = TownyMissionInstance.getInstance();
-        player.sendPluginMessage(instance, "townymission:main", out.toByteArray());
+        player.sendPluginMessage(instance, "townymission:main", message.asByteArray());
     }
-
 
 }

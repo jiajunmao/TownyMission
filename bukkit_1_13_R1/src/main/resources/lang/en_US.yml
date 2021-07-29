@@ -18,7 +18,7 @@ commands:
     onSuccess: "&fYou have successfully deposited %number% of %type%!"
     requiredItem: "&fRequired type: %item%"
     inHandItem: "&fIn-hand type: %item%"
-    onNonMainServerFail: "&cSomething went wrong during deposit. Please try again while on the main server to get detailed reason."
+    onNonMainServerFail: "&cSomething went wrong during deposit! You should try again on the main server!"
   start:
     onAlreadyStarted: "&cYour town already has a started mission!"
     onStillInCooldown: "&cYour town is still in cooldown for claiming mission! Please wait %time%"

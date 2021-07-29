@@ -1,9 +1,11 @@
-package world.naturecraft.townymission.data.source.sql;
+package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.DataEntity;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +20,7 @@ import java.util.UUID;
  *
  * @param <T> the type parameter
  */
-public abstract class SqlStorage<T extends DataEntity> {
+public abstract class MysqlStorage<T extends DataEntity> {
 
     protected final String tableName;
     private final HikariDataSource db;
@@ -32,11 +34,10 @@ public abstract class SqlStorage<T extends DataEntity> {
      * Instantiates a new Database.
      *
      * @param db        the db
-     * @param tableName the table name
      */
-    public SqlStorage(HikariDataSource db, String tableName) {
+    public MysqlStorage(HikariDataSource db, DbType dbType) {
         this.db = db;
-        this.tableName = tableName;
+        this.tableName = Util.getDbName(dbType);
         this.cached = false;
         createTable();
 

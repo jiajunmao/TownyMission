@@ -1,5 +1,6 @@
 package world.naturecraft.townymission;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -110,7 +111,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
         if (storageType.equals(StorageType.MYSQL)) {
             getServer().getConsoleSender().sendMessage("Using MYSQL as storage backend");
-            connect();
+            StorageService.getInstance();
         } else {
             getServer().getConsoleSender().sendMessage("Using YAML flat file as storage backend");
         }
@@ -119,9 +120,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
          * Configure listeners, timers, and tasks
          */
         // If is bungee, and not main, do nothing here except for the listeners
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering commands"));
+        registerCommands();
         if (!isBungeecordEnabled || isMainServer) {
-            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering commands"));
-            registerCommands();
             getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering timers"));
             registerTimers();
         }
@@ -130,8 +131,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         registerListeners();
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering tasks"));
         registerTasks();
-        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering placeholders"));
-        new PlaceholderBukkitService().register();
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Registering placeholders"));
+            new PlaceholderBukkitService().register();
+        }
 
         int pluginId = 12167;
         Metrics metrics = new Metrics(this, pluginId);
@@ -233,7 +237,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                     if (Bukkit.getPluginManager().isPluginEnabled(hook)
                             && mainConfig.getBoolean("mission.types." + key + ".hooks." + hook)
                             && mainConfig.getBoolean("mission.types." + key + ".enable")) {
-                        System.out.println("Hook enabled");
                         if (missionAndHooks.containsKey(missionType)) {
                             List<String> hookList = missionAndHooks.get(missionType);
                             hookList.add(hook);
@@ -273,6 +276,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      */
     private void registerCommands() {
         if (!isBungeecordEnabled || isMainServer) {
+            getServer().getConsoleSender().sendMessage("Registering main server commands");
             TownyMissionRoot root = new TownyMissionRoot(this);
             TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
             TownyMissionAdminSeasonRoot seasonRoot = new TownyMissionAdminSeasonRoot(this);
@@ -307,6 +311,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             sprintRoot.registerAdminCommand("point", new TownyMissionAdminSprintPoint(this));
             sprintRoot.registerAdminCommand("rank", new TownyMissionAdminSprintRank(this));
         } else {
+            getServer().getConsoleSender().sendMessage("Registering non-main server commands");
             this.rootCmd = new TownyMissionRoot(this);
             this.getCommand("townymission").setExecutor(rootCmd);
 
@@ -386,18 +391,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         if (!isMainServer()) {
             SendCachedMissionTask.registerTask();
             getServer().getConsoleSender().sendMessage("Started send cache task");
-        }
-    }
-
-    /**
-     * Connect.
-     */
-    private void connect() {
-        try {
-            StorageService.getInstance().connectDb();
-        } catch (DbConnectException e) {
-            e.printStackTrace();
-            onDisable();
         }
     }
 

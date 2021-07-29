@@ -47,7 +47,9 @@ public class MissionCacheDao extends Dao<MissionCacheEntry> {
     public void add(MissionCacheEntry entry) {
         db.add(entry.getPlayerUUID(),
                 entry.getMissionType(),
-                entry.getAmount());
+                entry.getAmount(),
+                entry.getLastAttempted(),
+                entry.getRetryCount());
     }
 
     /**
@@ -70,7 +72,9 @@ public class MissionCacheDao extends Dao<MissionCacheEntry> {
                 entry.getId(),
                 entry.getPlayerUUID(),
                 entry.getMissionType(),
-                entry.getAmount());
+                entry.getAmount(),
+                entry.getLastAttempted(),
+                entry.getRetryCount());
     }
 
     @Override

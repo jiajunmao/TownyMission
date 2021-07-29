@@ -1,9 +1,10 @@
-package world.naturecraft.townymission.data.source.sql;
+package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
+import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.ClaimStorage;
 
 import java.sql.PreparedStatement;
@@ -15,16 +16,15 @@ import java.util.UUID;
 /**
  * The type Claim sql storage.
  */
-public class ClaimSqlStorage extends SqlStorage<ClaimEntry> implements ClaimStorage {
+public class ClaimMysqlStorage extends MysqlStorage<ClaimEntry> implements ClaimStorage {
 
     /**
      * Instantiates a new Database.
      *
      * @param db        the db
-     * @param tableName the table name
      */
-    public ClaimSqlStorage(HikariDataSource db, String tableName) {
-        super(db, tableName);
+    public ClaimMysqlStorage(HikariDataSource db) {
+        super(db, DbType.CLAIM);
     }
 
     /**

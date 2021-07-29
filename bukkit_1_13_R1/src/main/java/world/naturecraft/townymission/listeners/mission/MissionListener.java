@@ -6,6 +6,7 @@ package world.naturecraft.townymission.listeners.mission;
 
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.PluginMessage;
@@ -18,6 +19,7 @@ import world.naturecraft.townymission.services.PluginMessagingService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -72,22 +74,41 @@ public abstract class MissionListener extends TownyMissionListener {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PluginMessage request = new PluginMessage()
-                            .channel("mission:request")
-                            .messageUUID(UUID.randomUUID())
-                            .dataSize(4)
-                            .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
 
-                    // Check for reply and timeout to determine mission cache
+                    // Getting the main server info from bungee first
+                    PluginMessage mainSrvRequest = new PluginMessage()
+                            .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                            .destination(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                            .channel("config:request")
+                            .messageUUID(UUID.randomUUID())
+                            .dataSize(1)
+                            .data(new String[]{"main-server"});
+
+
+                    String mainServer = null;
                     try {
-                        PluginMessage response = PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
+                        PluginMessage mainSrvResponse = PluginMessagingService.getInstance().sendAndWait(mainSrvRequest, 3, TimeUnit.SECONDS);
+                        mainServer = mainSrvResponse.getData()[0];
+
+
+                        PluginMessage request = new PluginMessage()
+                                .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                                .destination(mainServer)
+                                .channel("mission:request")
+                                .messageUUID(UUID.randomUUID())
+                                .dataSize(4)
+                                .data(new String[]{"doMission", player.getUniqueId().toString(), missionType.name(), String.valueOf(amount)});
+
+                        PluginMessagingService.getInstance().sendAndWait(request, 5, TimeUnit.SECONDS);
                     } catch (TimeoutException | InterruptedException | ExecutionException e) {
                         // This means no response is received, or something went wrong, we need to cache
                         //instance.getInstanceLogger().info("Main server did not respond, caching mission");
                         MissionCacheEntry missionCacheEntry = new MissionCacheEntry(UUID.randomUUID(),
                                 player.getUniqueId(),
                                 missionType,
-                                amount);
+                                amount,
+                                new Date().getTime(),
+                                0);
 
                         MissionCacheDao.getInstance().add(missionCacheEntry);
                     }

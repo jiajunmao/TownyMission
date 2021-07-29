@@ -1,10 +1,11 @@
-package world.naturecraft.townymission.data.source.sql;
+package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
-import world.naturecraft.townymission.data.storage.SeasonHistoryStorage;
+import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.data.storage.SprintHistoryStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,18 +14,17 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Season history database.
+ * The type Sprint history database.
  */
-public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> implements SeasonHistoryStorage {
+public class SprintHistoryMysqlStorage extends MysqlStorage<SprintHistoryEntry> implements SprintHistoryStorage {
 
     /**
-     * Instantiates a new Season history database.
+     * Instantiates a new Sprint history database.
      *
      * @param db        the db
-     * @param tableName the table name
      */
-    public SeasonHistorySqlStorage(HikariDataSource db, String tableName) {
-        super(db, tableName);
+    public SprintHistoryMysqlStorage(HikariDataSource db) {
+        super(db, DbType.SPRINT_HISTORY);
     }
 
     @Override
@@ -33,7 +33,8 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
             String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "(" +
                     "`uuid` VARCHAR(255) NOT NULL ," +
                     "`season` INT NOT NULL ," +
-                    "`started_time` BIGINT NOT NULL ," +
+                    "`sprint` INT NOT NULL, " +
+                    "`started_time` BIGINT NOT NULL, " +
                     "`rank_json` VARCHAR(255) NOT NULL ," +
                     "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -43,21 +44,22 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
     }
 
     @Override
-    public List<SeasonHistoryEntry> getEntries() {
+    public List<SprintHistoryEntry> getEntries() {
         if (cached) {
-            List<SeasonHistoryEntry> list = new ArrayList<>(memCache.values());
+            List<SprintHistoryEntry> list = new ArrayList<>(memCache.values());
             return list;
         }
 
-        List<SeasonHistoryEntry> list = new ArrayList<>();
+        List<SprintHistoryEntry> list = new ArrayList<>();
         execute(conn -> {
             String sql = "SELECT * FROM " + tableName;
             PreparedStatement p = conn.prepareStatement(sql);
             ResultSet result = p.executeQuery();
 
             while (result.next()) {
-                list.add(new SeasonHistoryEntry(UUID.fromString(result.getString("uuid")),
+                list.add(new SprintHistoryEntry(UUID.fromString(result.getString("uuid")),
                         result.getInt("season"),
+                        result.getInt("sprint"),
                         result.getLong("started_time"),
                         result.getString("rank_json")));
             }
@@ -71,18 +73,19 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
      * Add.
      *
      * @param season      the season
+     * @param sprint      the sprint
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void add(int season, long startedTime, String rankJson) {
+    public void add(int season, int sprint, long startedTime, String rankJson) {
         if (cached) {
-            SeasonHistoryEntry seasonHistoryEntry = new SeasonHistoryEntry(UUID.randomUUID(), season, startedTime, rankJson);
-            memCache.put(seasonHistoryEntry.getId(), seasonHistoryEntry);
+            SprintHistoryEntry sprintHistoryEntry = new SprintHistoryEntry(UUID.randomUUID(), season, sprint, startedTime, rankJson);
+            memCache.put(sprintHistoryEntry.getId(), sprintHistoryEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(season, startedTime, rankJson);
+                    addRemote(season, sprint, startedTime, rankJson);
                 }
             };
 
@@ -90,15 +93,16 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
             return;
         }
 
-        addRemote(season, startedTime, rankJson);
+        addRemote(season, sprint, startedTime, rankJson);
     }
 
-    private void addRemote(int season, long startedTime, String rankJson) {
+    public void addRemote(int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
-                    season + "', '" +
-                    startedTime + "', '" +
+                    season + "' , '" +
+                    sprint + "' , '" +
+                    startedTime + "' , '" +
                     rankJson + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
@@ -111,18 +115,19 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
      *
      * @param uuid        the id
      * @param season      the season
+     * @param sprint      the sprint
      * @param startedTime the started time
      * @param rankJson    the rank json
      */
-    public void update(UUID uuid, int season, long startedTime, String rankJson) {
+    public void update(UUID uuid, int season, int sprint, long startedTime, String rankJson) {
         if (cached) {
-            SeasonHistoryEntry seasonHistoryEntry = new SeasonHistoryEntry(uuid, season, startedTime, rankJson);
-            memCache.put(seasonHistoryEntry.getId(), seasonHistoryEntry);
+            SprintHistoryEntry sprintHistoryEntry = new SprintHistoryEntry(uuid, season, sprint, startedTime, rankJson);
+            memCache.put(sprintHistoryEntry.getId(), sprintHistoryEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    updateRemote(uuid, season, startedTime, rankJson);
+                    updateRemote(uuid, season, sprint, startedTime, rankJson);
                 }
             };
 
@@ -130,13 +135,14 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
             return;
         }
 
-        updateRemote(uuid, season, startedTime, rankJson);
+        updateRemote(uuid, season, sprint, startedTime, rankJson);
     }
 
-    private void updateRemote(UUID uuid, int season, long startedTime, String rankJson) {
+    private void updateRemote(UUID uuid, int season, int sprint, long startedTime, String rankJson) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET season='" + season +
+                    "', sprint='" + sprint +
                     "', started_time='" + startedTime +
                     "', rank_json='" + rankJson +
                     "' WHERE uuid='" + uuid + "';";
@@ -146,8 +152,7 @@ public class SeasonHistorySqlStorage extends SqlStorage<SeasonHistoryEntry> impl
         });
     }
 
-
-    public void update(SeasonHistoryEntry data) {
-        update(data.getId(), data.getSeason(), data.getStartTime(), data.getRankJson());
+    public void update(SprintHistoryEntry data) {
+        update(data.getId(), data.getSeason(), data.getSprint(), data.getStartedTime(), data.getRankJson());
     }
 }

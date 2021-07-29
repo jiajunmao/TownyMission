@@ -13,7 +13,7 @@ public interface MissionCacheStorage extends Storage<MissionCacheEntry> {
      *
      * @param missionType the mission type
      */
-    void add(UUID playerUUID, MissionType missionType, int amount);
+    void add(UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount);
 
     /**
      * Remove.
@@ -28,7 +28,7 @@ public interface MissionCacheStorage extends Storage<MissionCacheEntry> {
      * @param id          the id
      * @param missionType the mission type
      */
-    void update(UUID id, UUID playerUUID, MissionType missionType, int amount);
+    void update(UUID id, UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount);
 
     List<MissionCacheEntry> getEntries();
 }

@@ -59,39 +59,6 @@ public abstract class PluginMessagingService extends TownyMissionService {
     }
 
     /**
-     * Parse data plugin message.
-     *
-     * @param byteData the data
-     * @return the plugin message
-     */
-    public static PluginMessage parseData(Byte[] byteData) {
-        byte[] data = new byte[byteData.length];
-        for (int i = 0; i < byteData.length; i++) {
-            data[i] = byteData[i];
-        }
-
-        return parseData(data);
-    }
-
-    public static PluginMessage parseData(byte[] data) {
-        ByteArrayDataInput in = ByteStreams.newDataInput(data);
-        PluginMessage message = new PluginMessage()
-                .channel(in.readUTF())
-                .messageUUID(UUID.fromString(in.readUTF()))
-                .timestamp(in.readLong())
-                .dataSize(in.readInt());
-
-        int size = message.getSize();
-        String[] strData = new String[size];
-        for (int i = 0; i < size; i++) {
-            strData[i] = in.readUTF();
-        }
-
-        message.data(strData);
-        return message;
-    }
-
-    /**
      * Register request completable future.
      *
      * @param respondId the respond id
@@ -135,15 +102,23 @@ public abstract class PluginMessagingService extends TownyMissionService {
         return this.response.get(responseId);
     }
 
-    /**
-     * Send and wait for response plugin message.
-     *
-     * @param message the message
-     * @return the plugin message
-     */
-    public abstract PluginMessage sendAndWait(PluginMessage message);
+    public PluginMessage sendAndWait(PluginMessage message) {
+        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
+        send(message);
 
-    public abstract PluginMessage sendAndWait(PluginMessage message, long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException;
+        Byte[] responseBytes = future.join();
+        response.remove(message.getMessageUUID().toString());
+        return PluginMessage.parse(responseBytes);
+    }
+
+    public PluginMessage sendAndWait(PluginMessage message, long timeout, TimeUnit unit) throws ExecutionException, InterruptedException, TimeoutException {
+        CompletableFuture<Byte[]> future = getInstance().registerRequest(message.getMessageUUID().toString());
+        send(message);
+
+        Byte[] responseBytes = future.get(timeout, unit);
+        response.remove(message.getMessageUUID().toString());
+        return PluginMessage.parse(responseBytes);
+    }
 
     public abstract void send(PluginMessage message);
 }

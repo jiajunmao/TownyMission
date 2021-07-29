@@ -1,5 +1,6 @@
 package world.naturecraft.townymission;
 
+import com.zaxxer.hikari.HikariDataSource;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import world.naturecraft.townymission.components.enums.ServerType;

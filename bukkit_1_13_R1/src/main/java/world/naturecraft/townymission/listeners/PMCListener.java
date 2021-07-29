@@ -38,7 +38,7 @@ public class PMCListener implements PluginMessageListener {
         if (!channel.equalsIgnoreCase("townymission:main")) return;
 
         TownyMissionBukkit instance = TownyMissionInstance.getInstance();
-        PluginMessage request = PluginMessagingService.parseData(message);
+        PluginMessage request = PluginMessage.parse(message);
 
         // Ignore if the message has been sent 3 seconds ago, 5s is the mark for other server to cache
         long timeDiff = new Date().getTime() - request.getTimestamp();
@@ -53,11 +53,20 @@ public class PMCListener implements PluginMessageListener {
             PluginMessagingService.getInstance().completeRequest(request.getMessageUUID().toString(), message);
         } else if (subchannel.equalsIgnoreCase("mission:request")) {
             // If this is not the main server, just ignore, otherwise this infinite looping
+            // TODO: this should be able to get deleted, since no non-main server will be sending message to non-main server
             if (!instance.getConfig().getBoolean("bungeecord.main-server")) return;
 
             OfflinePlayer realPlayer = Bukkit.getOfflinePlayer(UUID.fromString(request.getData()[1]));
             if (TownyUtil.residentOf(realPlayer) == null) {
                 // This means that the player does not have a town
+                PluginMessage response = new PluginMessage()
+                        .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                        .destination(request.getOrigin())
+                        .channel("mission:response")
+                        .messageUUID(request.getMessageUUID())
+                        .dataSize(1)
+                        .data(new String[]{"false"});
+                PluginMessagingService.getInstance().send(response);
                 return;
             }
 
@@ -73,6 +82,8 @@ public class PMCListener implements PluginMessageListener {
             if (!checker.check()) {
                 // If not passing sanity check, return false, and break, do not try to doMission()
                 PluginMessage response = new PluginMessage()
+                        .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                        .destination(request.getOrigin())
                         .channel("mission:response")
                         .messageUUID(request.getMessageUUID())
                         .dataSize(1)
@@ -84,6 +95,8 @@ public class PMCListener implements PluginMessageListener {
             MissionService.getInstance().doMission(townUUID, realPlayer.getUniqueId(), MissionType.valueOf(request.getData()[2].toUpperCase(Locale.ROOT)), Integer.parseInt(request.getData()[3]));
 
             PluginMessage response = new PluginMessage()
+                    .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
+                    .destination(request.getOrigin())
                     .channel("mission:response")
                     .messageUUID(request.getMessageUUID())
                     .dataSize(1)

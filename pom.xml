@@ -120,7 +120,7 @@
                         <checkModificationExclude>target/*</checkModificationExclude>
                     </checkModificationExcludes>
                     <goals>deploy</goals>
-                    <autoversionsubmodules>true</autoversionsubmodules>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
 
@@ -199,7 +199,7 @@
         </repository>
 
         <repository>
-            <id>maven-central</id>
+            <id>config-updater</id>
             <url>https://oss.sonatype.org/content/groups/public</url>
         </repository>
 
@@ -328,6 +328,7 @@
             <groupId>com.tchristofferson</groupId>
             <artifactId>ConfigUpdater</artifactId>
             <version>1.2-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

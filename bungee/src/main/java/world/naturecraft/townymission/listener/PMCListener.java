@@ -21,7 +21,7 @@ public class PMCListener implements Listener {
     @EventHandler
     public void onPluginMessageEvent(PluginMessageEvent event) {
         if (!event.getTag().equalsIgnoreCase("townymission:main")) return;
-        PluginMessage message = PluginMessagingService.parseData(event.getData());
+        PluginMessage message = PluginMessage.parse(event.getData());
 
 
         //TownyMissionInstance.getInstance().getInstanceLogger().info("Bungee received message " + message.getMessageUUID());
@@ -29,6 +29,8 @@ public class PMCListener implements Listener {
         if (message.getChannel().equals("config:request")) {
             String configValue = instance.getInstanceConfig().getString(message.getData()[0]);
             PluginMessage response = new PluginMessage()
+                    .origin(message.getOrigin())
+                    .destination(message.getDestination())
                     .channel("config:response")
                     .messageUUID(message.getMessageUUID())
                     .dataSize(1)
@@ -40,5 +42,7 @@ public class PMCListener implements Listener {
         } else if (message.getChannel().equals("mission:response")) {
             PluginMessagingService.getInstance().send(message);
         }
+
+        event.setCancelled(true);
     }
 }
