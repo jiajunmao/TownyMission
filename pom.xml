@@ -139,12 +139,6 @@
     <repositories>
 
         <repository>
-            <id>gitlab-dep-repo</id>
-            <name>NC-Staff-Backend</name>
-            <url>https://git.naturecraft.world/api/v4/projects/10/packages/maven</url>
-        </repository>
-
-        <repository>
             <id>gitlab-maven</id>
             <name>NC-TownyMission</name>
             <!--suppress UnresolvedMavenProperty -->
@@ -179,11 +173,6 @@
         </repository>
 
         <repository>
-            <id>essentials-snapshots</id>
-            <url>https://repo.essentialsx.net/snapshots/</url>
-        </repository>
-
-        <repository>
             <id>paper-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
@@ -194,11 +183,6 @@
         </repository>
 
         <repository>
-            <id>lumine-repo</id>
-            <url>https://mvn.lumine.io/repository/maven-public/</url>
-        </repository>
-
-        <repository>
             <id>config-updater</id>
             <url>https://oss.sonatype.org/content/groups/public</url>
         </repository>
@@ -206,7 +190,6 @@
     </repositories>
 
     <dependencies>
-
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -264,41 +247,6 @@
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>8.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.essentialsx</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>2.19.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zrips</groupId>
-            <artifactId>CMIAPI</artifactId>
-            <version>8.7.8.2</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.teozfrank</groupId>
-            <artifactId>UltimateVotes</artifactId>
-            <version>0.1</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.Indyuce</groupId>
-            <artifactId>MMOItems</artifactId>
-            <version>6.5</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.Indyuce</groupId>
-            <artifactId>MMOLib</artifactId>
-            <version>6.5</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
