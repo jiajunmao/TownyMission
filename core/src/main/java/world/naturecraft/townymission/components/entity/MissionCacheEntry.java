@@ -39,20 +39,20 @@ public class MissionCacheEntry extends DataEntity {
         return lastAttempted;
     }
 
+    public void setLastAttempted(long lastAttempted) {
+        this.lastAttempted = lastAttempted;
+    }
+
     public int getRetryCount() {
         return retryCount;
+    }
+
+    public void setRetryCount(int retryCount) {
+        this.retryCount = retryCount;
     }
 
     public void incrementFail() {
         this.retryCount++;
         this.lastAttempted = new Date().getTime();
-    }
-
-    public void setLastAttempted(long lastAttempted) {
-        this.lastAttempted = lastAttempted;
-    }
-
-    public void setRetryCount(int retryCount) {
-        this.retryCount = retryCount;
     }
 }

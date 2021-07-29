@@ -25,7 +25,7 @@ public class CooldownMysqlStorage extends MysqlStorage<CooldownEntry> implements
     /**
      * Instantiates a new Database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public CooldownMysqlStorage(HikariDataSource db) {
         super(db, DbType.COOLDOWN);

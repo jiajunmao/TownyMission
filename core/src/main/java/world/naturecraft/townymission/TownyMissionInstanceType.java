@@ -12,6 +12,16 @@ public class TownyMissionInstanceType {
      */
     public static ServerType serverType;
 
+    private static TownyMissionInstance instance;
+
+    public static void registerInstance(TownyMissionInstance instance) {
+        TownyMissionInstanceType.instance = instance;
+    }
+
+    public static <T extends TownyMissionInstance> T getInstance() {
+        return (T) TownyMissionInstanceType.instance;
+    }
+
     /**
      * Is bungee boolean.
      *

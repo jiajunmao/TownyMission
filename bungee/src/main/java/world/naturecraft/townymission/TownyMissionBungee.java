@@ -30,6 +30,7 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     public void onEnable() {
         logger.info("===> Enabling TownyMission");
         TownyMissionInstanceType.serverType = ServerType.BUNGEE;
+        TownyMissionInstanceType.registerInstance(this);
         // This is loading in the config file
         logger.info("===> Registering and parsing configs");
         mainConfig = new BungeeConfig("config.yml", "bungee/config.yml");
@@ -41,6 +42,9 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
         logger.info("===> Registering Listeners and PMC");
         registerChannel();
         registerListener();
+
+        // bStats
+        int pluginId = 1234; // <-- Replace with the id of your plugin!
     }
 
     /**

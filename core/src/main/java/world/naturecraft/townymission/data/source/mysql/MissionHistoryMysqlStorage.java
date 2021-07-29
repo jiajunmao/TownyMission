@@ -21,7 +21,7 @@ public class MissionHistoryMysqlStorage extends MysqlStorage<MissionHistoryEntry
     /**
      * Instantiates a new Task history database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public MissionHistoryMysqlStorage(HikariDataSource db) {
         super(db, DbType.MISSION_HISTORY);

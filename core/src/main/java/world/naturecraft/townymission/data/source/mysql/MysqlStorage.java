@@ -33,7 +33,7 @@ public abstract class MysqlStorage<T extends DataEntity> {
     /**
      * Instantiates a new Database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public MysqlStorage(HikariDataSource db, DbType dbType) {
         this.db = db;

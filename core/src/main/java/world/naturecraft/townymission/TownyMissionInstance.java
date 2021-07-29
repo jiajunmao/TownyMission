@@ -1,9 +1,5 @@
 package world.naturecraft.townymission;
 
-import com.zaxxer.hikari.HikariDataSource;
-import net.md_5.bungee.api.ProxyServer;
-import org.bukkit.Bukkit;
-import world.naturecraft.townymission.components.enums.ServerType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.config.TownyMissionConfig;
 
@@ -17,19 +13,8 @@ import java.util.logging.Logger;
  */
 public interface TownyMissionInstance {
 
-    /**
-     * Gets instance.
-     *
-     * @param <T> the type parameter
-     * @return the instance
-     */
-    @SuppressWarnings("unchecked")
     static <T extends TownyMissionInstance> T getInstance() {
-        if (TownyMissionInstanceType.serverType.equals(ServerType.BUKKIT)) {
-            return (T) Bukkit.getPluginManager().getPlugin("TownyMission");
-        } else {
-            return (T) ProxyServer.getInstance().getPluginManager().getPlugin("TownyMission");
-        }
+        return TownyMissionInstanceType.getInstance();
     }
 
     /**

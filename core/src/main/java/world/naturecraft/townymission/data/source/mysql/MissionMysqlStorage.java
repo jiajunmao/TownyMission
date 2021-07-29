@@ -22,7 +22,7 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
     /**
      * Instantiates a new Task database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public MissionMysqlStorage(HikariDataSource db) {
         super(db, DbType.MISSION);

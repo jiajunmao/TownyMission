@@ -21,7 +21,7 @@ public class ClaimMysqlStorage extends MysqlStorage<ClaimEntry> implements Claim
     /**
      * Instantiates a new Database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public ClaimMysqlStorage(HikariDataSource db) {
         super(db, DbType.CLAIM);

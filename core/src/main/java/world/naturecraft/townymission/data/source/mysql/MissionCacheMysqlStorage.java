@@ -19,7 +19,7 @@ public class MissionCacheMysqlStorage extends MysqlStorage<MissionCacheEntry> im
     /**
      * Instantiates a new Database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public MissionCacheMysqlStorage(HikariDataSource db) {
         super(db, DbType.MISSION_CACHE);

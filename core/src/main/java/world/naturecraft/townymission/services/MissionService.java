@@ -122,7 +122,7 @@ public abstract class MissionService extends TownyMissionService {
      *
      * @param player the player
      * @param entry  the entry
-     * @param force when this is set to true, the function will not check whether player is eligible for aborting the mission. The player UUID can be null.
+     * @param force  when this is set to true, the function will not check whether player is eligible for aborting the mission. The player UUID can be null.
      */
     public void abortMission(UUID player, MissionEntry entry, boolean force) {
         if (!force) {
