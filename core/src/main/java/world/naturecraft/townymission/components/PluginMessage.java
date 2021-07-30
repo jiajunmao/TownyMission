@@ -44,6 +44,35 @@ public class PluginMessage {
         timestamp = new Date().getTime();
     }
 
+    public static PluginMessage parse(byte[] byteArray) {
+        ByteArrayDataInput in = ByteStreams.newDataInput(byteArray);
+        PluginMessage message = new PluginMessage()
+                .origin(in.readUTF())
+                .destination(in.readUTF())
+                .channel(in.readUTF())
+                .messageUUID(UUID.fromString(in.readUTF()))
+                .timestamp(in.readLong())
+                .dataSize(in.readInt());
+
+        int size = message.getSize();
+        String[] strData = new String[size];
+        for (int i = 0; i < size; i++) {
+            strData[i] = in.readUTF();
+        }
+
+        message.data(strData);
+        return message;
+    }
+
+    public static PluginMessage parse(Byte[] byteArray) {
+        byte[] array = new byte[byteArray.length];
+        for (int i = 0; i < byteArray.length; i++) {
+            array[i] = byteArray[i];
+        }
+
+        return parse(array);
+    }
+
     public PluginMessage origin(String originSrv) {
         this.originSrv = originSrv;
         return this;
@@ -53,6 +82,7 @@ public class PluginMessage {
         this.destinationSrv = destinationSrv;
         return this;
     }
+
     /**
      * Channel plugin message.
      *
@@ -163,35 +193,6 @@ public class PluginMessage {
         }
 
         return out.toByteArray();
-    }
-
-    public static PluginMessage parse(byte[] byteArray) {
-        ByteArrayDataInput in = ByteStreams.newDataInput(byteArray);
-        PluginMessage message = new PluginMessage()
-                .origin(in.readUTF())
-                .destination(in.readUTF())
-                .channel(in.readUTF())
-                .messageUUID(UUID.fromString(in.readUTF()))
-                .timestamp(in.readLong())
-                .dataSize(in.readInt());
-
-        int size = message.getSize();
-        String[] strData = new String[size];
-        for (int i = 0; i < size; i++) {
-            strData[i] = in.readUTF();
-        }
-
-        message.data(strData);
-        return message;
-    }
-
-    public static PluginMessage parse(Byte[] byteArray) {
-        byte[] array = new byte[byteArray.length];
-        for (int i = 0; i < byteArray.length; i++) {
-            array[i] = byteArray[i];
-        }
-
-        return parse(array);
     }
 
 }

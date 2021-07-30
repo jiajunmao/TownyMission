@@ -21,7 +21,7 @@ public class SeasonHistoryMysqlStorage extends MysqlStorage<SeasonHistoryEntry> 
     /**
      * Instantiates a new Season history database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public SeasonHistoryMysqlStorage(HikariDataSource db) {
         super(db, DbType.SEASON_HISTORY);

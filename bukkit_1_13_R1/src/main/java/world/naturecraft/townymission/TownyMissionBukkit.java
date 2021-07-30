@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
@@ -14,6 +15,7 @@ import world.naturecraft.townymission.commands.admin.season.*;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
+import world.naturecraft.townymission.components.DataHolder;
 import world.naturecraft.townymission.components.enums.*;
 import world.naturecraft.townymission.config.BukkitConfig;
 import world.naturecraft.townymission.config.TownyMissionConfig;
@@ -23,6 +25,7 @@ import world.naturecraft.townymission.gui.MissionManageGui;
 import world.naturecraft.townymission.listeners.DoMissionListener;
 import world.naturecraft.townymission.listeners.PMCListener;
 import world.naturecraft.townymission.listeners.TownFallListener;
+import world.naturecraft.townymission.listeners.UpdateRemindListener;
 import world.naturecraft.townymission.listeners.mission.ExpansionListener;
 import world.naturecraft.townymission.listeners.mission.MobListener;
 import world.naturecraft.townymission.listeners.mission.VoteListener;
@@ -33,6 +36,7 @@ import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.tasks.SendCachedMissionTask;
 import world.naturecraft.townymission.utils.BukkitUtil;
+import world.naturecraft.townymission.utils.UpdateChecker;
 
 import java.io.File;
 import java.io.InputStream;
@@ -73,6 +77,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         getServer().getConsoleSender().sendMessage("-----------------------------------------------------------------");
 
         TownyMissionInstanceType.serverType = ServerType.BUKKIT;
+        TownyMissionInstanceType.registerInstance(this);
         missionAndHooks = new HashMap<>();
 
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing main and lang config"));
@@ -137,8 +142,29 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             new PlaceholderBukkitService().register();
         }
 
+        // Update bStats
         int pluginId = 12167;
         Metrics metrics = new Metrics(this, pluginId);
+
+        // Check for updates
+        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Checking updates"));
+        DataHolder<JavaPlugin> instanceHolder = new DataHolder<>(this);
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                new UpdateChecker(instanceHolder.getData(), 94472).getVersion(version -> {
+                    version = version.substring(1);
+                    if (!UpdateChecker.isGreater(getDescription().getVersion(), version)) {
+                        String str = "&bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instanceHolder.getData().getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
+                        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));
+                    } else {
+                        String str = "&fThe version you are using is the latest, yay! Current version: " + getDescription().getVersion();
+                        getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));
+                    }
+                });
+            }
+        };
+        r.runTaskAsynchronously(this);
     }
 
     private void additionalConfigs() {
@@ -343,6 +369,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
             // GUI listeners
             getServer().getPluginManager().registerEvents(new MissionManageGui(this), this);
+
+            // Update listener
+            getServer().getPluginManager().registerEvents(new UpdateRemindListener(this), this);
         }
 
         if (isMissionEnabled(MissionType.MOB)) {

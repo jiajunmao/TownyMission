@@ -22,7 +22,7 @@ public class SprintMysqlStorage extends MysqlStorage<SprintEntry> implements Spr
     /**
      * Instantiates a new Sprint database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public SprintMysqlStorage(HikariDataSource db) {
         super(db, DbType.SPRINT);

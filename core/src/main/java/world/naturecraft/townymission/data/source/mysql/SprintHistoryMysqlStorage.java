@@ -21,7 +21,7 @@ public class SprintHistoryMysqlStorage extends MysqlStorage<SprintHistoryEntry> 
     /**
      * Instantiates a new Sprint history database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public SprintHistoryMysqlStorage(HikariDataSource db) {
         super(db, DbType.SPRINT_HISTORY);

@@ -22,7 +22,7 @@ public class SeasonMysqlStorage extends MysqlStorage<SeasonEntry> implements Sea
     /**
      * Instantiates a new Season database.
      *
-     * @param db        the db
+     * @param db the db
      */
     public SeasonMysqlStorage(HikariDataSource db) {
         super(db, DbType.SEASON);
