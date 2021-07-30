@@ -69,7 +69,7 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
                             result.getLong("allowed_time"),
                             result.getString("mission_json"),
                             UUID.fromString(result.getString("town_uuid")),
-                            UUID.fromString(result.getString("started_player_uuid"))));
+                            result.getString("started_player_uuid") == null || result.getString("started_player_uuid").equals("null") ? null : UUID.fromString(result.getString("started_player_uuid"))));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

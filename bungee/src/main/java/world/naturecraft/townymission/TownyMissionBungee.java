@@ -3,6 +3,7 @@ package world.naturecraft.townymission;
 import com.zaxxer.hikari.HikariDataSource;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
+import org.bstats.bungeecord.Metrics;
 import world.naturecraft.townymission.components.enums.ServerType;
 import world.naturecraft.townymission.components.enums.StorageType;
 import world.naturecraft.townymission.config.BungeeConfig;
@@ -45,6 +46,7 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
         // bStats
         int pluginId = 1234; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     /**

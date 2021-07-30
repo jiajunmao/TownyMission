@@ -26,8 +26,9 @@ public class UpdateRemindListener extends TownyMissionListener {
                 Player player = e.getPlayer();
                 if (player.isOp()) {
                     new UpdateChecker(instance, 94472).getVersion(version -> {
-                        if (!instance.getDescription().getVersion().equalsIgnoreCase(version)) {
-                            String str = "&bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instance.getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
+                        version = version.substring(1);
+                        if (!UpdateChecker.isGreater(instance.getDescription().getVersion(), version)) {
+                            String str = "[TownyMission] &bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instance.getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
                             instance.getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));
                         }
                     });
