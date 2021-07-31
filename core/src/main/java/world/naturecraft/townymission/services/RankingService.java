@@ -49,8 +49,10 @@ public class RankingService {
         switch (rankType) {
             case SPRINT:
                 rankables = new ArrayList<T>((Collection<? extends T>) RankUtil.sort(SprintDao.getInstance().getEntries()));
+                break;
             case SEASON:
                 rankables = new ArrayList<T>((Collection<? extends T>) RankUtil.sort(SeasonDao.getInstance().getEntries()));
+                break;
         }
 
         List<T> finalList = new ArrayList<>();

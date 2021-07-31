@@ -12,6 +12,7 @@ import world.naturecraft.townymission.components.enums.RewardMethod;
 import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SeasonHistoryDao;
+import world.naturecraft.townymission.data.dao.SprintHistoryDao;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.Date;
@@ -57,6 +58,10 @@ public class TimerService extends TownyMissionService {
                 Date date = new Date();
                 long timeNow = date.getTime();
 
+                System.out.printf("Curr sprint: %d\n", instance.getStatsConfig().getInt("sprint.current"));
+                System.out.printf("Sprint interval: %b\n", isInInterval(RankType.SPRINT));
+                System.out.printf("Sprint within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SPRINT), timeNow < getActiveEndTime(RankType.SPRINT));
+
                 // This means that season is not started
                 if (instance.getStatsConfig().getLong("season.startedTime") == -1) return;
 
@@ -65,6 +70,11 @@ public class TimerService extends TownyMissionService {
 
 
                 if (timeNow > getTotalEndTime(RankType.SPRINT)) {
+                    // If it is the last sprint of the season, do not increment
+                    int sprintsPerSeason = instance.getInstanceConfig().getInt("season.sprintsPerSeason");
+                    int currSprint = instance.getStatsConfig().getInt("sprint.current");
+                    if (currSprint == sprintsPerSeason) return;
+
                     instance.getInstanceLogger().warning("Sprint interval ended, proceeding to the next interval");
                     // This means that we are in the next sprint, change config.yml
                     instance.getStatsConfig().set("sprint.current", instance.getStatsConfig().getInt("sprint.current") + 1);
@@ -73,11 +83,13 @@ public class TimerService extends TownyMissionService {
                 } else if (timeNow < getTotalEndTime(RankType.SPRINT) && timeNow > getActiveEndTime(RankType.SPRINT)) {
                     // This means that sprint is now in the interval, do clean up task before config changes
 
-                    // Check if in season interval, if is, do nothing
-//                    if (SprintHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current"),
-//                            instance.getStatsConfig().getInt("sprint.current")) != null) {
-//                        return;
-//                    }
+                    // **Run this even when it is season interval to clean out sprint related stuff
+
+                    // If a clean task has already been performed, do nothing (If there is current season/sprint entry in SprintHistory)
+                    if (SprintHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current"),
+                            instance.getStatsConfig().getInt("sprint.current")) != null) {
+                        return;
+                    }
 
                     instance.getInstanceLogger().warning("Sprint interval reached, doing sprint recess clean up jobs");
 
@@ -95,7 +107,7 @@ public class TimerService extends TownyMissionService {
                     RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
                     // Clear SprintStorage, move ranking to SprintHistoryStorage
-                    // SprintService.getInstance().sprintEndCleanUp();
+                    SprintService.getInstance().sprintEndCleanUp();
                 }
             }
         };
@@ -111,8 +123,12 @@ public class TimerService extends TownyMissionService {
         Runnable r = new Runnable() {
             @Override
             public void run() {
+
                 Date date = new Date();
                 long timeNow = date.getTime();
+                System.out.printf("Curr season: %d, sprint: %d\n", instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
+                System.out.printf("Season interval: %b, sprint interval %b\n", isInInterval(RankType.SEASON), isInInterval(RankType.SPRINT));
+                System.out.printf("Season within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SEASON), timeNow < getActiveEndTime(RankType.SEASON));
 
                 // This means that season is not started
                 if (instance.getStatsConfig().getLong("season.startedTime") == -1) return;
@@ -125,28 +141,35 @@ public class TimerService extends TownyMissionService {
                     instance.getStatsConfig().save();
                 } else if (timeNow < getTotalEndTime(RankType.SEASON) && timeNow > getActiveEndTime(RankType.SEASON)) {
 
-                    // If the entry is already in there, do nothing
+                    // If a clean up job is already finished, do nothing
                     if (SeasonHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current")) != null)
                         return;
 
+                    // Check whether the sprint clean up is done, if not, wait til the next iteration
+                    if (SprintHistoryDao.getInstance().get(instance.getStatsConfig().getInt("season.current"),
+                            instance.getStatsConfig().getInt("sprint.current")) == null)
+                        return;
+
                     instance.getInstanceLogger().warning("Season interval reached. Doing season clean up job");
-                    // This means we are in the interval time, do clean up job and issue rewards
-                    // Since reaching this point means the sprint has ended, and sprint cleanup job has been done
+                    //     - Reward all towns
                     //     - Mission has been moved to MissionHistory
                     //     - Cooldown has been cleared
                     //     - Sprint has been moved to SprintHistory
-                    // We only need to do season only jobs
 
-                    // Clean out SeasonStorage, move to SeasonHistoryStorage
-                    SeasonService.getInstance().seasonEndCleanUp();
+                    // Clear MissionStorage
+                    instance.getInstanceLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Cleaning up mission storage"));
+                    MissionService.getInstance().sprintEndCleanUp();
 
-                    for (SeasonEntry seasonEntry : SeasonDao.getInstance().getEntries()) {
-                        SeasonDao.getInstance().remove(seasonEntry);
-                    }
+                    // Clear CooldownStorage
+                    instance.getInstanceLogger().info(ChatService.getInstance().translateColor("{#E9B728}===> Cleaning up cooldown storage"));
+                    CooldownDao.getInstance().removeAllEntries();
 
                     // Reward all towns
                     RewardMethod rewardMethod = RewardMethod.valueOf(instance.getInstanceConfig().getString("season.rewards.method").toUpperCase(Locale.ROOT));
                     RewardService.getInstance().rewardAllTowns(RankType.SEASON, rewardMethod);
+
+                    // Clean out SeasonStorage, move to SeasonHistoryStorage
+                    SeasonService.getInstance().seasonEndCleanUp();
                 }
             }
         };

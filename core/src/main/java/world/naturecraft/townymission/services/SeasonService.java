@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.rank.RankJson;
@@ -55,6 +56,10 @@ public class SeasonService extends TownyMissionService {
             SeasonHistoryDao.getInstance().add(seasonHistoryEntry);
         } catch (JsonProcessingException jsonProcessingException) {
             jsonProcessingException.printStackTrace();
+        }
+
+        for (SeasonEntry seasonEntry : SeasonDao.getInstance().getEntries()) {
+            SeasonDao.getInstance().remove(seasonEntry);
         }
     }
 }
