@@ -1,6 +1,6 @@
-package world.naturecraft.townymission.config.reward;
+package world.naturecraft.townymission.config;
 
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
+import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.RankType;
 
 public class RewardConfigValidator {

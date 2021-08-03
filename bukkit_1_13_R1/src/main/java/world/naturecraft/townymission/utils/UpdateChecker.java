@@ -10,9 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
-import java.util.jar.Pack200;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UpdateChecker {
 
@@ -22,19 +19,6 @@ public class UpdateChecker {
     public UpdateChecker(JavaPlugin plugin, int resourceId) {
         this.plugin = plugin;
         this.resourceId = resourceId;
-    }
-
-    public void getVersion(final Consumer<String> consumer) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).openStream();
-                 Scanner scanner = new Scanner(inputStream)) {
-                if (scanner.hasNext()) {
-                    consumer.accept(scanner.next());
-                }
-            } catch (IOException exception) {
-                this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
-            }
-        });
     }
 
     public static boolean isGreater(String ver1, String ver2) {
@@ -55,7 +39,7 @@ public class UpdateChecker {
             }
         }
 
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             if (Integer.parseInt(ver1Tags.get(i).replace(".", "")) > Integer.parseInt(ver2Tags.get(i).replace(".", ""))) {
                 return true;
             }
@@ -66,5 +50,18 @@ public class UpdateChecker {
         }
 
         return false;
+    }
+
+    public void getVersion(final Consumer<String> consumer) {
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).openStream();
+                 Scanner scanner = new Scanner(inputStream)) {
+                if (scanner.hasNext()) {
+                    consumer.accept(scanner.next());
+                }
+            } catch (IOException exception) {
+                this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+            }
+        });
     }
 }

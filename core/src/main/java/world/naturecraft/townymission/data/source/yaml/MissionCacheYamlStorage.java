@@ -4,10 +4,13 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.YamlStorage;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.storage.MissionCacheStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,7 @@ public class MissionCacheYamlStorage extends YamlStorage<MissionCacheEntry> impl
      * Instantiates a new Mission yaml.
      */
     public MissionCacheYamlStorage() {
-        super(DbType.MISSION_CACHE);
+        super(Util.getDbName(DbType.MISSION_CACHE, StorageType.YAML));
     }
 
     @Override

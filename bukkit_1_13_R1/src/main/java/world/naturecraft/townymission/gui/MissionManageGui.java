@@ -26,12 +26,9 @@ import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.TownyUtil;
-import world.naturecraft.townymission.utils.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Mission manage gui.
@@ -60,7 +57,6 @@ public class MissionManageGui extends TownyMissionGui {
     public void initializeItems(Player player) {
         inv.clear();
         Town town = TownyUtil.residentOf(player);
-        MissionDao missionDao = MissionDao.getInstance();
 
         // Figure out how many missions the town is missing
         List<MissionEntry> townMissions = MissionDao.getInstance().getTownMissions(town.getUUID());
@@ -72,7 +68,7 @@ public class MissionManageGui extends TownyMissionGui {
 
         Random rand = new Random();
 
-        // If not in recess or not has not started, proceed.Otherwise place fillers;
+        // If not in recess or not has not started, proceed. Otherwise place fillers;
         if (!TimerService.getInstance().canStart()) {
             placeFiller();
             placeRecessFiller();
@@ -96,9 +92,9 @@ public class MissionManageGui extends TownyMissionGui {
             MissionEntry entry = new MissionEntry(
                     UUID.randomUUID(),
                     mission.getMissionType().name(),
-                    Util.currentTime(),
+                    new Date().getTime(),
                     0,
-                    Util.hrToMs(mission.getHrAllowed()),
+                    TimeUnit.MILLISECONDS.convert(mission.getHrAllowed(), TimeUnit.HOURS),
                     mission.toJson(),
                     town.getUUID(),
                     null);

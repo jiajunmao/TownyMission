@@ -2,10 +2,13 @@ package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.MysqlStorage;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionHistoryStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +27,10 @@ public class MissionHistoryMysqlStorage extends MysqlStorage<MissionHistoryEntry
      * @param db the db
      */
     public MissionHistoryMysqlStorage(HikariDataSource db) {
-        super(db, DbType.MISSION_HISTORY);
+        super(
+                db,
+                Util.getDbName(DbType.MISSION_HISTORY, StorageType.MYSQL),
+                TownyMissionInstance.getInstance().getInstanceConfig().getBoolean("database.mem-cache"));
     }
 
     @Override

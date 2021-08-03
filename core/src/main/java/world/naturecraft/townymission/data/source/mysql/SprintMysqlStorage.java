@@ -2,10 +2,13 @@ package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.MysqlStorage;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.SprintStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +28,10 @@ public class SprintMysqlStorage extends MysqlStorage<SprintEntry> implements Spr
      * @param db the db
      */
     public SprintMysqlStorage(HikariDataSource db) {
-        super(db, DbType.SPRINT);
+        super(
+                db,
+                Util.getDbName(DbType.SPRINT, StorageType.MYSQL),
+                TownyMissionInstance.getInstance().getInstanceConfig().getBoolean("database.mem-cache"));
     }
 
     @Override

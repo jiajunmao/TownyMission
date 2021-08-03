@@ -5,10 +5,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import world.naturecraft.naturelib.config.NatureConfig;
+import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
+import world.naturecraft.naturelib.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
-import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.Collection;
 /**
  * The type Bukkit config.
  */
-public class BukkitConfig implements TownyMissionConfig {
+public class BukkitConfig implements NatureConfig {
 
     private FileConfiguration configuration;
     private File configFile;

@@ -4,9 +4,12 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.YamlStorage;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.SeasonStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ public class SeasonYamlStorage extends YamlStorage<SeasonEntry> implements Seaso
      * Instantiates a new Season yaml.
      */
     public SeasonYamlStorage() {
-        super(DbType.SEASON);
+        super(Util.getDbName(DbType.SEASON, StorageType.YAML));
     }
 
     /**

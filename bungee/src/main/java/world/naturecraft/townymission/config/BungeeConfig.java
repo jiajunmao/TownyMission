@@ -3,10 +3,11 @@ package world.naturecraft.townymission.config;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import world.naturecraft.naturelib.config.NatureConfig;
+import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
+import world.naturecraft.naturelib.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.TownyMissionBungee;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
-import world.naturecraft.townymission.api.exceptions.ConfigSavingException;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.Collection;
 /**
  * The type Bungee config.
  */
-public class BungeeConfig implements TownyMissionConfig {
+public class BungeeConfig implements NatureConfig {
 
     private Configuration configuration;
     private File configFile;

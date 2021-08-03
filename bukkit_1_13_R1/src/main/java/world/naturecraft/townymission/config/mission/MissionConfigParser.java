@@ -4,11 +4,11 @@
 
 package world.naturecraft.townymission.config.mission;
 
+import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.*;
-import world.naturecraft.townymission.config.TownyMissionConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class MissionConfigParser {
      * @param fileConfiguration the file configuration
      * @return the list
      */
-    public static List<MissionJson> parse(MissionType type, TownyMissionConfig fileConfiguration) {
+    public static List<MissionJson> parse(MissionType type, NatureConfig fileConfiguration) {
         List<MissionJson> list = new ArrayList<>();
         //System.out.println("Parsing: " + type.name());
         for (String key : fileConfiguration.getShallowKeys()) {

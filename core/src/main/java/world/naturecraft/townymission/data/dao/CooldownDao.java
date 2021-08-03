@@ -4,11 +4,11 @@
 
 package world.naturecraft.townymission.data.dao;
 
+import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.CooldownStorage;
 import world.naturecraft.townymission.services.StorageService;
-import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.List;
 import java.util.UUID;
@@ -63,12 +63,7 @@ public class CooldownDao extends Dao<CooldownEntry> {
      * @return the cooldown entry
      */
     public CooldownEntry get(UUID townUUID) {
-        List<CooldownEntry> list = getEntries(new EntryFilter<CooldownEntry>() {
-            @Override
-            public boolean include(CooldownEntry data) {
-                return (data.getTownUUID().equals(townUUID));
-            }
-        });
+        List<CooldownEntry> list = getEntries(data -> (data.getTownUUID().equals(townUUID)));
 
         if (list.size() != 0) {
             return list.get(0);
@@ -85,10 +80,5 @@ public class CooldownDao extends Dao<CooldownEntry> {
         for (CooldownEntry entry : entries) {
             remove(entry);
         }
-    }
-
-    @Override
-    public void reloadDb() {
-        singleton = new CooldownDao();
     }
 }

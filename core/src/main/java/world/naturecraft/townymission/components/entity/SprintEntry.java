@@ -1,7 +1,7 @@
 package world.naturecraft.townymission.components.entity;
 
 import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.naturelib.components.DataEntity;
 import world.naturecraft.townymission.services.RankingService;
 
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class SprintEntry extends DataEntity implements Rankable {
      * @param season       the season
      */
     public SprintEntry(UUID id, UUID townUUID, int naturepoints, int sprint, int season) {
-        super(id, DbType.SPRINT);
+        super(id);
         this.townUUID = townUUID;
         this.naturepoints = naturepoints;
         this.sprint = sprint;

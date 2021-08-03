@@ -13,11 +13,11 @@ import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.PluginMessagingService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
-import world.naturecraft.townymission.utils.Util;
 
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Pmc listener.
@@ -42,8 +42,8 @@ public class PMCListener implements PluginMessageListener {
 
         // Ignore if the message has been sent 3 seconds ago, 5s is the mark for other server to cache
         long timeDiff = new Date().getTime() - request.getTimestamp();
-        if (Util.msToS(timeDiff) > 3) {
-            instance.getInstanceLogger().info("PMC older than 3 seconds, disgarding. Time diff: " + Util.msToS(timeDiff) + "s");
+        if (TimeUnit.SECONDS.convert(timeDiff, TimeUnit.MILLISECONDS) > 3) {
+            instance.getInstanceLogger().info("PMC older than 3 seconds, disgarding. Time diff: " + TimeUnit.SECONDS.convert(timeDiff, TimeUnit.MILLISECONDS) + "s");
             return;
         }
 

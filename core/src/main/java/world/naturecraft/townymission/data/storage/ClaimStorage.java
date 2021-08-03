@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.data.storage;
 
+import world.naturecraft.naturelib.database.Storage;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 
 import java.util.UUID;

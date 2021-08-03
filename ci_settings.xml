@@ -24,5 +24,17 @@
             </configuration>
         </server>
 
+        <server>
+            <id>naturelib</id>
+            <configuration>
+                <httpHeaders>
+                    <property>
+                        <name>Private-Token</name>
+                        <value>${BARBADOSIAN_TOKEN}</value>
+                    </property>
+                </httpHeaders>
+            </configuration>
+        </server>
+
     </servers>
 </settings>

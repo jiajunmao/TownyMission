@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.services.ChatService;
 
-import javax.swing.*;
 import java.util.List;
 
 public class TownyMissionNonMain extends TownyMissionCommand {

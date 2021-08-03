@@ -1,7 +1,7 @@
 package world.naturecraft.townymission.services;
 
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.naturelib.InstanceType;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +20,7 @@ public abstract class TownyService {
      */
     public static TownyService getInstance() {
         if (singleton == null) {
-            if (TownyMissionInstanceType.isBukkit()) {
+            if (InstanceType.isBukkit()) {
                 String packageName = TownyService.class.getPackage().getName();
                 String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {

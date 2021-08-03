@@ -2,11 +2,11 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.config.reward;
+package world.naturecraft.townymission.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.enums.RewardMethod;
 import world.naturecraft.townymission.components.enums.RewardType;

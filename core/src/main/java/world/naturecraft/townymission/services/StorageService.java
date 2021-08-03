@@ -2,15 +2,15 @@ package world.naturecraft.townymission.services;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.config.NatureConfig;
+import world.naturecraft.naturelib.database.MysqlStorage;
+import world.naturecraft.naturelib.database.Storage;
+import world.naturecraft.naturelib.exceptions.DataProcessException;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.DataProcessException;
 import world.naturecraft.townymission.api.exceptions.DbConnectException;
 import world.naturecraft.townymission.components.DataHolder;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.components.enums.StorageType;
-import world.naturecraft.townymission.config.TownyMissionConfig;
-import world.naturecraft.townymission.data.source.mysql.MysqlStorage;
-import world.naturecraft.townymission.data.storage.Storage;
 import world.naturecraft.townymission.utils.Util;
 
 import java.lang.reflect.InvocationTargetException;
@@ -76,7 +76,7 @@ public class StorageService {
      */
     public void connectDb() throws DbConnectException {
 
-        TownyMissionConfig mainConfig = instance.getInstanceConfig();
+        NatureConfig mainConfig = instance.getInstanceConfig();
         String dbAddress = mainConfig.getString("database.address");
         String dbPort = mainConfig.getString("database.port");
         String dbName = mainConfig.getString("database.name");

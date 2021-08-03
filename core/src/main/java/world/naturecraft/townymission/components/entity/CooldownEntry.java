@@ -5,8 +5,8 @@
 package world.naturecraft.townymission.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
-import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.naturelib.components.DataEntity;
+import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.json.cooldown.CooldownListJson;
 
 import java.util.Date;
@@ -28,7 +28,7 @@ public class CooldownEntry extends DataEntity {
      * @param townUUID the town
      */
     public CooldownEntry(UUID uuid, UUID townUUID) {
-        super(uuid, DbType.COOLDOWN);
+        super(uuid);
         this.townUUID = townUUID;
         cooldownJsonList = new CooldownListJson();
     }
@@ -42,7 +42,7 @@ public class CooldownEntry extends DataEntity {
      * @throws ConfigParsingException the json processing exception
      */
     public CooldownEntry(UUID id, UUID townUUID, String cooldownJsonList) {
-        super(id, DbType.COOLDOWN);
+        super(id);
         this.townUUID = townUUID;
         try {
             this.cooldownJsonList = CooldownListJson.parse(cooldownJsonList);

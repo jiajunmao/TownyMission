@@ -1,6 +1,6 @@
 package world.naturecraft.townymission.services;
 
-import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.naturelib.InstanceType;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;
@@ -11,7 +11,7 @@ import world.naturecraft.townymission.components.json.reward.CommandRewardJson;
 import world.naturecraft.townymission.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.components.json.reward.ResourceRewardJson;
 import world.naturecraft.townymission.components.json.reward.RewardJson;
-import world.naturecraft.townymission.config.reward.RewardConfigParser;
+import world.naturecraft.townymission.config.RewardConfigParser;
 import world.naturecraft.townymission.data.dao.ClaimDao;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.utils.RankUtil;
@@ -53,7 +53,7 @@ public class RewardService extends TownyMissionService {
         RewardJson rewardJson = claimEntry.getRewardJson();
         RewardType rewardType = rewardJson.getRewardType();
         String playerName = null;
-        if (TownyMissionInstanceType.isBukkit()) {
+        if (InstanceType.isBukkit()) {
             playerName = PlayerService.getInstance().getPlayerName(playerUUID);
         }
 

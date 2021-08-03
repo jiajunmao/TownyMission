@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.TownyMissionCommand;
-import world.naturecraft.townymission.services.ChatService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
