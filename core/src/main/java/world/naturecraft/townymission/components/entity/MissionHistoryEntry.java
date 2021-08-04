@@ -1,9 +1,9 @@
 package world.naturecraft.townymission.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import world.naturecraft.naturelib.components.DataEntity;
+import world.naturecraft.naturelib.exceptions.DataProcessException;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
-import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
@@ -46,7 +46,7 @@ public class MissionHistoryEntry extends DataEntity {
     public MissionHistoryEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime,
                                MissionJson missionJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean claimed,
                                int sprint, int season) {
-        super(id, DbType.MISSION_HISTORY);
+        super(id);
         this.missionType = missionType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;
@@ -75,16 +75,16 @@ public class MissionHistoryEntry extends DataEntity {
      * @param claimed           the claimed
      * @param sprint            the sprint
      * @param season            the season
-     * @throws ConfigParsingException the json processing exception
+     * @throws DataProcessException the json processing exception
      */
     public MissionHistoryEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime,
                                String missionJson, UUID townUUID, UUID startedPlayerUUID, long completedTime,
-                               boolean claimed, int sprint, int season) throws ConfigParsingException {
+                               boolean claimed, int sprint, int season) throws DataProcessException {
         this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, townUUID, startedPlayerUUID, completedTime, claimed, sprint, season);
         try {
             this.missionJson = MissionJsonFactory.getJson(missionJson, MissionType.valueOf(missionType));
         } catch (JsonProcessingException e) {
-            throw new ConfigParsingException(e);
+            throw new DataProcessException(e);
         }
     }
 

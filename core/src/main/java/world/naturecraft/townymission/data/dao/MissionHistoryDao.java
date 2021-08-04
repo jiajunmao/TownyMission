@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
+import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.components.entity.MissionHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionHistoryStorage;
@@ -76,11 +77,6 @@ public class MissionHistoryDao extends Dao<MissionHistoryEntry> {
 
     public void remove(MissionHistoryEntry entry) {
         db.remove(entry.getId());
-    }
-
-    @Override
-    public void reloadDb() {
-        singleton = new MissionHistoryDao();
     }
 
     public void update(MissionHistoryEntry entry) {

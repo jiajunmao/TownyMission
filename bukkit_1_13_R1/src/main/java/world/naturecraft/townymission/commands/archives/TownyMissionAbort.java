@@ -22,6 +22,7 @@ import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Towny mission abort.
@@ -69,7 +70,7 @@ public class TownyMissionAbort extends TownyMissionCommand {
                                 MissionService.getInstance().abortMission(player.getUniqueId(), entry, false);
                             }
                         }
-                        CooldownService.getInstance().startCooldown(town.getUUID(), Util.minuteToMs(instance.getConfig().getInt("mission.cooldown")));
+                        CooldownService.getInstance().startCooldown(town.getUUID(), TimeUnit.MILLISECONDS.convert(instance.getConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
                     }
                 }
             };

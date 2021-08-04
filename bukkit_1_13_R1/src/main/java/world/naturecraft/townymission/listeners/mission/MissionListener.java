@@ -6,7 +6,6 @@ package world.naturecraft.townymission.listeners.mission;
 
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.PluginMessage;

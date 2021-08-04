@@ -2,11 +2,14 @@ package world.naturecraft.townymission.data.source.mysql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.MysqlStorage;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.storage.MissionCacheStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -22,7 +25,10 @@ public class MissionCacheMysqlStorage extends MysqlStorage<MissionCacheEntry> im
      * @param db the db
      */
     public MissionCacheMysqlStorage(HikariDataSource db) {
-        super(db, DbType.MISSION_CACHE);
+        super(
+                db,
+                Util.getDbName(DbType.MISSION_CACHE, StorageType.MYSQL),
+                TownyMissionInstance.getInstance().getInstanceConfig().getBoolean("database.mem-cache"));
     }
 
     @Override

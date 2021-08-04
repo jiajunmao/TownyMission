@@ -6,17 +6,15 @@ package world.naturecraft.townymission.services;
 
 // This service is mainly here to check the progress of sprint and season
 
-import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.enums.RewardMethod;
 import world.naturecraft.townymission.data.dao.CooldownDao;
-import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SeasonHistoryDao;
 import world.naturecraft.townymission.data.dao.SprintHistoryDao;
-import world.naturecraft.townymission.utils.Util;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Timer service.
@@ -234,10 +232,10 @@ public class TimerService extends TownyMissionService {
     public long getDuration(RankType rankType) {
         switch (rankType) {
             case SPRINT:
-                return Util.hrToMs(instance.getInstanceConfig().getInt("sprint.duration") * 24);
+                return TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("sprint.duration"), TimeUnit.DAYS);
             case SEASON:
                 long numSprints = instance.getInstanceConfig().getInt("season.sprintsPerSeason");
-                long sprintDura = Util.hrToMs(instance.getInstanceConfig().getInt("sprint.duration") * 24);
+                long sprintDura = TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("sprint.duration"), TimeUnit.DAYS);
                 long sprintInterDura = getIntervalDuration(RankType.SPRINT);
                 return numSprints * (sprintDura + sprintInterDura);
         }
@@ -254,9 +252,9 @@ public class TimerService extends TownyMissionService {
     public long getIntervalDuration(RankType rankType) {
         switch (rankType) {
             case SPRINT:
-                return Util.hrToMs(instance.getInstanceConfig().getInt("sprint.interval") * 24);
+                return TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("sprint.interval"), TimeUnit.DAYS);
             case SEASON:
-                return Util.hrToMs(instance.getInstanceConfig().getInt("season.interval") * 24);
+                return TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("season.interval"), TimeUnit.DAYS);
         }
 
         throw new IllegalStateException();

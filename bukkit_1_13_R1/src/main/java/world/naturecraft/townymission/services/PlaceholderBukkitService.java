@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SprintDao;
@@ -121,7 +120,7 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
     }
 
     @Override
-    public String getRequiredPlugin(){
+    public String getRequiredPlugin() {
         return "TownyMission";
     }
 
@@ -131,7 +130,7 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier){
+    public String onPlaceholderRequest(Player player, String identifier) {
         return onRequest(player, identifier);
     }
 }

@@ -4,7 +4,7 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.api.exceptions.DataProcessException;
+import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionCacheStorage;
@@ -42,7 +42,6 @@ public class MissionCacheDao extends Dao<MissionCacheEntry> {
      * Add.
      *
      * @param entry the entry
-     * @throws DataProcessException the json processing exception
      */
     public void add(MissionCacheEntry entry) {
         db.add(entry.getPlayerUUID(),
@@ -65,7 +64,6 @@ public class MissionCacheDao extends Dao<MissionCacheEntry> {
      * Update.
      *
      * @param entry the entry
-     * @throws DataProcessException the json processing exception
      */
     public void update(MissionCacheEntry entry) {
         db.update(
@@ -75,10 +73,5 @@ public class MissionCacheDao extends Dao<MissionCacheEntry> {
                 entry.getAmount(),
                 entry.getLastAttempted(),
                 entry.getRetryCount());
-    }
-
-    @Override
-    public void reloadDb() {
-        singleton = new MissionCacheDao();
     }
 }

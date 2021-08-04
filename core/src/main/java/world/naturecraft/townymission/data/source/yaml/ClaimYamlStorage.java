@@ -1,8 +1,11 @@
 package world.naturecraft.townymission.data.source.yaml;
 
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.YamlStorage;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.ClaimStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,7 @@ public class ClaimYamlStorage extends YamlStorage<ClaimEntry> implements ClaimSt
      * Instantiates a new Yaml storage.
      */
     public ClaimYamlStorage() {
-        super(DbType.CLAIM);
+        super(Util.getDbName(DbType.CLAIM, StorageType.YAML));
     }
 
     /**

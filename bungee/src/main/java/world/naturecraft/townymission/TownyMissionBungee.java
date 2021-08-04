@@ -1,13 +1,13 @@
 package world.naturecraft.townymission;
 
-import com.zaxxer.hikari.HikariDataSource;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import org.bstats.bungeecord.Metrics;
-import world.naturecraft.townymission.components.enums.ServerType;
-import world.naturecraft.townymission.components.enums.StorageType;
+import world.naturecraft.naturelib.InstanceType;
+import world.naturecraft.naturelib.components.enums.ServerType;
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.townymission.config.BungeeConfig;
-import world.naturecraft.townymission.config.TownyMissionConfig;
 import world.naturecraft.townymission.listener.PMCListener;
 
 import java.io.File;
@@ -24,14 +24,14 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
     private final Logger logger = this.getLogger();
     private Configuration config;
-    private TownyMissionConfig mainConfig;
-    private TownyMissionConfig langConfig;
+    private NatureConfig mainConfig;
+    private NatureConfig langConfig;
 
     @Override
     public void onEnable() {
         logger.info("===> Enabling TownyMission");
-        TownyMissionInstanceType.serverType = ServerType.BUNGEE;
-        TownyMissionInstanceType.registerInstance(this);
+        InstanceType.serverType = ServerType.BUNGEE;
+        InstanceType.registerInstance(this);
         // This is loading in the config file
         logger.info("===> Registering and parsing configs");
         mainConfig = new BungeeConfig("config.yml", "bungee/config.yml");
@@ -86,12 +86,12 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     }
 
     @Override
-    public TownyMissionConfig getInstanceConfig() {
+    public NatureConfig getInstanceConfig() {
         return mainConfig;
     }
 
     @Override
-    public TownyMissionConfig getStatsConfig() {
+    public NatureConfig getStatsConfig() {
         return null;
     }
 
@@ -132,5 +132,9 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
             InputStream in = getResourceAsStream(filePath);
             Files.copy(in, file.toPath());
         }
+    }
+
+    @Override
+    public void reloadConfigs() {
     }
 }

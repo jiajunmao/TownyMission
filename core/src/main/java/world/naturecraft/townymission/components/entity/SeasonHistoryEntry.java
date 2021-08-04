@@ -1,6 +1,6 @@
 package world.naturecraft.townymission.components.entity;
 
-import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.naturelib.components.DataEntity;
 
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class SeasonHistoryEntry extends DataEntity {
      * @param rankJson  the rank json
      */
     public SeasonHistoryEntry(UUID id, int season, long startTime, String rankJson) {
-        super(id, DbType.SEASON_HISTORY);
+        super(id);
         this.season = season;
         this.startTime = startTime;
         this.rankJson = rankJson;

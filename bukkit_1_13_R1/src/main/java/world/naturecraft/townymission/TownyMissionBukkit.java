@@ -1,26 +1,31 @@
 package world.naturecraft.townymission;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
-import world.naturecraft.townymission.api.exceptions.DbConnectException;
+import world.naturecraft.naturelib.InstanceType;
+import world.naturecraft.naturelib.components.enums.LangType;
+import world.naturecraft.naturelib.components.enums.ServerType;
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.config.NatureConfig;
+import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
+import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.commands.*;
-import world.naturecraft.townymission.commands.admin.*;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminInfo;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
 import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionList;
 import world.naturecraft.townymission.commands.admin.season.*;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
 import world.naturecraft.townymission.components.DataHolder;
-import world.naturecraft.townymission.components.enums.*;
+import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.BukkitConfig;
-import world.naturecraft.townymission.config.TownyMissionConfig;
+import world.naturecraft.townymission.config.RewardConfigValidator;
 import world.naturecraft.townymission.config.mission.MissionConfig;
-import world.naturecraft.townymission.config.reward.RewardConfigValidator;
 import world.naturecraft.townymission.gui.MissionManageGui;
 import world.naturecraft.townymission.listeners.DoMissionListener;
 import world.naturecraft.townymission.listeners.PMCListener;
@@ -51,9 +56,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     private final Logger logger = this.getLogger();
 
     private MissionConfig missionConfig;
-    private TownyMissionConfig statsConfig;
-    private TownyMissionConfig mainConfig;
-    private TownyMissionConfig langConfig;
+    private NatureConfig statsConfig;
+    private NatureConfig mainConfig;
+    private NatureConfig langConfig;
 
     private TownyMissionRoot rootCmd;
 
@@ -76,8 +81,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "                           |___/                                "));
         getServer().getConsoleSender().sendMessage("-----------------------------------------------------------------");
 
-        TownyMissionInstanceType.serverType = ServerType.BUKKIT;
-        TownyMissionInstanceType.registerInstance(this);
+        InstanceType.serverType = ServerType.BUKKIT;
+        InstanceType.registerInstance(this);
         missionAndHooks = new HashMap<>();
 
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing main and lang config"));
@@ -464,12 +469,12 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     }
 
     @Override
-    public TownyMissionConfig getStatsConfig() {
+    public NatureConfig getStatsConfig() {
         return statsConfig;
     }
 
     @Override
-    public TownyMissionConfig getInstanceConfig() {
+    public NatureConfig getInstanceConfig() {
         return mainConfig;
     }
 

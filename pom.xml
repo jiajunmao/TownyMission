@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>world.naturecraft</groupId>
@@ -138,6 +139,11 @@
 
     <repositories>
         <repository>
+            <id>naturelib</id>
+            <url>https://git.naturecraft.world/api/v4/projects/16/packages/maven</url>
+        </repository>
+
+        <repository>
             <id>gitlab-maven</id>
             <name>NC-TownyMission</name>
             <!--suppress UnresolvedMavenProperty -->
@@ -170,15 +176,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.34</version>
+            <groupId>world.naturecraft</groupId>
+            <artifactId>NatureLib</artifactId>
+            <version>0.0.3</version>
         </dependency>
 
         <dependency>

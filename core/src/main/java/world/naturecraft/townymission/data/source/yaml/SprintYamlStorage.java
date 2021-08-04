@@ -4,10 +4,13 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
-import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.YamlStorage;
+import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.SprintStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ public class SprintYamlStorage extends YamlStorage<SprintEntry> implements Sprin
      * @throws ConfigLoadingException the config loading exception
      */
     public SprintYamlStorage() throws ConfigLoadingException {
-        super(DbType.SPRINT);
+        super(Util.getDbName(DbType.SPRINT, StorageType.YAML));
     }
 
     /**

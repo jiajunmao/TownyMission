@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
@@ -17,7 +18,6 @@ import world.naturecraft.townymission.data.dao.ClaimDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.RewardService;
 import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.townymission.utils.EntryFilter;
 import world.naturecraft.townymission.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.Util;
 

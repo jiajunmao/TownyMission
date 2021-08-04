@@ -1,7 +1,7 @@
 package world.naturecraft.townymission.components.entity;
 
 import org.jetbrains.annotations.NotNull;
-import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.naturelib.components.DataEntity;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class SeasonEntry extends DataEntity implements Rankable {
      * @param season      the season
      */
     public SeasonEntry(UUID id, UUID townUUID, int seasonPoint, int season) {
-        super(id, DbType.SEASON);
+        super(id);
         this.townUUID = townUUID;
         this.seasonPoint = seasonPoint;
         this.season = season;
