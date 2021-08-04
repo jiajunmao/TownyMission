@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommandRoot;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommandRoot;
 
 import java.util.List;
 
@@ -24,6 +24,8 @@ public class TownyMissionAdminRoot extends TownyMissionCommandRoot {
      */
     public TownyMissionAdminRoot(TownyMissionBukkit instance) {
         super(instance, 0);
+        commandName = "townymissionadmin";
+        commandAlias = "tmsa";
     }
 
     /**

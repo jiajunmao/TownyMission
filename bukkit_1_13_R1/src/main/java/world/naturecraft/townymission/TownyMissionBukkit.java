@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.naturelib.InstanceType;
-import world.naturecraft.naturelib.NaturePlugin;
 import world.naturecraft.naturelib.components.enums.LangType;
 import world.naturecraft.naturelib.components.enums.ServerType;
 import world.naturecraft.naturelib.components.enums.StorageType;
@@ -16,7 +15,9 @@ import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminInfo;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
+import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionAbort;
 import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionList;
+import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionRoot;
 import world.naturecraft.townymission.commands.admin.season.*;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
@@ -52,7 +53,7 @@ import java.util.logging.Logger;
 /**
  * The type Towny mission.
  */
-public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstance{
+public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstance {
 
     private final Logger logger = this.getLogger();
 
@@ -313,6 +314,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
             TownyMissionAdminSeasonRoot seasonRoot = new TownyMissionAdminSeasonRoot(this);
             TownyMissionAdminSprintRoot sprintRoot = new TownyMissionAdminSprintRoot(this);
+            TownyMissionAdminMissionRoot missionRoot = new TownyMissionAdminMissionRoot(this);
 
             this.rootCmd = root;
             this.getCommand("townymission").setExecutor(rootCmd);
@@ -332,6 +334,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             rootAdminCmd.registerCommand("info", new TownyMissionAdminInfo(this));
             rootAdminCmd.registerCommand("season", seasonRoot);
             rootAdminCmd.registerCommand("sprint", sprintRoot);
+            rootAdminCmd.registerCommand("mission", missionRoot);
 
             // Admin season commands
             seasonRoot.registerCommand("start", new TownyMissionAdminSeasonStart(this));
@@ -342,6 +345,10 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             // Admin sprint commands
             sprintRoot.registerCommand("point", new TownyMissionAdminSprintPoint(this));
             sprintRoot.registerCommand("rank", new TownyMissionAdminSprintRank(this));
+
+            // Admin mission commands
+            missionRoot.registerCommand("list", new TownyMissionAdminMissionList(this));
+            missionRoot.registerCommand("abort", new TownyMissionAdminMissionAbort(this));
         } else {
             getServer().getConsoleSender().sendMessage("Registering non-main server commands");
             this.rootCmd = new TownyMissionRoot(this);
@@ -520,16 +527,5 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
     public List<String> getHooks(MissionType missionType) {
         return missionAndHooks.getOrDefault(missionType, null);
-    }
-
-
-    @Override
-    public String getCommand() {
-        return "townymission";
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return "tms";
     }
 }

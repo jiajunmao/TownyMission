@@ -1,13 +1,10 @@
-package world.naturecraft.townymission.commands;
+package world.naturecraft.townymission.commands.templates;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import world.naturecraft.naturelib.NaturePlugin;
 import world.naturecraft.naturelib.commands.CommandRoot;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.services.ChatService;
-
-import java.util.List;
 
 public abstract class TownyMissionCommandRoot extends CommandRoot {
 

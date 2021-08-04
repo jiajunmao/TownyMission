@@ -11,7 +11,6 @@ import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.MMOService;

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;

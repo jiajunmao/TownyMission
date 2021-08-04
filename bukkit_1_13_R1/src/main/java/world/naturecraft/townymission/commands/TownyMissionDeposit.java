@@ -19,6 +19,7 @@ import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;

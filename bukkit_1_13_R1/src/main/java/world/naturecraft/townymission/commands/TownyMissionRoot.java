@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommandRoot;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class TownyMissionRoot extends TownyMissionCommandRoot {
 
     public TownyMissionRoot(TownyMissionBukkit instance) {
         super(instance, 0);
+        commandName = "townymission";
+        commandAlias = "tms";
     }
 
     @Override

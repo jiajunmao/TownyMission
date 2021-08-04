@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * The type Towny mission reload.
  */
-public class TownyMissionAdminReload extends TownyMissionCommand implements TabExecutor, CommandExecutor {
+public class TownyMissionAdminReload extends TownyMissionAdminCommand implements TabExecutor, CommandExecutor {
 
     /**
      * Instantiates a new Towny mission command.

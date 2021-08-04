@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.services.ChatService;

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.gui.MissionManageGui;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;

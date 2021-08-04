@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.data.dao.ClaimDao;
 import world.naturecraft.townymission.services.ChatService;

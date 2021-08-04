@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.config.mission.MissionConfigParser;
@@ -26,7 +26,7 @@ import java.util.Locale;
 /**
  * The type Towny mission list all.
  */
-public class TownyMissionAdminMissionList extends TownyMissionCommand {
+public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
 
     /**
      * Instantiates a new Towny mission command.
@@ -78,7 +78,7 @@ public class TownyMissionAdminMissionList extends TownyMissionCommand {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
                 MissionType missionType = MissionType.valueOf(args[1].toUpperCase(Locale.ROOT));
-                if (((TownyMissionBukkit) instance).isMissionEnabled(missionType)) {
+                if (instance.isMissionEnabled(missionType)) {
                     Collection<MissionJson> collection = MissionConfigParser.parse(missionType, (TownyMissionBukkit) instance);
                     builder.add("&eMission Type&f: " + missionType.name());
                     builder.add(" ");

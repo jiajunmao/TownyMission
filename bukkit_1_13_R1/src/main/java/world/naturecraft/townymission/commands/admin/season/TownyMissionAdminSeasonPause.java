@@ -6,14 +6,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
 import java.util.Date;
 import java.util.List;
 
-public class TownyMissionAdminSeasonPause extends TownyMissionCommand {
+public class TownyMissionAdminSeasonPause extends TownyMissionAdminCommand {
     /**
      * Instantiates a new Towny mission command.
      *

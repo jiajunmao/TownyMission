@@ -4,8 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommandRoot;
-import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommandRoot;
 
 import java.util.List;
 
@@ -18,6 +17,8 @@ public class TownyMissionAdminSeasonRoot extends TownyMissionCommandRoot {
      */
     public TownyMissionAdminSeasonRoot(TownyMissionBukkit instance) {
         super(instance, 1);
+        commandName = "townymissionadmin";
+        commandAlias = "tmsa";
     }
 
     /**
@@ -30,16 +31,6 @@ public class TownyMissionAdminSeasonRoot extends TownyMissionCommandRoot {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return false;
-    }
-
-    @Override
-    public void onUnknown(Player player) {
-        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandNotFound"));
-    }
-
-    @Override
-    public void onHelp(Player player) {
-        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandNotFound"));
     }
 
     @Override

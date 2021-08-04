@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.reward.RewardJson;
 import world.naturecraft.townymission.config.RewardConfigParser;

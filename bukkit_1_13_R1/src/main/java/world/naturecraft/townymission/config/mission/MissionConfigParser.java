@@ -6,7 +6,6 @@ package world.naturecraft.townymission.config.mission;
 
 import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.*;
 

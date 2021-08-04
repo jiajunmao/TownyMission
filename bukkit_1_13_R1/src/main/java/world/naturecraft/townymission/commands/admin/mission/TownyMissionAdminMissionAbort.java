@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
@@ -17,7 +17,7 @@ import world.naturecraft.townymission.utils.TownyUtil;
 
 import java.util.List;
 
-public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
+public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
     /**
      * Instantiates a new Towny mission command.
      *

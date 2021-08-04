@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.naturelib.exceptions.ConfigSavingException;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.Util;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * The type Towny mission admin start season.
  */
-public class TownyMissionAdminSeasonStart extends TownyMissionCommand {
+public class TownyMissionAdminSeasonStart extends TownyMissionAdminCommand {
 
     /**
      * Instantiates a new Towny mission command.
