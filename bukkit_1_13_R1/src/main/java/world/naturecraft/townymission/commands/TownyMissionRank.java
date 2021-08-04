@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.commands;
 
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,14 +14,14 @@ import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RankType;
-import world.naturecraft.townymission.data.dao.SeasonDao;
-import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.RankingService;
 import world.naturecraft.townymission.services.TimerService;
-import world.naturecraft.townymission.utils.*;
+import world.naturecraft.townymission.utils.BukkitChecker;
+import world.naturecraft.townymission.utils.MultilineBuilder;
+import world.naturecraft.townymission.utils.TownyUtil;
+import world.naturecraft.townymission.utils.Util;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

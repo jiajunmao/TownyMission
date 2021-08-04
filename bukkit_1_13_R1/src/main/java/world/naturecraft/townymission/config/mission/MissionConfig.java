@@ -4,12 +4,12 @@
 
 package world.naturecraft.townymission.config.mission;
 
+import world.naturecraft.naturelib.config.NatureConfig;
+import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.api.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.BukkitConfig;
-import world.naturecraft.townymission.config.TownyMissionConfig;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class MissionConfig {
 
-    private final Map<MissionType, TownyMissionConfig> customConfigs;
+    private final Map<MissionType, NatureConfig> customConfigs;
 
     /**
      * Instantiates a new Custom config loader.
@@ -41,7 +41,7 @@ public class MissionConfig {
                 String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
                 String filePath = "missions" + File.separator + fileName;
 
-                TownyMissionConfig tempConfig = new BukkitConfig(filePath);
+                NatureConfig tempConfig = new BukkitConfig(filePath);
 
                 MissionConfigValidator.checkMissionConfig(tempConfig, missionType);
                 customConfigs.put(missionType, tempConfig);
@@ -55,7 +55,7 @@ public class MissionConfig {
      * @param missionType the mission type
      * @return the mission config
      */
-    public TownyMissionConfig getMissionConfig(MissionType missionType) {
+    public NatureConfig getMissionConfig(MissionType missionType) {
         return customConfigs.getOrDefault(missionType, null);
     }
 }

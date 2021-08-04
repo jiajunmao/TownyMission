@@ -9,17 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
-import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
-import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.MissionService;
-import world.naturecraft.townymission.services.TownyService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
 import java.util.List;
-import java.util.UUID;
 
 public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
     /**
@@ -63,10 +59,9 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
                     Town town = TownyUtil.getTown(townName);
                     if (MissionService.getInstance().hasStarted(town.getUUID())) {
                         return true;
-                    }
-                    else {
+                    } else {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("adminCommands.mission_abort.onNoStartedMission")
-                            .replace("%town%", townName));
+                                .replace("%town%", townName));
                         return false;
                     }
                 });
@@ -96,9 +91,9 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
                     Town town = TownyUtil.getTown(args[2]);
                     MissionEntry missionEntry = MissionDao.getInstance().getStartedMission(town.getUUID());
 
-                    MissionService.getInstance().abortMission(null,missionEntry, true);
+                    MissionService.getInstance().abortMission(null, missionEntry, true);
                     ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("adminCommands.mission_abort.onSuccess")
-                        .replace("%town%", town.getName()));
+                            .replace("%town%", town.getName()));
                 }
             };
 

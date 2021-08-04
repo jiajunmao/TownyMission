@@ -4,9 +4,12 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.YamlStorage;
 import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.SprintHistoryStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,7 @@ public class SprintHistoryYamlStorage extends YamlStorage<SprintHistoryEntry> im
      * Instantiates a new Sprint history yaml.
      */
     public SprintHistoryYamlStorage() {
-        super(DbType.SPRINT_HISTORY);
+        super(Util.getDbName(DbType.SPRINT_HISTORY, StorageType.YAML));
     }
 
     /**

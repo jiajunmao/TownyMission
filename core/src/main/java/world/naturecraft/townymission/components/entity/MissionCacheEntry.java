@@ -1,6 +1,6 @@
 package world.naturecraft.townymission.components.entity;
 
-import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.naturelib.components.DataEntity;
 import world.naturecraft.townymission.components.enums.MissionType;
 
 import java.util.Date;
@@ -15,7 +15,7 @@ public class MissionCacheEntry extends DataEntity {
     private int retryCount;
 
     public MissionCacheEntry(UUID uuid, UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount) {
-        super(uuid, DbType.MISSION_CACHE);
+        super(uuid);
         this.playerUUID = playerUUID;
         this.missionType = missionType;
         this.amount = amount;

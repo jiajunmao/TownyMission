@@ -5,7 +5,8 @@
 package world.naturecraft.townymission.services;
 
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.naturelib.InstanceType;
+import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.components.entity.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.enums.RewardType;
@@ -15,13 +16,9 @@ import world.naturecraft.townymission.components.json.mission.ResourceMissionJso
 import world.naturecraft.townymission.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.components.json.reward.ResourceRewardJson;
 import world.naturecraft.townymission.data.dao.*;
-import world.naturecraft.townymission.utils.EntryFilter;
-import world.naturecraft.townymission.utils.Util;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Mission service.
@@ -37,7 +34,7 @@ public abstract class MissionService extends TownyMissionService {
      */
     public static MissionService getInstance() {
         if (singleton == null) {
-            if (TownyMissionInstanceType.isBukkit()) {
+            if (InstanceType.isBukkit()) {
                 String packageName = MissionService.class.getPackage().getName();
                 String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {
@@ -95,7 +92,7 @@ public abstract class MissionService extends TownyMissionService {
 
         MissionEntry entry = taskEntries.get(missionIdx - 1);
 
-        entry.setStartedTime(Util.currentTime());
+        entry.setStartedTime(new Date().getTime());
         entry.setStartedPlayerUUID(playerUUID);
         MissionDao.getInstance().update(entry);
 
@@ -132,7 +129,7 @@ public abstract class MissionService extends TownyMissionService {
 
         giveBack(entry);
         MissionDao.getInstance().remove(entry);
-        CooldownService.getInstance().startCooldown(entry.getTownUUID(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTownUUID(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
     }
 
     private void giveBack(MissionEntry entry) {
@@ -174,7 +171,7 @@ public abstract class MissionService extends TownyMissionService {
         giveBack(entry);
 
         MissionDao.getInstance().remove(entry);
-        MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, Util.currentTime());
+        MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, new Date().getTime());
         MissionHistoryDao.getInstance().add(missionHistoryEntry);
         if (SprintDao.getInstance().contains(missionHistoryEntry.getTownUUID())) {
             SprintEntry sprintEntry = SprintDao.getInstance().get(missionHistoryEntry.getTownUUID());
@@ -188,7 +185,7 @@ public abstract class MissionService extends TownyMissionService {
                     instance.getStatsConfig().getInt("sprint.current"),
                     instance.getStatsConfig().getInt("season.current")));
         }
-        CooldownService.getInstance().startCooldown(entry.getTownUUID(), Util.minuteToMs(instance.getInstanceConfig().getInt("mission.cooldown")));
+        CooldownService.getInstance().startCooldown(entry.getTownUUID(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
     }
 
     /**

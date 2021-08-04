@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.data.dao;
 
 import org.jetbrains.annotations.Nullable;
+import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
@@ -52,11 +53,6 @@ public class SeasonDao extends Dao<SeasonEntry> {
     @Override
     public void remove(SeasonEntry data) {
         database.remove(data.getId());
-    }
-
-    @Override
-    public void reloadDb() {
-        singleton = new SeasonDao();
     }
 
     public void add(SeasonEntry entry) {

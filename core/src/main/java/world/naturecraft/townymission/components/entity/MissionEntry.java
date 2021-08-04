@@ -7,8 +7,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import world.naturecraft.townymission.api.exceptions.ConfigParsingException;
-import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.naturelib.components.DataEntity;
+import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
@@ -47,7 +47,7 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      * @param startedPlayerUUID the started player
      */
     public MissionEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, UUID townUUID, UUID startedPlayerUUID) {
-        super(id, DbType.MISSION);
+        super(id);
         this.missionType = missionType;
         this.addedTime = addedTime;
         this.startedTime = startedTime;

@@ -4,13 +4,12 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.townymission.api.exceptions.DataProcessException;
+import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.storage.MissionStorage;
 import world.naturecraft.townymission.services.StorageService;
-import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,13 +105,8 @@ public class MissionDao extends Dao<MissionEntry> {
      * @return the started missions
      */
     public List<MissionEntry> getStartedMissions(UUID townUUID) {
-        List<MissionEntry> list = getEntries(new EntryFilter<MissionEntry>() {
-            @Override
-            public boolean include(MissionEntry data) {
-                return (data.getTownUUID().equals(townUUID)
-                        && data.isStarted());
-            }
-        });
+        List<MissionEntry> list = getEntries(data -> (data.getTownUUID().equals(townUUID)
+                && data.isStarted()));
 
         return list;
     }
@@ -133,7 +127,6 @@ public class MissionDao extends Dao<MissionEntry> {
      * Add.
      *
      * @param entry the entry
-     * @throws DataProcessException the json processing exception
      */
     public void add(MissionEntry entry) {
         db.add(
@@ -155,16 +148,10 @@ public class MissionDao extends Dao<MissionEntry> {
         db.remove(entry.getId());
     }
 
-    @Override
-    public void reloadDb() {
-        singleton = new MissionDao();
-    }
-
     /**
      * Update.
      *
      * @param entry the entry
-     * @throws DataProcessException the json processing exception
      */
     public void update(MissionEntry entry) {
         db.update(

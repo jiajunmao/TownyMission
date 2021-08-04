@@ -4,9 +4,12 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.YamlStorage;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
      * Instantiates a new Mission yaml.
      */
     public MissionYamlStorage() {
-        super(DbType.MISSION);
+        super(Util.getDbName(DbType.MISSION, StorageType.YAML));
     }
 
     /**

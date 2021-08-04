@@ -4,9 +4,12 @@
 
 package world.naturecraft.townymission.data.source.yaml;
 
+import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.database.YamlStorage;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.CooldownStorage;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ public class CooldownYamlStorage extends YamlStorage<CooldownEntry> implements C
      * Instantiates a new Cooldown yaml.
      */
     public CooldownYamlStorage() {
-        super(DbType.COOLDOWN);
+        super(Util.getDbName(DbType.COOLDOWN, StorageType.YAML));
     }
 
     /**

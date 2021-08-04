@@ -1,11 +1,11 @@
 package world.naturecraft.townymission.data.dao;
 
+import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.data.storage.ClaimStorage;
 import world.naturecraft.townymission.services.StorageService;
-import world.naturecraft.townymission.utils.EntryFilter;
 
 import java.util.List;
 
@@ -73,20 +73,14 @@ public class ClaimDao extends Dao<ClaimEntry> {
         db.remove(data.getId());
     }
 
-    @Override
     public void reloadDb() {
         singleton = new ClaimDao();
     }
 
     public void addAndMerge(ClaimEntry entry) {
-        List<ClaimEntry> compatibleList = ClaimDao.getInstance().getEntries(new EntryFilter<ClaimEntry>() {
-            @Override
-            public boolean include(ClaimEntry data) {
-                return data.getRewardType().equals(entry.getRewardType())
-                        && entry.getRewardType() != RewardType.COMMAND
-                        && data.getPlayerUUID().equals(entry.getPlayerUUID());
-            }
-        });
+        List<ClaimEntry> compatibleList = ClaimDao.getInstance().getEntries(data -> data.getRewardType().equals(entry.getRewardType())
+                && entry.getRewardType() != RewardType.COMMAND
+                && data.getPlayerUUID().equals(entry.getPlayerUUID()));
 
         if (compatibleList.isEmpty()) {
             ClaimDao.getInstance().add(entry);

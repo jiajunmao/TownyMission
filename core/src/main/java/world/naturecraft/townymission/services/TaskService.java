@@ -1,7 +1,7 @@
 package world.naturecraft.townymission.services;
 
 import org.bukkit.Bukkit;
-import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.naturelib.InstanceType;
 
 /**
  * The type Task service.
@@ -17,7 +17,7 @@ public abstract class TaskService extends TownyMissionService {
      */
     public static TaskService getInstance() {
         if (singleton == null) {
-            if (TownyMissionInstanceType.isBukkit()) {
+            if (InstanceType.isBukkit()) {
                 String packageName = TaskService.class.getPackage().getName();
                 String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {

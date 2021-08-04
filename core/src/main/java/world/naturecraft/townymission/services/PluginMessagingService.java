@@ -1,6 +1,6 @@
 package world.naturecraft.townymission.services;
 
-import world.naturecraft.townymission.TownyMissionInstanceType;
+import world.naturecraft.naturelib.InstanceType;
 import world.naturecraft.townymission.components.PluginMessage;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public abstract class PluginMessagingService extends TownyMissionService {
             try {
                 String packageName = PluginMessagingService.class.getPackage().getName();
 
-                if (TownyMissionInstanceType.isBukkit()) {
+                if (InstanceType.isBukkit()) {
                     singleton = (PluginMessagingService) Class.forName(packageName + "." + "PluginMessagingBukkitService").newInstance();
                 } else {
                     singleton = (PluginMessagingService) Class.forName(packageName + "." + "PluginMessagingBungeeService").newInstance();

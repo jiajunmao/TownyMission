@@ -2,8 +2,10 @@ package world.naturecraft.townymission.components.json.cooldown;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import world.naturecraft.naturelib.exceptions.DataProcessException;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -43,7 +45,12 @@ public class CooldownListJson {
      */
     @JsonIgnore
     public static CooldownListJson parse(String json) throws JsonProcessingException {
-        return new ObjectMapper().readValue(json, CooldownListJson.class);
+        try {
+            return new ObjectMapper().readValue(json, CooldownListJson.class);
+        } catch (JsonParseException e) {
+            throw new DataProcessException(e);
+        }
+
     }
 
     /**

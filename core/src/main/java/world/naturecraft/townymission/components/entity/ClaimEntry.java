@@ -1,7 +1,7 @@
 package world.naturecraft.townymission.components.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.naturelib.components.DataEntity;
 import world.naturecraft.townymission.components.enums.RewardType;
 import world.naturecraft.townymission.components.json.reward.*;
 
@@ -29,7 +29,7 @@ public class ClaimEntry extends DataEntity {
      * @param sprint     the sprint
      */
     public ClaimEntry(UUID id, UUID playerUUID, RewardType rewardType, RewardJson rewardJson, int season, int sprint) {
-        super(id, DbType.CLAIM);
+        super(id);
         this.playerUUID = playerUUID;
         this.rewardType = rewardType;
         this.rewardJson = rewardJson;
