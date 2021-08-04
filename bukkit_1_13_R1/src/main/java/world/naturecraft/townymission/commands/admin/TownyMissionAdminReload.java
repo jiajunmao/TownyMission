@@ -5,13 +5,15 @@
 package world.naturecraft.townymission.commands.admin;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * The type Towny mission reload.
  */
-public class TownyMissionAdminReload extends TownyMissionCommand {
+public class TownyMissionAdminReload extends TownyMissionAdminCommand implements TabExecutor, CommandExecutor {
 
     /**
      * Instantiates a new Towny mission command.

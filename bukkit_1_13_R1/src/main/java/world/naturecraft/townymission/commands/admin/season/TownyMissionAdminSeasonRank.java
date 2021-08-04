@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TownyMissionAdminSeasonRank extends TownyMissionCommand {
+public class TownyMissionAdminSeasonRank extends TownyMissionAdminCommand {
     /**
      * Instantiates a new Towny mission command.
      *
@@ -60,7 +60,7 @@ public class TownyMissionAdminSeasonRank extends TownyMissionCommand {
                     UUID townUUID = TownyUtil.getTown(townName).getUUID();
                     SeasonEntry seasonEntry = SeasonDao.getInstance().get(townUUID);
                     if (seasonEntry == null) {
-                        seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, 0, instance.getStatsConfig().getInt("season.current"));
+                        seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, 0, ((TownyMissionBukkit) instance).getStatsConfig().getInt("season.current"));
                         SeasonDao.getInstance().add(seasonEntry);
                     }
                     return true;

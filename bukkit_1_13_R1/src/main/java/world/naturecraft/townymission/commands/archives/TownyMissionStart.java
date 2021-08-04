@@ -7,13 +7,15 @@ package world.naturecraft.townymission.commands.archives;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.MissionDao;
@@ -29,7 +31,7 @@ import java.util.List;
 /**
  * The type Towny mission start.
  */
-public class TownyMissionStart extends TownyMissionCommand {
+public class TownyMissionStart extends TownyMissionCommand implements TabExecutor, CommandExecutor {
 
     /**
      * Instantiates a new Towny mission command.

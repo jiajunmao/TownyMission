@@ -6,14 +6,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
 import java.util.Date;
 import java.util.List;
 
-public class TownyMissionAdminSeasonPause extends TownyMissionCommand {
+public class TownyMissionAdminSeasonPause extends TownyMissionAdminCommand {
     /**
      * Instantiates a new Towny mission command.
      *
@@ -31,7 +31,7 @@ public class TownyMissionAdminSeasonPause extends TownyMissionCommand {
                             || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.pauseSeason").check();
                 })
                 .customCheck(() -> {
-                    if (instance.getStatsConfig().getLong("season.pausedTime") != -1) {
+                    if (((TownyMissionBukkit) instance).getStatsConfig().getLong("season.pausedTime") != -1) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.pauseSeason.onAlreadyPaused"));
                         return false;
                     }
@@ -54,9 +54,9 @@ public class TownyMissionAdminSeasonPause extends TownyMissionCommand {
             Player player = (Player) commandSender;
             if (!sanityCheck(player, strings)) return false;
 
-            instance.getStatsConfig().set("season.pausedTime", new Date().getTime());
+            ((TownyMissionBukkit) instance).getStatsConfig().set("season.pausedTime", new Date().getTime());
 
-            instance.getStatsConfig().save();
+            ((TownyMissionBukkit) instance).getStatsConfig().save();
             ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.pauseSeason.onSuccess"));
         }
         return true;

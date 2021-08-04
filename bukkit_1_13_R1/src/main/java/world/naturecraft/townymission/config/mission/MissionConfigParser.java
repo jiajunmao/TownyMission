@@ -6,7 +6,6 @@ package world.naturecraft.townymission.config.mission;
 
 import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.*;
 
@@ -49,7 +48,6 @@ public class MissionConfigParser {
                     break;
                 case RESOURCE:
                     boolean isMi = fileConfiguration.getBoolean(key + ".isMi");
-                    TownyMissionBukkit instance = TownyMissionInstance.getInstance();
                     String resourceType = fileConfiguration.getString(key + ".type");
                     String miId = fileConfiguration.getString(key + ".miID");
                     returnable = fileConfiguration.getBoolean(key + ".returnable");

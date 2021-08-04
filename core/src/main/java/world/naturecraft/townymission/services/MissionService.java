@@ -71,7 +71,7 @@ public abstract class MissionService extends TownyMissionService {
      * @return the boolean
      */
     public boolean hasStarted(UUID townUUID) {
-        return MissionDao.getInstance().getStartedMission(townUUID) == null;
+        return MissionDao.getInstance().getStartedMission(townUUID) != null;
     }
 
     /**
@@ -140,7 +140,6 @@ public abstract class MissionService extends TownyMissionService {
                 for (String playerUUID : contributions.keySet()) {
                     MoneyRewardJson moneyRewardJson = new MoneyRewardJson(contributions.get(playerUUID));
                     ClaimEntry claimEntry = new ClaimEntry(UUID.randomUUID(), UUID.fromString(playerUUID), RewardType.MONEY, moneyRewardJson, instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
-                    System.out.println("Adding to claimDb");
                     ClaimDao.getInstance().addAndMerge(claimEntry);
                 }
             }

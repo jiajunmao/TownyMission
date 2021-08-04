@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.NoStartedException;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class TownyMissionAdminInfo extends TownyMissionCommand {
+public class TownyMissionAdminInfo extends TownyMissionAdminCommand {
     /**
      * Instantiates a new Towny mission command.
      *
@@ -43,7 +43,6 @@ public class TownyMissionAdminInfo extends TownyMissionCommand {
      * @param args   the args
      * @return the boolean
      */
-    @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tmsa info <town>
         String townName = args[1];
@@ -76,7 +75,6 @@ public class TownyMissionAdminInfo extends TownyMissionCommand {
      * @param args    Passed command arguments
      * @return true if a valid command, otherwise false
      */
-    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             BukkitRunnable r = new BukkitRunnable() {

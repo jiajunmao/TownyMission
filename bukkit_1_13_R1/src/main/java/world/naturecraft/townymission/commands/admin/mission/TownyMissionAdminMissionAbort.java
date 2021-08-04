@@ -7,17 +7,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.commands.TownyMissionCommand;
+import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
+import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.MissionService;
+import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
+public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
     /**
      * Instantiates a new Towny mission command.
      *
@@ -48,6 +51,14 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
                     return true;
                 })
                 .customCheck(() -> {
+                    // Recess check
+                    if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
+                        return false;
+                    }
+                    return true;
+                })
+                .customCheck(() -> {
                     if (TownyUtil.getTown(townName) == null) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onTownNameInvalid"));
                         return false;
@@ -55,7 +66,7 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
                     return true;
                 })
                 .customCheck(() -> {
-                    // Check whether the town has a started mission ,cannot use hasStarted() because it is not a player target
+                    // Check whether the town has a started mission
                     Town town = TownyUtil.getTown(townName);
                     if (MissionService.getInstance().hasStarted(town.getUUID())) {
                         return true;
@@ -86,8 +97,9 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!sanityCheck(player, args)) return;
-
+                    if (!sanityCheck(player, args)) {
+                        return;
+                    }
                     Town town = TownyUtil.getTown(args[2]);
                     MissionEntry missionEntry = MissionDao.getInstance().getStartedMission(town.getUUID());
 
@@ -97,7 +109,7 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
                 }
             };
 
-            r.runTaskAsynchronously(instance);
+            r.runTaskAsynchronously((TownyMissionBukkit) instance);
         }
 
         return true;
@@ -118,6 +130,14 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
      */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return null;
+        List<String> tabList = new ArrayList<>();
+        // /tmsa mission abort <town>
+        if (args.length == 3) {
+            for (Town town : TownyUtil.getTowns()) {
+                tabList.add(town.getName());
+            }
+        }
+
+        return tabList;
     }
 }

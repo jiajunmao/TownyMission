@@ -56,9 +56,9 @@ public class TimerService extends TownyMissionService {
                 Date date = new Date();
                 long timeNow = date.getTime();
 
-                System.out.printf("Curr sprint: %d\n", instance.getStatsConfig().getInt("sprint.current"));
-                System.out.printf("Sprint interval: %b\n", isInInterval(RankType.SPRINT));
-                System.out.printf("Sprint within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SPRINT), timeNow < getActiveEndTime(RankType.SPRINT));
+                //System.out.printf("Curr sprint: %d\n", instance.getStatsConfig().getInt("sprint.current"));
+                //System.out.printf("Sprint interval: %b\n", isInInterval(RankType.SPRINT));
+                //System.out.printf("Sprint within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SPRINT), timeNow < getActiveEndTime(RankType.SPRINT));
 
                 // This means that season is not started
                 if (instance.getStatsConfig().getLong("season.startedTime") == -1) return;
@@ -124,9 +124,9 @@ public class TimerService extends TownyMissionService {
 
                 Date date = new Date();
                 long timeNow = date.getTime();
-                System.out.printf("Curr season: %d, sprint: %d\n", instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
-                System.out.printf("Season interval: %b, sprint interval %b\n", isInInterval(RankType.SEASON), isInInterval(RankType.SPRINT));
-                System.out.printf("Season within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SEASON), timeNow < getActiveEndTime(RankType.SEASON));
+                //System.out.printf("Curr season: %d, sprint: %d\n", instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
+                //System.out.printf("Season interval: %b, sprint interval %b\n", isInInterval(RankType.SEASON), isInInterval(RankType.SPRINT));
+                //System.out.printf("Season within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SEASON), timeNow < getActiveEndTime(RankType.SEASON));
 
                 // This means that season is not started
                 if (instance.getStatsConfig().getLong("season.startedTime") == -1) return;

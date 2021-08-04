@@ -1,11 +1,14 @@
 package world.naturecraft.townymission.commands;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.json.reward.RewardJson;
 import world.naturecraft.townymission.config.RewardConfigParser;
@@ -19,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class TownyMissionReward extends TownyMissionCommand {
+public class TownyMissionReward extends TownyMissionCommand implements TabExecutor, CommandExecutor {
     /**
      * Instantiates a new Towny mission command.
      *

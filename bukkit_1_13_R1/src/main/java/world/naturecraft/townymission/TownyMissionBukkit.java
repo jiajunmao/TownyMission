@@ -15,7 +15,9 @@ import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminInfo;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
+import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionAbort;
 import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionList;
+import world.naturecraft.townymission.commands.admin.mission.TownyMissionAdminMissionRoot;
 import world.naturecraft.townymission.commands.admin.season.*;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
@@ -312,6 +314,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             TownyMissionAdminRoot rootAdminCmd = new TownyMissionAdminRoot(this);
             TownyMissionAdminSeasonRoot seasonRoot = new TownyMissionAdminSeasonRoot(this);
             TownyMissionAdminSprintRoot sprintRoot = new TownyMissionAdminSprintRoot(this);
+            TownyMissionAdminMissionRoot missionRoot = new TownyMissionAdminMissionRoot(this);
 
             this.rootCmd = root;
             this.getCommand("townymission").setExecutor(rootCmd);
@@ -326,21 +329,25 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
             // Admin commands
             this.getCommand("townymissionadmin").setExecutor(rootAdminCmd);
-            rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminMissionList(this));
-            rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
-            rootAdminCmd.registerAdminCommand("info", new TownyMissionAdminInfo(this));
-            rootAdminCmd.registerAdminCommand("season", seasonRoot);
-            rootAdminCmd.registerAdminCommand("sprint", sprintRoot);
+            rootAdminCmd.registerCommand("reload", new TownyMissionAdminReload(this));
+            rootAdminCmd.registerCommand("info", new TownyMissionAdminInfo(this));
+            rootAdminCmd.registerCommand("season", seasonRoot);
+            rootAdminCmd.registerCommand("sprint", sprintRoot);
+            rootAdminCmd.registerCommand("mission", missionRoot);
 
             // Admin season commands
-            seasonRoot.registerAdminCommand("start", new TownyMissionAdminSeasonStart(this));
-            seasonRoot.registerAdminCommand("pause", new TownyMissionAdminSeasonPause(this));
-            seasonRoot.registerAdminCommand("point", new TownyMissionAdminSeasonPoint(this));
-            seasonRoot.registerAdminCommand("rank", new TownyMissionAdminSeasonRank(this));
+            seasonRoot.registerCommand("start", new TownyMissionAdminSeasonStart(this));
+            seasonRoot.registerCommand("pause", new TownyMissionAdminSeasonPause(this));
+            seasonRoot.registerCommand("point", new TownyMissionAdminSeasonPoint(this));
+            seasonRoot.registerCommand("rank", new TownyMissionAdminSeasonRank(this));
 
             // Admin sprint commands
-            sprintRoot.registerAdminCommand("point", new TownyMissionAdminSprintPoint(this));
-            sprintRoot.registerAdminCommand("rank", new TownyMissionAdminSprintRank(this));
+            sprintRoot.registerCommand("point", new TownyMissionAdminSprintPoint(this));
+            sprintRoot.registerCommand("rank", new TownyMissionAdminSprintRank(this));
+
+            // Admin mission commands
+            missionRoot.registerCommand("list", new TownyMissionAdminMissionList(this));
+            missionRoot.registerCommand("abort", new TownyMissionAdminMissionAbort(this));
         } else {
             getServer().getConsoleSender().sendMessage("Registering non-main server commands");
             this.rootCmd = new TownyMissionRoot(this);

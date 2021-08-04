@@ -1,16 +1,19 @@
 package world.naturecraft.townymission.commands;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.services.ChatService;
 
 import java.util.List;
 
-public class TownyMissionNonMain extends TownyMissionCommand {
+public class TownyMissionNonMain extends TownyMissionCommand implements TabExecutor, CommandExecutor {
     /**
      * Instantiates a new Towny mission command.
      *
