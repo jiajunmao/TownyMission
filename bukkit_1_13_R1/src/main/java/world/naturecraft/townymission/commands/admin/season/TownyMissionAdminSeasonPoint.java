@@ -66,7 +66,7 @@ public class TownyMissionAdminSeasonPoint extends TownyMissionAdminCommand {
                     UUID townUUID = TownyUtil.getTown(townName).getUUID();
                     SeasonEntry seasonEntry = SeasonDao.getInstance().get(townUUID);
                     if (seasonEntry == null) {
-                        seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, 0, ((TownyMissionBukkit) instance).getStatsConfig().getInt("season.current"));
+                        seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, 0, instance.getStatsConfig().getInt("season.current"));
                         SeasonDao.getInstance().add(seasonEntry);
                     }
                     return true;

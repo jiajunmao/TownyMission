@@ -329,7 +329,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
             // Admin commands
             this.getCommand("townymissionadmin").setExecutor(rootAdminCmd);
-            rootAdminCmd.registerCommand("listMissions", new TownyMissionAdminMissionList(this));
             rootAdminCmd.registerCommand("reload", new TownyMissionAdminReload(this));
             rootAdminCmd.registerCommand("info", new TownyMissionAdminInfo(this));
             rootAdminCmd.registerCommand("season", seasonRoot);

@@ -44,10 +44,10 @@ public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
                     return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
                             || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
                 }).customCheck(() -> {
-                    // /tmsa listMission #type
-                    if (args.length == 2) {
+                    // /tmsa mission list type
+                    if (args.length == 3) {
                         for (MissionType missionType : MissionType.values()) {
-                            if (args[1].equalsIgnoreCase(missionType.name())) {
+                            if (args[2].equalsIgnoreCase(missionType.name())) {
                                 return true;
                             }
                         }

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionCommandRoot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TownyMissionAdminSeasonRoot extends TownyMissionCommandRoot {
@@ -32,6 +33,7 @@ public class TownyMissionAdminSeasonRoot extends TownyMissionCommandRoot {
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return false;
     }
+
 
     @Override
     protected void postProcessTabList(CommandSender commandSender, List<String> list) {
