@@ -102,7 +102,7 @@ pages:
   dependencies:
     - build
   script:
-    - mvn javadoc:aggregate
+    - mvn javadoc:aggregate -s ci_settings.xml -U
     - mv target/site/apidocs public
   artifacts:
     paths:
