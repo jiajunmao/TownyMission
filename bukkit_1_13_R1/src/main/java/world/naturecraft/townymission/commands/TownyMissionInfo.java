@@ -7,7 +7,9 @@ package world.naturecraft.townymission.commands;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The type Towny mission info.
  */
-public class TownyMissionInfo extends TownyMissionCommand {
+public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor, CommandExecutor {
 
     /**
      * Instantiates a new Towny mission command.

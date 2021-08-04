@@ -5,7 +5,9 @@
 package world.naturecraft.townymission.commands;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +29,7 @@ import java.util.List;
 /**
  * The type Towny mission claim.
  */
-public class TownyMissionClaim extends TownyMissionCommand {
+public class TownyMissionClaim extends TownyMissionCommand implements TabExecutor, CommandExecutor {
 
     /**
      * Instantiates a new Towny mission command.

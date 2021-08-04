@@ -31,7 +31,7 @@ public class TownyMissionAdminSeasonPause extends TownyMissionCommand {
                             || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.pauseSeason").check();
                 })
                 .customCheck(() -> {
-                    if (instance.getStatsConfig().getLong("season.pausedTime") != -1) {
+                    if (((TownyMissionBukkit) instance).getStatsConfig().getLong("season.pausedTime") != -1) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.pauseSeason.onAlreadyPaused"));
                         return false;
                     }
@@ -54,9 +54,9 @@ public class TownyMissionAdminSeasonPause extends TownyMissionCommand {
             Player player = (Player) commandSender;
             if (!sanityCheck(player, strings)) return false;
 
-            instance.getStatsConfig().set("season.pausedTime", new Date().getTime());
+            ((TownyMissionBukkit) instance).getStatsConfig().set("season.pausedTime", new Date().getTime());
 
-            instance.getStatsConfig().save();
+            ((TownyMissionBukkit) instance).getStatsConfig().save();
             ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.pauseSeason.onSuccess"));
         }
         return true;

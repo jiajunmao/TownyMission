@@ -5,7 +5,9 @@
 package world.naturecraft.townymission.commands;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * The type Towny mission list.
  */
-public class TownyMissionList extends TownyMissionCommand {
+public class TownyMissionList extends TownyMissionCommand implements TabExecutor, CommandExecutor {
 
 
     /**
@@ -56,7 +58,7 @@ public class TownyMissionList extends TownyMissionCommand {
             // Do not call async here, async is handled in the GUI
             Player player = (Player) sender;
             if (TownyUtil.residentOf(player) != null) {
-                MissionManageGui gui = new MissionManageGui(instance);
+                MissionManageGui gui = new MissionManageGui(((TownyMissionBukkit) instance));
                 gui.openInventory(player);
             } else {
                 ChatService.getInstance().sendMsg(player.getUniqueId(), "&c You are not a member of a town. You need to be in a town to work on Towny Mission");

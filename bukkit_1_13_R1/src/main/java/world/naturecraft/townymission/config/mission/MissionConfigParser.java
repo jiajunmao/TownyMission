@@ -49,7 +49,6 @@ public class MissionConfigParser {
                     break;
                 case RESOURCE:
                     boolean isMi = fileConfiguration.getBoolean(key + ".isMi");
-                    TownyMissionBukkit instance = TownyMissionInstance.getInstance();
                     String resourceType = fileConfiguration.getString(key + ".type");
                     String miId = fileConfiguration.getString(key + ".miID");
                     returnable = fileConfiguration.getBoolean(key + ".returnable");

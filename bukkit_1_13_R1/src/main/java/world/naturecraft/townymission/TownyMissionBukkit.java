@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.naturelib.InstanceType;
+import world.naturecraft.naturelib.NaturePlugin;
 import world.naturecraft.naturelib.components.enums.LangType;
 import world.naturecraft.naturelib.components.enums.ServerType;
 import world.naturecraft.naturelib.components.enums.StorageType;
@@ -51,7 +52,7 @@ import java.util.logging.Logger;
 /**
  * The type Towny mission.
  */
-public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstance {
+public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstance{
 
     private final Logger logger = this.getLogger();
 
@@ -326,21 +327,21 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
             // Admin commands
             this.getCommand("townymissionadmin").setExecutor(rootAdminCmd);
-            rootAdminCmd.registerAdminCommand("listMissions", new TownyMissionAdminMissionList(this));
-            rootAdminCmd.registerAdminCommand("reload", new TownyMissionAdminReload(this));
-            rootAdminCmd.registerAdminCommand("info", new TownyMissionAdminInfo(this));
-            rootAdminCmd.registerAdminCommand("season", seasonRoot);
-            rootAdminCmd.registerAdminCommand("sprint", sprintRoot);
+            rootAdminCmd.registerCommand("listMissions", new TownyMissionAdminMissionList(this));
+            rootAdminCmd.registerCommand("reload", new TownyMissionAdminReload(this));
+            rootAdminCmd.registerCommand("info", new TownyMissionAdminInfo(this));
+            rootAdminCmd.registerCommand("season", seasonRoot);
+            rootAdminCmd.registerCommand("sprint", sprintRoot);
 
             // Admin season commands
-            seasonRoot.registerAdminCommand("start", new TownyMissionAdminSeasonStart(this));
-            seasonRoot.registerAdminCommand("pause", new TownyMissionAdminSeasonPause(this));
-            seasonRoot.registerAdminCommand("point", new TownyMissionAdminSeasonPoint(this));
-            seasonRoot.registerAdminCommand("rank", new TownyMissionAdminSeasonRank(this));
+            seasonRoot.registerCommand("start", new TownyMissionAdminSeasonStart(this));
+            seasonRoot.registerCommand("pause", new TownyMissionAdminSeasonPause(this));
+            seasonRoot.registerCommand("point", new TownyMissionAdminSeasonPoint(this));
+            seasonRoot.registerCommand("rank", new TownyMissionAdminSeasonRank(this));
 
             // Admin sprint commands
-            sprintRoot.registerAdminCommand("point", new TownyMissionAdminSprintPoint(this));
-            sprintRoot.registerAdminCommand("rank", new TownyMissionAdminSprintRank(this));
+            sprintRoot.registerCommand("point", new TownyMissionAdminSprintPoint(this));
+            sprintRoot.registerCommand("rank", new TownyMissionAdminSprintRank(this));
         } else {
             getServer().getConsoleSender().sendMessage("Registering non-main server commands");
             this.rootCmd = new TownyMissionRoot(this);
@@ -519,5 +520,16 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
     public List<String> getHooks(MissionType missionType) {
         return missionAndHooks.getOrDefault(missionType, null);
+    }
+
+
+    @Override
+    public String getCommand() {
+        return "townymission";
+    }
+
+    @Override
+    public String getCommandAlias() {
+        return "tms";
     }
 }

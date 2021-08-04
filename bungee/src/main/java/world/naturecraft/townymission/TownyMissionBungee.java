@@ -137,4 +137,14 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     @Override
     public void reloadConfigs() {
     }
+
+    @Override
+    public String getCommand() {
+        return "townymission";
+    }
+
+    @Override
+    public String getCommandAlias() {
+        return "tms";
+    }
 }

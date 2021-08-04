@@ -97,7 +97,7 @@ public class TownyMissionAdminMissionAbort extends TownyMissionCommand {
                 }
             };
 
-            r.runTaskAsynchronously(instance);
+            r.runTaskAsynchronously((TownyMissionBukkit) instance);
         }
 
         return true;

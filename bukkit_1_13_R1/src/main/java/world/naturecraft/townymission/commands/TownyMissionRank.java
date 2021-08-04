@@ -6,12 +6,15 @@ package world.naturecraft.townymission.commands;
 
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.services.ChatService;
@@ -30,7 +33,7 @@ import java.util.UUID;
 /**
  * The type Towny mission rank.
  */
-public class TownyMissionRank extends TownyMissionCommand {
+public class TownyMissionRank extends TownyMissionCommand implements TabExecutor, CommandExecutor {
     /**
      * Instantiates a new Towny mission command.
      *
@@ -97,7 +100,7 @@ public class TownyMissionRank extends TownyMissionCommand {
                         switch (RankType.valueOf(args[1].toUpperCase(Locale.ROOT))) {
                             case SPRINT:
                                 builder.add("&e" + index + ". &3" + town.getName() + " &f: "
-                                        + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
+                                        + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), (TownyMissionInstance) instance)
                                         + " points");
                                 break;
                             case SEASON:
@@ -113,7 +116,7 @@ public class TownyMissionRank extends TownyMissionCommand {
                 }
             };
 
-            r.runTaskAsynchronously(instance);
+            r.runTaskAsynchronously(((TownyMissionBukkit) instance));
         }
 
         return true;

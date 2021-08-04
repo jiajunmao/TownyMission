@@ -3,6 +3,8 @@ package world.naturecraft.townymission.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import world.naturecraft.naturelib.NaturePlugin;
+import world.naturecraft.naturelib.utils.BooleanChecker;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;

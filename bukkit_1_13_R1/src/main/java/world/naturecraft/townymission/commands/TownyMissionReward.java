@@ -1,7 +1,9 @@
 package world.naturecraft.townymission.commands;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class TownyMissionReward extends TownyMissionCommand {
+public class TownyMissionReward extends TownyMissionCommand implements TabExecutor, CommandExecutor {
     /**
      * Instantiates a new Towny mission command.
      *
