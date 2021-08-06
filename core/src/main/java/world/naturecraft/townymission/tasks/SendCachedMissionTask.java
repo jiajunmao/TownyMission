@@ -1,8 +1,8 @@
 package world.naturecraft.townymission.tasks;
 
 import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.naturelib.components.DataHolder;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.components.DataHolder;
 import world.naturecraft.townymission.components.PluginMessage;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.ResendMethod;

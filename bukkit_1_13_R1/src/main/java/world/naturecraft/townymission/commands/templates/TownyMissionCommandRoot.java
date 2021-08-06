@@ -11,7 +11,7 @@ public abstract class TownyMissionCommandRoot extends CommandRoot {
     protected TownyMissionBukkit instance;
 
     public TownyMissionCommandRoot(TownyMissionBukkit instance, int argPos) {
-        super((NaturePlugin) instance, argPos);
+        super(instance, argPos, "townymission", "tms");
         this.instance = instance;
     }
 

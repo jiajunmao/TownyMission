@@ -18,8 +18,6 @@ public class TownyMissionAdminSeasonRoot extends TownyMissionCommandRoot {
      */
     public TownyMissionAdminSeasonRoot(TownyMissionBukkit instance) {
         super(instance, 1);
-        commandName = "townymissionadmin";
-        commandAlias = "tmsa";
     }
 
     /**

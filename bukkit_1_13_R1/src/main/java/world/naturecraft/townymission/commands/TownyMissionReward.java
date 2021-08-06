@@ -14,7 +14,7 @@ import world.naturecraft.townymission.components.json.reward.RewardJson;
 import world.naturecraft.townymission.config.RewardConfigParser;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.townymission.utils.MultilineBuilder;
+import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;

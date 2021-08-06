@@ -22,7 +22,7 @@ import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.RankingService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.townymission.utils.MultilineBuilder;
+import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 

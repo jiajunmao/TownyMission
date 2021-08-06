@@ -10,9 +10,11 @@ public abstract class TownyMissionCommand extends Command {
     protected TownyMissionBukkit instance;
 
     public TownyMissionCommand(TownyMissionBukkit instance) {
-        super(instance);
-        this.commandName = "townymission";
-        this.commandAlias = "tms";
+        this(instance, "townymission", "tms");
+    }
+
+    public TownyMissionCommand(TownyMissionBukkit instance, String commandName, String commandAlias) {
+        super(instance, commandName, commandAlias);
         this.instance = instance;
     }
 
