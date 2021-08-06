@@ -5,12 +5,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.naturelib.InstanceType;
+import world.naturecraft.naturelib.components.DataHolder;
 import world.naturecraft.naturelib.components.enums.LangType;
 import world.naturecraft.naturelib.components.enums.ServerType;
 import world.naturecraft.naturelib.components.enums.StorageType;
 import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
 import world.naturecraft.naturelib.exceptions.ConfigParsingException;
+import world.naturecraft.naturelib.utils.BukkitUtil;
+import world.naturecraft.naturelib.utils.UpdateChecker;
 import world.naturecraft.townymission.commands.*;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminInfo;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
@@ -22,7 +25,6 @@ import world.naturecraft.townymission.commands.admin.season.*;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
-import world.naturecraft.townymission.components.DataHolder;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.BukkitConfig;
@@ -42,8 +44,6 @@ import world.naturecraft.townymission.services.PlaceholderBukkitService;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.tasks.SendCachedMissionTask;
-import world.naturecraft.townymission.utils.BukkitUtil;
-import world.naturecraft.townymission.utils.UpdateChecker;
 
 import java.io.File;
 import java.io.InputStream;
@@ -61,8 +61,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     private NatureConfig statsConfig;
     private NatureConfig mainConfig;
     private NatureConfig langConfig;
-
-    private TownyMissionRoot rootCmd;
 
     private StorageType storageType;
     private boolean isMainServer;
@@ -161,7 +159,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             public void run() {
                 new UpdateChecker(instanceHolder.getData(), 94472).getVersion(version -> {
                     version = version.substring(1);
-                    if (!UpdateChecker.isGreater(getDescription().getVersion(), version)) {
+                    if (!UpdateChecker.isGreater(version, getDescription().getVersion())) {
                         String str = "&bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instanceHolder.getData().getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
                         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));
                     } else {
@@ -308,6 +306,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      * Register commands.
      */
     private void registerCommands() {
+        TownyMissionRoot rootCmd;
         if (!isBungeecordEnabled || isMainServer) {
             getServer().getConsoleSender().sendMessage("Registering main server commands");
             TownyMissionRoot root = new TownyMissionRoot(this);
@@ -316,7 +315,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             TownyMissionAdminSprintRoot sprintRoot = new TownyMissionAdminSprintRoot(this);
             TownyMissionAdminMissionRoot missionRoot = new TownyMissionAdminMissionRoot(this);
 
-            this.rootCmd = root;
+            rootCmd = root;
             this.getCommand("townymission").setExecutor(rootCmd);
 
             // User commands
@@ -350,7 +349,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             missionRoot.registerCommand("abort", new TownyMissionAdminMissionAbort(this));
         } else {
             getServer().getConsoleSender().sendMessage("Registering non-main server commands");
-            this.rootCmd = new TownyMissionRoot(this);
+            rootCmd = new TownyMissionRoot(this);
             this.getCommand("townymission").setExecutor(rootCmd);
 
             rootCmd.registerCommand("list", new TownyMissionNonMain(this));
@@ -455,11 +454,21 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      * @return the lang entry
      */
     @Override
+    @Deprecated
     public String getLangEntry(String path) {
         String finalString = "";
         finalString += langConfig.getString("prefix") + " ";
         finalString += langConfig.getString(path);
         return finalString;
+    }
+
+    @Override
+    public String getLangEntry(String s, boolean b) {
+        if (b) {
+            return langConfig.getString("prefix") + " " + langConfig.getString(s);
+        } else {
+            return langConfig.getString(s);
+        }
     }
 
     public String getLangEntryNoPrefix(String path) {

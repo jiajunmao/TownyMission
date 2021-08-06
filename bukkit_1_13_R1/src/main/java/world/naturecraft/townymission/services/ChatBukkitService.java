@@ -1,6 +1,6 @@
 package world.naturecraft.townymission.services;
 
-import world.naturecraft.townymission.utils.BukkitUtil;
+import world.naturecraft.naturelib.utils.BukkitUtil;
 
 import java.util.UUID;
 

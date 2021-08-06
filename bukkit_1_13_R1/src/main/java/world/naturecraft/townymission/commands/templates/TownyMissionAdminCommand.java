@@ -5,8 +5,6 @@ import world.naturecraft.townymission.TownyMissionBukkit;
 public abstract class TownyMissionAdminCommand extends TownyMissionCommand {
 
     public TownyMissionAdminCommand(TownyMissionBukkit instance) {
-        super(instance);
-        commandName = "townymissionadmin";
-        commandAlias = "tmsa";
+        super(instance, "townymissionadmin", "tmsa");
     }
 }

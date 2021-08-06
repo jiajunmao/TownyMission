@@ -86,6 +86,15 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
     }
 
     @Override
+    public String getLangEntry(String s, boolean b) {
+        if (b) {
+            return langConfig.getString("prefix") + " " + langConfig.getString(s);
+        } else {
+            return langConfig.getString(s);
+        }
+    }
+
+    @Override
     public NatureConfig getInstanceConfig() {
         return mainConfig;
     }

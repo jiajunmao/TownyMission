@@ -18,8 +18,6 @@ public class TownyMissionAdminSprintRoot extends TownyMissionCommandRoot {
      */
     public TownyMissionAdminSprintRoot(TownyMissionBukkit instance) {
         super(instance, 1);
-        commandName = "townymissionadmin";
-        commandAlias = "tmsa";
     }
 
     /**

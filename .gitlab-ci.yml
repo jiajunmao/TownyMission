@@ -54,6 +54,20 @@ release:
     expire_in: 1 week
   when: on_success
 
+release_public:
+  stage: release
+  only:
+    - master
+  dependencies:
+    - build
+  script:
+    - 'MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)'
+    - 'OFFSET=$(echo $MVN_VERSION | grep -b -o - | cut -d: -f1)'
+    - 'MVN_VERSION=${MVN_VERSION:0:$OFFSET}'
+    - NAME="TownyMission-${MVN_VERSION}-SNAPSHOT.jar"
+    - mvn deploy:deploy-file -DgroupId=world.naturecraft -DartifactId=TownyMission -Dversion=$MVN_VERSION -Dpackaging=jar -Dfile=target/$NAME -Durl=https://git.naturecraft.world/api/v4/projects/17/packages/maven -DrepositoryId=gitlab-maven -s ci_settings.xml
+  when: on_success
+
 success_notification:
   stage: notification
   tags:

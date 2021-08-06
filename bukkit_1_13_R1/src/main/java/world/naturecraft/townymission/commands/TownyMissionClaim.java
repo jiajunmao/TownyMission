@@ -21,7 +21,7 @@ import world.naturecraft.townymission.data.dao.ClaimDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.RewardService;
 import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.townymission.utils.MultilineBuilder;
+import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;
