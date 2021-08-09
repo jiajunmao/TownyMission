@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.naturelib.exceptions.ConfigParsingException;
+import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Json entry.
@@ -206,5 +206,19 @@ public abstract class MissionJson {
      */
     public Map<String, Integer> getContributions() {
         return contributions;
+    }
+
+    @JsonIgnore
+    public MissionEntry getNewMissionEntry(UUID townUUID) {
+        MissionEntry entry = new MissionEntry(
+                UUID.randomUUID(),
+                getMissionType().name(),
+                new Date().getTime(),
+                0,
+                TimeUnit.MILLISECONDS.convert(getHrAllowed(), TimeUnit.HOURS),
+                toJson(),
+                townUUID,
+                null);
+        return entry;
     }
 }

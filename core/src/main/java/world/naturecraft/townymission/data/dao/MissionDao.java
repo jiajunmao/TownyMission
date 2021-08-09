@@ -118,6 +118,8 @@ public class MissionDao extends Dao<MissionEntry> {
      * @param index    The index
      * @return The corresponding MissionEntry
      */
+    //TODO: nuke this method
+    @Deprecated
     public MissionEntry getIndexedMission(UUID townUUID, int index) {
         List<MissionEntry> missionEntries = getTownMissions(townUUID);
         return missionEntries.get(index - 1);
@@ -136,7 +138,8 @@ public class MissionDao extends Dao<MissionEntry> {
                 entry.getAllowedTime(),
                 entry.getMissionJson().toJson(),
                 entry.getTownUUID(),
-                entry.getStartedPlayerUUID());
+                entry.getStartedPlayerUUID(),
+                entry.getNumMission());
     }
 
     /**
@@ -162,6 +165,7 @@ public class MissionDao extends Dao<MissionEntry> {
                 entry.getAllowedTime(),
                 entry.getMissionJson().toJson(),
                 entry.getTownUUID(),
-                entry.getStartedPlayerUUID());
+                entry.getStartedPlayerUUID(),
+                entry.getNumMission());
     }
 }

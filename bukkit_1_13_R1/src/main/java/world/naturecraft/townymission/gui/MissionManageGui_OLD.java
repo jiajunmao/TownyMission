@@ -18,7 +18,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.MissionEntry;
-import world.naturecraft.townymission.components.enums.GuiType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.config.mission.MissionConfigParser;
 import world.naturecraft.townymission.data.dao.MissionDao;
@@ -34,30 +33,20 @@ import java.util.concurrent.TimeUnit;
 /**
  * The type Mission manage gui.
  */
-public class MissionManageGui extends TownyMissionGui {
+public class MissionManageGui_OLD extends TownyMissionGui {
 
     private final TownyMissionBukkit instance;
     private final String guiTitle;
-    private final Map<MissionEntry, Integer> slots;
-    private final int row;
 
     /**
      * Instantiates a new Mission manage gui.
      *
      * @param instance the instance
      */
-    public MissionManageGui(TownyMissionBukkit instance) {
+    public MissionManageGui_OLD(TownyMissionBukkit instance) {
         this.instance = instance;
-        guiTitle = instance.getGuiConfig(GuiType.MISSION_MANAGE, "title");
-        int missionNum = instance.getInstanceConfig().getInt("mission.amount");
-        this.row = missionNum / 7;
-        if (missionNum > 28) {
-            instance.getInstanceLogger().severe("You can only set less than 28 possible missions!!!");
-            Bukkit.getPluginManager().disablePlugin(instance);
-        }
-
-        inv = Bukkit.createInventory(null, (row + 2) * 9, guiTitle);
-        slots = new HashMap<>();
+        guiTitle = "Mission Manage";
+        inv = Bukkit.createInventory(null, 36, guiTitle);
     }
 
     /**
@@ -100,11 +89,20 @@ public class MissionManageGui extends TownyMissionGui {
         for (int i = 0; i < diff; i++) {
             int index = rand.nextInt(size);
             MissionJson mission = missions.get(index);
-            MissionEntry entry = mission.getNewMissionEntry(town.getUUID());
+            MissionEntry entry = new MissionEntry(
+                    UUID.randomUUID(),
+                    mission.getMissionType().name(),
+                    new Date().getTime(),
+                    0,
+                    TimeUnit.MILLISECONDS.convert(mission.getHrAllowed(), TimeUnit.HOURS),
+                    mission.toJson(),
+                    town.getUUID(),
+                    null);
             newlyAddedMissions.add(entry);
             // Async this in the future and handle concurrency issue with click event
             MissionDao.getInstance().add(entry);
         }
+
 
         // Place down all missions
         townMissions.addAll(newlyAddedMissions);
@@ -166,18 +164,13 @@ public class MissionManageGui extends TownyMissionGui {
         meta.setDisplayName(ChatService.getInstance().translateColor("&r"));
         itemStack.setItemMeta(meta);
 
-        // First row
         for (int i = 1; i < 9; i++) {
             inv.setItem(i, itemStack);
         }
-
-        // Last row
-        for (int i = row * 7; i < (row + 1) * 7; i++) {
+        for (int i = 28; i < 36; i++) {
             inv.setItem(i, itemStack);
         }
-
-        // Vertical
-        for (int i = 1; i < row * 7; i += 9) {
+        for (int i = 1; i < 28; i += 9) {
             inv.setItem(i, itemStack);
         }
     }

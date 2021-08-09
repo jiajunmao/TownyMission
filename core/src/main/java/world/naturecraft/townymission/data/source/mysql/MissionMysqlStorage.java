@@ -10,6 +10,7 @@ import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionStorage;
 import world.naturecraft.townymission.utils.Util;
 
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,9 +47,12 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
                     "`mission_json` VARCHAR(255) NOT NULL ," +
                     "`town_uuid` VARCHAR(255) NOT NULL ," +
                     "`started_player_uuid` VARCHAR(255) NOT NULL," +
+                    "`num_mission` INT NOT NULL, " +
                     "PRIMARY KEY (`uuid`))";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
+
+            addColumn("num_mission", "INT", "0");
             return null;
         });
     }

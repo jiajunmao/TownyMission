@@ -45,22 +45,8 @@ public class MissionCacheMysqlStorage extends MysqlStorage<MissionCacheEntry> im
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
 
-            DatabaseMetaData md = conn.getMetaData();
-            ResultSet rs = md.getColumns(null, null, tableName, "last_attempted");
-            if (!rs.next()) {
-                sql = "ALTER TABLE " + tableName + " ADD last_attempted BIGINT DEFAULT " + new Date().getTime();
-                p = conn.prepareStatement(sql);
-                p.executeUpdate();
-                return null;
-            }
-
-            rs = md.getColumns(null, null, tableName, "retry_count");
-            if (!rs.next()) {
-                sql = "ALTER TABLE " + tableName + " ADD retry_count BIGINT DEFAULT " + new Date().getTime();
-                p = conn.prepareStatement(sql);
-                p.executeUpdate();
-                return null;
-            }
+            addColumn("last_attempted", "BIGINT", String.valueOf(new Date().getTime()));
+            addColumn("retry_count", "INT", "0");
 
             return null;
         });

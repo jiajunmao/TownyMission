@@ -21,8 +21,9 @@ public interface MissionStorage extends Storage<MissionEntry> {
      * @param missionJson       the mission json
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
+     * @param numMission the slot where it is placed in the GUI
      */
-    void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID);
+    void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission);
 
     /**
      * Remove.
@@ -43,7 +44,7 @@ public interface MissionStorage extends Storage<MissionEntry> {
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID);
+    void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission);
 
     List<MissionEntry> getEntries();
 }
