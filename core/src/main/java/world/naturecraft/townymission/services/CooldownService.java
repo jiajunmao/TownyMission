@@ -5,10 +5,10 @@
 package world.naturecraft.townymission.services;
 
 import world.naturecraft.townymission.components.entity.CooldownEntry;
+import world.naturecraft.townymission.components.json.cooldown.CooldownJson;
 import world.naturecraft.townymission.data.dao.CooldownDao;
 
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The type Cooldown service.
@@ -36,7 +36,7 @@ public class CooldownService extends TownyMissionService {
      * @param townUUID the town uuid
      * @param cooldown the cooldown
      */
-    public void startCooldown(UUID townUUID, long cooldown) {
+    public void startCooldown(UUID townUUID, int numMission, long cooldown) {
         Date date = new Date();
         // This means that the town does not exist in the db yet
         if (CooldownDao.getInstance().get(townUUID) == null) {
@@ -44,23 +44,21 @@ public class CooldownService extends TownyMissionService {
         }
 
         CooldownEntry entry = CooldownDao.getInstance().get(townUUID);
-        entry.startCooldown(cooldown);
+        entry.startCooldown(numMission, cooldown);
         CooldownDao.getInstance().update(entry);
     }
 
-    /**
-     * Gets num addable.
-     *
-     * @param townUUID the town uuid
-     * @return the num addable
-     */
-    public int getNumAddable(UUID townUUID) {
-        int amount = instance.getInstanceConfig().getInt("mission.amount");
+    public List<Integer> getInCooldown(UUID townUUID) {
         CooldownEntry entry = CooldownDao.getInstance().get(townUUID);
-
-        if (entry == null) return amount;
-        int finished = entry.getNumFinished(true);
-        CooldownDao.getInstance().update(entry);
-        return finished;
+        Map<Integer, CooldownJson> cooldowenMap = entry.getCooldownJsonList().getCooldownMap();
+        List<Integer> cooldownList = new ArrayList<>();
+        for (Integer i : cooldowenMap.keySet()) {
+            if (!cooldowenMap.get(i).isFinished()) {
+                cooldownList.add(i);
+            } else {
+                cooldowenMap.remove(i);
+            }
+        }
+        return cooldownList;
     }
 }

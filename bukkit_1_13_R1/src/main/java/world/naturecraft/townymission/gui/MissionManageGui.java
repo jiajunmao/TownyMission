@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;
@@ -16,6 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.naturelib.utils.BukkitUtil;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.GuiType;
@@ -38,7 +40,6 @@ public class MissionManageGui extends TownyMissionGui {
 
     private final TownyMissionBukkit instance;
     private final String guiTitle;
-    private final Map<MissionEntry, Integer> slots;
     private final int row;
 
     /**
@@ -57,7 +58,7 @@ public class MissionManageGui extends TownyMissionGui {
         }
 
         inv = Bukkit.createInventory(null, (row + 2) * 9, guiTitle);
-        slots = new HashMap<>();
+        placeFiller();
     }
 
     /**
@@ -71,65 +72,59 @@ public class MissionManageGui extends TownyMissionGui {
 
         // If not in recess or not has not started, proceed. Otherwise place fillers;
         if (!TimerService.getInstance().canStart()) {
-            placeFiller();
             placeRecessFiller();
             return;
         }
 
-        // Figure out how many missions the town is missing
-        List<MissionEntry> townMissions = MissionDao.getInstance().getTownMissions(town.getUUID());
-        List<MissionEntry> newlyAddedMissions = new ArrayList<>();
-        int diff = instance.getConfig().getInt("mission.amount") - townMissions.size();
-
         List<MissionJson> missions = MissionConfigParser.parseAll(instance);
-        int size = missions.size();
-
-        Random rand = new Random();
-
-        if (size == 0) {
+        if (missions.size() == 0) {
             placeFiller();
             ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.list.onNoConfiguredMission"));
             instance.getInstanceLogger().severe(ChatService.getInstance().translateColor(instance.getLangEntryNoPrefix("commands.list.onNoConfiguredMission")));
             return;
         }
 
-        int numAddable = CooldownService.getInstance().getNumAddable(town.getUUID());
-        diff = Math.min(numAddable, diff);
+        // Get all slots where we can add missions to
+        List<Integer> missingMission = MissionDao.getInstance().getMissingIndexMissions(town.getUUID());
+        missingMission.removeAll(CooldownService.getInstance().getInCooldown(town.getUUID()));
+
+        // Get all missions from town
+        List<MissionEntry> townMissions = MissionDao.getInstance().getTownMissions(town.getUUID());
 
         // If the town is not in cooldown, it can get new missions
-        for (int i = 0; i < diff; i++) {
-            int index = rand.nextInt(size);
-            MissionJson mission = missions.get(index);
-            MissionEntry entry = mission.getNewMissionEntry(town.getUUID());
-            newlyAddedMissions.add(entry);
+        for (Integer index : missingMission) {
+            MissionJson mission = missions.get(new Random().nextInt(missions.size()));
+            MissionEntry entry = mission.getNewMissionEntry(town.getUUID(), index);
             // Async this in the future and handle concurrency issue with click event
             MissionDao.getInstance().add(entry);
+
+            // **This is to prevent DB connection lag when not using mem-cache
+            townMissions.add(entry);
         }
 
-        // Place down all missions
-        townMissions.addAll(newlyAddedMissions);
-        int placingIndex = 11;
+        int startedMissionIdx = 0;
         for (MissionEntry entry : townMissions) {
-            if (placingIndex % 9 == 0) {
-                placingIndex += 2;
-            }
+            int placingIndex = numMissionToSlot(entry.getNumMission());
 
             if (!entry.isStarted()) {
                 inv.setItem(placingIndex, entry.getGuiItem());
-                placingIndex++;
+            } else {
+                // Filler on the standby panel
+                ItemStack itemStack = new ItemStack(Material.NETHER_STAR);
+                ItemMeta im = itemStack.getItemMeta();
+                im.setDisplayName(BukkitUtil.translateColor("&3In Progress"));
+                List<String> lores = new ArrayList<>();
+                lores.add("&fThis mission is already in progress");
+                lores.add("&fPlease check the left panel for more info");
+                im.setLore(lores);
+                itemStack.setItemMeta(im);
+                inv.setItem(placingIndex, itemStack);
+
+                // Progress on the started panel
+                inv.setItem(0, entry.getGuiItem());
+                startedMissionIdx += 9;
             }
         }
-
-        // Put in all started missions
-        townMissions = MissionDao.getInstance().getStartedMissions(town.getUUID());
-        placingIndex = 0;
-        for (MissionEntry entry : townMissions) {
-            inv.setItem(0, entry.getGuiItem());
-            placingIndex += 9;
-        }
-
-        // Place filler glass panes
-        placeFiller();
     }
 
     /**
@@ -220,22 +215,16 @@ public class MissionManageGui extends TownyMissionGui {
         }
 
         // This means the player is clicking on the fillers
-        if ((slot >= 1 && slot <= 8) || (slot >= 28 && slot <= 35) || slot == 10 || slot == 19) {
+        if ((slot >= 1 && slot <= 8) || (slot >= row*9 && slot <= row*9+9) || slot % 9 == 1) {
             inv.setItem(slot, player.getItemOnCursor());
             player.setItemOnCursor(null);
             return;
         }
 
         // This means that the player is clicking on the UNSTARTED missions, starting a mission
-        if ((slot >= 11 && slot <= 17) || (slot >= 20 && slot <= 26)) {
+        if (slot % 9 >= 2) {
             // Map the slot numbers to mission number
-            int missionIdx;
-
-            if (slot >= 11 && slot <= 17) {
-                missionIdx = slot - 10;
-            } else {
-                missionIdx = slot - 12;
-            }
+            int missionIdx = slotToNumMission(slot);
 
             // This is the actual logic of storing into db
             if (MissionService.getInstance().startMission(player.getUniqueId(), missionIdx)) {
@@ -323,18 +312,18 @@ public class MissionManageGui extends TownyMissionGui {
         }
     }
 
-    /**
-     * Gets first empty start region slot.
-     *
-     * @return the first empty start region slot
-     */
-    public Integer getFirstEmptyStartRegionSlot() {
-        for (int i = 0; i < 28; i += 9) {
-            if (inv.getItem(i) == null || inv.getItem(i).getType() == Material.AIR) {
-                return i;
-            }
-        }
+    public int numMissionToSlot(int numMission) {
+        // 7 -> 2
+        // 14 -> 3
+        int row = numMission / 7 + 1;
+        int slot = 11 + 9 * numMission / 7 + numMission % 7;
+        return slot;
+    }
 
-        return null;
+    public int slotToNumMission(int slot) {
+        int row = slot / 9 + 1;
+        int missionRow = Math.max(0, row - 1);
+        int rowIndex = (slot - (row - 1) * 9) % 9 - 2;
+        return missionRow * row + rowIndex;
     }
 }

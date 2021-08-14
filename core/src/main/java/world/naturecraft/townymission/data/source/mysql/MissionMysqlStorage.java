@@ -7,6 +7,7 @@ import world.naturecraft.naturelib.database.MysqlStorage;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.data.storage.MissionStorage;
 import world.naturecraft.townymission.utils.Util;
 
@@ -14,9 +15,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The type Task database.
@@ -52,7 +51,11 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
 
+            // 1. Adding num_mission column if it does not exists
+            // 2. Assigning current missions with a number
             addColumn("num_mission", "INT", "0");
+            assignNumber();
+
             return null;
         });
     }
@@ -79,7 +82,8 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
                             result.getLong("allowed_time"),
                             result.getString("mission_json"),
                             UUID.fromString(result.getString("town_uuid")),
-                            result.getString("started_player_uuid") == null || result.getString("started_player_uuid").equals("null") ? null : UUID.fromString(result.getString("started_player_uuid"))));
+                            result.getString("started_player_uuid") == null || result.getString("started_player_uuid").equals("null") ? null : UUID.fromString(result.getString("started_player_uuid")),
+                            result.getInt("num_mission")));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -101,25 +105,25 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         if (cached) {
             MissionEntry missionEntry = new MissionEntry(
-                    UUID.randomUUID(), missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+                    UUID.randomUUID(), missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
             memCache.put(missionEntry.getId(), missionEntry);
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+                    addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
                 }
             };
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+        addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
     }
 
-    private void addRemote(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
+    private void addRemote(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         execute(conn -> {
             UUID uuid = UUID.randomUUID();
             String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
@@ -129,7 +133,8 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
                     allowedTime + "', '" +
                     missionJson + "', '" +
                     townUUID + "', '" +
-                    startedPlayerUUID + "');";
+                    startedPlayerUUID + "', '" +
+                    numMission + "');";
             PreparedStatement p = conn.prepareStatement(sql);
             p.executeUpdate();
             return null;
@@ -148,16 +153,16 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
+    public void update(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         if (cached) {
             MissionEntry missionEntry = new MissionEntry(
-                    id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+                    id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
             memCache.put(missionEntry.getId(), missionEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    updateRemote(id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+                    updateRemote(id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
                 }
             };
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
@@ -165,10 +170,10 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
             return;
         }
 
-        updateRemote(id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID);
+        updateRemote(id, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
     }
 
-    private void updateRemote(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
+    private void updateRemote(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         execute(conn -> {
             String sql = "UPDATE " + tableName +
                     " SET task_type='" + missionType +
@@ -186,6 +191,24 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
     }
 
     public void update(MissionEntry data) {
-        update(data.getId(), data.getMissionType().name(), data.getAddedTime(), data.getStartedTime(), data.getAllowedTime(), data.getMissionJson().toJson(), data.getTownUUID(), data.getStartedPlayerUUID());
+        update(data.getId(), data.getMissionType().name(), data.getAddedTime(), data.getStartedTime(), data.getAllowedTime(), data.getMissionJson().toJson(), data.getTownUUID(), data.getStartedPlayerUUID(), data.getNumMission());
+    }
+
+    /**
+     * This method is called by MissionStorage when num_mission column is added
+     */
+    public void assignNumber() {
+        HashMap<UUID, List<MissionEntry>> townMap = new HashMap<>();
+        for (MissionEntry e : getEntries()) {
+            if (townMap.containsKey(e.getTownUUID())) {
+                e.setNumMission(townMap.get(e.getTownUUID()).size());
+                update(e);
+                townMap.get(e.getTownUUID()).add(e);
+            } else {
+                List<MissionEntry> newList = new LinkedList<>();
+                newList.add(e);
+                townMap.put(e.getTownUUID(), newList);
+            }
+        }
     }
 }

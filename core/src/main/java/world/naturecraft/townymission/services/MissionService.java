@@ -78,19 +78,23 @@ public abstract class MissionService extends TownyMissionService {
      * Start mission.
      *
      * @param playerUUID the player
-     * @param choice     the choice
+     * @param missionIdx     the choice
      * @return the boolean
      */
-    public boolean startMission(UUID playerUUID, int choice) {
+    public boolean startMission(UUID playerUUID, int missionIdx) {
         if (!canStartMission(playerUUID))
             return false;
 
         UUID townUUID = TownyService.getInstance().residentOf(playerUUID);
 
-        List<MissionEntry> taskEntries = MissionDao.getInstance().getTownMissions(townUUID);
-        int missionIdx = choice;
+        List<MissionEntry> taskEntries = MissionDao.getInstance().getEntries(new EntryFilter<MissionEntry>() {
+            @Override
+            public boolean include(MissionEntry missionEntry) {
+                return missionEntry.getTownUUID().equals(townUUID) && missionEntry.getNumMission() == missionIdx;
+            }
+        });
 
-        MissionEntry entry = taskEntries.get(missionIdx - 1);
+        MissionEntry entry = taskEntries.get(0);
 
         entry.setStartedTime(new Date().getTime());
         entry.setStartedPlayerUUID(playerUUID);

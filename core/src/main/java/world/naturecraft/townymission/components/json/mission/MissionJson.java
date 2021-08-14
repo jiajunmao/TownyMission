@@ -209,7 +209,7 @@ public abstract class MissionJson {
     }
 
     @JsonIgnore
-    public MissionEntry getNewMissionEntry(UUID townUUID) {
+    public MissionEntry getNewMissionEntry(UUID townUUID, int numMission) {
         MissionEntry entry = new MissionEntry(
                 UUID.randomUUID(),
                 getMissionType().name(),
@@ -218,7 +218,8 @@ public abstract class MissionJson {
                 TimeUnit.MILLISECONDS.convert(getHrAllowed(), TimeUnit.HOURS),
                 toJson(),
                 townUUID,
-                null);
+                null,
+                numMission);
         return entry;
     }
 }

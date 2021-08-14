@@ -4,7 +4,9 @@
 
 package world.naturecraft.townymission.data.dao;
 
+import world.naturecraft.naturelib.NaturePlugin;
 import world.naturecraft.naturelib.database.Dao;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -109,6 +111,21 @@ public class MissionDao extends Dao<MissionEntry> {
                 && data.isStarted()));
 
         return list;
+    }
+
+    public List<Integer> getMissingIndexMissions(UUID townUUID) {
+        List<MissionEntry> list = getEntries(data -> data.getTownUUID().equals(townUUID));
+        List<Integer> finalList = new ArrayList<>();
+        int maxMission = TownyMissionInstance.getInstance().getInstanceConfig().getInt("mission.amount");
+        for (int i = 0; i < maxMission; i++) {
+            finalList.add(i);
+        }
+
+        for (MissionEntry e : list) {
+            finalList.remove(e.getNumMission());
+        }
+
+        return finalList;
     }
 
     /**
