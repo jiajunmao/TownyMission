@@ -21,7 +21,7 @@ public interface MissionStorage extends Storage<MissionEntry> {
      * @param missionJson       the mission json
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
-     * @param numMission the slot where it is placed in the GUI
+     * @param numMission        the slot where it is placed in the GUI
      */
     void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission);
 

@@ -78,7 +78,7 @@ public abstract class MissionService extends TownyMissionService {
      * Start mission.
      *
      * @param playerUUID the player
-     * @param missionIdx     the choice
+     * @param missionIdx the choice
      * @return the boolean
      */
     public boolean startMission(UUID playerUUID, int missionIdx) {
@@ -133,7 +133,7 @@ public abstract class MissionService extends TownyMissionService {
 
         giveBack(entry);
         MissionDao.getInstance().remove(entry);
-        CooldownService.getInstance().startCooldown(entry.getTownUUID(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
+        CooldownService.getInstance().startCooldown(entry.getTownUUID(), entry.getNumMission(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
     }
 
     private void giveBack(MissionEntry entry) {
@@ -188,7 +188,7 @@ public abstract class MissionService extends TownyMissionService {
                     instance.getStatsConfig().getInt("sprint.current"),
                     instance.getStatsConfig().getInt("season.current")));
         }
-        CooldownService.getInstance().startCooldown(entry.getTownUUID(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
+        CooldownService.getInstance().startCooldown(entry.getTownUUID(), entry.getNumMission(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
     }
 
     /**

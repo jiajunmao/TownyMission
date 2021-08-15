@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.data.dao;
 
-import world.naturecraft.naturelib.NaturePlugin;
 import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;

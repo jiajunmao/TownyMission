@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;
@@ -30,8 +29,9 @@ import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.TownyUtil;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * The type Mission manage gui.
@@ -58,7 +58,6 @@ public class MissionManageGui extends TownyMissionGui {
         }
 
         inv = Bukkit.createInventory(null, (row + 2) * 9, guiTitle);
-        placeFiller();
     }
 
     /**
@@ -67,7 +66,9 @@ public class MissionManageGui extends TownyMissionGui {
      * @param player the player
      */
     public void initializeItems(Player player) {
+        System.out.println("Row: " + row);
         inv.clear();
+        placeFiller();
         Town town = TownyUtil.residentOf(player);
 
         // If not in recess or not has not started, proceed. Otherwise place fillers;
@@ -167,12 +168,12 @@ public class MissionManageGui extends TownyMissionGui {
         }
 
         // Last row
-        for (int i = row * 7; i < (row + 1) * 7; i++) {
+        for (int i = (row + 1) * 9 + 2; i < (row + 2) * 9; i++) {
             inv.setItem(i, itemStack);
         }
 
         // Vertical
-        for (int i = 1; i < row * 7; i += 9) {
+        for (int i = 1; i < (row + 2) * 9; i += 9) {
             inv.setItem(i, itemStack);
         }
     }
@@ -215,7 +216,7 @@ public class MissionManageGui extends TownyMissionGui {
         }
 
         // This means the player is clicking on the fillers
-        if ((slot >= 1 && slot <= 8) || (slot >= row*9 && slot <= row*9+9) || slot % 9 == 1) {
+        if ((slot >= 1 && slot <= 8) || (slot >= row * 9 && slot <= row * 9 + 9) || slot % 9 == 1) {
             inv.setItem(slot, player.getItemOnCursor());
             player.setItemOnCursor(null);
             return;
@@ -228,7 +229,7 @@ public class MissionManageGui extends TownyMissionGui {
 
             // This is the actual logic of storing into db
             if (MissionService.getInstance().startMission(player.getUniqueId(), missionIdx)) {
-                int firstEmpty = getFirstEmptyStartRegionSlot();
+                int firstEmpty = 0;
                 player.setItemOnCursor(null);
                 initializeItems(player);
                 inv.setItem(missionIdx, null);

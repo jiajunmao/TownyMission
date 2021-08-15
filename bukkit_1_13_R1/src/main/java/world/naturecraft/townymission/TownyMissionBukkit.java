@@ -160,6 +160,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             public void run() {
                 new UpdateChecker(instanceHolder.getData(), 94472).getVersion(version -> {
                     version = version.substring(1);
+                    System.out.println("Ver1: " + version);
+                    System.out.println("Ver2: " + getDescription().getVersion());
                     if (!UpdateChecker.isGreater(version, getDescription().getVersion())) {
                         String str = "&bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instanceHolder.getData().getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
                         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));

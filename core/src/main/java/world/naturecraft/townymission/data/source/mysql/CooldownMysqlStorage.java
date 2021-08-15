@@ -152,6 +152,6 @@ public class CooldownMysqlStorage extends MysqlStorage<CooldownEntry> implements
     }
 
     public void update(CooldownEntry data) {
-        update(data.getId(), data.getTownUUID(), data.getCooldownsAsString());
+        update(data.getId(), data.getTownUUID(), data.getCooldownJsonList().toJson());
     }
 }

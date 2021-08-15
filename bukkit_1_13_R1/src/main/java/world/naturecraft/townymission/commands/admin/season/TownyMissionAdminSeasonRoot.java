@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionCommandRoot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TownyMissionAdminSeasonRoot extends TownyMissionCommandRoot {
@@ -17,7 +16,7 @@ public class TownyMissionAdminSeasonRoot extends TownyMissionCommandRoot {
      * @param instance the instance
      */
     public TownyMissionAdminSeasonRoot(TownyMissionBukkit instance) {
-        super(instance, 1);
+        super(instance, 1, "townymissionadmin", "tmsa");
     }
 
     /**

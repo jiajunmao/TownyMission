@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.commands.templates;
 
 import org.bukkit.entity.Player;
-import world.naturecraft.naturelib.NaturePlugin;
 import world.naturecraft.naturelib.commands.CommandRoot;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.services.ChatService;
@@ -10,8 +9,8 @@ public abstract class TownyMissionCommandRoot extends CommandRoot {
 
     protected TownyMissionBukkit instance;
 
-    public TownyMissionCommandRoot(TownyMissionBukkit instance, int argPos) {
-        super(instance, argPos, "townymission", "tms");
+    public TownyMissionCommandRoot(TownyMissionBukkit instance, int argPos, String commandName, String commandAlias) {
+        super(instance, argPos, commandName, commandAlias);
         this.instance = instance;
     }
 

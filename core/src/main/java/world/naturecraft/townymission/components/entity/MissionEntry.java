@@ -46,7 +46,7 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      * @param missionJson       the task json
      * @param townUUID          the town
      * @param startedPlayerUUID the started player
-     * @param numMission the slot in the mission gui
+     * @param numMission        the slot in the mission gui
      */
     public MissionEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         super(id);
@@ -176,14 +176,6 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
         return startedPlayerUUID;
     }
 
-    public int getNumMission() {
-        return numMission;
-    }
-
-    public void setNumMission(int numMission) {
-        this.numMission = numMission;
-    }
-
     /**
      * Sets started player uuid.
      *
@@ -191,6 +183,14 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      */
     public void setStartedPlayerUUID(UUID startedPlayerUUID) {
         this.startedPlayerUUID = startedPlayerUUID;
+    }
+
+    public int getNumMission() {
+        return numMission;
+    }
+
+    public void setNumMission(int numMission) {
+        this.numMission = numMission;
     }
 
     private Material getGuiItemMaterial() {

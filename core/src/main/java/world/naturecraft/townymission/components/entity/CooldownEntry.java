@@ -4,9 +4,7 @@
 
 package world.naturecraft.townymission.components.entity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.naturelib.components.DataEntity;
-import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.components.json.cooldown.CooldownJson;
 import world.naturecraft.townymission.components.json.cooldown.CooldownListJson;
 
@@ -18,9 +16,9 @@ import java.util.UUID;
  */
 public class CooldownEntry extends DataEntity {
 
+    private final CooldownListJson cooldownJsonList;
     // Map<StartedTime, Cooldown>
     private UUID townUUID;
-    private final CooldownListJson cooldownJsonList;
 
     /**
      * Instantiates a new Cooldown entry.

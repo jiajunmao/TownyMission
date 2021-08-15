@@ -11,7 +11,6 @@ import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.storage.MissionCacheStorage;
 import world.naturecraft.townymission.utils.Util;
 
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

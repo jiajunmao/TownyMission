@@ -8,10 +8,7 @@ import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
-import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.GuiType;
-import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.config.mission.MissionConfigValidator;
 
 import java.io.File;
 import java.util.HashMap;
@@ -40,7 +37,7 @@ public class GuiConfig {
         for (GuiType guiType : GuiType.values()) {
             TownyMissionBukkit instance = TownyMissionInstance.getInstance();
             String fileName = guiType.toString().toLowerCase(Locale.ROOT) + ".yml";
-            String filePath = "missions" + File.separator + fileName;
+            String filePath = "gui" + File.separator + fileName;
 
             NatureConfig tempConfig = new BukkitConfig(filePath);
             customConfigs.put(guiType, tempConfig);
