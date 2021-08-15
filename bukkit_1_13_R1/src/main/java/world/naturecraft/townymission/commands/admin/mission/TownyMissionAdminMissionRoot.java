@@ -9,7 +9,7 @@ import java.util.List;
 public class TownyMissionAdminMissionRoot extends TownyMissionCommandRoot {
 
     public TownyMissionAdminMissionRoot(TownyMissionBukkit instance) {
-        super(instance, 1);
+        super(instance, 1, "townymissionadmin", "tmsa");
     }
 
     @Override

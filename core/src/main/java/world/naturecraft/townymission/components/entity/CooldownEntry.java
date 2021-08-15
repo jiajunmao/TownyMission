@@ -4,9 +4,8 @@
 
 package world.naturecraft.townymission.components.entity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import world.naturecraft.naturelib.components.DataEntity;
-import world.naturecraft.naturelib.exceptions.ConfigParsingException;
+import world.naturecraft.townymission.components.json.cooldown.CooldownJson;
 import world.naturecraft.townymission.components.json.cooldown.CooldownListJson;
 
 import java.util.Date;
@@ -17,8 +16,8 @@ import java.util.UUID;
  */
 public class CooldownEntry extends DataEntity {
 
-    // Map<StartedTime, Cooldown>
     private final CooldownListJson cooldownJsonList;
+    // Map<StartedTime, Cooldown>
     private UUID townUUID;
 
     /**
@@ -39,16 +38,11 @@ public class CooldownEntry extends DataEntity {
      * @param id               the id
      * @param townUUID         the town uuid
      * @param cooldownJsonList the cooldown json list
-     * @throws ConfigParsingException the json processing exception
      */
     public CooldownEntry(UUID id, UUID townUUID, String cooldownJsonList) {
         super(id);
         this.townUUID = townUUID;
-        try {
-            this.cooldownJsonList = CooldownListJson.parse(cooldownJsonList);
-        } catch (JsonProcessingException e) {
-            throw new ConfigParsingException(e);
-        }
+        this.cooldownJsonList = CooldownListJson.parse(cooldownJsonList);
     }
 
     /**
@@ -79,45 +73,13 @@ public class CooldownEntry extends DataEntity {
     }
 
     /**
-     * Gets num finished.
-     *
-     * @param remove the remove
-     * @return the num finished
-     */
-    public int getNumFinished(boolean remove) {
-        return cooldownJsonList.getNumFinished(remove);
-    }
-
-    /**
-     * Gets num total.
-     *
-     * @return the num total
-     */
-    public int getNumTotal() {
-        return cooldownJsonList.getNumTotal();
-    }
-
-    /**
      * Start cooldown.
      *
      * @param cooldown the cooldown
      */
-    public void startCooldown(long cooldown) {
+    public void startCooldown(int numMission, long cooldown) {
         long timeNow = new Date().getTime();
-        cooldownJsonList.addCooldown(timeNow, cooldown);
-    }
-
-    /**
-     * Gets cooldowns as string.
-     *
-     * @return the cooldowns as string
-     */
-    public String getCooldownsAsString() {
-        try {
-            return cooldownJsonList.toJson();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
+        CooldownJson newCooldown = new CooldownJson(timeNow, cooldown);
+        cooldownJsonList.addCooldown(numMission, newCooldown);
     }
 }

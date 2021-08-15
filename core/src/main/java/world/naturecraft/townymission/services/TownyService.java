@@ -58,5 +58,5 @@ public abstract class TownyService {
      */
     public abstract List<UUID> getResidents(UUID townUUID);
 
-    public abstract Integer getNumResidents(UUID townUUID);
+    public abstract int getNumResidents(UUID townUUID);
 }

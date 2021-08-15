@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.naturelib.database.Dao;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -111,6 +112,21 @@ public class MissionDao extends Dao<MissionEntry> {
         return list;
     }
 
+    public List<Integer> getMissingIndexMissions(UUID townUUID) {
+        List<MissionEntry> list = getEntries(data -> data.getTownUUID().equals(townUUID));
+        List<Integer> finalList = new ArrayList<>();
+        int maxMission = TownyMissionInstance.getInstance().getInstanceConfig().getInt("mission.amount");
+        for (int i = 0; i < maxMission; i++) {
+            finalList.add(i);
+        }
+
+        for (MissionEntry e : list) {
+            finalList.remove(e.getNumMission());
+        }
+
+        return finalList;
+    }
+
     /**
      * This returns the indexed MissionEntry from 1 to mission.amount
      *
@@ -118,6 +134,8 @@ public class MissionDao extends Dao<MissionEntry> {
      * @param index    The index
      * @return The corresponding MissionEntry
      */
+    //TODO: nuke this method
+    @Deprecated
     public MissionEntry getIndexedMission(UUID townUUID, int index) {
         List<MissionEntry> missionEntries = getTownMissions(townUUID);
         return missionEntries.get(index - 1);
@@ -136,7 +154,8 @@ public class MissionDao extends Dao<MissionEntry> {
                 entry.getAllowedTime(),
                 entry.getMissionJson().toJson(),
                 entry.getTownUUID(),
-                entry.getStartedPlayerUUID());
+                entry.getStartedPlayerUUID(),
+                entry.getNumMission());
     }
 
     /**
@@ -162,6 +181,7 @@ public class MissionDao extends Dao<MissionEntry> {
                 entry.getAllowedTime(),
                 entry.getMissionJson().toJson(),
                 entry.getTownUUID(),
-                entry.getStartedPlayerUUID());
+                entry.getStartedPlayerUUID(),
+                entry.getNumMission());
     }
 }

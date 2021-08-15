@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
@@ -22,7 +23,6 @@ import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.RankingService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 

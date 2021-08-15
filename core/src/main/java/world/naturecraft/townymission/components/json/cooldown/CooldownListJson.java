@@ -2,31 +2,37 @@ package world.naturecraft.townymission.components.json.cooldown;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.naturelib.exceptions.DataProcessException;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Cooldown list json.
  */
 public class CooldownListJson {
 
+    //WARNING: consider the case where the server active cooldownJsonList
+
     @JsonProperty("cooldownJsonList")
-    private final List<CooldownJson> cooldownJsonList;
+    private List<CooldownJson> cooldownJsonList;
+    @JsonProperty("cooldownMap")
+    private Map<Integer, CooldownJson> cooldownMap;
 
     /**
      * Instantiates a new Cooldown list json.
      *
      * @param cooldownJsonList the cooldown json list
      */
-    @ConstructorProperties({"cooldownJsonList"})
-    public CooldownListJson(List<CooldownJson> cooldownJsonList) {
+    @ConstructorProperties({"cooldownJsonList", "cooldownMap"})
+    public CooldownListJson(List<CooldownJson> cooldownJsonList, Map<Integer, CooldownJson> cooldownMap) {
         this.cooldownJsonList = cooldownJsonList;
+        this.cooldownMap = cooldownMap;
     }
 
     /**
@@ -34,6 +40,7 @@ public class CooldownListJson {
      */
     public CooldownListJson() {
         cooldownJsonList = new ArrayList<>();
+        cooldownMap = new HashMap<>();
     }
 
     /**
@@ -41,91 +48,44 @@ public class CooldownListJson {
      *
      * @param json the json
      * @return the rank json
-     * @throws JsonProcessingException the json processing exception
      */
     @JsonIgnore
-    public static CooldownListJson parse(String json) throws JsonProcessingException {
+    public static CooldownListJson parse(String json) throws DataProcessException {
         try {
             return new ObjectMapper().readValue(json, CooldownListJson.class);
-        } catch (JsonParseException e) {
+        } catch (JsonProcessingException e) {
             throw new DataProcessException(e);
         }
 
     }
 
-    /**
-     * Gets cooldown json list.
-     *
-     * @return the cooldown json list
-     */
-    @JsonProperty("cooldownJsonList")
-    public List<CooldownJson> getCooldownJsonList() {
-        return cooldownJsonList;
+    @JsonProperty("cooldownMap")
+    public Map<Integer, CooldownJson> getCooldownMap() {
+        return cooldownMap;
     }
 
-    /**
-     * Add cooldown.
-     *
-     * @param cooldownJson the cooldown json
-     */
+
     @JsonIgnore
-    public void addCooldown(CooldownJson cooldownJson) {
-        cooldownJsonList.add(cooldownJson);
+    public void addCooldown(int numMission, CooldownJson cooldownJson) {
+        cooldownMap.put(numMission, cooldownJson);
     }
 
-    /**
-     * Add cooldown.
-     *
-     * @param startedTime the started time
-     * @param cooldown    the cooldown
-     */
-    @JsonIgnore
-    public void addCooldown(long startedTime, long cooldown) {
-        cooldownJsonList.add(new CooldownJson(startedTime, cooldown));
-    }
-
-    /**
-     * Gets num finished.
-     *
-     * @param remove the remove
-     * @return the num finished
-     */
-    @JsonIgnore
-    public int getNumFinished(boolean remove) {
-        int num = 0;
-        List<CooldownJson> removing = new ArrayList<>();
-        for (CooldownJson cooldownJson : cooldownJsonList) {
-            if (cooldownJson.isFinished()) {
-                num++;
-                removing.add(cooldownJson);
-            }
-        }
-
-        if (remove) {
-            cooldownJsonList.removeAll(removing);
-        }
-
-        return num;
-    }
-
-    /**
-     * Gets num total.
-     *
-     * @return the num total
-     */
-    @JsonIgnore
-    public int getNumTotal() {
-        return cooldownJsonList.size();
+    public boolean isFinished(int numMission) {
+        return cooldownMap.get(numMission).isFinished();
     }
 
     /**
      * To json string.
      *
      * @return the string
-     * @throws JsonProcessingException the json processing exception
+     * @throws DataProcessException the json processing exception
      */
     @JsonIgnore
-    public String toJson() throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(this);
+    public String toJson() throws DataProcessException {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new DataProcessException(e);
+        }
     }
 }

@@ -38,7 +38,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
+    public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         String uuid = UUID.randomUUID().toString();
 
         add(uuid + ".missionType", missionType);
@@ -50,6 +50,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
         if (startedPlayerUUID != null) {
             add(uuid + ".startedPlayerUUID", startedPlayerUUID.toString());
         }
+        add(uuid + ".numMission", numMission);
     }
 
     /**
@@ -64,7 +65,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
      * @param townUUID          the town name
      * @param startedPlayerUUID the started player uuid
      */
-    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
+    public void update(UUID uuid, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         set(uuid + ".missionType", missionType);
         set(uuid + ".addedTime", addedTime);
         set(uuid + ".startedTime", startedTime);
@@ -72,6 +73,7 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
         set(uuid + ".missionJson", missionJson);
         set(uuid + ".townUUID", townUUID.toString());
         set(uuid + ".startedPlayerUUID", startedPlayerUUID.toString());
+        set(uuid + ".numMission", numMission);
     }
 
     @Override
@@ -91,8 +93,8 @@ public class MissionYamlStorage extends YamlStorage<MissionEntry> implements Mis
                     file.getLong(key + ".allowedTime"),
                     file.getString(key + ".missionJson"),
                     UUID.fromString(file.getString(key + ".townUUID")),
-                    startedPlayerUUID == null || startedPlayerUUID.equals("null") ? null : UUID.fromString(file.getString(key + ".startedPlayerUUID"))
-            ));
+                    startedPlayerUUID == null || startedPlayerUUID.equals("null") ? null : UUID.fromString(file.getString(key + ".startedPlayerUUID")),
+                    file.getInt(key + ".numMission")));
         }
 
         return entryList;

@@ -26,8 +26,10 @@ import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSpr
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.enums.GuiType;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.BukkitConfig;
+import world.naturecraft.townymission.config.GuiConfig;
 import world.naturecraft.townymission.config.RewardConfigValidator;
 import world.naturecraft.townymission.config.mission.MissionConfig;
 import world.naturecraft.townymission.gui.MissionManageGui;
@@ -58,6 +60,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     private final Logger logger = this.getLogger();
 
     private MissionConfig missionConfig;
+    private GuiConfig guiConfig;
     private NatureConfig statsConfig;
     private NatureConfig mainConfig;
     private NatureConfig langConfig;
@@ -107,9 +110,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         langConfig.updateConfig();
 
         determineBungeeCord();
-
         determineMissionEnabled();
-
         additionalConfigs();
 
         /**
@@ -159,6 +160,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             public void run() {
                 new UpdateChecker(instanceHolder.getData(), 94472).getVersion(version -> {
                     version = version.substring(1);
+                    System.out.println("Ver1: " + version);
+                    System.out.println("Ver2: " + getDescription().getVersion());
                     if (!UpdateChecker.isGreater(version, getDescription().getVersion())) {
                         String str = "&bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instanceHolder.getData().getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
                         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));
@@ -182,6 +185,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                 getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing mission and rewards config"));
                 missionConfig = new MissionConfig();
                 statsConfig = new BukkitConfig("datastore/stats.yml");
+                guiConfig = new GuiConfig();
             }
 
             RewardConfigValidator.checkRewardConfig();
@@ -535,5 +539,9 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
     public List<String> getHooks(MissionType missionType) {
         return missionAndHooks.getOrDefault(missionType, null);
+    }
+
+    public String getGuiConfig(GuiType type, String s) {
+        return guiConfig.getMissionConfig(type).getString(s);
     }
 }

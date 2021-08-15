@@ -33,6 +33,7 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
     private long startedTime;
     private MissionJson missionJson;
     private UUID startedPlayerUUID;
+    private int numMission;
 
     /**
      * Instantiates a new Task entry.
@@ -45,8 +46,9 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      * @param missionJson       the task json
      * @param townUUID          the town
      * @param startedPlayerUUID the started player
+     * @param numMission        the slot in the mission gui
      */
-    public MissionEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, UUID townUUID, UUID startedPlayerUUID) {
+    public MissionEntry(UUID id, MissionType missionType, long addedTime, long startedTime, long allowedTime, MissionJson missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         super(id);
         this.missionType = missionType;
         this.addedTime = addedTime;
@@ -55,6 +57,7 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
         this.missionJson = missionJson;
         this.townUUID = townUUID;
         this.startedPlayerUUID = startedPlayerUUID;
+        this.numMission = numMission;
     }
 
     /**
@@ -70,8 +73,8 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      * @param startedPlayerUUID the started player name
      * @throws ConfigParsingException the json processing exception
      */
-    public MissionEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID) {
-        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, townUUID, startedPlayerUUID);
+    public MissionEntry(UUID id, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
+        this(id, MissionType.valueOf(missionType), addedTime, startedTime, allowedTime, null, townUUID, startedPlayerUUID, numMission);
 
         //TODO: replace with polymorphism
         try {
@@ -180,6 +183,14 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      */
     public void setStartedPlayerUUID(UUID startedPlayerUUID) {
         this.startedPlayerUUID = startedPlayerUUID;
+    }
+
+    public int getNumMission() {
+        return numMission;
+    }
+
+    public void setNumMission(int numMission) {
+        this.numMission = numMission;
     }
 
     private Material getGuiItemMaterial() {
