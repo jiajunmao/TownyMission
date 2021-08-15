@@ -34,12 +34,11 @@ public class RankingService {
         int baselineCap = instance.getInstanceConfig().getInt("participants.sprintRewardBaselineCap");
         int baselineIncrement = instance.getInstanceConfig().getInt("participants.sprintBaselineIncrement");
 
-
         int realBaseline = baseline + (TownyService.getInstance().getNumResidents(townUUID) - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
         realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
         int naturepoints = SprintDao.getInstance().get(townUUID).getNaturepoints();
-        int rankingPoints = (naturepoints - realBaseline) / TownyService.getInstance().getNumResidents(townUUID);
+        int rankingPoints = TownyService.getInstance().getNumResidents(townUUID) == 0 ? naturepoints - realBaseline : (naturepoints - realBaseline) / TownyService.getInstance().getNumResidents(townUUID);
         rankingPoints = Math.max(rankingPoints, 0);
         return rankingPoints;
     }

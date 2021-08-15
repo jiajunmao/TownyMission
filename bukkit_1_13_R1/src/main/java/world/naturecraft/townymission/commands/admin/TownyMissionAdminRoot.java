@@ -23,9 +23,7 @@ public class TownyMissionAdminRoot extends TownyMissionCommandRoot {
      * @param instance the instance
      */
     public TownyMissionAdminRoot(TownyMissionBukkit instance) {
-        super(instance, 0);
-        commandName = "townymissionadmin";
-        commandAlias = "tmsa";
+        super(instance, 0, "townymissionadmin", "tmsa");
     }
 
     /**

@@ -7,6 +7,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.enums.RankType;
@@ -14,7 +15,6 @@ import world.naturecraft.townymission.components.json.reward.RewardJson;
 import world.naturecraft.townymission.config.RewardConfigParser;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
-import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.ArrayList;

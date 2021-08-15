@@ -59,7 +59,7 @@ public class TownyMissionList extends TownyMissionCommand implements TabExecutor
             // Do not call async here, async is handled in the GUI
             Player player = (Player) sender;
             if (TownyUtil.residentOf(player) != null) {
-                MissionManageGui gui = new MissionManageGui(((TownyMissionBukkit) instance));
+                MissionManageGui gui = new MissionManageGui(instance);
                 gui.openInventory(player);
             } else {
                 ChatService.getInstance().sendMsg(player.getUniqueId(), "&c You are not a member of a town. You need to be in a town to work on Towny Mission");

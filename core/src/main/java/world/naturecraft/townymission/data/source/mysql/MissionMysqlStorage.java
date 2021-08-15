@@ -7,11 +7,9 @@ import world.naturecraft.naturelib.database.MysqlStorage;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.data.storage.MissionStorage;
 import world.naturecraft.townymission.utils.Util;
 
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

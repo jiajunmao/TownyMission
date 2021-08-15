@@ -17,7 +17,7 @@ public class TownyMissionAdminSprintRoot extends TownyMissionCommandRoot {
      * @param instance the instance
      */
     public TownyMissionAdminSprintRoot(TownyMissionBukkit instance) {
-        super(instance, 1);
+        super(instance, 1, "townymissionadmin", "tmsa");
     }
 
     /**

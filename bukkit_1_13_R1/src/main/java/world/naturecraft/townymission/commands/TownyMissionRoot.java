@@ -15,9 +15,7 @@ public class TownyMissionRoot extends TownyMissionCommandRoot {
 
 
     public TownyMissionRoot(TownyMissionBukkit instance) {
-        super(instance, 0);
-        commandName = "townymission";
-        commandAlias = "tms";
+        super(instance, 0, "townymission", "tms");
     }
 
     @Override

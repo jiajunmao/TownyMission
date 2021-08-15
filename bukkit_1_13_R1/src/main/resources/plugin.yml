@@ -47,22 +47,6 @@ commands:
   townymission:
     description: Root command
     aliases: tms
-  townymission info:
-    description: overview
-  townymission rank:
-    description: show the current ranking
-  townymission list:
-    description: list the current missions
-  townymission help:
-    description: help page
   townymissionadmin:
     description: Admin root command
     aliases: tmsa
-  townymission addPoint:
-    description: add point
-  townymission rmPoint:
-    description: remove point
-  townymission setPoint:
-    description: set point
-  townymission checkPoint:
-    description: check point
