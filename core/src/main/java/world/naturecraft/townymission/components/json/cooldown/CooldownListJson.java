@@ -2,6 +2,7 @@ package world.naturecraft.townymission.components.json.cooldown;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.naturelib.exceptions.DataProcessException;
@@ -23,17 +24,6 @@ public class CooldownListJson {
     private List<CooldownJson> cooldownJsonList;
     @JsonProperty("cooldownMap")
     private Map<Integer, CooldownJson> cooldownMap;
-
-    /**
-     * Instantiates a new Cooldown list json.
-     *
-     * @param cooldownJsonList the cooldown json list
-     */
-    @ConstructorProperties({"cooldownJsonList", "cooldownMap"})
-    public CooldownListJson(List<CooldownJson> cooldownJsonList, Map<Integer, CooldownJson> cooldownMap) {
-        this.cooldownJsonList = cooldownJsonList;
-        this.cooldownMap = cooldownMap;
-    }
 
     /**
      * Instantiates a new Cooldown list json.
@@ -87,5 +77,15 @@ public class CooldownListJson {
         } catch (JsonProcessingException e) {
             throw new DataProcessException(e);
         }
+    }
+
+    @JsonSetter("cooldownJsonList")
+    public void setCooldownJsonList(List<CooldownJson> cooldownJsonList) {
+        this.cooldownJsonList = cooldownJsonList;
+    }
+
+    @JsonSetter("cooldownMap")
+    public void setCooldownMap(Map<Integer, CooldownJson> cooldownMap) {
+        this.cooldownMap = cooldownMap;
     }
 }

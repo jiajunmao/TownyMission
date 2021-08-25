@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
@@ -47,10 +48,10 @@ public class MissionBukkitService extends MissionService {
                 .customCheck(() -> {
                     Town town = TownyUtil.residentOf(player);
 
-                    if (MissionDao.getInstance().getStartedMission(town.getUUID()) == null) {
+                    if (MissionDao.getInstance().getStartedMissions(town.getUUID()).size() == 0) {
                         return true;
                     } else {
-                        ChatService.getInstance().sendMsg(playerUUID, townyMissionBukkit.getLangEntry("commands.start.onAlreadyStarted"));
+                        ChatService.getInstance().sendMsg(playerUUID, townyMissionBukkit.getLangEntry("commands.start.onAlreadyStarted", true));
                         return false;
                     }
                 }).check();
@@ -65,7 +66,7 @@ public class MissionBukkitService extends MissionService {
                 .hasPermission("townymission.player")
                 .customCheck(() -> {
                     // If timed out, everyone can abort
-                    MissionEntry missionEntry = MissionDao.getInstance().getStartedMission(TownyService.getInstance().residentOf(playerUUID));
+                    MissionEntry missionEntry = MissionDao.getInstance().getStartedMissions(TownyService.getInstance().residentOf(playerUUID)).get(0);
                     if (missionEntry.isTimedout())
                         return true;
 
@@ -81,7 +82,7 @@ public class MissionBukkitService extends MissionService {
 
     public void doMission(UUID townUUID, UUID playerUUID, MissionType missionType, int amount) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-        MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(townUUID, missionType);
+        MissionEntry taskEntry = MissionDao.getInstance().getTownMissions(townUUID, missionEntry -> missionEntry.getMissionType().equals(missionType)).get(0);
 
         if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
 

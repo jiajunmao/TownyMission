@@ -23,6 +23,7 @@ import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
@@ -98,7 +99,8 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
 
                         // Started Mission section
                         builder.add("&5--Mission Section--");
-                        if ((taskEntry = MissionDao.getInstance().getStartedMission(town.getUUID())) != null) {
+                        if (MissionService.getInstance().hasStarted(town.getUUID())) {
+                            taskEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
                             builder.add("&eCurrent Mission: &f" + taskEntry.getMissionJson().getDisplayLine());
                             Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
                             builder.add("&eStarted By: &f" + startedPlayer.getName());

@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.naturelib.components.DataEntity;
 import world.naturecraft.naturelib.exceptions.ConfigParsingException;
+import world.naturecraft.naturelib.utils.BukkitUtil;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
@@ -152,9 +153,8 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      * Gets display line.
      *
      * @return the display line
-     * @throws JsonProcessingException the json processing exception
      */
-    public String getDisplayLine() throws JsonProcessingException {
+    public String getDisplayLine() {
         return missionJson.getDisplayLine();
     }
 
@@ -222,8 +222,9 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      */
     public ItemStack getGuiItem() {
         ItemStack stack = new ItemStack(getGuiItemMaterial(), 1);
-        if (startedTime != 0)
+        if (isStarted()) {
             stack.addUnsafeEnchantment(Enchantment.LUCK, 1);
+        }
 
         ItemMeta meta = stack.getItemMeta();
 
@@ -246,6 +247,7 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
         } else {
             loreList.addAll(missionJson.getLore());
         }
+        //loreList.add("&r&eIndex&f: " + numMission);
 
         meta.setLore(loreList);
 

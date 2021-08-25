@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.events.DoMissionEvent;
@@ -78,13 +79,12 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 @Override
                 public void run() {
 
-                    MissionEntry resourceEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
+                    TownyMissionBukkit instance = TownyMissionInstance.getInstance();
+                    MissionEntry resourceEntry = MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE)).get(0);
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
 
-                    TownyMissionBukkit instance = TownyMissionInstance.getInstance();
                     if (instance.isMainServer()) {
                         // This means that this is the main server, directly interact with the services
-
                         if (!sanityCheck(player, args)) return;
 
                         int number;
@@ -216,7 +216,8 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 })
                 .customCheck(() -> {
                     // Mission timeout
-                    MissionEntry resourceEntry = missionDao.getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
+                    MissionEntry resourceEntry = missionDao.getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE)).get(0);
+
                     try {
                         if (resourceEntry.isTimedout()) {
                             ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onMissionTimedOut"));
@@ -270,7 +271,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
 
     private boolean checkItemMismatch(Player player) {
         // Holding item in hand mismatch
-        MissionEntry resourceEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(player).getUUID(), MissionType.RESOURCE);
+        MissionEntry resourceEntry = MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE)).get(0);
         ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
 
         ItemStack inHand = player.getItemInHand();

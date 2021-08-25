@@ -50,13 +50,14 @@ public class CooldownService extends TownyMissionService {
 
     public List<Integer> getInCooldown(UUID townUUID) {
         CooldownEntry entry = CooldownDao.getInstance().get(townUUID);
+        if (entry == null)
+            return new ArrayList<>();
+
         Map<Integer, CooldownJson> cooldowenMap = entry.getCooldownJsonList().getCooldownMap();
-        List<Integer> cooldownList = new ArrayList<>();
+        List<Integer> cooldownList = new ArrayList<>(cooldowenMap.keySet());
         for (Integer i : cooldowenMap.keySet()) {
-            if (!cooldowenMap.get(i).isFinished()) {
-                cooldownList.add(i);
-            } else {
-                cooldowenMap.remove(i);
+            if (cooldowenMap.get(i).isFinished()) {
+                cooldownList.remove(i);
             }
         }
         return cooldownList;

@@ -5,6 +5,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
+import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -41,7 +42,8 @@ public class MobListener extends MissionListener {
                         .hasStarted()
                         .isMissionType(MissionType.MOB)
                         .customCheck(() -> {
-                            MissionEntry taskEntry = MissionDao.getInstance().getTownStartedMission(TownyUtil.residentOf(killer).getUUID(), MissionType.MOB);
+                            MissionEntry taskEntry = MissionDao.getInstance().getEntries(missionEntry -> missionEntry.getTownUUID().equals(TownyUtil.residentOf(killer).getUUID()) &&
+                                    missionEntry.getMissionType().equals(MissionType.MOB)).get(0);
                             MobMissionJson mobMissionJson = (MobMissionJson) taskEntry.getMissionJson();
                             return EntityType.valueOf(mobMissionJson.getEntityType()).equals(dead.getType());
                         });

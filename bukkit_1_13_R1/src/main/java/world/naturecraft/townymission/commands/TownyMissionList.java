@@ -62,7 +62,7 @@ public class TownyMissionList extends TownyMissionCommand implements TabExecutor
                 MissionManageGui gui = new MissionManageGui(instance);
                 gui.openInventory(player);
             } else {
-                ChatService.getInstance().sendMsg(player.getUniqueId(), "&c You are not a member of a town. You need to be in a town to work on Towny Mission");
+                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.list.notInTown", true));
             }
         }
 

@@ -97,7 +97,7 @@ public class TownyMissionAdminInfo extends TownyMissionAdminCommand {
 
                     // Started Mission section
                     builder.add("&5--Mission Section--");
-                    if ((taskEntry = MissionDao.getInstance().getStartedMission(town.getUUID())) != null) {
+                    if ((taskEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0)) != null) {
                         builder.add("&eCurrent Mission: &f" + taskEntry.getMissionJson().getDisplayLine());
                         Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
                         builder.add("&eStarted By: &f" + startedPlayer.getName());

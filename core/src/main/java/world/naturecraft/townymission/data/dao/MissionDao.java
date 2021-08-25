@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.data.dao;
 
 import world.naturecraft.naturelib.database.Dao;
+import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.DbType;
@@ -51,52 +52,11 @@ public class MissionDao extends Dao<MissionEntry> {
      * @return the town tasks
      */
     public List<MissionEntry> getTownMissions(UUID townUUID) {
-        List<MissionEntry> list = new ArrayList<>();
-        for (MissionEntry e : db.getEntries()) {
-            if (e.getTownUUID().equals(townUUID)) {
-                list.add(e);
-            }
-        }
-
-        return list;
+        return getEntries(missionEntry -> (missionEntry.getTownUUID().equals(townUUID)));
     }
 
-    /**
-     * Gets town tasks.
-     *
-     * @param townUUID    the town uuid
-     * @param missionType the mission type
-     * @return the town tasks
-     */
-    @Deprecated
-    public MissionEntry getTownStartedMission(UUID townUUID, MissionType missionType) {
-        List<MissionEntry> list = getTownMissions(townUUID);
-
-        for (MissionEntry e : list) {
-            if (e.getMissionType().equals(missionType) && e.getStartedTime() != 0) {
-                return e;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets started mission.
-     *
-     * @param townUUID the town uuid
-     * @return the started mission
-     */
-    public MissionEntry getStartedMission(UUID townUUID) {
-        for (MissionEntry e : db.getEntries()) {
-            if (e.getTownUUID().equals(townUUID)) {
-                if (e.getStartedTime() != 0) {
-                    return e;
-                }
-            }
-        }
-
-        return null;
+    public List<MissionEntry> getTownMissions(UUID townUUID, EntryFilter<MissionEntry> filter) {
+        return getEntries(missionEntry -> (missionEntry.getTownUUID().equals(townUUID) && filter.include(missionEntry)));
     }
 
     /**
@@ -106,10 +66,8 @@ public class MissionDao extends Dao<MissionEntry> {
      * @return the started missions
      */
     public List<MissionEntry> getStartedMissions(UUID townUUID) {
-        List<MissionEntry> list = getEntries(data -> (data.getTownUUID().equals(townUUID)
+        return getEntries(data -> (data.getTownUUID().equals(townUUID)
                 && data.isStarted()));
-
-        return list;
     }
 
     public List<Integer> getMissingIndexMissions(UUID townUUID) {
@@ -121,24 +79,10 @@ public class MissionDao extends Dao<MissionEntry> {
         }
 
         for (MissionEntry e : list) {
-            finalList.remove(e.getNumMission());
+            finalList.remove(Integer.valueOf(e.getNumMission()));
         }
 
         return finalList;
-    }
-
-    /**
-     * This returns the indexed MissionEntry from 1 to mission.amount
-     *
-     * @param townUUID the town uuid
-     * @param index    The index
-     * @return The corresponding MissionEntry
-     */
-    //TODO: nuke this method
-    @Deprecated
-    public MissionEntry getIndexedMission(UUID townUUID, int index) {
-        List<MissionEntry> missionEntries = getTownMissions(townUUID);
-        return missionEntries.get(index - 1);
     }
 
     /**

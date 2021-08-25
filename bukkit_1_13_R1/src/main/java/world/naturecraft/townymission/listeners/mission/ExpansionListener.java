@@ -2,12 +2,16 @@ package world.naturecraft.townymission.listeners.mission;
 
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.EventHandler;
+import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
+import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.utils.BukkitChecker;
+import world.naturecraft.townymission.utils.TownyUtil;
 
 public class ExpansionListener extends MissionListener {
 
@@ -36,8 +40,8 @@ public class ExpansionListener extends MissionListener {
                     .isMissionType(MissionType.EXPANSION)
                     .customCheck(() -> {
                         try {
-                            MissionEntry entry = MissionDao.getInstance().getTownStartedMission(e.getTownBlock().getTown().getUUID(), MissionType.EXPANSION);
-                            return entry.getTownUUID().equals(e.getTownBlock().getTown().getUUID());
+                            Town currTown = e.getTownBlock().getTown();
+                            return MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(e.getResident().getPlayer()).getUUID(), missionEntry -> (missionEntry.getTownUUID().equals(currTown.getUUID()))).size() != 0;
                         } catch (NotRegisteredException notRegisteredException) {
                             return false;
                         }
