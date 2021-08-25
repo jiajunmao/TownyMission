@@ -9,6 +9,7 @@ import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.MissionService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +167,7 @@ public class BukkitChecker {
         if (checkHasStarted) {
             if (!checkHasTown)
                 return false;
-            if (missionDao.getStartedMission(TownyUtil.residentOf(player).getUUID()) == null) {
+            if (!MissionService.getInstance().hasStarted(TownyUtil.residentOf(player).getUUID())) {
                 if (!isSilent)
                     ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoStartedMission"));
                 return false;
@@ -179,7 +180,7 @@ public class BukkitChecker {
             if (!checkHasStarted)
                 return false;
 
-            MissionEntry entry = MissionDao.getInstance().getStartedMission(TownyUtil.residentOf(player).getUUID());
+            MissionEntry entry = MissionDao.getInstance().getStartedMissions(TownyUtil.residentOf(player).getUUID()).get(0);
             if (entry.isTimedout()) {
                 if (!isSilent)
                     ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onMissionTimedOut"));
@@ -190,7 +191,7 @@ public class BukkitChecker {
         if (checkIsMissionType) {
             if (!checkHasStarted)
                 return false;
-            if (!missionDao.getStartedMission(TownyUtil.residentOf(player).getUUID()).getMissionType().equals(missionType)) {
+            if (!missionDao.getStartedMissions(TownyUtil.residentOf(player).getUUID()).get(0).getMissionType().equals(missionType)) {
                 if (!isSilent)
                     ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onMissionTypeMismatch").replace("%missionType%", missionType.name().toLowerCase(Locale.ROOT)));
                 return false;

@@ -25,6 +25,7 @@ import world.naturecraft.townymission.commands.admin.season.*;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintPoint;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRank;
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
+import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.GuiType;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -32,6 +33,7 @@ import world.naturecraft.townymission.config.BukkitConfig;
 import world.naturecraft.townymission.config.GuiConfig;
 import world.naturecraft.townymission.config.RewardConfigValidator;
 import world.naturecraft.townymission.config.mission.MissionConfig;
+import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.gui.MissionManageGui;
 import world.naturecraft.townymission.listeners.DoMissionListener;
 import world.naturecraft.townymission.listeners.PMCListener;
@@ -42,6 +44,7 @@ import world.naturecraft.townymission.listeners.mission.MobListener;
 import world.naturecraft.townymission.listeners.mission.VoteListener;
 import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
 import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
+import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.PlaceholderBukkitService;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.services.TimerService;
@@ -128,6 +131,22 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         }
 
         /**
+         * Migrate section
+         */
+        // If config version is one (automatically updated), migrate JsonList to JsonMap, and increment version number
+        String ver = statsConfig.getString("config.version");
+        if (ver == null || ver.equals("1")) {
+            getInstanceLogger().warning("You are currently on version 1, migrating to version 2");
+            List<CooldownEntry> cooldownEntries = CooldownDao.getInstance().getEntries();
+            for (CooldownEntry entry : cooldownEntries) {
+                CooldownDao.getInstance().add(entry);
+            }
+
+            statsConfig.set("config.version", 2);
+            statsConfig.save();
+        }
+
+        /**
          * Configure listeners, timers, and tasks
          */
         // If is bungee, and not main, do nothing here except for the listeners
@@ -160,8 +179,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             public void run() {
                 new UpdateChecker(instanceHolder.getData(), 94472).getVersion(version -> {
                     version = version.substring(1);
-                    System.out.println("Ver1: " + version);
-                    System.out.println("Ver2: " + getDescription().getVersion());
                     if (!UpdateChecker.isGreater(version, getDescription().getVersion())) {
                         String str = "&bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instanceHolder.getData().getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
                         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));
@@ -185,6 +202,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                 getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&6===> Parsing mission and rewards config"));
                 missionConfig = new MissionConfig();
                 statsConfig = new BukkitConfig("datastore/stats.yml");
+                statsConfig.updateConfig();
                 guiConfig = new GuiConfig();
             }
 

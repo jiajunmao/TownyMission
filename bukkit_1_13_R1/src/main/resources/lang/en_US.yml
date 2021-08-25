@@ -47,6 +47,7 @@ commands:
     onNotEnabled: "&cThe mission type you are listing is not enabled!"
   list:
     onNoConfiguredMission: "&cThere is 0 mission configured! Please configure mission before starting season!"
+    notInTown: "&cYou are not a member of a town. You need to be in a town to work on Towny Mission"
 
 adminCommands:
   season_point:

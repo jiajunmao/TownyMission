@@ -71,7 +71,7 @@ public abstract class MissionService extends TownyMissionService {
      * @return the boolean
      */
     public boolean hasStarted(UUID townUUID) {
-        return MissionDao.getInstance().getStartedMission(townUUID) != null;
+        return MissionDao.getInstance().getStartedMissions(townUUID).size() != 0;
     }
 
     /**

@@ -101,7 +101,7 @@ public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
                         return;
                     }
                     Town town = TownyUtil.getTown(args[2]);
-                    MissionEntry missionEntry = MissionDao.getInstance().getStartedMission(town.getUUID());
+                    MissionEntry missionEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
 
                     MissionService.getInstance().abortMission(null, missionEntry, true);
                     ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("adminCommands.mission_abort.onSuccess")
