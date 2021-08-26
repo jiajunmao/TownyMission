@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.gui;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,19 +18,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.naturelib.utils.BukkitUtil;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.MissionEntry;
-import world.naturecraft.townymission.components.enums.GuiType;
+import world.naturecraft.townymission.components.json.cooldown.CooldownJson;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
-import world.naturecraft.townymission.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.config.MissionConfigParser;
+import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.TownyUtil;
+import world.naturecraft.townymission.utils.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The type Mission manage gui.
@@ -49,7 +48,7 @@ public class MissionManageGui extends TownyMissionGui {
      */
     public MissionManageGui(TownyMissionBukkit instance) {
         this.instance = instance;
-        guiTitle = instance.getGuiConfig(GuiType.MISSION_MANAGE, "title");
+        guiTitle = instance.getGuiLangEntry("mission_manage.title");
         int missionNum = instance.getInstanceConfig().getInt("mission.amount");
         this.row = missionNum / 7;
         if (missionNum > 28) {
@@ -66,9 +65,8 @@ public class MissionManageGui extends TownyMissionGui {
      * @param player the player
      */
     public void initializeItems(Player player) {
-        System.out.println("Row: " + row);
         inv.clear();
-        placeFiller();
+
         Town town = TownyUtil.residentOf(player);
 
         // If not in recess or not has not started, proceed. Otherwise place fillers;
@@ -77,6 +75,7 @@ public class MissionManageGui extends TownyMissionGui {
             return;
         }
 
+        // Check if there is loaded missions
         List<MissionJson> missions = MissionConfigParser.parseAll(instance);
         if (missions.size() == 0) {
             placeFiller();
@@ -106,26 +105,24 @@ public class MissionManageGui extends TownyMissionGui {
         int startedMissionIdx = 0;
         for (MissionEntry entry : townMissions) {
             int placingIndex = numMissionToSlot(entry.getNumMission());
-
             if (!entry.isStarted()) {
                 inv.setItem(placingIndex, entry.getGuiItem());
-            } else {
+            } else if (entry.isStarted()) {
                 // Filler on the standby panel
-                ItemStack itemStack = new ItemStack(Material.NETHER_STAR);
-                ItemMeta im = itemStack.getItemMeta();
-                im.setDisplayName(BukkitUtil.translateColor("&3In Progress"));
-                List<String> lores = new ArrayList<>();
-                lores.add("&fThis mission is already in progress");
-                lores.add("&fPlease check the left panel for more info");
-                im.setLore(lores);
-                itemStack.setItemMeta(im);
-                inv.setItem(placingIndex, itemStack);
+                inv.setItem(placingIndex, startedFiller());
 
                 // Progress on the started panel
-                inv.setItem(0, entry.getGuiItem());
+                inv.setItem(startedMissionIdx, entry.getGuiItem());
                 startedMissionIdx += 9;
             }
         }
+
+        // Cooldown filler
+        for (Integer cooldownSlot : CooldownService.getInstance().getInCooldown(town.getUUID())) {
+            inv.setItem(numMissionToSlot(cooldownSlot), cooldownFiller(cooldownSlot, town.getUUID()));
+        }
+
+        placeFiller();
     }
 
     /**
@@ -140,13 +137,9 @@ public class MissionManageGui extends TownyMissionGui {
 
             ItemStack itemStack = new ItemStack(Material.FIREWORK_STAR, 1);
             ItemMeta meta = itemStack.getItemMeta();
-            meta.setDisplayName(ChatService.getInstance().translateColor("&cIn Recess"));
+            meta.setDisplayName(ChatService.getInstance().translateColor(instance.getGuiLangEntry("mission_manage.in_recess_filler.title")));
 
-            List<String> lore = new ArrayList<>();
-            lore.add(ChatService.getInstance().translateColor("&r&7We are currently in recess"));
-            lore.add(ChatService.getInstance().translateColor("&r&7Please wait for the sprint to start"));
-
-            meta.setLore(lore);
+            meta.setLore(instance.getGuiLangEntries("mission_manage.in_recess_filler.lores"));
             itemStack.setItemMeta(meta);
             inv.setItem(placingIndex, itemStack);
             placingIndex++;
@@ -198,25 +191,23 @@ public class MissionManageGui extends TownyMissionGui {
     public void onInventoryClick(final InventoryClickEvent e) {
         // This means the opened inv is not this inv
         if (!e.getView().getTitle().equalsIgnoreCase(guiTitle)) return;
-
         e.setCancelled(true);
-
         final ItemStack clickedItem = e.getCurrentItem();
-
-        // verify current item is not null
         if (clickedItem == null || clickedItem.getType().equals(Material.AIR)) return;
+
 
         final Player player = (Player) e.getWhoClicked();
         int slot = e.getSlot();
+        int row = slot / 9;
 
-        // This means that if the its recess time, nothing will happen if you click
+        // This means that if its recess time, nothing will happen if you click
         if (!TimerService.getInstance().canStart()) {
-            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
+            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess", true));
             return;
         }
 
         // This means the player is clicking on the fillers
-        if ((slot >= 1 && slot <= 8) || (slot >= row * 9 && slot <= row * 9 + 9) || slot % 9 == 1) {
+        if ((row == 0 && slot % 9 >= 1) || (row == this.row + 1 && slot % 9 >= 1) || slot % 9 == 1) {
             inv.setItem(slot, player.getItemOnCursor());
             player.setItemOnCursor(null);
             return;
@@ -226,55 +217,48 @@ public class MissionManageGui extends TownyMissionGui {
         if (slot % 9 >= 2) {
             // Map the slot numbers to mission number
             int missionIdx = slotToNumMission(slot);
-
             // This is the actual logic of storing into db
             if (MissionService.getInstance().startMission(player.getUniqueId(), missionIdx)) {
-                int firstEmpty = 0;
+
+                MissionEntry entry = MissionDao.getInstance().getEntries(missionEntry -> missionEntry.getNumMission() == missionIdx
+                        && missionEntry.getTownUUID().equals(TownyUtil.residentOf(player).getUUID())).get(0);
+                List<MissionEntry> startedMissions = MissionDao.getInstance().getStartedMissions(TownyUtil.residentOf(player).getUUID());
+
                 player.setItemOnCursor(null);
-                initializeItems(player);
-                inv.setItem(missionIdx, null);
-                inv.setItem(firstEmpty, clickedItem);
-                player.openInventory(inv);
-                Town town = TownyUtil.residentOf(player);
+                int startedIdx = 0;
+                for (MissionEntry missionEntry : startedMissions) {
+                    player.getOpenInventory().getTopInventory().setItem(startedIdx, missionEntry.getGuiItem());
+                    startedIdx += 9;
+                }
+                player.getOpenInventory().getTopInventory().setItem(slot, startedFiller());
+                player.updateInventory();
 
-                final int missionIdxFinal = missionIdx;
-                BukkitRunnable r = new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        MissionEntry entry = MissionDao.getInstance().getIndexedMission(town.getUUID(), missionIdxFinal);
-
-                        try {
-                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.start.onSuccess")
-                                    .replace("%type%", entry.getMissionType().name())
-                                    .replace("%details%", entry.getDisplayLine()));
-                        } catch (JsonProcessingException exception) {
-                            exception.printStackTrace();
-                        }
-                    }
-                };
-
-                r.runTaskAsynchronously(instance);
+                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.start.onSuccess")
+                        .replace("%type%", entry.getMissionType().name())
+                        .replace("%details%", entry.getDisplayLine()));
             } else {
                 player.setItemOnCursor(null);
-                initializeItems(player);
                 inv.setItem(slot, clickedItem);
-                player.openInventory(inv);
+                player.updateInventory();
             }
         }
 
         // This means that the player is clicking on a STARTED mission
-        if (slot == 0 || slot == 9 || slot == 18 || slot == 27) {
+        if (slot % 9 == 0) {
             Town town = TownyUtil.residentOf(player);
             List<MissionEntry> startedList = MissionDao.getInstance().getStartedMissions(town.getUUID());
             int index = slot / 9;
             MissionEntry entry = startedList.get(index);
 
             // This means abort mission
-            if (entry.isTimedout() && !entry.isCompleted() && entry.isStarted()) {
+            if ((entry.isTimedout() && !entry.isCompleted() && entry.isStarted()) ||
+                    entry.isStarted() && e.getClick().equals(ClickType.RIGHT)) {
+
                 player.setItemOnCursor(null);
-                initializeItems(player);
-                inv.setItem(slot, null);
-                player.openInventory(inv);
+                player.getOpenInventory().getTopInventory().setItem(slot, null);
+                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID()));
+                player.updateInventory();
+
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -288,43 +272,64 @@ public class MissionManageGui extends TownyMissionGui {
             // This means complete the mission
             else if (entry.isCompleted() && entry.isStarted()) {
                 player.setItemOnCursor(null);
-                initializeItems(player);
-                inv.setItem(slot, null);
-                player.openInventory(inv);
+
+                player.setItemOnCursor(null);
+                player.getOpenInventory().getTopInventory().setItem(slot, null);
+                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID()));
+                player.updateInventory();
+
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
                         MissionService.getInstance().completeMission(entry);
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess").replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess", true).replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
                     }
                 };
                 runnable.runTaskAsynchronously(instance);
             }
-
-            // If on going, and right click, that means abort
-            else if (entry.isStarted() && e.getClick().equals(ClickType.RIGHT)) {
-                player.setItemOnCursor(null);
-                initializeItems(player);
-                inv.setItem(slot, null);
-                player.openInventory(inv);
-                MissionService.getInstance().abortMission(player.getUniqueId(), entry, false);
-                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.abort.onSuccess"));
-            }
         }
     }
 
-    public int numMissionToSlot(int numMission) {
-        // 7 -> 2
-        // 14 -> 3
+    private int numMissionToSlot(int numMission) {
         int row = numMission / 7 + 1;
-        int slot = 11 + 9 * numMission / 7 + numMission % 7;
+        int slot = 9 + row * 2 + (row - 1) * 7 + numMission % 7;
         return slot;
     }
 
-    public int slotToNumMission(int slot) {
-        int row = slot / 9 + 1;
-        int missionRow = Math.max(0, row - 1);
-        int rowIndex = (slot - (row - 1) * 9) % 9 - 2;
-        return missionRow * row + rowIndex;
+    private int slotToNumMission(int slot) {
+        int row = slot / 9;
+        if (row == 0 || row == instance.getInstanceConfig().getInt("mission.amount") / 7 + 1)
+            return -1;
+
+        int idxInRow = slot % 9;
+        return (row - 1) * 7 + idxInRow - 2;
+    }
+
+    private ItemStack startedFiller() {
+        ItemStack itemStack = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
+        ItemMeta im = itemStack.getItemMeta();
+        im.setDisplayName(BukkitUtil.translateColor(instance.getGuiLangEntry("mission_manage.in_progress_filler.title")));
+        List<String> loreList = new ArrayList<>();
+        for (String s : instance.getGuiLangEntries("mission_manage.in_progress_filler.lores")) {
+            loreList.add(ChatService.getInstance().translateColor("&r" + s));
+        }
+        im.setLore(loreList);
+        itemStack.setItemMeta(im);
+        return itemStack;
+    }
+
+    private ItemStack cooldownFiller(int numMission, UUID townUUID) {
+        ItemStack itemStack = new ItemStack(XMaterial.FIREWORK_STAR.parseMaterial());
+        ItemMeta im = itemStack.getItemMeta();
+        im.setDisplayName(BukkitUtil.translateColor(instance.getGuiLangEntry("mission_manage.cooldown_filler.title")));
+        List<String> loreList = new ArrayList<>();
+        for (String s : instance.getGuiLangEntries("mission_manage.cooldown_filler.lores")) {
+            CooldownJson cooldownJson = CooldownDao.getInstance().get(townUUID).getCooldownJsonList().getCooldownMap().get(numMission);
+            long remainingTime = cooldownJson.getStartedTime() + cooldownJson.getCooldown() - new Date().getTime();
+            loreList.add(ChatService.getInstance().translateColor("&r" + s.replace("%time%", Util.formatMilliseconds(remainingTime))));
+        }
+        im.setLore(loreList);
+        itemStack.setItemMeta(im);
+        return itemStack;
     }
 }

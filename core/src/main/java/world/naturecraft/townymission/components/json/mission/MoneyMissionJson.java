@@ -7,8 +7,10 @@ package world.naturecraft.townymission.components.json.mission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.utils.Util;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -67,26 +69,31 @@ public class MoneyMissionJson extends MissionJson {
     @Override
     @JsonIgnore
     public List<String> getLore() {
-        List<String> loreList = new ArrayList<>();
-        loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
-        loreList.add(ChatService.getInstance().translateColor("&r&eReturnable: &7" + returnable));
-        loreList.add(ChatService.getInstance().translateColor("&r&eReward: &7" + getReward()));
-        loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
+        List<String> loreList = TownyMissionInstance.getInstance().getGuiLangEntries("mission_manage.missions.money.lores");
+        List<String> finalLoreList = new ArrayList<>();
+        for (String s : loreList) {
+            if (s.contains("Status") || s.contains("Completed"))
+                continue;
 
-        return loreList;
+            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s)));
+        }
+
+        return finalLoreList;
     }
 
     @Override
     @JsonIgnore
     public List<String> getStartedLore() {
-        List<String> loreList = new ArrayList<>();
-        loreList.add(ChatService.getInstance().translateColor("&r&eAmount: &7" + getAmount()));
-        loreList.add(ChatService.getInstance().translateColor("&r&eReturnable: &7" + returnable));
-        loreList.add(ChatService.getInstance().translateColor("&r&eCompleted: &7" + getCompleted()));
-        loreList.add(ChatService.getInstance().translateColor("&r&ePoints: &7" + getReward()));
-        loreList.add(ChatService.getInstance().translateColor("&r&eAllowed Time: &7" + getHrAllowed() + "hr"));
+        List<String> loreList = TownyMissionInstance.getInstance().getGuiLangEntries("mission_manage.missions.money.lores");
+        List<String> finalLoreList = new ArrayList<>();
+        for (String s : loreList) {
+            if (s.contains("Status"))
+                continue;
 
-        return loreList;
+            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s)));
+        }
+
+        return finalLoreList;
     }
 
     public boolean isReturnable() {
