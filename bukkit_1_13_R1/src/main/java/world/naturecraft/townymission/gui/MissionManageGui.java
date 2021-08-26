@@ -5,7 +5,6 @@
 package world.naturecraft.townymission.gui;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,18 +12,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.naturelib.utils.BukkitUtil;
-import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.entity.MissionEntry;
-import world.naturecraft.townymission.components.enums.GuiType;
+import world.naturecraft.townymission.components.json.cooldown.CooldownJson;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
-import world.naturecraft.townymission.config.mission.MissionConfigParser;
+import world.naturecraft.townymission.config.MissionConfigParser;
 import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
@@ -32,10 +28,9 @@ import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.utils.TownyUtil;
+import world.naturecraft.townymission.utils.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * The type Mission manage gui.
@@ -53,7 +48,7 @@ public class MissionManageGui extends TownyMissionGui {
      */
     public MissionManageGui(TownyMissionBukkit instance) {
         this.instance = instance;
-        guiTitle = instance.getGuiConfig(GuiType.MISSION_MANAGE, "title");
+        guiTitle = instance.getGuiLangEntry("mission_manage.title");
         int missionNum = instance.getInstanceConfig().getInt("mission.amount");
         this.row = missionNum / 7;
         if (missionNum > 28) {
@@ -124,7 +119,7 @@ public class MissionManageGui extends TownyMissionGui {
 
         // Cooldown filler
         for (Integer cooldownSlot : CooldownService.getInstance().getInCooldown(town.getUUID())) {
-            inv.setItem(numMissionToSlot(cooldownSlot), cooldownFiller());
+            inv.setItem(numMissionToSlot(cooldownSlot), cooldownFiller(cooldownSlot, town.getUUID()));
         }
 
         placeFiller();
@@ -142,13 +137,9 @@ public class MissionManageGui extends TownyMissionGui {
 
             ItemStack itemStack = new ItemStack(Material.FIREWORK_STAR, 1);
             ItemMeta meta = itemStack.getItemMeta();
-            meta.setDisplayName(ChatService.getInstance().translateColor("&cIn Recess"));
+            meta.setDisplayName(ChatService.getInstance().translateColor(instance.getGuiLangEntry("mission_manage.in_recess_filler.title")));
 
-            List<String> lore = new ArrayList<>();
-            lore.add(ChatService.getInstance().translateColor("&r&7We are currently in recess"));
-            lore.add(ChatService.getInstance().translateColor("&r&7Please wait for the sprint to start"));
-
-            meta.setLore(lore);
+            meta.setLore(instance.getGuiLangEntries("mission_manage.in_recess_filler.lores"));
             itemStack.setItemMeta(meta);
             inv.setItem(placingIndex, itemStack);
             placingIndex++;
@@ -265,7 +256,7 @@ public class MissionManageGui extends TownyMissionGui {
 
                 player.setItemOnCursor(null);
                 player.getOpenInventory().getTopInventory().setItem(slot, null);
-                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller());
+                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID()));
                 player.updateInventory();
 
                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -284,14 +275,14 @@ public class MissionManageGui extends TownyMissionGui {
 
                 player.setItemOnCursor(null);
                 player.getOpenInventory().getTopInventory().setItem(slot, null);
-                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller());
+                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID()));
                 player.updateInventory();
 
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
                         MissionService.getInstance().completeMission(entry);
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess").replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess", true).replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
                     }
                 };
                 runnable.runTaskAsynchronously(instance);
@@ -317,22 +308,27 @@ public class MissionManageGui extends TownyMissionGui {
     private ItemStack startedFiller() {
         ItemStack itemStack = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
         ItemMeta im = itemStack.getItemMeta();
-        im.setDisplayName(BukkitUtil.translateColor("&3In Progress"));
-        List<String> lores = new ArrayList<>();
-        lores.add(ChatService.getInstance().translateColor("&r&fThis mission is already in progress"));
-        lores.add(ChatService.getInstance().translateColor("&r&fPlease check the left panel for more info"));
-        im.setLore(lores);
+        im.setDisplayName(BukkitUtil.translateColor(instance.getGuiLangEntry("mission_manage.in_progress_filler.title")));
+        List<String> loreList = new ArrayList<>();
+        for (String s : instance.getGuiLangEntries("mission_manage.in_progress_filler.lores")) {
+            loreList.add(ChatService.getInstance().translateColor("&r" + s));
+        }
+        im.setLore(loreList);
         itemStack.setItemMeta(im);
         return itemStack;
     }
 
-    private ItemStack cooldownFiller() {
+    private ItemStack cooldownFiller(int numMission, UUID townUUID) {
         ItemStack itemStack = new ItemStack(XMaterial.FIREWORK_STAR.parseMaterial());
         ItemMeta im = itemStack.getItemMeta();
-        im.setDisplayName(BukkitUtil.translateColor("&cIn Cooldown"));
-        List<String> lores = new ArrayList<>();
-        lores.add(ChatService.getInstance().translateColor("&r&fThis slot is in cooldown"));
-        im.setLore(lores);
+        im.setDisplayName(BukkitUtil.translateColor(instance.getGuiLangEntry("mission_manage.cooldown_filler.title")));
+        List<String> loreList = new ArrayList<>();
+        for (String s : instance.getGuiLangEntries("mission_manage.cooldown_filler.lores")) {
+            CooldownJson cooldownJson = CooldownDao.getInstance().get(townUUID).getCooldownJsonList().getCooldownMap().get(numMission);
+            long remainingTime = cooldownJson.getStartedTime() + cooldownJson.getCooldown() - new Date().getTime();
+            loreList.add(ChatService.getInstance().translateColor("&r" + s.replace("%time%", Util.formatMilliseconds(remainingTime))));
+        }
+        im.setLore(loreList);
         itemStack.setItemMeta(im);
         return itemStack;
     }

@@ -6,14 +6,15 @@ import org.bstats.bungeecord.Metrics;
 import world.naturecraft.naturelib.InstanceType;
 import world.naturecraft.naturelib.components.enums.ServerType;
 import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.config.BungeeConfig;
 import world.naturecraft.naturelib.config.NatureConfig;
-import world.naturecraft.townymission.config.BungeeConfig;
 import world.naturecraft.townymission.listener.PMCListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -101,6 +102,16 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
     @Override
     public NatureConfig getStatsConfig() {
+        return null;
+    }
+
+    @Override
+    public List<String> getGuiLangEntries(String path) {
+        return null;
+    }
+
+    @Override
+    public String getGuiLangEntry(String path) {
         return null;
     }
 

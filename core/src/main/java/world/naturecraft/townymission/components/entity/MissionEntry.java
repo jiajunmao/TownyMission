@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import world.naturecraft.naturelib.components.DataEntity;
 import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.naturelib.utils.BukkitUtil;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
@@ -17,10 +18,7 @@ import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
 import world.naturecraft.townymission.utils.Util;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The type Task entry.
@@ -228,21 +226,27 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
 
         ItemMeta meta = stack.getItemMeta();
 
-        String displayName = "&r&6&l" + Util.capitalizeFirst(missionType.name()) + " Mission";
-        meta.setDisplayName(ChatService.getInstance().translateColor(displayName));
+        String displayName = TownyMissionInstance.getInstance().getGuiLangEntry("mission_manage.missions." + missionType.name().toLowerCase(Locale.ROOT) + ".title");
+        meta.setDisplayName(ChatService.getInstance().translateColor("&r" + displayName));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         // Setting lores
         List<String> loreList = new ArrayList<>();
+        String statusLine = null;
+        for (String s : TownyMissionInstance.getInstance().getGuiLangEntries("mission_manage.missions." + missionType.name().toLowerCase(Locale.ROOT) + ".lores")) {
+            if (s.contains("Status"))
+                statusLine = s;
+        }
+
         if (isTimedout() && !isCompleted() && isStarted()) {
-            loreList.add(ChatService.getInstance().translateColor("&eStatus: {#DD3322}Timed Out"));
+            loreList.add(ChatService.getInstance().translateColor(statusLine.replace("%status%", "{#DD3322}Timed Out")));
             loreList.addAll(missionJson.getLore());
         } else if (isCompleted() && isStarted()) {
-            loreList.add(ChatService.getInstance().translateColor("&eStatus: &aCompleted"));
+            loreList.add(ChatService.getInstance().translateColor(statusLine.replace("%status%", "&aCompleted")));
             loreList.addAll(missionJson.getLore());
         } else if (!isTimedout() && !isCompleted() && isStarted()) {
-            loreList.add(ChatService.getInstance().translateColor("&eStatus: {#39DBF3}Started"));
+            loreList.add(ChatService.getInstance().translateColor(statusLine.replace("%status%", "{#39DBF3}Started")));
             loreList.addAll(missionJson.getStartedLore());
         } else {
             loreList.addAll(missionJson.getLore());

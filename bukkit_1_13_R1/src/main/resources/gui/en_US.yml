@@ -1,0 +1,64 @@
+# This file contains all the config options for the mission manage gui
+mission_manage:
+  title: "Mission Manage"
+  missions:
+    mob:
+      title: "&6&lMob Mission"
+      lores:
+        - "&eStatus&f: %status%"
+        - "&eMob Type&f: %type%"
+        - "&eAmount&f: %amount%"
+        - "&eCompleted&f: %completed%"
+        - "&eReward&f: %reward%"
+        - "&eTime Allowed&f: %time%"
+    resource:
+      title: "&6&lResource Mission"
+      lores:
+        - "&eStatus&f: %status%"
+        - "&eItem Type&f: %type%"
+        - "&eAmount&f: %amount%"
+        - "&eCompleted&f: %completed%"
+        - "&eReturnable&f: %returnable%"
+        - "&eReward&f: %reward%"
+        - "&eTime Allowed&f: %time%"
+    money:
+      title: "&6&lMoney Mission"
+      lores:
+        - "&eStatus&f: %status%"
+        - "&eAmount&f: %amount%"
+        - "&eCompleted&f: %completed%"
+        - "&eReturnable&f: %returnable%"
+        - "&eReward&f: %reward%"
+        - "&eTime Allowed&f: %time%"
+    expansion:
+      title: "&6&lExpansion Mission"
+      lores:
+        - "&eStatus&f: %status%"
+        - "&eDimension&f: %dimension%"
+        - "&eAmount&f: %amount%"
+        - "&eCompleted&f: %completed%"
+        - "&eReward&f: %reward%"
+        - "&eTime Allowed&f: %time%hr"
+    vote:
+      title: "&6&lVote Mission"
+      lores:
+        - "&eStatus&f: %status%"
+        - "&eAmount&f: %amount%"
+        - "&eCompleted&f: %completed%"
+        - "&eReward&f: %reward%"
+        - "&eTime Allowed&f: %time%"
+  in_recess_filler:
+    title: "&6In Recess"
+    lores:
+      - "&fWe are currently in recess"
+      - "&fPlease wait for the sprint to start"
+  in_progress_filler:
+    title: "&6In Progress"
+    lores:
+      - "&fThis mission is already in progress"
+      - "&fPlease check the started pane for more information!"
+  cooldown_filler:
+    title: "&cIn Cooldown"
+    lores:
+      - "&fThis slot is currently in cooldown"
+      - "&fCooldown remaining: %time%"
