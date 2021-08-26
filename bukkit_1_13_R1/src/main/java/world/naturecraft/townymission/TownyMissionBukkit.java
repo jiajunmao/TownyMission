@@ -105,7 +105,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         }
 
         String langFile = "lang/" + mainConfig.getString("language") + ".yml";
-        System.out.println("Loading language file " + langFile);
+        getServer().getConsoleSender().sendMessage("Loading language file " + langFile);
         langConfig = new BukkitConfig(langFile);
         langConfig.updateConfig();
 
@@ -145,7 +145,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             getInstanceLogger().warning("You are currently on version 1, migrating to version 2");
             List<CooldownEntry> cooldownEntries = CooldownDao.getInstance().getEntries();
             for (CooldownEntry entry : cooldownEntries) {
-                CooldownDao.getInstance().add(entry);
+                entry.getCooldownJsonList().migrateListToMap();
+                CooldownDao.getInstance().update(entry);
             }
 
             statsConfig.set("config.version", 2);
