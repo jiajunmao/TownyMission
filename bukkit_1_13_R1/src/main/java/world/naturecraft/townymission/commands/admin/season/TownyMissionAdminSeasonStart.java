@@ -50,7 +50,7 @@ public class TownyMissionAdminSeasonStart extends TownyMissionAdminCommand {
                 .customCheck(() -> {
                     // /tmsa season start
                     if (args.length != 2 || !args[0].equalsIgnoreCase("season") || !args[1].equalsIgnoreCase("start")) {
-                        System.out.println("It's ME!");
+                        //System.out.println("It's ME!");
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
