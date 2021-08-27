@@ -22,7 +22,7 @@ stages:
 test:
   stage: test
   script:
-    - 'mvn -s ci_settings.xml clean test -U'
+    - 'mvn -s .gitlab/ci_settings.xml clean test -U'
   artifacts:
     when: always
     reports:
@@ -33,7 +33,7 @@ build:
   dependencies:
     - test
   script:
-    - 'mvn -Dpackaging=jar -DgeneratePom=false -s ci_settings.xml clean package -U'
+    - 'mvn -Dpackaging=jar -DgeneratePom=false -s .gitlab/ci_settings.xml clean package -U'
   artifacts:
     paths:
       - target/TownyMission*.jar
@@ -47,7 +47,7 @@ release:
   only:
     - master
   script:
-    - 'mvn -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -DremoveSnapshot -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s ci_settings.xml release:clean release:prepare release:perform -U'
+    - 'mvn -B -DscmCommentPrefix="[skip ci]" -DignoreSnapshots=true -DremoveSnapshot -Dpackaging=jar -DgeneratePom=false -Dusername=$GIT_USERNAME -Dpassword=$GIT_PASSWORD -s .gitlab/ci_settings.xml release:clean release:prepare release:perform -U'
   artifacts:
     paths:
       - target/TownyMission*.jar
@@ -65,7 +65,7 @@ release_public:
     - 'OFFSET=$(echo $MVN_VERSION | grep -b -o - | cut -d: -f1)'
     - 'MVN_VERSION=${MVN_VERSION:0:$OFFSET}'
     - NAME="TownyMission-${MVN_VERSION}-SNAPSHOT.jar"
-    - mvn deploy:deploy-file -DgroupId=world.naturecraft -DartifactId=TownyMission -Dversion=$MVN_VERSION -Dpackaging=jar -Dfile=target/$NAME -Durl=https://git.naturecraft.world/api/v4/projects/17/packages/maven -DrepositoryId=gitlab-maven -s ci_settings.xml
+    - mvn deploy:deploy-file -DgroupId=world.naturecraft -DartifactId=TownyMission -Dversion=$MVN_VERSION -Dpackaging=jar -Dfile=target/$NAME -Durl=https://git.naturecraft.world/api/v4/projects/17/packages/maven -DrepositoryId=gitlab-maven -s .gitlab/ci_settings.xml
   when: on_success
 
 success_notification:
@@ -75,8 +75,8 @@ success_notification:
   dependencies:
     - build
   script:
-    - chmod +x ./send.sh
-    - bash send.sh success $WEBHOOK_URL
+    - chmod +x ./.gitlab/send.sh
+    - bash ./.gitlab/send.sh success $WEBHOOK_URL
   when: on_success
   artifacts:
     paths:
@@ -92,8 +92,8 @@ success_notification_public:
   dependencies:
     - build
   script:
-    - chmod +x ./send.sh
-    - bash send.sh success $WEBHOOK_URL_PUBLIC
+    - chmod +x ./.gitlab/send.sh
+    - bash ./.gitlab/send.sh success $WEBHOOK_URL_PUBLIC
   when: on_success
   artifacts:
     paths:
@@ -107,8 +107,8 @@ fail_notification:
   dependencies:
     - build
   script:
-    - chmod +x ./send.sh
-    - bash send.sh failure $WEBHOOK_URL
+    - chmod +x ./.gitlab/send.sh
+    - bash ./.gitlab/send.sh failure $WEBHOOK_URL
   when: on_failure
 
 pages:
@@ -116,7 +116,7 @@ pages:
   dependencies:
     - build
   script:
-    - mvn javadoc:aggregate -s ci_settings.xml -U
+    - mvn javadoc:aggregate -s .gitlab/ci_settings.xml -U
     - mv target/site/apidocs public
   artifacts:
     paths:
