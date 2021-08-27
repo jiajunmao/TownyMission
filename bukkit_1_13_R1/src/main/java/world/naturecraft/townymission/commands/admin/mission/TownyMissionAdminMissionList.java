@@ -77,7 +77,7 @@ public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
             if (sanityCheck(player, args)) {
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
-                MissionType missionType = MissionType.valueOf(args[1].toUpperCase(Locale.ROOT));
+                MissionType missionType = MissionType.valueOf(args[2].toUpperCase(Locale.ROOT));
                 if (instance.isMissionEnabled(missionType)) {
                     Collection<MissionJson> collection = MissionConfigParser.parse(missionType, (TownyMissionBukkit) instance);
                     builder.add("&eMission Type&f: " + missionType.name());

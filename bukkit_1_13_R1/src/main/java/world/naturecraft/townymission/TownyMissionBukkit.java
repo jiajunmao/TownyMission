@@ -1,5 +1,7 @@
 package world.naturecraft.townymission;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,6 +49,7 @@ import world.naturecraft.townymission.services.PlaceholderBukkitService;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.services.TimerService;
 import world.naturecraft.townymission.tasks.SendCachedMissionTask;
+import world.naturecraft.townymission.utils.TownyUtil_97_1;
 
 import java.io.File;
 import java.io.InputStream;
@@ -348,7 +351,23 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             this.getCommand("townymission").setExecutor(rootCmd);
 
             // User commands
-            rootCmd.registerCommand("list", new TownyMissionList(this));
+            TownyMissionList listCommand = new TownyMissionList(this);
+            String version = Bukkit.getPluginManager().getPlugin("Towny").getDescription().getVersion();
+            int prevIdx = 0;
+            int aftIdx = 0;
+            List<Integer> versionList = new ArrayList<>();
+            while ((aftIdx= version.indexOf(".", prevIdx)) != -1) {
+                int temp = Integer.parseInt(version.substring(prevIdx, aftIdx));
+                versionList.add(temp);
+                prevIdx = aftIdx + 1;
+            }
+
+            if (versionList.get(1) >= 97 && (versionList.get(2) >= 1 || versionList.get(2) == 0 && versionList.get(3) >= 1)) {
+                // This means TownyCommandAddonAPI exists
+                System.out.println("Detecting version above 0.97.0.1, registering custom sub command");
+                TownyUtil_97_1.registerSubCommand(TownyCommandAddonAPI.CommandType.TOWN, "missions", listCommand);
+            }
+            rootCmd.registerCommand("list", listCommand);
             rootCmd.registerCommand("deposit", new TownyMissionDeposit(this));
             rootCmd.registerCommand("claim", new TownyMissionClaim(this));
             rootCmd.registerCommand("info", new TownyMissionInfo(this));

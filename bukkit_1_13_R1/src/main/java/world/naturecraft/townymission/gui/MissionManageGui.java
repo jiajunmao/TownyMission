@@ -31,6 +31,7 @@ import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The type Mission manage gui.
@@ -256,7 +257,7 @@ public class MissionManageGui extends TownyMissionGui {
 
                 player.setItemOnCursor(null);
                 player.getOpenInventory().getTopInventory().setItem(slot, null);
-                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID()));
+                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID(), true));
                 player.updateInventory();
 
                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -319,13 +320,22 @@ public class MissionManageGui extends TownyMissionGui {
     }
 
     private ItemStack cooldownFiller(int numMission, UUID townUUID) {
+        return cooldownFiller(numMission, townUUID, false);
+    }
+
+    private ItemStack cooldownFiller(int numMission, UUID townUUID, boolean staticRemainingTime) {
         ItemStack itemStack = new ItemStack(XMaterial.FIREWORK_STAR.parseMaterial());
         ItemMeta im = itemStack.getItemMeta();
         im.setDisplayName(BukkitUtil.translateColor(instance.getGuiLangEntry("mission_manage.cooldown_filler.title")));
         List<String> loreList = new ArrayList<>();
         for (String s : instance.getGuiLangEntries("mission_manage.cooldown_filler.lores")) {
             CooldownJson cooldownJson = CooldownDao.getInstance().get(townUUID).getCooldownJsonList().getCooldownMap().get(numMission);
-            long remainingTime = cooldownJson.getStartedTime() + cooldownJson.getCooldown() - new Date().getTime();
+            long remainingTime;
+            if (staticRemainingTime) {
+                remainingTime = TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES);
+            } else {
+                remainingTime = cooldownJson.getStartedTime() + cooldownJson.getCooldown() - new Date().getTime();
+            }
             loreList.add(ChatService.getInstance().translateColor("&r" + s.replace("%time%", Util.formatMilliseconds(remainingTime))));
         }
         im.setLore(loreList);
