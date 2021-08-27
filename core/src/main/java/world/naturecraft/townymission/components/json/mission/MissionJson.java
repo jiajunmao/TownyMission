@@ -222,4 +222,12 @@ public abstract class MissionJson {
                 numMission);
         return entry;
     }
+
+    protected String processLore(String s) {
+        String result = s.replace("%amount%", String.valueOf(getAmount()))
+                .replace("%completed%", String.valueOf(getCompleted()))
+                .replace("%reward%", String.valueOf(getReward()))
+                .replace("%time%", String.valueOf(getHrAllowed()));
+        return result;
+    }
 }

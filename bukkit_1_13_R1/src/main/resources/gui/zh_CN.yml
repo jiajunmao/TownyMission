@@ -1,0 +1,64 @@
+# This file contains all the config options for the mission manage gui
+mission_manage:
+  title: "Mission Manage"
+  missions:
+    mob:
+      title: "Mob Mission"
+      lores:
+        - "Status: %status%"
+        - "Mob Type: %type%"
+        - "Amount: %amount%"
+        - "Completed: %completed%"
+        - "Reward: %reward%"
+        - "Time Allowed: %time%"
+    resource:
+      title: "Resource Mission"
+      lores:
+        - "Status: %status%"
+        - "Item Type: %type%"
+        - "Amount: %amount%"
+        - "Completed: %completed%"
+        - "Returnable: %returnable%"
+        - "Reward: %reward%"
+        - "Time Allowed: %time%"
+    money:
+      title: "Money Mission"
+      lores:
+        - "Status: %status%"
+        - "Amount: %amount%"
+        - "Completed: %completed%"
+        - "Returnable: %returnable%"
+        - "Reward: %reward%"
+        - "Time Allowed: %time%"
+    expansion:
+      title: "Expansion Mission"
+      lores:
+        - "Status: %status%"
+        - "Dimension: %dimension%"
+        - "Amount: %amount%"
+        - "Completed: %completed%"
+        - "Reward: %reward%"
+        - "Time Allowed: %time%hr"
+    vote:
+      title: "Vote Mission"
+      lores:
+        - "Status: %status%"
+        - "Amount: %amount%"
+        - "Completed: %completed%"
+        - "Reward: %reward%"
+        - "Time Allowed: %time%"
+  in_recess_filler:
+    title: "&6In Recess"
+    lores:
+      - "&r&7We are currently in recess"
+      - "&r&7Please wait for the sprint to start"
+  in_progress_filler:
+    title: "&6In Progress"
+    lores:
+      - "This mission is already in progress"
+      - "Please check the started pane for more information!"
+  cooldown_filler:
+    title: "&cIn Cooldown"
+    lores:
+      - "This slot is currently in cooldown"
+      - "Cooldown remaining: %time%"

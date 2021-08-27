@@ -9,6 +9,7 @@ import world.naturecraft.naturelib.components.DataHolder;
 import world.naturecraft.naturelib.components.enums.LangType;
 import world.naturecraft.naturelib.components.enums.ServerType;
 import world.naturecraft.naturelib.components.enums.StorageType;
+import world.naturecraft.naturelib.config.BukkitConfig;
 import world.naturecraft.naturelib.config.NatureConfig;
 import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
 import world.naturecraft.naturelib.exceptions.ConfigParsingException;
@@ -27,12 +28,9 @@ import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSpr
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
-import world.naturecraft.townymission.components.enums.GuiType;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.config.BukkitConfig;
-import world.naturecraft.townymission.config.GuiConfig;
 import world.naturecraft.townymission.config.RewardConfigValidator;
-import world.naturecraft.townymission.config.mission.MissionConfig;
+import world.naturecraft.townymission.config.MissionConfig;
 import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.gui.MissionManageGui;
 import world.naturecraft.townymission.listeners.DoMissionListener;
@@ -63,7 +61,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
     private final Logger logger = this.getLogger();
 
     private MissionConfig missionConfig;
-    private GuiConfig guiConfig;
+    private NatureConfig guiConfig;
     private NatureConfig statsConfig;
     private NatureConfig mainConfig;
     private NatureConfig langConfig;
@@ -108,9 +106,18 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         }
 
         String langFile = "lang/" + mainConfig.getString("language") + ".yml";
-        System.out.println("Loading language file " + langFile);
+        getServer().getConsoleSender().sendMessage("Loading language file " + langFile);
         langConfig = new BukkitConfig(langFile);
         langConfig.updateConfig();
+
+        String guiLangFilePath = "gui/" + mainConfig.getString("language") + ".yml";
+        guiConfig = new BukkitConfig(guiLangFilePath);
+        guiConfig.updateConfig();
+
+        File missionManageYml = new File("gui/mission_manage.yml");
+        if (missionManageYml.exists()) {
+            missionManageYml.delete();
+        }
 
         determineBungeeCord();
         determineMissionEnabled();
@@ -139,7 +146,8 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             getInstanceLogger().warning("You are currently on version 1, migrating to version 2");
             List<CooldownEntry> cooldownEntries = CooldownDao.getInstance().getEntries();
             for (CooldownEntry entry : cooldownEntries) {
-                CooldownDao.getInstance().add(entry);
+                entry.getCooldownJsonList().migrateListToMap();
+                CooldownDao.getInstance().update(entry);
             }
 
             statsConfig.set("config.version", 2);
@@ -203,7 +211,6 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                 missionConfig = new MissionConfig();
                 statsConfig = new BukkitConfig("datastore/stats.yml");
                 statsConfig.updateConfig();
-                guiConfig = new GuiConfig();
             }
 
             RewardConfigValidator.checkRewardConfig();
@@ -465,6 +472,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         mainConfig = new BukkitConfig("config.yml");
         String langFile = "lang/" + mainConfig.getString("language") + ".yml";
         langConfig = new BukkitConfig(langFile);
+        guiConfig = new BukkitConfig("gui/" + mainConfig.getString("language") + ".yml");
         missionConfig = new MissionConfig();
         statsConfig = new BukkitConfig("datastore/stats.yml");
     }
@@ -559,7 +567,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         return missionAndHooks.getOrDefault(missionType, null);
     }
 
-    public String getGuiConfig(GuiType type, String s) {
-        return guiConfig.getMissionConfig(type).getString(s);
+    public String getGuiLangEntry(String path) {
+        return guiConfig.getString(path);
+    }
+
+    public List<String> getGuiLangEntries(String path) {
+        return new ArrayList<>(guiConfig.getStringList(path));
     }
 }

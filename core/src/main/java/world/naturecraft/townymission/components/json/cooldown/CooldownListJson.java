@@ -88,4 +88,14 @@ public class CooldownListJson {
     public void setCooldownMap(Map<Integer, CooldownJson> cooldownMap) {
         this.cooldownMap = cooldownMap;
     }
+
+    public void migrateListToMap() {
+        int index = 0;
+        for (CooldownJson cooldownJson : cooldownJsonList) {
+            cooldownMap.put(index, cooldownJson);
+            index++;
+        }
+
+        cooldownJsonList = null;
+    }
 }
