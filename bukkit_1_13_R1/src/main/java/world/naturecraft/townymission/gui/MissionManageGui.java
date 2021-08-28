@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -140,7 +141,12 @@ public class MissionManageGui extends TownyMissionGui {
             ItemMeta meta = itemStack.getItemMeta();
             meta.setDisplayName(ChatService.getInstance().translateColor(instance.getGuiLangEntry("mission_manage.in_recess_filler.title")));
 
-            meta.setLore(instance.getGuiLangEntries("mission_manage.in_recess_filler.lores"));
+            List<String> loreList = new ArrayList<>();
+            for (String s : instance.getGuiLangEntries("mission_manage.in_recess_filler.lores")) {
+                loreList.add(ChatService.getInstance().translateColor("&r" + s));
+            }
+            meta.setLore(loreList);
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemStack.setItemMeta(meta);
             inv.setItem(placingIndex, itemStack);
             placingIndex++;
@@ -315,6 +321,7 @@ public class MissionManageGui extends TownyMissionGui {
             loreList.add(ChatService.getInstance().translateColor("&r" + s));
         }
         im.setLore(loreList);
+        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemStack.setItemMeta(im);
         return itemStack;
     }
@@ -339,6 +346,7 @@ public class MissionManageGui extends TownyMissionGui {
             loreList.add(ChatService.getInstance().translateColor("&r" + s.replace("%time%", Util.formatMilliseconds(remainingTime))));
         }
         im.setLore(loreList);
+        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemStack.setItemMeta(im);
         return itemStack;
     }
