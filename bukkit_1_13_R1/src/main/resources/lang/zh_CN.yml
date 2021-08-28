@@ -16,6 +16,7 @@ commands:
     onNotMatch: "&c你手上的物品不匹配需要的物品类别!"
     onMissionTimedOut: "&c你的进行中的任务已经超时!"
     onSuccess: "&f你成功的存入了 %number% 个 %type%!"
+    onNoMission: "&c你没有开始的任务，或者你开始的任务不是一个资源任务!"
     requiredItem: "&f任务物品类别: %item%"
     inHandItem: "&f手上物品类别: %item%"
     onNonMainServerFail: "&c未知错误，请联系服务器管理员。"
