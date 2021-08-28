@@ -15,10 +15,11 @@ commands:
   deposit:
     onNotMatch: "&cThe item you are holding does not match the mission's resource type!"
     onMissionTimedOut: "&cYour mission has timed out! Please abort the current mission and start a new one!"
+    onNoMission: "&cYou either do not have a started mission, or your started mission is not a resource mission!"
     onSuccess: "&fYou have successfully deposited %number% of %type%!"
+    onNonMainServerFail: "&cSomething went wrong during deposit! You should try again on the main server!"
     requiredItem: "&fRequired type: %item%"
     inHandItem: "&fIn-hand type: %item%"
-    onNonMainServerFail: "&cSomething went wrong during deposit! You should try again on the main server!"
   start:
     onAlreadyStarted: "&cYour town already has a started mission!"
     onStillInCooldown: "&cYour town is still in cooldown for claiming mission! Please wait %time%"

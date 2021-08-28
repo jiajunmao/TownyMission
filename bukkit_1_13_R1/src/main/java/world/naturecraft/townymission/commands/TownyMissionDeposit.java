@@ -80,7 +80,12 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 public void run() {
 
                     TownyMissionBukkit instance = TownyMissionInstance.getInstance();
-                    MissionEntry resourceEntry = MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE)).get(0);
+                    List<MissionEntry> resouceEntries = MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE));
+                    if (resouceEntries.isEmpty()) {
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNoMission", true));
+                        return;
+                    }
+                    MissionEntry resourceEntry = resouceEntries.get(0);
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
 
                     if (instance.isMainServer()) {

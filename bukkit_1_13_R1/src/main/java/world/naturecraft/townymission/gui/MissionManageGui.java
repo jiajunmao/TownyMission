@@ -140,7 +140,11 @@ public class MissionManageGui extends TownyMissionGui {
             ItemMeta meta = itemStack.getItemMeta();
             meta.setDisplayName(ChatService.getInstance().translateColor(instance.getGuiLangEntry("mission_manage.in_recess_filler.title")));
 
-            meta.setLore(instance.getGuiLangEntries("mission_manage.in_recess_filler.lores"));
+            List<String> loreList = new ArrayList<>();
+            for (String s : instance.getGuiLangEntries("mission_manage.in_recess_filler.lores")) {
+                loreList.add(ChatService.getInstance().translateColor("&r" + s));
+            }
+            meta.setLore(loreList);
             itemStack.setItemMeta(meta);
             inv.setItem(placingIndex, itemStack);
             placingIndex++;
