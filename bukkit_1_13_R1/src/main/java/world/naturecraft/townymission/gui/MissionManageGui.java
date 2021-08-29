@@ -336,11 +336,11 @@ public class MissionManageGui extends TownyMissionGui {
         im.setDisplayName(BukkitUtil.translateColor(instance.getGuiLangEntry("mission_manage.cooldown_filler.title")));
         List<String> loreList = new ArrayList<>();
         for (String s : instance.getGuiLangEntries("mission_manage.cooldown_filler.lores")) {
-            CooldownJson cooldownJson = CooldownDao.getInstance().get(townUUID).getCooldownJsonList().getCooldownMap().get(numMission);
             long remainingTime;
             if (staticRemainingTime) {
                 remainingTime = TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES);
             } else {
+                CooldownJson cooldownJson = CooldownDao.getInstance().get(townUUID).getCooldownJsonList().getCooldownMap().get(numMission);
                 remainingTime = cooldownJson.getStartedTime() + cooldownJson.getCooldown() - new Date().getTime();
             }
             loreList.add(ChatService.getInstance().translateColor("&r" + s.replace("%time%", Util.formatMilliseconds(remainingTime))));
