@@ -89,12 +89,7 @@ public class MissionBukkitService extends MissionService {
         MissionJson json = taskEntry.getMissionJson();
         json.setCompleted(json.getCompleted() + amount);
         json.addContribution(player.getUniqueId().toString(), amount);
-        try {
-            taskEntry.setMissionJson(json);
-        } catch (JsonProcessingException exception) {
-            exception.printStackTrace();
-            return;
-        }
+        taskEntry.setMissionJson(json);
 
         BukkitRunnable r = new BukkitRunnable() {
             @Override

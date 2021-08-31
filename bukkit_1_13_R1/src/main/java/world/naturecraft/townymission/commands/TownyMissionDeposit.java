@@ -109,17 +109,13 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onSuccess")
                                 .replace("%number%", String.valueOf(number)).replace("%type%", resourceMissionJson.getType().toLowerCase(Locale.ROOT)));
 
-                        try {
-                            resourceEntry.setMissionJson(resourceMissionJson);
+                        resourceEntry.setMissionJson(resourceMissionJson);
 
-                            DoMissionEvent missionEvent = new DoMissionEvent(player, resourceEntry, true);
-                            Bukkit.getPluginManager().callEvent(missionEvent);
+                        DoMissionEvent missionEvent = new DoMissionEvent(player, resourceEntry, true);
+                        Bukkit.getPluginManager().callEvent(missionEvent);
 
-                            if (!missionEvent.isCanceled()) {
-                                MissionDao.getInstance().update(resourceEntry);
-                            }
-                        } catch (JsonProcessingException exception) {
-                            exception.printStackTrace();
+                        if (!missionEvent.isCanceled()) {
+                            MissionDao.getInstance().update(resourceEntry);
                         }
                     } else {
                         // Non main, send PMC instead

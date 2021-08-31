@@ -130,9 +130,8 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
      * Sets mission json.
      *
      * @param json the json
-     * @throws JsonProcessingException the json processing exception
      */
-    public void setMissionJson(MissionJson json) throws JsonProcessingException {
+    public void setMissionJson(MissionJson json) {
         this.missionJson = json;
     }
 
