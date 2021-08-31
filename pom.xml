@@ -91,6 +91,10 @@
                             <!-- Replace this with your package! -->
                             <shadedPattern>world.naturecraft.bstats</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.fasterxml.jackson</pattern>
+                            <shadedPattern>world.naturecraft.jackson</shadedPattern>
+                        </relocation>
                     </relocations>
                     <!-- Here you can remove the classes you don't use. -->
                     <!-- These are some examples. -->
