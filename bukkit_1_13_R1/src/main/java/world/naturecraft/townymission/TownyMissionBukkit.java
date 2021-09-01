@@ -189,7 +189,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             public void run() {
                 new UpdateChecker(instanceHolder.getData(), 94472).getVersion(version -> {
                     version = version.substring(1);
-                    if (!UpdateChecker.isGreater(version, getDescription().getVersion())) {
+                    if (UpdateChecker.isGreater(version, getDescription().getVersion())) {
                         String str = "&bThere is a an update available! Please visit Spigot resource page to download! Current version: " + "&f" + instanceHolder.getData().getDescription().getVersion() + ", &bLatest version: " + "&f" + version;
                         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor(str));
                     } else {
@@ -355,11 +355,12 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             int prevIdx = 0;
             int aftIdx = 0;
             List<Integer> versionList = new ArrayList<>();
-            while ((aftIdx= version.indexOf(".", prevIdx)) != -1) {
+            while ((aftIdx = version.indexOf(".", prevIdx)) != -1) {
                 int temp = Integer.parseInt(version.substring(prevIdx, aftIdx));
                 versionList.add(temp);
                 prevIdx = aftIdx + 1;
             }
+            versionList.add(Integer.parseInt(version.substring(prevIdx)));
 
             if (versionList.get(1) >= 97 && (versionList.get(2) >= 1 || versionList.get(2) == 0 && versionList.get(3) >= 1)) {
                 // This means TownyCommandAddonAPI exists

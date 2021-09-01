@@ -181,7 +181,7 @@
         <dependency>
             <groupId>world.naturecraft</groupId>
             <artifactId>NatureLib</artifactId>
-            <version>0.0.21</version>
+            <version>0.0.22</version>
         </dependency>
 
         <dependency>
