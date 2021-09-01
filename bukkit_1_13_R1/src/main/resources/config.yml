@@ -83,6 +83,8 @@ mission:
         UltimateVotes: true
     mob:
       enable: true
+      hooks:
+        MythicMobs: true
     expansion:
       enable: true
     resource:

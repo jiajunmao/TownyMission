@@ -22,4 +22,17 @@ public class Util extends world.naturecraft.naturelib.utils.Util {
 
         return null;
     }
+
+    public static String mmDispalyName(String internalName) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : internalName.toCharArray()) {
+            if (c <= 'Z' && sb.length() != 0) {
+                sb.append(" ");
+            }
+
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
 }

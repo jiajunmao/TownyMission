@@ -1,6 +1,5 @@
 package world.naturecraft.townymission;
 
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -40,11 +39,11 @@ import world.naturecraft.townymission.listeners.PMCListener;
 import world.naturecraft.townymission.listeners.TownFallListener;
 import world.naturecraft.townymission.listeners.UpdateRemindListener;
 import world.naturecraft.townymission.listeners.mission.ExpansionListener;
-import world.naturecraft.townymission.listeners.mission.MobListener;
-import world.naturecraft.townymission.listeners.mission.VoteListener;
+import world.naturecraft.townymission.listeners.mission.mob.MobListener;
+import world.naturecraft.townymission.listeners.mission.mob.MythicMobListener;
+import world.naturecraft.townymission.listeners.mission.vote.UltimateVoteListener;
 import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
 import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
-import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.PlaceholderBukkitService;
 import world.naturecraft.townymission.services.StorageService;
 import world.naturecraft.townymission.services.TimerService;
@@ -364,7 +363,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
             if (versionList.get(1) >= 97 && (versionList.get(2) >= 1 || versionList.get(2) == 0 && versionList.get(3) >= 1)) {
                 // This means TownyCommandAddonAPI exists
-                System.out.println("Detecting version above 0.97.0.1, registering custom sub command");
+                getServer().getConsoleSender().sendMessage("Detecting version above 0.97.0.1, registering custom sub command");
                 TownyUtil_97_1.registerSubCommand(TownyCommandAddonAPI.CommandType.TOWN, "missions", listCommand);
             }
             rootCmd.registerCommand("list", listCommand);
@@ -436,6 +435,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         if (isMissionEnabled(MissionType.MOB)) {
             getServer().getConsoleSender().sendMessage("Hooked into Vanilla Mob Events");
             getServer().getPluginManager().registerEvents(new MobListener(this), this);
+            getServer().getPluginManager().registerEvents(new MythicMobListener(this), this);
         }
 
         if (isMissionEnabled(MissionType.MONEY)) {
@@ -451,7 +451,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
         if (isMissionEnabled(MissionType.VOTE)) {
             getServer().getConsoleSender().sendMessage("Hooked into UltimateVotes Vote Events");
-            getServer().getPluginManager().registerEvents(new VoteListener(this), this);
+            getServer().getPluginManager().registerEvents(new UltimateVoteListener(this), this);
         }
     }
 

@@ -4,6 +4,7 @@
 
 package world.naturecraft.townymission.components.json.mission;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +24,8 @@ import java.util.Map;
  */
 public class MobMissionJson extends MissionJson {
 
+    @JsonProperty("isMm")
+    private final boolean isMm;
     @JsonProperty("entityType")
     private final String entityType;
 
@@ -36,9 +39,10 @@ public class MobMissionJson extends MissionJson {
      * @param reward        the reward
      * @param contributions the contributions
      */
-    @ConstructorProperties({"entityType", "amount", "completed", "hrAllowed", "reward", "contributions"})
-    public MobMissionJson(String entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
+    @ConstructorProperties({"isMm", "entityType", "amount", "completed", "hrAllowed", "reward", "contributions"})
+    public MobMissionJson(boolean isMm, String entityType, int amount, int completed, int hrAllowed, int reward, Map<String, Integer> contributions) {
         super(MissionType.MOB, amount, completed, hrAllowed, reward, contributions);
+        this.isMm = isMm;
         this.entityType = entityType;
     }
 
@@ -71,7 +75,7 @@ public class MobMissionJson extends MissionJson {
     @Override
     @JsonIgnore
     public String getDisplayLine() {
-        return "&f- &eType: &f" + getEntityType() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
+        return "&f- &eisMm: &f" + isMm + " &eType: &f" + getEntityType() + "&7; &eAmount: &f" + getAmount() + "&7; &eReward: &f" + getReward();
     }
 
     /**
@@ -88,7 +92,10 @@ public class MobMissionJson extends MissionJson {
             if (s.contains("Status") || s.contains("Completed"))
                 continue;
 
-            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%type%", Util.capitalizeFirst(entityType))));
+            if (isMm)
+                finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%type%", Util.mmDispalyName(entityType))));
+            else
+                finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%type%", Util.capitalizeFirst(entityType))));
         }
 
         return finalLoreList;
@@ -103,9 +110,17 @@ public class MobMissionJson extends MissionJson {
             if (s.contains("Status"))
                 continue;
 
-            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%type%", Util.capitalizeFirst(entityType))));
+            if (isMm)
+                finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%type%", Util.mmDispalyName(entityType))));
+            else
+                finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%type%", Util.capitalizeFirst(entityType))));
         }
 
         return finalLoreList;
+    }
+
+    @JsonGetter("isMm")
+    public boolean isMm() {
+        return isMm;
     }
 }

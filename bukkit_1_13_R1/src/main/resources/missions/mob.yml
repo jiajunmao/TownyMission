@@ -1,4 +1,6 @@
 1:
+  # Whether this mob is MythicMobs
+  isMm: false
   # The type of mob to kill
   type: ZOMBIE
   # The amount of the mob to kill
@@ -8,7 +10,13 @@
   # The time allowed in hours before this mission time out
   timeAllowed: 2
 2:
-  type: VINDICATOR
+  # Whether this mob is MythicMobs
+  isMm: true
+  # The internal name of that mob (i.e. the name in the YAML file)
+  type: SkeletalKnight
+  # The amount of the mob to kill
   amount: 50
+  # The sprint points the town get after completing this mission
   reward: 800
+  # The time allowed in hours before this mission time out
   timeAllowed: 4
