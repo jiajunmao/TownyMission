@@ -4,6 +4,8 @@
 
 package world.naturecraft.townymission.config;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.mobs.MythicMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -77,10 +79,16 @@ public class MissionConfigValidator {
                         path = key + ".type";
                         String mobType = missionConfig.getString(path);
 
-                        try {
-                            EntityType.valueOf(mobType);
-                        } catch (IllegalArgumentException e) {
-                            throwException(missionConfig, key, "MobType " + mobType + " for entry " + key + " is invalid", e);
+                        if (missionConfig.getBoolean(key + ".isMm")) {
+                            if (!MythicMobs.inst().getMobManager().getMobNames().contains(mobType)) {
+                                throwException(missionConfig, key, "MobType " + mobType + " for entry " + key + " is invalid");
+                            }
+                        } else {
+                            try {
+                                EntityType.valueOf(mobType);
+                            } catch (IllegalArgumentException e) {
+                                throwException(missionConfig, key, "MobType " + mobType + " for entry " + key + " is invalid", e);
+                            }
                         }
                         break;
                 }

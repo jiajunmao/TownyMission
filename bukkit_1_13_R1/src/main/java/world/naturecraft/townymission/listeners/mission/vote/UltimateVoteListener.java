@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.listeners.mission;
+package world.naturecraft.townymission.listeners.mission.vote;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -6,9 +6,10 @@ import org.bukkit.event.EventPriority;
 import teozfrank.ultimatevotes.events.VoteRewardEvent;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.components.enums.MissionType;
+import world.naturecraft.townymission.listeners.mission.MissionListener;
 import world.naturecraft.townymission.utils.BukkitChecker;
 
-public class VoteListener extends MissionListener {
+public class UltimateVoteListener extends MissionListener {
 
 
     /**
@@ -16,7 +17,7 @@ public class VoteListener extends MissionListener {
      *
      * @param instance the instance
      */
-    public VoteListener(TownyMissionBukkit instance) {
+    public UltimateVoteListener(TownyMissionBukkit instance) {
         super(instance);
     }
 
