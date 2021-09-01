@@ -38,8 +38,9 @@ public class MissionConfigParser {
                     list.add(new ExpansionMissionJson(world, amount, 0, hrAllowed, reward, null));
                     break;
                 case MOB:
+                    boolean isMm = fileConfiguration.getBoolean(key + ".isMm");
                     String mobType = fileConfiguration.getString(key + ".type");
-                    MobMissionJson mobMissionJson = new MobMissionJson((mobType), amount, 0, hrAllowed, reward, null);
+                    MobMissionJson mobMissionJson = new MobMissionJson(isMm, mobType, amount, 0, hrAllowed, reward, null);
                     list.add(mobMissionJson);
                     break;
                 case MONEY:

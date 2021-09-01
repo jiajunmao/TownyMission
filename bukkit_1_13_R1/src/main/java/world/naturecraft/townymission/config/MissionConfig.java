@@ -35,14 +35,14 @@ public class MissionConfig {
     }
 
     private void createMissionConfig() {
+        TownyMissionBukkit instance = TownyMissionInstance.getInstance();
         for (MissionType missionType : MissionType.values()) {
-            TownyMissionBukkit instance = TownyMissionInstance.getInstance();
+            String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
+            String filePath = "missions" + File.separator + fileName;
+
+            NatureConfig tempConfig = new BukkitConfig(filePath);
+            tempConfig.updateConfig();
             if (instance.isMissionEnabled(missionType)) {
-                String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
-                String filePath = "missions" + File.separator + fileName;
-
-                NatureConfig tempConfig = new BukkitConfig(filePath);
-
                 MissionConfigValidator.checkMissionConfig(tempConfig, missionType);
                 customConfigs.put(missionType, tempConfig);
             }
