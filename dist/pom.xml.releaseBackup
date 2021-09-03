@@ -72,7 +72,7 @@
         </dependency>
         <dependency>
             <groupId>world.naturecraft</groupId>
-            <artifactId>TownyMission-bukkit</artifactId>
+            <artifactId>TownyMission-bukkit_1_13_R1</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
