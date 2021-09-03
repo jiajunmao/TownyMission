@@ -75,7 +75,7 @@ public class MoneyMissionJson extends MissionJson {
             if (s.contains("Status") || s.contains("Completed"))
                 continue;
 
-            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s)));
+            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%returnable%", String.valueOf(returnable))));
         }
 
         return finalLoreList;
@@ -90,7 +90,7 @@ public class MoneyMissionJson extends MissionJson {
             if (s.contains("Status"))
                 continue;
 
-            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s)));
+            finalLoreList.add(ChatService.getInstance().translateColor("&r" + processLore(s).replace("%returnable%", String.valueOf(returnable))));
         }
 
         return finalLoreList;
