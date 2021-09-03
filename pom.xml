@@ -11,7 +11,7 @@
     <modules>
         <module>core</module>
         <module>bungee</module>
-        <module>bukkit_1_13_R1</module>
+        <module>bukkit</module>
         <module>dist</module>
     </modules>
 

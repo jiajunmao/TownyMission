@@ -40,6 +40,8 @@ public class MissionConfig {
             String fileName = missionType.toString().toLowerCase(Locale.ROOT) + ".yml";
             String filePath = "missions" + File.separator + fileName;
 
+            System.out.println("Creating config " + filePath);
+
             NatureConfig tempConfig = new BukkitConfig(filePath);
             tempConfig.updateConfig();
             if (instance.isMissionEnabled(missionType)) {
