@@ -226,7 +226,6 @@ public class MissionManageGui extends TownyMissionGui {
             int missionIdx = slotToNumMission(slot);
             // This is the actual logic of storing into db
             if (MissionService.getInstance().startMission(player.getUniqueId(), missionIdx)) {
-
                 MissionEntry entry = MissionDao.getInstance().getEntries(missionEntry -> missionEntry.getNumMission() == missionIdx
                         && missionEntry.getTownUUID().equals(TownyUtil.residentOf(player).getUUID())).get(0);
                 List<MissionEntry> startedMissions = MissionDao.getInstance().getStartedMissions(TownyUtil.residentOf(player).getUUID());

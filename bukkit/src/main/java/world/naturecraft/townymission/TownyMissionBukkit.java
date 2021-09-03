@@ -143,17 +143,19 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
          * Migrate section
          */
         // If config version is one (automatically updated), migrate JsonList to JsonMap, and increment version number
-        String ver = statsConfig.getString("config.version");
-        if (ver == null || ver.equals("1")) {
-            getInstanceLogger().warning("You are currently on version 1, migrating to version 2");
-            List<CooldownEntry> cooldownEntries = CooldownDao.getInstance().getEntries();
-            for (CooldownEntry entry : cooldownEntries) {
-                entry.getCooldownJsonList().migrateListToMap();
-                CooldownDao.getInstance().update(entry);
-            }
+        if (!isBungeecordEnabled || isMainServer) {
+            String ver = statsConfig.getString("config.version");
+            if (ver == null || ver.equals("1")) {
+                getInstanceLogger().warning("You are currently on version 1, migrating to version 2");
+                List<CooldownEntry> cooldownEntries = CooldownDao.getInstance().getEntries();
+                for (CooldownEntry entry : cooldownEntries) {
+                    entry.getCooldownJsonList().migrateListToMap();
+                    CooldownDao.getInstance().update(entry);
+                }
 
-            statsConfig.set("config.version", 2);
-            statsConfig.save();
+                statsConfig.set("config.version", 2);
+                statsConfig.save();
+            }
         }
 
         /**
