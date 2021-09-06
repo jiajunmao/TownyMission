@@ -45,7 +45,6 @@ public class TownyMissionAdminInfo extends TownyMissionAdminCommand {
      */
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tmsa info <town>
-        String townName = args[1];
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
                 .hasPermission("townymission.admin")
                 .customCheck(() -> {
@@ -56,6 +55,7 @@ public class TownyMissionAdminInfo extends TownyMissionAdminCommand {
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[1];
                     if (TownyUtil.getTown(townName) == null) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onTownNameInvalid"));
                         return false;
