@@ -4,7 +4,6 @@
 
 package world.naturecraft.townymission.services;
 
-import org.bukkit.Bukkit;
 import world.naturecraft.naturelib.InstanceType;
 import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.townymission.components.entity.*;
@@ -16,6 +15,7 @@ import world.naturecraft.townymission.components.json.mission.ResourceMissionJso
 import world.naturecraft.townymission.components.json.reward.MoneyRewardJson;
 import world.naturecraft.townymission.components.json.reward.ResourceRewardJson;
 import world.naturecraft.townymission.data.dao.*;
+import world.naturecraft.townymission.services.core.CooldownService;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +36,6 @@ public abstract class MissionService extends TownyMissionService {
         if (singleton == null) {
             if (InstanceType.isBukkit()) {
                 String packageName = MissionService.class.getPackage().getName();
-                String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {
                     singleton = (MissionService) Class.forName(packageName + "." + "MissionBukkitService").newInstance();
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {

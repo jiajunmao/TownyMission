@@ -30,8 +30,8 @@ import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSpr
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.enums.MissionType;
-import world.naturecraft.townymission.config.RewardConfigValidator;
 import world.naturecraft.townymission.config.MissionConfig;
+import world.naturecraft.townymission.config.RewardConfigValidator;
 import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.gui.MissionManageGui;
 import world.naturecraft.townymission.listeners.DoMissionListener;
@@ -41,14 +41,15 @@ import world.naturecraft.townymission.listeners.UpdateRemindListener;
 import world.naturecraft.townymission.listeners.mission.ExpansionListener;
 import world.naturecraft.townymission.listeners.mission.mob.MobListener;
 import world.naturecraft.townymission.listeners.mission.mob.MythicMobListener;
-import world.naturecraft.townymission.listeners.mission.vote.UltimateVoteListener;
 import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
 import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
+import world.naturecraft.townymission.listeners.mission.vote.UltimateVoteListener;
 import world.naturecraft.townymission.services.PlaceholderBukkitService;
-import world.naturecraft.townymission.services.StorageService;
-import world.naturecraft.townymission.services.TimerService;
+import world.naturecraft.townymission.services.core.StorageService;
+import world.naturecraft.townymission.services.core.TimerService;
 import world.naturecraft.townymission.tasks.SendCachedMissionTask;
 import world.naturecraft.townymission.utils.TownyUtil_97_1;
+import world.naturecraft.townymission.utils.Util;
 
 import java.io.File;
 import java.io.InputStream;
@@ -100,6 +101,14 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         for (LangType lang : LangType.values()) {
             String targetPath = "lang/" + lang.name() + ".yml";
             File targetFile = new File(getInstanceDataFolder(), targetPath);
+            if (!targetFile.exists()) {
+                targetFile.getParentFile().getParentFile().mkdirs();
+                targetFile.getParentFile().mkdirs();
+                saveInstanceResource(targetPath, false);
+            }
+
+            targetPath = "gui/" + lang.name() + ".yml";
+            targetFile = new File(getInstanceDataFolder(), targetPath);
             if (!targetFile.exists()) {
                 targetFile.getParentFile().getParentFile().mkdirs();
                 targetFile.getParentFile().mkdirs();
@@ -354,15 +363,11 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             // User commands
             TownyMissionList listCommand = new TownyMissionList(this);
             String version = Bukkit.getPluginManager().getPlugin("Towny").getDescription().getVersion();
-            int prevIdx = 0;
-            int aftIdx = 0;
-            List<Integer> versionList = new ArrayList<>();
-            while ((aftIdx = version.indexOf(".", prevIdx)) != -1) {
-                int temp = Integer.parseInt(version.substring(prevIdx, aftIdx));
-                versionList.add(temp);
-                prevIdx = aftIdx + 1;
+            if (version.contains(" for")) {
+                version = version.substring(0, version.indexOf(" for"));
             }
-            versionList.add(Integer.parseInt(version.substring(prevIdx)));
+
+            List<Integer> versionList = Util.versionParser(version);
 
             if (versionList.get(1) >= 97 && (versionList.get(2) >= 1 || versionList.get(2) == 0 && versionList.get(3) >= 1)) {
                 // This means TownyCommandAddonAPI exists

@@ -2,11 +2,12 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.services;
+package world.naturecraft.townymission.services.core;
 
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.json.cooldown.CooldownJson;
 import world.naturecraft.townymission.data.dao.CooldownDao;
+import world.naturecraft.townymission.services.TownyMissionService;
 
 import java.util.*;
 

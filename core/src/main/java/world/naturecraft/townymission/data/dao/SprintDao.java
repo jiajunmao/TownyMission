@@ -9,7 +9,7 @@ import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.storage.SprintStorage;
-import world.naturecraft.townymission.services.StorageService;
+import world.naturecraft.townymission.services.core.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;

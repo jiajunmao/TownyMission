@@ -1,7 +1,6 @@
 package world.naturecraft.townymission.utils;
 
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
-import com.palmergames.bukkit.towny.command.TownyCommand;
 import org.bukkit.command.CommandExecutor;
 
 public class TownyUtil_97_1 {

@@ -13,7 +13,7 @@ import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.services.MissionService;
-import world.naturecraft.townymission.services.TimerService;
+import world.naturecraft.townymission.services.core.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 

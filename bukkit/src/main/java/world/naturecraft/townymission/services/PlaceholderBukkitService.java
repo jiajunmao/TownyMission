@@ -9,22 +9,27 @@ import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SprintDao;
+import world.naturecraft.townymission.services.core.RankingService;
+import world.naturecraft.townymission.services.core.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
 public class PlaceholderBukkitService extends PlaceholderExpansion {
     @Override
-    public @NotNull String getIdentifier() {
+    public @NotNull
+    String getIdentifier() {
         return "townymission";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NotNull
+    String getAuthor() {
         return "Barbadosian";
     }
 
     @Override
-    public @NotNull String getVersion() {
+    public @NotNull
+    String getVersion() {
         return "1.0.0";
     }
 

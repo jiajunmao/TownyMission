@@ -2,6 +2,7 @@ package world.naturecraft.townymission.components.entity;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -12,16 +13,20 @@ import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.json.mission.MissionJson;
+import world.naturecraft.townymission.components.json.mission.MobMissionJson;
 import world.naturecraft.townymission.components.json.mission.ResourceMissionJson;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.ItemService;
+import world.naturecraft.townymission.services.TownyMissionService;
 import world.naturecraft.townymission.utils.MissionJsonFactory;
+import world.naturecraft.townymission.utils.Util;
 
 import java.util.*;
 
 /**
  * The type Task entry.
  */
-public class MissionEntry extends DataEntity implements MissionEntryWrapper {
+public class MissionEntry extends DataEntity {
 
     private final MissionType missionType;
     private final long addedTime;
@@ -189,16 +194,22 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
     }
 
     private Material getGuiItemMaterial() {
+        TownyMissionInstance instance = TownyMissionInstance.getInstance();
         switch (missionType) {
             case RESOURCE:
                 ResourceMissionJson resourceMissionJson = (ResourceMissionJson) missionJson;
                 if (resourceMissionJson.isMi()) {
-                    return XMaterial.GLOWSTONE_DUST.parseMaterial();
+                    return XMaterial.valueOf(instance.getGuiLangEntry("mission_manage.missions.resource.materials.MMOItems.material")).parseMaterial();
                 } else {
-                    return XMaterial.WHEAT.parseMaterial();
+                    return XMaterial.valueOf(instance.getGuiLangEntry("mission_manage.missions.resource.materials.vanilla.material")).parseMaterial();
                 }
             case MOB:
-                return XMaterial.NETHERITE_SWORD.parseMaterial();
+                MobMissionJson mobMissionJson = (MobMissionJson) missionJson;
+                if (mobMissionJson.isMm()) {
+                    return XMaterial.valueOf(instance.getGuiLangEntry("mission_manage.missions.mob.materials.MythicMobs.material")).parseMaterial();
+                } else {
+                    return XMaterial.valueOf(instance.getGuiLangEntry("mission_manage.missions.mob.materials.vanilla.material")).parseMaterial();
+                }
             case EXPANSION:
                 return XMaterial.DIRT_PATH.parseMaterial();
             case VOTE:
@@ -207,6 +218,34 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
                 return XMaterial.PAPER.parseMaterial();
             default:
                 return null;
+        }
+    }
+
+    public int getCustomModelData() {
+        TownyMissionInstance instance = TownyMissionInstance.getInstance();
+        switch (missionType) {
+            case RESOURCE:
+                ResourceMissionJson resourceMissionJson = (ResourceMissionJson) missionJson;
+                if (resourceMissionJson.isMi()) {
+                    return Integer.parseInt(instance.getGuiLangEntry("mission_manage.missions.resource.materials.MMOItems.CustomModelData"));
+                } else {
+                    return Integer.parseInt(instance.getGuiLangEntry("mission_manage.missions.resource.materials.vanilla.CustomModelData"));
+                }
+            case MOB:
+                MobMissionJson mobMissionJson = (MobMissionJson) missionJson;
+                if (mobMissionJson.isMm()) {
+                    return Integer.parseInt(instance.getGuiLangEntry("mission_manage.missions.mob.materials.MythicMobs.CustomModelData"));
+                } else {
+                    return Integer.parseInt(instance.getGuiLangEntry("mission_manage.missions.mob.materials.vanilla.CustomModelData"));
+                }
+            case EXPANSION:
+                return Integer.parseInt(instance.getGuiLangEntry("mission_manage.missions.expansion.CustomModelData"));
+            case VOTE:
+                return Integer.parseInt(instance.getGuiLangEntry("mission_manage.missions.vote.CustomModelData"));
+            case MONEY:
+                return Integer.parseInt(instance.getGuiLangEntry("mission_manage.missions.money.CustomModelData"));
+            default:
+                return 1;
         }
     }
 
@@ -251,6 +290,9 @@ public class MissionEntry extends DataEntity implements MissionEntryWrapper {
         //loreList.add("&r&eIndex&f: " + numMission);
 
         meta.setLore(loreList);
+        if (Util.currBukkitVer().get(1) >= 14) {
+            ItemService.getInstance().setCustomModelData(meta, getCustomModelData());
+        }
 
         stack.setItemMeta(meta);
         return stack;

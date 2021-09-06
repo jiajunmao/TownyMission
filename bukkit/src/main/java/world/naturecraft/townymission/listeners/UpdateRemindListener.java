@@ -37,6 +37,6 @@ public class UpdateRemindListener extends TownyMissionListener {
             }
         };
 
-        r.runTaskLaterAsynchronously(instance, 3*20);
+        r.runTaskLaterAsynchronously(instance, 3 * 20);
     }
 }

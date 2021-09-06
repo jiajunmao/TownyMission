@@ -1,4 +1,4 @@
-package world.naturecraft.townymission.services;
+package world.naturecraft.townymission.services.core;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

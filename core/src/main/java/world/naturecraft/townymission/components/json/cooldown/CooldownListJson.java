@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import world.naturecraft.naturelib.exceptions.DataProcessException;
 
-import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +53,10 @@ public class CooldownListJson {
         return cooldownMap;
     }
 
+    @JsonSetter("cooldownMap")
+    public void setCooldownMap(Map<Integer, CooldownJson> cooldownMap) {
+        this.cooldownMap = cooldownMap;
+    }
 
     @JsonIgnore
     public void addCooldown(int numMission, CooldownJson cooldownJson) {
@@ -82,11 +85,6 @@ public class CooldownListJson {
     @JsonSetter("cooldownJsonList")
     public void setCooldownJsonList(List<CooldownJson> cooldownJsonList) {
         this.cooldownJsonList = cooldownJsonList;
-    }
-
-    @JsonSetter("cooldownMap")
-    public void setCooldownMap(Map<Integer, CooldownJson> cooldownMap) {
-        this.cooldownMap = cooldownMap;
     }
 
     public void migrateListToMap() {

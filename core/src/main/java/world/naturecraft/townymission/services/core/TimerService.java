@@ -2,18 +2,30 @@
  * Copyright (c) 2021 NatureCraft. All Rights Reserved. You may not distribute, decompile, and modify the plugin consent without explicit written consent from NatureCraft devs.
  */
 
-package world.naturecraft.townymission.services;
+package world.naturecraft.townymission.services.core;
 
 // This service is mainly here to check the progress of sprint and season
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import world.naturecraft.townymission.components.entity.SeasonEntry;
+import world.naturecraft.townymission.components.entity.SeasonHistoryEntry;
+import world.naturecraft.townymission.components.entity.SprintEntry;
+import world.naturecraft.townymission.components.entity.SprintHistoryEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.components.enums.RewardMethod;
-import world.naturecraft.townymission.data.dao.CooldownDao;
-import world.naturecraft.townymission.data.dao.SeasonHistoryDao;
-import world.naturecraft.townymission.data.dao.SprintHistoryDao;
+import world.naturecraft.townymission.components.json.rank.RankJson;
+import world.naturecraft.townymission.components.json.rank.TownRankJson;
+import world.naturecraft.townymission.data.dao.*;
+import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.MissionService;
+import world.naturecraft.townymission.services.TaskService;
+import world.naturecraft.townymission.services.TownyMissionService;
+import world.naturecraft.townymission.utils.RankUtil;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -105,7 +117,7 @@ public class TimerService extends TownyMissionService {
                     RewardService.getInstance().rewardAllTowns(RankType.SPRINT, rewardMethod);
 
                     // Clear SprintStorage, move ranking to SprintHistoryStorage
-                    SprintService.getInstance().sprintEndCleanUp();
+                    sprintEndCleanUp();
                 }
             }
         };
@@ -167,13 +179,66 @@ public class TimerService extends TownyMissionService {
                     RewardService.getInstance().rewardAllTowns(RankType.SEASON, rewardMethod);
 
                     // Clean out SeasonStorage, move to SeasonHistoryStorage
-                    SeasonService.getInstance().seasonEndCleanUp();
+                    seasonEndCleanUp();
                 }
             }
         };
 
         TaskService.getInstance().runTimerTaskAsync(r, 0, 20 * 60);
     }
+
+    /**
+     * Season end clean up.
+     */
+    public void seasonEndCleanUp() {
+        List<TownRankJson> townRankJsons = (List<TownRankJson>) RankUtil.sort(SeasonDao.getInstance().getEntriesAsJson());
+        RankJson rankJson = new RankJson(RankType.SEASON, townRankJsons);
+
+        try {
+            SeasonHistoryEntry seasonHistoryEntry =
+                    new SeasonHistoryEntry(
+                            UUID.randomUUID(),
+                            instance.getStatsConfig().getInt("season.current"),
+                            TimerService.getInstance().getStartTime(RankType.SEASON),
+                            rankJson.toJson()
+                    );
+
+            SeasonHistoryDao.getInstance().add(seasonHistoryEntry);
+        } catch (JsonProcessingException jsonProcessingException) {
+            jsonProcessingException.printStackTrace();
+        }
+
+        for (SeasonEntry seasonEntry : SeasonDao.getInstance().getEntries()) {
+            SeasonDao.getInstance().remove(seasonEntry);
+        }
+    }
+
+    /**
+     * Sprint end clean up.
+     */
+    public void sprintEndCleanUp() {
+        List<TownRankJson> townRankJsons = (List<TownRankJson>) RankUtil.sort(SprintDao.getInstance().getEntriesAsJson());
+        RankJson rankJson = new RankJson(RankType.SPRINT, townRankJsons);
+
+        try {
+            SprintHistoryEntry sprintHistoryEntry =
+                    new SprintHistoryEntry(
+                            UUID.randomUUID(),
+                            instance.getStatsConfig().getInt("season.current"),
+                            instance.getStatsConfig().getInt("sprint.current"),
+                            TimerService.getInstance().getStartTime(RankType.SPRINT),
+                            rankJson.toJson());
+
+            SprintHistoryDao.getInstance().add(sprintHistoryEntry);
+        } catch (JsonProcessingException exception) {
+            exception.printStackTrace();
+        }
+
+        for (SprintEntry sprintEntry : SprintDao.getInstance().getEntries()) {
+            SprintDao.getInstance().remove(sprintEntry);
+        }
+    }
+
 
     /**
      * Can start boolean.
