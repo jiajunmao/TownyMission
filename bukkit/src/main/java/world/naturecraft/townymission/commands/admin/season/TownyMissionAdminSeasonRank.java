@@ -41,7 +41,7 @@ public class TownyMissionAdminSeasonRank extends TownyMissionAdminCommand {
         // /tmsa season rank <town>
         String townName = args[2];
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission("townymission.admin")
+                .hasPermission(new String[]{"townymission.admin.season.rank", "townymission.admin"})
                 .customCheck(() -> {
                     if (!args[0].equalsIgnoreCase("season") || !args[1].equalsIgnoreCase("rank")) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));

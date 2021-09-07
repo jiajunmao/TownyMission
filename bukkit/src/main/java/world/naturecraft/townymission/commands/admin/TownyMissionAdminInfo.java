@@ -46,7 +46,7 @@ public class TownyMissionAdminInfo extends TownyMissionAdminCommand {
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tmsa info <town>
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission("townymission.admin")
+                .hasPermission(new String[]{"townymission.admin.info", "townymission.admin"})
                 .customCheck(() -> {
                     if (args.length != 2 || !args[0].equalsIgnoreCase("info")) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));

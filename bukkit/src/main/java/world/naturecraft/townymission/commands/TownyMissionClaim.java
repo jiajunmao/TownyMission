@@ -45,7 +45,7 @@ public class TownyMissionClaim extends TownyMissionCommand implements TabExecuto
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
                 .hasTown()
-                .hasPermission("townymission.player")
+                .hasPermission(new String[]{"townymission.player.claim", "townymission.player"})
                 .customCheck(() -> {
                             if (args.length == 1
                                     || (args.length == 2

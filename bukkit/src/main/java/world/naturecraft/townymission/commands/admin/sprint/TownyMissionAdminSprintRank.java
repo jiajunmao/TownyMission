@@ -41,7 +41,7 @@ public class TownyMissionAdminSprintRank extends TownyMissionAdminCommand {
         // /tmsa sprint rank <town>
         String townName = args[2];
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission("townymission.admin")
+                .hasPermission(new String[]{"townymission.admin.sprint.rank", "townymission.admin"})
                 .customCheck(() -> {
                     if (!args[0].equalsIgnoreCase("sprint") || !args[1].equalsIgnoreCase("rank")) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));

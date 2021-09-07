@@ -42,7 +42,7 @@ public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
         // /tmsa mission abort <town>
         String townName = args[2];
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission("townymission.admin")
+                .hasPermission(new String[]{"townymission.admin.mission.abort", "townymission.admin"})
                 .customCheck(() -> {
                     if (args.length != 3 || !args[0].equalsIgnoreCase("mission") || !args[1].equalsIgnoreCase("abort")) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));

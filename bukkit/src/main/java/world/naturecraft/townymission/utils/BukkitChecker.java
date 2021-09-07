@@ -20,7 +20,7 @@ import java.util.Locale;
  */
 public class BukkitChecker {
 
-    private final List<String> permissions;
+    private final List<List<String>> permissions;
     private final List<BooleanChecker> customChecks;
     private final MissionDao missionDao;
     private final TownyMissionBukkit instance;
@@ -122,7 +122,18 @@ public class BukkitChecker {
      * @return the sanity checker
      */
     public BukkitChecker hasPermission(String permission) {
+        List<String> permissions = new ArrayList<>();
         permissions.add(permission);
+        this.permissions.add(permissions);
+        return this;
+    }
+
+    public BukkitChecker hasPermission(String[] permissions) {
+        List<String> tempPerm = new ArrayList<>();
+        for (String s : permissions) {
+            tempPerm.add(s);
+        }
+        this.permissions.add(tempPerm);
         return this;
     }
 
@@ -199,15 +210,25 @@ public class BukkitChecker {
         }
 
         if (permissions.size() != 0) {
-            for (String s : permissions) {
-                if (Bukkit.getPlayer(player.getUniqueId()).isOnline()) {
-                    Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
-                    if (!onlinePlayer.hasPermission(s)) {
-                        if (!isSilent)
-                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoPermission").replace("%permission%", s));
-                        return false;
+            for (List<String> strList : permissions) {
+                // Perm in this list should be ORing
+                if (!Bukkit.getPlayer(player.getUniqueId()).isOnline()) return false;
+
+                Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
+                boolean hasPerm = false;
+                StringBuilder permStr = new StringBuilder();
+                for (int i = 0; i < strList.size(); i++) {
+                    String s = strList.get(i);
+                    permStr.append(s);
+                    if (i != strList.size() - 1)
+                        permStr.append(" OR ");
+                    hasPerm = hasPerm || onlinePlayer.hasPermission(s);
+                }
+
+                if (!hasPerm) {
+                    if (!isSilent) {
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.sanityChecker.onNoPermission").replace("%permission%", permStr));
                     }
-                } else {
                     return false;
                 }
             }

@@ -43,8 +43,7 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand implements
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
-                .customCheck(() -> new BukkitChecker(instance).target(player).hasPermission("tms.admin").check()
-                        || new BukkitChecker(instance).target(player).hasPermission("tms.commands.reload").check())
+                .hasPermission(new String[]{"townymission.admin.reload", "townymission.admin"})
                 .customCheck(() -> {
                     // /tmsa reload
                     if (args.length == 1 && args[0].equalsIgnoreCase("reload"))

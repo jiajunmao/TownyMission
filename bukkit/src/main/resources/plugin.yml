@@ -22,25 +22,53 @@ permissions:
   townymission.admin:
     description: Default admin commands
     default: op
-  townymission.premium:
-    description: premium reward track
+  townymission.player.claim:
+    description: Can use claim
     default: op
-  townymission.boost.:
-    description: boost permission
-  townymission.commands.addpoint:
-    description: Add point
+  townymission.player.deposit:
+    description: Can use deposit
     default: op
-  townymission.commands.rmpoint:
-    description: Remove point
+  townymission.player.info:
+    description: Can use info
     default: op
-  townymission.commands.setpoint:
-    description: Set point
+  townymission.player.list:
+    description: Can use list
     default: op
-  townymission.commands.checkpoint:
-    description: Check the point
+  townymission.player.rank:
+    description: Can use rank
     default: op
-  townymission.commands.listall:
-    description: Check the point
+  townymission.player.reward:
+    description: Can use reward
+    default: op
+  townymission.admin.mission.abort:
+    description: Admin can abort
+    default: op
+  townymission.admin.mission.list:
+    description: Admin can list
+    default: op
+  townymission.admin.season.pause:
+    description: Admin can pause season
+    default: op
+  townymission.admin.season.point:
+    description: Admin can manipuate season point
+    default: op
+  townymission.admin.season.rank:
+    description: Admin can check season rank
+    default: op
+  townymission.admin.season.start:
+    description: Admin can start season
+    default: op
+  townymission.admin.sprint.point:
+    description: Admin can manipuate sprint point
+    default: op
+  townymission.admin.sprint.rank:
+    description: Admin can check sprint rank
+    default: op
+  townymission.admin.info:
+    description: Admin can check town info
+    default: op
+  townymission.admin.reload:
+    description: Admin can reload config
     default: op
 
 commands:

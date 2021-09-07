@@ -40,10 +40,8 @@ public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
+                .hasPermission(new String[]{"townymission.admin.mission.list", "townymission.admin"})
                 .customCheck(() -> {
-                    return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
-                            || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.listall").check();
-                }).customCheck(() -> {
                     // /tmsa mission list type
                     if (args.length == 3) {
                         for (MissionType missionType : MissionType.values()) {
@@ -53,7 +51,7 @@ public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
                         }
                     }
 
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError", true));
                     return false;
                 }).check();
     }
