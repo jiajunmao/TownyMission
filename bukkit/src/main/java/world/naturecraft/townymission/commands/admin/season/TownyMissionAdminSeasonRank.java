@@ -11,7 +11,7 @@ import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.services.RankingService;
+import world.naturecraft.townymission.services.core.RankingService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 

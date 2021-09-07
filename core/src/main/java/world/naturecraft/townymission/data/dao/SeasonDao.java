@@ -10,7 +10,7 @@ import world.naturecraft.townymission.components.entity.SeasonEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.components.json.rank.TownRankJson;
 import world.naturecraft.townymission.data.storage.SeasonStorage;
-import world.naturecraft.townymission.services.StorageService;
+import world.naturecraft.townymission.services.core.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,6 +3,13 @@ mission_manage:
   title: "Mission Manage"
   missions:
     mob:
+      materials:
+        vanilla:
+          material: NETHERITE_SWORD
+          CustomModelData: 1
+        MythicMobs:
+          material: NETHERITE_AXE
+          CustomModelData: 1
       title: "&6&lMob Mission"
       lores:
         - "&eStatus&f: %status%"
@@ -12,6 +19,13 @@ mission_manage:
         - "&eReward&f: %reward%"
         - "&eTime Allowed&f: %time%"
     resource:
+      materials:
+        vanilla:
+          material: WHEAT
+          CustomModelData: 1
+        MMOItems:
+          material: GLOWSTONE_DUST
+          CustomModelData: 1
       title: "&6&lResource Mission"
       lores:
         - "&eStatus&f: %status%"
@@ -22,6 +36,8 @@ mission_manage:
         - "&eReward&f: %reward%"
         - "&eTime Allowed&f: %time%"
     money:
+      material: PAPER
+      CustomModelData: 1
       title: "&6&lMoney Mission"
       lores:
         - "&eStatus&f: %status%"
@@ -31,6 +47,8 @@ mission_manage:
         - "&eReward&f: %reward%"
         - "&eTime Allowed&f: %time%"
     expansion:
+      material: DIRT_PATH
+      CustomModelData: 1
       title: "&6&lExpansion Mission"
       lores:
         - "&eStatus&f: %status%"
@@ -40,6 +58,8 @@ mission_manage:
         - "&eReward&f: %reward%"
         - "&eTime Allowed&f: %time%hr"
     vote:
+      material: TORCH
+      CustomModelData: 1
       title: "&6&lVote Mission"
       lores:
         - "&eStatus&f: %status%"

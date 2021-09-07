@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.milkbowl.vault.chat.Chat;
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.services.ChatService;

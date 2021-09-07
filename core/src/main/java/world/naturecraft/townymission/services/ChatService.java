@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.services;
 
-import org.bukkit.Bukkit;
 import world.naturecraft.naturelib.InstanceType;
 
 import java.util.UUID;
@@ -22,7 +21,6 @@ public abstract class ChatService extends TownyMissionService {
             if (InstanceType.isBukkit()) {
                 // packageName = world.naturecraft.townymission.services
                 String packageName = ChatService.class.getPackage().getName();
-                String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {
                     singleton = (ChatService) Class.forName(packageName + "." + "ChatBukkitService").newInstance();
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {

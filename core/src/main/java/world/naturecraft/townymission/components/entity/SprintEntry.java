@@ -2,7 +2,7 @@ package world.naturecraft.townymission.components.entity;
 
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.naturelib.components.DataEntity;
-import world.naturecraft.townymission.services.RankingService;
+import world.naturecraft.townymission.services.core.RankingService;
 
 import java.util.UUID;
 

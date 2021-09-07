@@ -8,7 +8,7 @@ import world.naturecraft.naturelib.database.Dao;
 import world.naturecraft.townymission.components.entity.MissionCacheEntry;
 import world.naturecraft.townymission.components.enums.DbType;
 import world.naturecraft.townymission.data.storage.MissionCacheStorage;
-import world.naturecraft.townymission.services.StorageService;
+import world.naturecraft.townymission.services.core.StorageService;
 
 /**
  * The type Task dao.

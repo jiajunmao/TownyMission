@@ -25,9 +25,9 @@ import world.naturecraft.townymission.config.MissionConfigParser;
 import world.naturecraft.townymission.data.dao.CooldownDao;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.services.CooldownService;
 import world.naturecraft.townymission.services.MissionService;
-import world.naturecraft.townymission.services.TimerService;
+import world.naturecraft.townymission.services.core.CooldownService;
+import world.naturecraft.townymission.services.core.TimerService;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
 

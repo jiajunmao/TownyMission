@@ -1,10 +1,11 @@
-package world.naturecraft.townymission.services;
+package world.naturecraft.townymission.services.core;
 
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
+import world.naturecraft.townymission.services.TownyService;
 import world.naturecraft.townymission.utils.RankUtil;
 
 import java.util.ArrayList;

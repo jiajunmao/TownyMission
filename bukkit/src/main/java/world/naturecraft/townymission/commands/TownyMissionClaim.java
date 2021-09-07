@@ -20,7 +20,7 @@ import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.ClaimEntry;
 import world.naturecraft.townymission.data.dao.ClaimDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.services.RewardService;
+import world.naturecraft.townymission.services.core.RewardService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.Util;
 

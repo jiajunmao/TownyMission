@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.services;
 
-import org.bukkit.Bukkit;
 import world.naturecraft.naturelib.InstanceType;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public abstract class TownyService {
         if (singleton == null) {
             if (InstanceType.isBukkit()) {
                 String packageName = TownyService.class.getPackage().getName();
-                String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {
                     singleton = (TownyService) Class.forName(packageName + "." + "TownyBukkitService").newInstance();
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {

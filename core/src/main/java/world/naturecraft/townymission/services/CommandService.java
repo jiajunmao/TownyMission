@@ -1,6 +1,5 @@
 package world.naturecraft.townymission.services;
 
-import org.bukkit.Bukkit;
 import world.naturecraft.naturelib.InstanceType;
 
 import java.util.UUID;
@@ -21,7 +20,6 @@ public abstract class CommandService extends TownyMissionService {
         if (singleton == null) {
             if (InstanceType.isBukkit()) {
                 String packageName = CommandService.class.getPackage().getName();
-                String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
                 try {
                     singleton = (CommandService) Class.forName(packageName + "." + "CommandBukkitService").newInstance();
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
