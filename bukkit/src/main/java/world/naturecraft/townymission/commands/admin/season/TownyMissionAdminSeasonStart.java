@@ -43,10 +43,7 @@ public class TownyMissionAdminSeasonStart extends TownyMissionAdminCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
-                .customCheck(() -> {
-                    return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
-                            || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.startSeason").check();
-                })
+                .hasPermission(new String[]{"townymission.admin.season.start", "townymission.admin"})
                 .customCheck(() -> {
                     // /tmsa season start
                     if (args.length != 2 || !args[0].equalsIgnoreCase("season") || !args[1].equalsIgnoreCase("start")) {

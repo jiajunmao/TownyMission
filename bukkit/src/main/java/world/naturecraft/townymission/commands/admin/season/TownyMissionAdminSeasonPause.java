@@ -26,10 +26,7 @@ public class TownyMissionAdminSeasonPause extends TownyMissionAdminCommand {
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
-                .customCheck(() -> {
-                    return new BukkitChecker(instance).target(player).hasPermission("townymission.admin").check()
-                            || new BukkitChecker(instance).target(player).hasPermission("townymission.commands.admin.pauseSeason").check();
-                })
+                .hasPermission(new String[]{"townymission.admin.season.pause", "townymission.admin"})
                 .customCheck(() -> {
                     if (((TownyMissionBukkit) instance).getStatsConfig().getLong("season.pausedTime") != -1) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.pauseSeason.onAlreadyPaused"));

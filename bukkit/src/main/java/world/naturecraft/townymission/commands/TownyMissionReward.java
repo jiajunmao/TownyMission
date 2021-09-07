@@ -35,7 +35,7 @@ public class TownyMissionReward extends TownyMissionCommand implements TabExecut
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player).silent(true)
-                .hasPermission("townymission.player")
+                .hasPermission(new String[]{"townymission.player.reward", "townymission.player"})
                 .customCheck(() -> {
                     // /tms reward <sprint/season>
                     if (args.length == 2) {

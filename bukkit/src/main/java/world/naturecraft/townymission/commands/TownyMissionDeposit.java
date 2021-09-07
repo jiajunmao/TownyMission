@@ -190,7 +190,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
         MissionDao missionDao = MissionDao.getInstance();
         return new BukkitChecker(instance)
                 .target(player)
-                .hasPermission("townymission.player")
+                .hasPermission(new String[]{"townymission.player.deposit", "townymission.player"})
                 .hasTown()
                 .hasStarted()
                 .isMissionType(MissionType.RESOURCE)

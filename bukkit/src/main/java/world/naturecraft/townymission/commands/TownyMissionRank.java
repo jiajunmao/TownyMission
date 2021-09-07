@@ -47,7 +47,7 @@ public class TownyMissionRank extends TownyMissionCommand implements TabExecutor
     @Override
     public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
-                .hasPermission("townymission.player")
+                .hasPermission(new String[]{"townymission.player.rank", "townymission.player"})
                 .customCheck(() -> {
                     if (args.length == 2 && (args[1].equalsIgnoreCase("sprint") || args[1].equalsIgnoreCase("season"))) {
                         return true;

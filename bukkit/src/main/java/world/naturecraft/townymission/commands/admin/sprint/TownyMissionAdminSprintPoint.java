@@ -42,7 +42,7 @@ public class TownyMissionAdminSprintPoint extends TownyMissionAdminCommand {
         // /tmsa sprint point <a/r/s> <town> <#num>
         String townName = args[3];
         BukkitChecker bukkitChecker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission("townymission.admin")
+                .hasPermission(new String[]{"townymission.admin.sprint.point", "townymission.admin"})
                 .customCheck(() -> {
                     // /tmsa sprint point <add/set/remove> <town> <num>
                     if (args.length != 5
