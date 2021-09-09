@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
@@ -37,26 +38,35 @@ public class TownyMissionAdminSprintRank extends TownyMissionAdminCommand {
      * @return the boolean
      */
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tmsa sprint rank <town>
-        String townName = args[2];
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission(new String[]{"townymission.admin.sprint.rank", "townymission.admin"})
+                .hasPermission(new String[]{"townymission.admin.sprint.rank", "townymission.admin"});
+
+
+        return checker.check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        BukkitChecker checker = new BukkitChecker(instance)
                 .customCheck(() -> {
                     if (!args[0].equalsIgnoreCase("sprint") || !args[1].equalsIgnoreCase("rank")) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[2];
                     if (TownyUtil.getTown(townName) == null) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onTownNameInvalid"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onTownNameInvalid"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[2];
                     UUID townUUID = TownyUtil.getTown(townName).getUUID();
                     SprintEntry sprintEntry = SprintDao.getInstance().get(townUUID);
                     if (sprintEntry == null) {
@@ -79,19 +89,22 @@ public class TownyMissionAdminSprintRank extends TownyMissionAdminCommand {
      * @return true if a valid command, otherwise false
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (!sanityCheck(player, args)) return false;
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!sanityCheck(sender, args)) return;
 
-            // /tmsa sprint rank <town>
-            Town town = TownyUtil.getTown(args[2]);
-            int rank = RankingService.getInstance().getRank(town.getUUID(), RankType.SPRINT);
+                // /tmsa sprint rank <town>
+                Town town = TownyUtil.getTown(args[2]);
+                int rank = RankingService.getInstance().getRank(town.getUUID(), RankType.SPRINT);
 
-            String display = "&e" + town.getName() + " &fis ranked &3" + rank + " &fin the current sprint";
-            ChatService.getInstance().sendMsg(player.getUniqueId(), display);
-        }
+                String display = "&e" + town.getName() + " &fis ranked &3" + rank + " &fin the current sprint";
+                sender.sendMessage(display);
+            }
+        };
 
+        r.runTaskAsynchronously(instance);
         return true;
     }
 
@@ -109,7 +122,7 @@ public class TownyMissionAdminSprintRank extends TownyMissionAdminCommand {
      * to default to the command executor
      */
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         // /tmsa sprint rank <town>
         List<String> tabList = new ArrayList<>();
         if (args.length == 3) {

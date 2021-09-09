@@ -3,6 +3,7 @@ package world.naturecraft.townymission.commands.admin.mission;
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -38,14 +39,20 @@ public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
      * @return the boolean
      */
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tmsa mission abort <town>
-        String townName = args[2];
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission(new String[]{"townymission.admin.mission.abort", "townymission.admin"})
+                .hasPermission(new String[]{"townymission.admin.mission.abort", "townymission.admin"});
+
+        return checker.check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        return new BukkitChecker(instance)
                 .customCheck(() -> {
                     if (args.length != 3 || !args[0].equalsIgnoreCase("mission") || !args[1].equalsIgnoreCase("abort")) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
@@ -53,31 +60,31 @@ public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
                 .customCheck(() -> {
                     // Recess check
                     if (TimerService.getInstance().isInInterval(RankType.SEASON) || TimerService.getInstance().isInInterval(RankType.SPRINT)) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onClickDuringRecess"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[2];
                     if (TownyUtil.getTown(townName) == null) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onTownNameInvalid"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onTownNameInvalid"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[2];
                     // Check whether the town has a started mission
                     Town town = TownyUtil.getTown(townName);
                     if (MissionService.getInstance().hasStarted(town.getUUID())) {
                         return true;
                     } else {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("adminCommands.mission_abort.onNoStartedMission")
+                        commandSender.sendMessage(instance.getLangEntry("adminCommands.mission_abort.onNoStartedMission")
                                 .replace("%town%", townName));
                         return false;
                     }
-                });
-
-        return checker.check();
+                }).check();
     }
 
     /**
@@ -90,27 +97,22 @@ public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
      * @return true if a valid command, otherwise false
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!sanityCheck(sender, args)) return;
 
-            BukkitRunnable r = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (!sanityCheck(player, args)) {
-                        return;
-                    }
-                    Town town = TownyUtil.getTown(args[2]);
-                    MissionEntry missionEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
+                Town town = TownyUtil.getTown(args[2]);
+                MissionEntry missionEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
 
-                    MissionService.getInstance().abortMission(null, missionEntry, true);
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("adminCommands.mission_abort.onSuccess")
-                            .replace("%town%", town.getName()));
-                }
-            };
+                MissionService.getInstance().abortMission(null, missionEntry, true);
+                sender.sendMessage(instance.getLangEntry("adminCommands.mission_abort.onSuccess")
+                        .replace("%town%", town.getName()));
+            }
+        };
 
-            r.runTaskAsynchronously((TownyMissionBukkit) instance);
-        }
+        r.runTaskAsynchronously(instance);
 
         return true;
     }
@@ -129,7 +131,7 @@ public class TownyMissionAdminMissionAbort extends TownyMissionAdminCommand {
      * to default to the command executor
      */
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
         // /tmsa mission abort <town>
         if (args.length == 3) {

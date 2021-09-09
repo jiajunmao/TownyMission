@@ -65,6 +65,6 @@ public class EssentialMoneyListener extends MissionListener {
             if (!localCheck.check()) return;
         }
 
-        doLogic(checker, MissionType.MONEY, player, (int) (event.getNewBalance().subtract(event.getOldBalance())).intValue());
+        doLogic(checker, MissionType.MONEY, player, (event.getNewBalance().subtract(event.getOldBalance())).intValue());
     }
 }

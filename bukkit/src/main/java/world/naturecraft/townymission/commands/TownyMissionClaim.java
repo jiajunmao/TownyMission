@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import world.naturecraft.naturelib.utils.EntryFilter;
 import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.api.exceptions.NotEnoughInvSlotException;
@@ -42,25 +41,31 @@ public class TownyMissionClaim extends TownyMissionCommand implements TabExecuto
     }
 
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
                 .hasTown()
                 .hasPermission(new String[]{"townymission.player.claim", "townymission.player"})
                 .customCheck(() -> {
-                            if (args.length == 1
-                                    || (args.length == 2
-                                    && Util.isInt(args[1])
-                                    && Integer.parseInt(args[1]) >= 1
-                                    && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
-                                    || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
-                                return true;
-                            } else {
-                                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
-                                return false;
-                            }
-                        }
-                ).check();
+                    if (args.length == 1
+                            || (args.length == 2
+                            && Util.isInt(args[1])
+                            && Integer.parseInt(args[1]) >= 1
+                            && Integer.parseInt(args[1]) <= instance.getConfig().getInt("mission.amount"))
+                            || (args.length == 2 && args[1].equalsIgnoreCase("all"))) {
+                        return true;
+                    } else {
+                        player.sendMessage(instance.getLangEntry("universal.onCommandFormatError"));
+                        return false;
+                    }
+                }).check();
+    }
 
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof Player) return true;
+
+        commandSender.sendMessage(instance.getLangEntry("universal.onPlayerCommandInConsole"));
+        return false;
     }
 
     /**
@@ -88,14 +93,9 @@ public class TownyMissionClaim extends TownyMissionCommand implements TabExecuto
                     Player player = (Player) sender;
                     if (!sanityCheck(player, args)) return;
 
-                    List<ClaimEntry> claimEntries = ClaimDao.getInstance().getEntries(new EntryFilter<ClaimEntry>() {
-                        @Override
-                        public boolean include(ClaimEntry data) {
-                            return (data.getPlayerUUID().equals(player.getUniqueId())
-                                    && data.getSeason() == instance.getStatsConfig().getInt("season.current")
-                                    && data.getSprint() == instance.getStatsConfig().getInt("sprint.current"));
-                        }
-                    });
+                    List<ClaimEntry> claimEntries = ClaimDao.getInstance().getEntries(data -> (data.getPlayerUUID().equals(player.getUniqueId())
+                            && data.getSeason() == instance.getStatsConfig().getInt("season.current")
+                            && data.getSprint() == instance.getStatsConfig().getInt("sprint.current")));
 
                     if (claimEntries.size() == 0) {
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onNotFound"));

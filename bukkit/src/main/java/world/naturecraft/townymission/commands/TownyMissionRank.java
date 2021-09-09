@@ -45,7 +45,7 @@ public class TownyMissionRank extends TownyMissionCommand implements TabExecutor
     }
 
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
                 .hasPermission(new String[]{"townymission.player.rank", "townymission.player"})
                 .customCheck(() -> {
@@ -63,6 +63,14 @@ public class TownyMissionRank extends TownyMissionCommand implements TabExecutor
                     }
                     return true;
                 }).check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof Player) return true;
+
+        commandSender.sendMessage(instance.getLangEntry("universal.onPlayerCommandInConsole"));
+        return false;
     }
 
     /**
@@ -101,7 +109,7 @@ public class TownyMissionRank extends TownyMissionCommand implements TabExecutor
                         switch (RankType.valueOf(args[1].toUpperCase(Locale.ROOT))) {
                             case SPRINT:
                                 builder.add("&e" + index + ". &3" + town.getName() + " &f: "
-                                        + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), (TownyMissionInstance) instance)
+                                        + Rankable.getRankingPoints(town.getNumResidents(), entry.getRankingFactor(), instance)
                                         + " points");
                                 break;
                             case SEASON:
@@ -117,7 +125,7 @@ public class TownyMissionRank extends TownyMissionCommand implements TabExecutor
                 }
             };
 
-            r.runTaskAsynchronously(((TownyMissionBukkit) instance));
+            r.runTaskAsynchronously(instance);
         }
 
         return true;

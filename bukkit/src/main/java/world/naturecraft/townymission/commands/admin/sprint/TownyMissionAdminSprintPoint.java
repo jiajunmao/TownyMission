@@ -10,7 +10,6 @@ import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.data.dao.SprintDao;
-import world.naturecraft.townymission.services.ChatService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 import world.naturecraft.townymission.utils.Util;
@@ -38,11 +37,17 @@ public class TownyMissionAdminSprintPoint extends TownyMissionAdminCommand {
      * @return the boolean
      */
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tmsa sprint point <a/r/s> <town> <#num>
-        String townName = args[3];
         BukkitChecker bukkitChecker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission(new String[]{"townymission.admin.sprint.point", "townymission.admin"})
+                .hasPermission(new String[]{"townymission.admin.sprint.point", "townymission.admin"});
+
+        return bukkitChecker.check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        BukkitChecker checker = new BukkitChecker(instance)
                 .customCheck(() -> {
                     // /tmsa sprint point <add/set/remove> <town> <num>
                     if (args.length != 5
@@ -50,19 +55,21 @@ public class TownyMissionAdminSprintPoint extends TownyMissionAdminCommand {
                             || !args[1].equalsIgnoreCase("point")
                             || !(args[2].equalsIgnoreCase("add") || args[2].equalsIgnoreCase("set") || args[2].equalsIgnoreCase("remove")
                             || !Util.isInt(args[4]))) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[3];
                     if (TownyUtil.getTown(townName) == null) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onTownNameInvalid"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onTownNameInvalid"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[3];
                     UUID townUUID = TownyUtil.getTown(townName).getUUID();
                     SprintEntry sprintEntry = SprintDao.getInstance().get(townUUID);
                     if (sprintEntry == null) {
@@ -72,7 +79,7 @@ public class TownyMissionAdminSprintPoint extends TownyMissionAdminCommand {
                     return true;
                 });
 
-        return bukkitChecker.check();
+        return checker.check();
     }
 
     /**
@@ -85,48 +92,43 @@ public class TownyMissionAdminSprintPoint extends TownyMissionAdminCommand {
      * @return true if a valid command, otherwise false
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!sanityCheck(sender, args)) return;
 
-            BukkitRunnable r = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (!sanityCheck(player, args)) return;
+                // /tmsa season point <add/set/remove> <town> <num>
+                String action = args[2].toLowerCase(Locale.ROOT);
+                Town targetTown = TownyUtil.getTown(args[3]);
+                SprintEntry sprintEntry = SprintDao.getInstance().get(targetTown.getUUID());
+                int amount = Integer.parseInt(args[4]);
+                String finalAction = "";
 
-                    // /tmsa season point <add/set/remove> <town> <num>
-                    String action = args[2].toLowerCase(Locale.ROOT);
-                    Town targetTown = TownyUtil.getTown(args[3]);
-                    SprintEntry sprintEntry = SprintDao.getInstance().get(targetTown.getUUID());
-                    int amount = Integer.parseInt(args[4]);
-                    String finalAction = "";
-
-                    switch (action) {
-                        case "add":
-                            sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() + amount);
-                            finalAction = "added";
-                            break;
-                        case "remove":
-                            sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() - amount);
-                            finalAction = "removed";
-                            break;
-                        case "set":
-                            sprintEntry.setNaturepoints(amount);
-                            finalAction = "set";
-                            break;
-                    }
-
-                    SprintDao.getInstance().update(sprintEntry);
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("adminCommands.sprint_point.onSuccess")
-                            .replace("%action%", finalAction)
-                            .replace("%amount%", String.valueOf(amount))
-                            .replace("%town%", targetTown.getName()));
+                switch (action) {
+                    case "add":
+                        sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() + amount);
+                        finalAction = "added";
+                        break;
+                    case "remove":
+                        sprintEntry.setNaturepoints(sprintEntry.getNaturepoints() - amount);
+                        finalAction = "removed";
+                        break;
+                    case "set":
+                        sprintEntry.setNaturepoints(amount);
+                        finalAction = "set";
+                        break;
                 }
-            };
 
-            r.runTaskAsynchronously(instance);
-        }
+                SprintDao.getInstance().update(sprintEntry);
+                sender.sendMessage(instance.getLangEntry("adminCommands.sprint_point.onSuccess")
+                        .replace("%action%", finalAction)
+                        .replace("%amount%", String.valueOf(amount))
+                        .replace("%town%", targetTown.getName()));
+            }
+        };
 
+        r.runTaskAsynchronously(instance);
         return true;
     }
 
@@ -144,7 +146,7 @@ public class TownyMissionAdminSprintPoint extends TownyMissionAdminCommand {
      * to default to the command executor
      */
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         // /tmsa season point <add/set/remove> <town> <num>
         List<String> tabList = new ArrayList<>();
         if (args.length == 3) {

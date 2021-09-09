@@ -31,7 +31,15 @@ public class TownyMissionNonMain extends TownyMissionCommand implements TabExecu
      * @return the boolean
      */
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return false;
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof Player) return true;
+
+        commandSender.sendMessage(instance.getLangEntry("universal.onPlayerCommandInConsole"));
         return false;
     }
 

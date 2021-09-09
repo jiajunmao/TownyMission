@@ -40,6 +40,8 @@ public abstract class ChatService extends TownyMissionService {
      */
     public abstract void sendMsg(UUID playerUUID, String message);
 
+    public abstract void sendConsoleMsg(String message);
+
     /**
      * Translate color string.
      *
