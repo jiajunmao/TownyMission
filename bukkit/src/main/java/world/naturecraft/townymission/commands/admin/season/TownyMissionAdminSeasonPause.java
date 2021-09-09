@@ -3,6 +3,7 @@ package world.naturecraft.townymission.commands.admin.season;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.townymission.TownyMissionBukkit;
@@ -24,12 +25,17 @@ public class TownyMissionAdminSeasonPause extends TownyMissionAdminCommand {
     }
 
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
-                .hasPermission(new String[]{"townymission.admin.season.pause", "townymission.admin"})
+                .hasPermission(new String[]{"townymission.admin.season.pause", "townymission.admin"}).check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        return new BukkitChecker(instance)
                 .customCheck(() -> {
-                    if (((TownyMissionBukkit) instance).getStatsConfig().getLong("season.pausedTime") != -1) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.pauseSeason.onAlreadyPaused"));
+                    if (instance.getStatsConfig().getLong("season.pausedTime") != -1) {
+                        commandSender.sendMessage(instance.getLangEntry("commands.pauseSeason.onAlreadyPaused"));
                         return false;
                     }
 
@@ -38,7 +44,7 @@ public class TownyMissionAdminSeasonPause extends TownyMissionAdminCommand {
                 .customCheck(() -> {
                     // /tmsa season pause
                     if (args.length != 2 || !args[0].equalsIgnoreCase("season") || !args[1].equalsIgnoreCase("pause")) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
@@ -47,15 +53,19 @@ public class TownyMissionAdminSeasonPause extends TownyMissionAdminCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
-            if (!sanityCheck(player, strings)) return false;
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!sanityCheck(commandSender, strings)) return;
 
-            ((TownyMissionBukkit) instance).getStatsConfig().set("season.pausedTime", new Date().getTime());
+                instance.getStatsConfig().set("season.pausedTime", new Date().getTime());
 
-            ((TownyMissionBukkit) instance).getStatsConfig().save();
-            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.pauseSeason.onSuccess"));
-        }
+                instance.getStatsConfig().save();
+                commandSender.sendMessage(instance.getLangEntry("commands.pauseSeason.onSuccess"));
+            }
+        };
+
+        r.runTaskAsynchronously(instance);
         return true;
     }
 

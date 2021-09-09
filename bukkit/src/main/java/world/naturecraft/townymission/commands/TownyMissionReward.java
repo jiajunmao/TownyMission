@@ -33,7 +33,7 @@ public class TownyMissionReward extends TownyMissionCommand implements TabExecut
     }
 
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player).silent(true)
                 .hasPermission(new String[]{"townymission.player.reward", "townymission.player"})
                 .customCheck(() -> {
@@ -47,6 +47,14 @@ public class TownyMissionReward extends TownyMissionCommand implements TabExecut
                     onUnknown(player);
                     return false;
                 }).check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof Player) return true;
+
+        commandSender.sendMessage(instance.getLangEntry("universal.onPlayerCommandInConsole"));
+        return false;
     }
 
     @Override

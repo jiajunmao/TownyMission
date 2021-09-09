@@ -511,20 +511,19 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
      * @return the lang entry
      */
     @Override
-    @Deprecated
     public String getLangEntry(String path) {
         String finalString = "";
         finalString += langConfig.getString("prefix") + " ";
         finalString += langConfig.getString(path);
-        return finalString;
+        return BukkitUtil.translateColor(finalString);
     }
 
     @Override
     public String getLangEntry(String s, boolean b) {
         if (b) {
-            return langConfig.getString("prefix") + " " + langConfig.getString(s);
+            return BukkitUtil.translateColor(langConfig.getString("prefix") + " " + langConfig.getString(s));
         } else {
-            return langConfig.getString(s);
+            return BukkitUtil.translateColor(langConfig.getString(s));
         }
     }
 

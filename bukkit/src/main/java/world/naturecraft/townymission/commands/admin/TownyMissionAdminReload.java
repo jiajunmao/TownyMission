@@ -4,14 +4,13 @@
 
 package world.naturecraft.townymission.commands.admin;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.naturelib.exceptions.ConfigLoadingException;
+import world.naturecraft.naturelib.utils.BooleanChecker;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
 import world.naturecraft.townymission.services.ChatService;
@@ -34,27 +33,6 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand implements
     }
 
     /**
-     * Sanity check boolean.
-     *
-     * @param player the player
-     * @param args   the args
-     * @return the boolean
-     */
-    @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return new BukkitChecker(instance).target(player)
-                .hasPermission(new String[]{"townymission.admin.reload", "townymission.admin"})
-                .customCheck(() -> {
-                    // /tmsa reload
-                    if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
-                        return true;
-
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
-                    return false;
-                }).check();
-    }
-
-    /**
      * Executes the given command, returning its success.
      * <br>
      * If false is returned, then the "usage" plugin.yml entry for this command
@@ -69,20 +47,22 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand implements
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         // /tms reload
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (!sanityCheck(player, args)) return false;
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!sanityCheck(sender, args)) return;
 
-            try {
-                instance.reloadConfigs();
-            } catch (ConfigLoadingException e) {
-                e.printStackTrace();
-                ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.reload.onFailure"));
+                try {
+                    instance.reloadConfigs();
+                    sender.sendMessage(instance.getLangEntry("commands.reload.onSuccess", true));
+                } catch (ConfigLoadingException e) {
+                    e.printStackTrace();
+                    sender.sendMessage(instance.getLangEntry("commands.reload.onFailure", true));
+                }
             }
+        };
 
-            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.reload.onSuccess"));
-        }
-
+        r.runTaskAsynchronously(instance);
         return true;
     }
 
@@ -103,5 +83,30 @@ public class TownyMissionAdminReload extends TownyMissionAdminCommand implements
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return null;
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        return ((BooleanChecker) () -> {
+            // /tmsa reload
+            if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
+                return true;
+
+            commandSender.sendMessage(instance.getLangEntry("universal.onCommandFormatError", true));
+            return false;
+        }).check();
+    }
+
+    /**
+     * Sanity check boolean.
+     *
+     * @param player the player
+     * @param args   the args
+     * @return the boolean
+     */
+    @Override
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
+        return new BukkitChecker(instance).target(player)
+                .hasPermission(new String[]{"townymission.admin.reload", "townymission.admin"}).check();
     }
 }

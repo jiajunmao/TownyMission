@@ -1,5 +1,7 @@
 package world.naturecraft.townymission.commands.templates;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import world.naturecraft.naturelib.commands.CommandRoot;
 import world.naturecraft.townymission.TownyMissionBukkit;
@@ -15,12 +17,20 @@ public abstract class TownyMissionCommandRoot extends CommandRoot {
     }
 
     @Override
-    public void onUnknown(Player player) {
-        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandNotFound"));
+    public void onUnknown(CommandSender sender) {
+        if (sender instanceof Player) {
+            ChatService.getInstance().sendMsg(((Player) sender).getUniqueId(), instance.getLangEntry("universal.onCommandNotFound", true));
+        } else if (sender instanceof ConsoleCommandSender) {
+            ChatService.getInstance().sendConsoleMsg(instance.getLangEntry("universal.onCommandNotFound", false));
+        }
     }
 
     @Override
-    public void onHelp(Player player) {
-        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandNotFound"));
+    public void onHelp(CommandSender sender) {
+        if (sender instanceof Player) {
+            ChatService.getInstance().sendMsg(((Player) sender).getUniqueId(), instance.getLangEntry("universal.onCommandNotFound"));
+        } else if (sender instanceof ConsoleCommandSender) {
+            ChatService.getInstance().sendConsoleMsg(instance.getLangEntry("universal.onCommandNotFound", false));
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionAdminCommand;
@@ -37,36 +38,42 @@ public class TownyMissionAdminSeasonRank extends TownyMissionAdminCommand {
      * @return the boolean
      */
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         // /tmsa season rank <town>
-        String townName = args[2];
         BukkitChecker checker = new BukkitChecker(instance).target(player).silent(false)
-                .hasPermission(new String[]{"townymission.admin.season.rank", "townymission.admin"})
+                .hasPermission(new String[]{"townymission.admin.season.rank", "townymission.admin"});
+
+        return checker.check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        return new BukkitChecker(instance)
                 .customCheck(() -> {
                     if (!args[0].equalsIgnoreCase("season") || !args[1].equalsIgnoreCase("rank")) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onCommandFormatError"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[2];
                     if (TownyUtil.getTown(townName) == null) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onTownNameInvalid"));
+                        commandSender.sendMessage(instance.getLangEntry("universal.onTownNameInvalid"));
                         return false;
                     }
                     return true;
                 })
                 .customCheck(() -> {
+                    String townName = args[2];
                     UUID townUUID = TownyUtil.getTown(townName).getUUID();
                     SeasonEntry seasonEntry = SeasonDao.getInstance().get(townUUID);
                     if (seasonEntry == null) {
-                        seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, 0, ((TownyMissionBukkit) instance).getStatsConfig().getInt("season.current"));
+                        seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, 0, instance.getStatsConfig().getInt("season.current"));
                         SeasonDao.getInstance().add(seasonEntry);
                     }
                     return true;
-                });
-
-        return checker.check();
+                }).check();
     }
 
     /**
@@ -80,18 +87,21 @@ public class TownyMissionAdminSeasonRank extends TownyMissionAdminCommand {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (!sanityCheck(player, args)) return false;
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!sanityCheck(sender, args)) return;
 
-            // /tmsa season rank <town>
-            Town town = TownyUtil.getTown(args[2]);
-            int rank = RankingService.getInstance().getRank(town.getUUID(), RankType.SEASON);
+                // /tmsa season rank <town>
+                Town town = TownyUtil.getTown(args[2]);
+                int rank = RankingService.getInstance().getRank(town.getUUID(), RankType.SEASON);
 
-            String display = "&e" + town.getName() + " &fis ranked &3" + rank + " &fin the current season";
-            ChatService.getInstance().sendMsg(player.getUniqueId(), display);
-        }
+                String display = "&e" + town.getName() + " &fis ranked &3" + rank + " &fin the current season";
+                sender.sendMessage(display);
+            }
+        };
 
+        r.runTaskAsynchronously(instance);
         return true;
     }
 

@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.services;
 
+import org.bukkit.Bukkit;
 import world.naturecraft.naturelib.utils.BukkitUtil;
 
 import java.util.UUID;
@@ -27,6 +28,11 @@ public class ChatBukkitService extends ChatService {
 
     public void sendMsg(UUID playerUUID, String message) {
         BukkitUtil.sendMsg(playerUUID, translateColor(message));
+    }
+
+    @Override
+    public void sendConsoleMsg(String message) {
+        Bukkit.getConsoleSender().sendMessage(translateColor(message));
     }
 
     /**

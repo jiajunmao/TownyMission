@@ -72,3 +72,4 @@ universal:
   onNonMainServer: "&cYou are currently not on the main server! Please return to the main server to execute TownyMission commands!"
   onTownNameInvalid: "&cThe name of the town is not found"
   onUnrankedTown: "&cThe town does not exists in the TMS system. Likely due to not participating."
+  onPlayerCommandInConsole: "&cYou cannot execute player commands from the console!"

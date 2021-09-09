@@ -7,6 +7,7 @@ package world.naturecraft.townymission.commands.admin.mission;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.naturelib.utils.MultilineBuilder;
@@ -38,9 +39,14 @@ public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
     }
 
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, @NotNull String[] args) {
         return new BukkitChecker(instance).target(player)
-                .hasPermission(new String[]{"townymission.admin.mission.list", "townymission.admin"})
+                .hasPermission(new String[]{"townymission.admin.mission.list", "townymission.admin"}).check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        return new BukkitChecker(instance)
                 .customCheck(() -> {
                     // /tmsa mission list type
                     if (args.length == 3) {
@@ -51,7 +57,7 @@ public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
                         }
                     }
 
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onCommandFormatError", true));
+                    commandSender.sendMessage(instance.getLangEntry("universal.onCommandFormatError", true));
                     return false;
                 }).check();
     }
@@ -70,26 +76,30 @@ public class TownyMissionAdminMissionList extends TownyMissionAdminCommand {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (sanityCheck(player, args)) {
+        BukkitRunnable r = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!sanityCheck(sender, args)) return;
+
                 MultilineBuilder builder = new MultilineBuilder("&e------TownyMission Missions------&7");
 
                 MissionType missionType = MissionType.valueOf(args[2].toUpperCase(Locale.ROOT));
                 if (instance.isMissionEnabled(missionType)) {
-                    Collection<MissionJson> collection = MissionConfigParser.parse(missionType, (TownyMissionBukkit) instance);
+                    Collection<MissionJson> collection = MissionConfigParser.parse(missionType, instance);
                     builder.add("&eMission Type&f: " + missionType.name());
                     builder.add(" ");
                     for (MissionJson json : collection) {
                         builder.add(" " + json.getDisplayLine());
                     }
 
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), builder.toString());
+                    sender.sendMessage(builder.toString());
                 } else {
-                    ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.listMission.onNotEnabled"));
+                    sender.sendMessage(instance.getLangEntry("commands.listMission.onNotEnabled"));
                 }
             }
-        }
+        };
+
+        r.runTaskAsynchronously(instance);
         return true;
     }
 

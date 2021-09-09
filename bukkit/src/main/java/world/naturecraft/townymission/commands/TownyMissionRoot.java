@@ -19,11 +19,6 @@ public class TownyMissionRoot extends TownyMissionCommandRoot {
     }
 
     @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return false;
-    }
-
-    @Override
     protected void postProcessTabList(CommandSender sender, List<String> list) {
         if (sender instanceof Player) {
             Player player = (Player) sender;

@@ -5,8 +5,6 @@
 package world.naturecraft.townymission.commands.admin;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionBukkit;
 import world.naturecraft.townymission.commands.templates.TownyMissionCommandRoot;
 
@@ -24,18 +22,6 @@ public class TownyMissionAdminRoot extends TownyMissionCommandRoot {
      */
     public TownyMissionAdminRoot(TownyMissionBukkit instance) {
         super(instance, 0, "townymissionadmin", "tmsa");
-    }
-
-    /**
-     * Sanity check boolean.
-     *
-     * @param player the player
-     * @param args   the args
-     * @return the boolean
-     */
-    @Override
-    public boolean sanityCheck(@NotNull Player player, @NotNull String[] args) {
-        return false;
     }
 
     @Override

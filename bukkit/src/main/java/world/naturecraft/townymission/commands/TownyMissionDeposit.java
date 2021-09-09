@@ -186,7 +186,7 @@ public class TownyMissionDeposit extends TownyMissionCommand {
      * @param args   the args
      * @return the boolean
      */
-    public boolean sanityCheck(@NotNull Player player, String[] args) {
+    public boolean playerSanityCheck(@NotNull Player player, String[] args) {
         MissionDao missionDao = MissionDao.getInstance();
         return new BukkitChecker(instance)
                 .target(player)
@@ -230,6 +230,14 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     return true;
                 })
                 .customCheck(() -> checkItemMismatch(player)).check();
+    }
+
+    @Override
+    public boolean commonSanityCheck(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof Player) return true;
+
+        commandSender.sendMessage(instance.getLangEntry("universal.onPlayerCommandInConsole"));
+        return false;
     }
 
     /**

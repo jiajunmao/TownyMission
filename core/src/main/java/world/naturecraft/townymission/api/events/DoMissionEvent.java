@@ -11,6 +11,11 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 
+import javax.swing.tree.TreeNode;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 /**
  * The type Do mission event.
  */
@@ -34,6 +39,8 @@ public class DoMissionEvent extends Event implements Cancellable {
         this.player = player;
         this.taskEntry = entry;
         this.isCanceled = false;
+
+        Queue<Integer> queue = new LinkedList<>();
     }
 
     /**
