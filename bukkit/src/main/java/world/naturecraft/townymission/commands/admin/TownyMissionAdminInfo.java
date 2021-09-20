@@ -16,6 +16,7 @@ import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.ChatService;
+import world.naturecraft.townymission.services.core.RankingService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
@@ -88,77 +89,68 @@ public class TownyMissionAdminInfo extends TownyMissionAdminCommand {
             public void run() {
                 if (!sanityCheck(sender, args)) return;
 
-                MultilineBuilder builder = new MultilineBuilder("&7------&eTowny Mission: Overview&7------");
+                MultilineBuilder builder = new MultilineBuilder(instance.getGuiLangEntry("mission_info.sections.title"));
                 Town town = TownyUtil.getTown(args[1]);
                 MissionEntry taskEntry;
 
                 // Server-wide section
-                builder.add("&5--Basic Info Section--");
+                builder.add(instance.getGuiLangEntry("mission_info.sections.basic_info.title"));
                 int currentSeason = instance.getStatsConfig().getInt("season.current");
                 int currentSprint = instance.getStatsConfig().getInt("sprint.current");
-                builder.add("&eCurrent Season: &f" + currentSeason);
-                builder.add("&eCurrent Sprint: &f" + currentSprint);
-                builder.add("&eTown: &f" + town.getName());
+                for (String s : instance.getGuiLangEntries("mission_info.sections.basic_info.lores")) {
+                    s = s.replace("%season%", String.valueOf(currentSeason))
+                            .replace("%sprint", String.valueOf(currentSprint))
+                            .replace("%town_name%", town.getName());
+                    builder.add(s);
+                }
 
                 // Started Mission section
-                builder.add("&5--Mission Section--");
+                builder.add(instance.getGuiLangEntry("mission_info.sections.mission.title"));
                 if (!MissionDao.getInstance().getStartedMissions(town.getUUID()).isEmpty()) {
                     taskEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
-                    builder.add("&eCurrent Mission: &f" + taskEntry.getMissionJson().getDisplayLine());
                     Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
-                    builder.add("&eStarted By: &f" + startedPlayer.getName());
 
-                    long startedTime = taskEntry.getStartedTime();
                     long allowedTime = taskEntry.getAllowedTime();
 
                     DateFormat timeFormat = new SimpleDateFormat("dd/MM HH:mm");
-                    Date tempDate = new Date(startedTime);
-                    builder.add("&eStarted Time: &f" + timeFormat.format(tempDate));
 
-                    String display = String.format("%02d:%02d",
+                    String allowedTimeDisplay = String.format("%02d:%02d",
                             TimeUnit.MILLISECONDS.toHours(allowedTime),
                             TimeUnit.MILLISECONDS.toMinutes(allowedTime) -
                                     TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(allowedTime)));
-                    builder.add("&eAllowed Time: &f" + display);
 
-                    try {
-                        if (taskEntry.isTimedout()) {
-                            builder.add("&Remaining Time: &cTimed Out");
-                        } else {
-                            Date dateNow = new Date();
-                            long remainingTime = (startedTime + allowedTime) - dateNow.getTime();
-                            display = String.format("%02d:%02d",
-                                    TimeUnit.MILLISECONDS.toHours(remainingTime),
-                                    TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
-                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
-                            builder.add("&eRemaining Time: &f" + display);
-                        }
-                    } catch (NoStartedException e) {
-                        // Ignore, not possible
+                    long remainingTime = (taskEntry.getStartedTime() + allowedTime) - new Date().getTime();
+                    String remainingTimeDisplay = String.format("%02d:%02d",
+                            TimeUnit.MILLISECONDS.toHours(remainingTime),
+                            TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
+                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
+
+                    for (String s : instance.getGuiLangEntries("mission_info.sections.mission.lores")) {
+                        s = s.replace("%display_line%", taskEntry.getMissionJson().getDisplayLine())
+                                .replace("%player_name%", startedPlayer.getName())
+                                .replace("%started_time%", timeFormat.format(new Date(taskEntry.getStartedTime())))
+                                .replace("%allowed_time%", allowedTimeDisplay)
+                                .replace("%remaining_time%", remainingTimeDisplay);
+                        builder.add(s);
                     }
                 } else {
-                    builder.add("&eCurrent Mission: &cNone");
+                    builder.add(instance.getGuiLangEntries("mission_info.sections.mission.lores").get(0).replace("%display_line%", "&cNone"));
                 }
 
                 // Participant info section
-                builder.add("&5--Participant Section--");
-                int baseline = instance.getConfig().getInt("participants.sprintRewardBaseline");
-                int memberScale = instance.getConfig().getInt("participants.sprintRewardMemberScale");
-                int baselineCap = instance.getConfig().getInt("participants.sprintRewardBaselineCap");
-                int baselineIncrement = instance.getConfig().getInt("participants.sprintBaselineIncrement");
-
-                int realBaseline = baseline + (town.getNumResidents() - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
-                realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
+                builder.add(instance.getGuiLangEntry("mission_info.sections.participant.title"));
 
                 SprintEntry sprintEntry = SprintDao.getInstance().get(town.getUUID());
                 int naturepoints = sprintEntry == null ? 0 : sprintEntry.getNaturepoints();
 
-                builder.add("&eTotal Points: &f" + naturepoints);
-                builder.add("&eBaseline: &f" + realBaseline);
+                for(String s : instance.getGuiLangEntries("mission_info.sections.participant.lores")) {
+                    s = s.replace("%total_points%", String.valueOf(naturepoints))
+                            .replace("%baseline_points%", String.valueOf(RankingService.getInstance().getTownBaseline(town.getUUID())))
+                            .replace("%ranking_points%", String.valueOf(RankingService.getInstance().getRankingPoints(town.getUUID())));
 
-                int rankingPoints = (naturepoints - realBaseline) / town.getNumResidents();
-                rankingPoints = Math.max(rankingPoints, 0);
-                builder.add("&eRanking Points: &f" + rankingPoints);
+                    builder.add(s);
+                }
+
 
                 String finalString = builder.toString();
                 sender.sendMessage(finalString);

@@ -44,6 +44,21 @@ public class RankingService {
         return rankingPoints;
     }
 
+    public int getTownBaseline(UUID townUUID) {
+        TownyMissionInstance instance = TownyMissionInstance.getInstance();
+
+        int currentSprint = instance.getStatsConfig().getInt("sprint.current");
+        int baseline = instance.getInstanceConfig().getInt("participants.sprintRewardBaseline");
+        int memberScale = instance.getInstanceConfig().getInt("participants.sprintRewardMemberScale");
+        int baselineCap = instance.getInstanceConfig().getInt("participants.sprintRewardBaselineCap");
+        int baselineIncrement = instance.getInstanceConfig().getInt("participants.sprintBaselineIncrement");
+
+        int realBaseline = baseline + (TownyService.getInstance().getNumResidents(townUUID) - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
+        realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
+
+        return realBaseline;
+    }
+
     public <T extends Rankable> List<T> getRanks(RankType rankType) {
         List<T> rankables = null;
         switch (rankType) {
