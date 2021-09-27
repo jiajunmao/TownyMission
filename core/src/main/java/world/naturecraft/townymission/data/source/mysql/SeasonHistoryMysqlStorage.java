@@ -81,14 +81,15 @@ public class SeasonHistoryMysqlStorage extends MysqlStorage<SeasonHistoryEntry> 
      * @param rankJson    the rank json
      */
     public void add(int season, long startedTime, String rankJson) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
-            SeasonHistoryEntry seasonHistoryEntry = new SeasonHistoryEntry(UUID.randomUUID(), season, startedTime, rankJson);
+            SeasonHistoryEntry seasonHistoryEntry = new SeasonHistoryEntry(randomUUID, season, startedTime, rankJson);
             memCache.put(seasonHistoryEntry.getId(), seasonHistoryEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(season, startedTime, rankJson);
+                    addRemote(randomUUID, season, startedTime, rankJson);
                 }
             };
 
@@ -96,13 +97,12 @@ public class SeasonHistoryMysqlStorage extends MysqlStorage<SeasonHistoryEntry> 
             return;
         }
 
-        addRemote(season, startedTime, rankJson);
+        addRemote(randomUUID, season, startedTime, rankJson);
     }
 
-    private void addRemote(int season, long startedTime, String rankJson) {
+    private void addRemote(UUID randomUUID, int season, long startedTime, String rankJson) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID + "', '" +
                     season + "', '" +
                     startedTime + "', '" +
                     rankJson + "');";

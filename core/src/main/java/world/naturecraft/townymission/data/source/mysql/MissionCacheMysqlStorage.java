@@ -85,14 +85,15 @@ public class MissionCacheMysqlStorage extends MysqlStorage<MissionCacheEntry> im
 
     @Override
     public void add(UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
-            MissionCacheEntry missionCacheEntry = new MissionCacheEntry(UUID.randomUUID(), playerUUID, missionType, amount, lastAttempted, retryCount);
+            MissionCacheEntry missionCacheEntry = new MissionCacheEntry(randomUUID, playerUUID, missionType, amount, lastAttempted, retryCount);
             memCache.put(missionCacheEntry.getId(), missionCacheEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(playerUUID, missionType, amount, lastAttempted, retryCount);
+                    addRemote(randomUUID, playerUUID, missionType, amount, lastAttempted, retryCount);
                 }
             };
 
@@ -100,13 +101,12 @@ public class MissionCacheMysqlStorage extends MysqlStorage<MissionCacheEntry> im
             return;
         }
 
-        addRemote(playerUUID, missionType, amount, lastAttempted, retryCount);
+        addRemote(randomUUID, playerUUID, missionType, amount, lastAttempted, retryCount);
     }
 
-    private void addRemote(UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount) {
+    private void addRemote(UUID randomUUID, UUID playerUUID, MissionType missionType, int amount, long lastAttempted, int retryCount) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid.toString() + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID.toString() + "', '" +
                     playerUUID.toString() + "', '" +
                     missionType.name() + "', '" +
                     amount + "', '" +
