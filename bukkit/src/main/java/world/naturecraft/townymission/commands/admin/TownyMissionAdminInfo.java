@@ -89,7 +89,7 @@ public class TownyMissionAdminInfo extends TownyMissionAdminCommand {
             public void run() {
                 if (!sanityCheck(sender, args)) return;
 
-                MultilineBuilder builder = new MultilineBuilder(instance.getGuiLangEntry("mission_info.sections.title"));
+                MultilineBuilder builder = new MultilineBuilder(instance.getGuiLangEntry("mission_info.title"));
                 Town town = TownyUtil.getTown(args[1]);
                 MissionEntry taskEntry;
 
