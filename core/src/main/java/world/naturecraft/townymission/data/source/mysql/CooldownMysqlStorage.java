@@ -87,26 +87,26 @@ public class CooldownMysqlStorage extends MysqlStorage<CooldownEntry> implements
      * @param townUUID the town uuid
      */
     public void add(UUID townUUID, String cooldownJsonList) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
-            CooldownEntry cooldownEntry = new CooldownEntry(UUID.randomUUID(), townUUID, cooldownJsonList);
+            CooldownEntry cooldownEntry = new CooldownEntry(randomUUID, townUUID, cooldownJsonList);
             memCache.put(cooldownEntry.getId(), cooldownEntry);
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(townUUID, cooldownJsonList);
+                    addRemote(randomUUID, townUUID, cooldownJsonList);
                 }
             };
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        addRemote(townUUID, cooldownJsonList);
+        addRemote(randomUUID, townUUID, cooldownJsonList);
     }
 
-    private void addRemote(UUID townUUID, String cooldownJsonList) {
+    private void addRemote(UUID randomUUID, UUID townUUID, String cooldownJsonList) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID + "', '" +
                     townUUID + "', '" +
                     cooldownJsonList + "');";
             PreparedStatement p = conn.prepareStatement(sql);
