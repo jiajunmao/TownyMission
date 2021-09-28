@@ -44,17 +44,34 @@ public class MMOBukkitService extends MMOService {
     }
 
     @Override
-    public int getTotalAndSetNull(UUID playerUUID, String type, String id) {
+    public int getAmountAndSetNull(UUID playerUUID, String type, String id, int amount) {
+
         int total = 0;
         int index = 0;
         Player player = Bukkit.getPlayer(playerUUID);
+
         for (ItemStack itemStack : player.getInventory().getContents()) {
             NBTItem nbtItem = NBTItem.get(itemStack);
             if (nbtItem.hasType()
                     && nbtItem.getType().equalsIgnoreCase(type)
                     && nbtItem.getString("MMOITEMS_ITEM_ID").equalsIgnoreCase(id)) {
-                total += itemStack.getAmount();
-                player.getInventory().setItem(index, null);
+
+                int tempAmount = itemStack.getAmount();
+
+                if (tempAmount <= amount) {
+                    player.getInventory().setItem(index, null);
+                    amount -= tempAmount;
+                    total += tempAmount;
+                } else {
+                    // If temp amount is greater than the required amount, only take the required amount
+                    int diff = tempAmount - amount;
+                    itemStack.setAmount(diff);
+                    player.getInventory().setItem(index, null);
+                    player.getInventory().setItem(index, itemStack);
+                    total += amount;
+                    return total;
+
+                }
             }
             index++;
         }

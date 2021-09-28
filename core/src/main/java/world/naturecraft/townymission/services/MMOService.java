@@ -33,7 +33,7 @@ public abstract class MMOService {
 
     public abstract void addMiItem(UUID playerUUID, String category, String id, int amount);
 
-    public abstract int getTotalAndSetNull(UUID playerUUID, String type, String id);
+    public abstract int getAmountAndSetNull(UUID playerUUID, String type, String id, int amount);
 
     public abstract boolean validate(String type, String id);
 }

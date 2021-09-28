@@ -54,6 +54,30 @@ public class TownyMissionDeposit extends TownyMissionCommand {
         super(instance);
     }
 
+    public int getAmountCompletable(Player player, ResourceMissionJson resourceMissionJson, boolean isAll) {
+        int number;
+        int diff = resourceMissionJson.getAmount() - resourceMissionJson.getCompleted();
+        if (isAll) {
+            if (resourceMissionJson.isMi()) {
+                number = MMOService.getInstance().getAmountAndSetNull(player.getUniqueId(), resourceMissionJson.getType(), resourceMissionJson.getMiID(), diff);
+            } else {
+                number = getAmountAndSetNull(player, Material.valueOf(resourceMissionJson.getType()), diff);
+            }
+        } else {
+            int tempAmount = player.getItemInHand().getAmount();
+            if (tempAmount < diff) {
+                player.setItemInHand(null);
+                number = tempAmount;
+            } else {
+                ItemStack stack = player.getItemInHand();
+                stack.setAmount(stack.getAmount() - diff);
+                player.setItemInHand(null);
+                player.setItemInHand(stack);
+                number = diff;
+            }
+        }
+        return number;
+    }
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -78,29 +102,14 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                 public void run() {
 
                     TownyMissionBukkit instance = TownyMissionInstance.getInstance();
-                    List<MissionEntry> resouceEntries = MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE));
-                    if (resouceEntries.isEmpty()) {
-                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNoMission", true));
-                        return;
-                    }
-                    MissionEntry resourceEntry = resouceEntries.get(0);
+                    MissionEntry resourceEntry = MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE)).get(0);
                     ResourceMissionJson resourceMissionJson = (ResourceMissionJson) resourceEntry.getMissionJson();
 
                     if (instance.isMainServer()) {
                         // This means that this is the main server, directly interact with the services
                         if (!sanityCheck(player, args)) return;
 
-                        int number;
-                        if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
-                            if (resourceMissionJson.isMi()) {
-                                number = MMOService.getInstance().getTotalAndSetNull(player.getUniqueId(), resourceMissionJson.getType(), resourceMissionJson.getMiID());
-                            } else {
-                                number = getTotalAndSetNull(player, Material.valueOf(resourceMissionJson.getType()));
-                            }
-                        } else {
-                            number = player.getItemInHand().getAmount();
-                            player.setItemInHand(null);
-                        }
+                        int number = getAmountCompletable(player, resourceMissionJson, args.length == 2);
 
                         resourceMissionJson.addContribution(player.getUniqueId().toString(), number);
                         resourceMissionJson.addCompleted(number);
@@ -117,14 +126,8 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                         }
                     } else {
                         // Non main, send PMC instead
-                        int number;
+                        int number = getAmountCompletable(player, resourceMissionJson, args[1].equalsIgnoreCase("all"));
                         Material itemInHand = player.getItemInHand().getType();
-                        if (args.length == 2 && args[1].equalsIgnoreCase("all")) {
-                            number = getTotalAndSetNull(player, Material.valueOf(resourceMissionJson.getType()));
-                        } else {
-                            number = player.getItemInHand().getAmount();
-                            player.setItemInHand(null);
-                        }
 
                         PluginMessage mainSrvRequest = new PluginMessage()
                                 .origin(instance.getInstanceConfig().getString("bungeecord.server-name"))
@@ -214,17 +217,19 @@ public class TownyMissionDeposit extends TownyMissionCommand {
                     }
                 })
                 .customCheck(() -> {
+                    List<MissionEntry> resouceEntries = MissionDao.getInstance().getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE));
+                    if (resouceEntries.isEmpty()) {
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onNoMission", true));
+                        return false;
+                    }
+                    return true;
+                })
+                .customCheck(() -> {
                     // Mission timeout
                     MissionEntry resourceEntry = missionDao.getTownMissions(TownyUtil.residentOf(player).getUUID(), missionEntry -> missionEntry.isStarted() && missionEntry.getMissionType().equals(MissionType.RESOURCE)).get(0);
 
-                    try {
-                        if (resourceEntry.isTimedout()) {
-                            ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onMissionTimedOut"));
-                            return false;
-                        }
-                    } catch (NoStartedException e) {
-                        // This should not happen, if it gets to this, it must have been started
-                        e.printStackTrace();
+                    if (resourceEntry.isTimedout()) {
+                        ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.deposit.onMissionTimedOut"));
                         return false;
                     }
                     return true;
@@ -263,13 +268,28 @@ public class TownyMissionDeposit extends TownyMissionCommand {
         return tabList;
     }
 
-    private int getTotalAndSetNull(Player player, Material material) {
+    private int getAmountAndSetNull(Player player, Material material, int amount) {
         int total = 0;
         int index = 0;
+
         for (ItemStack itemStack : player.getInventory().getContents()) {
             if (itemStack != null && itemStack.getType().equals(material)) {
-                total += itemStack.getAmount();
-                player.getInventory().setItem(index, null);
+                int tempAmount = itemStack.getAmount();
+
+                // If temp amount is lesser than the required amount, set to null and keep the loop running
+                if (tempAmount <= amount) {
+                    player.getInventory().setItem(index, null);
+                    amount -= tempAmount;
+                    total += tempAmount;
+                } else {
+                    // If temp amount is greater than the required amount, only take the required amount
+                    int diff = tempAmount - amount;
+                    ItemStack tempStack = new ItemStack(material, diff);
+                    player.getInventory().setItem(index, null);
+                    player.getInventory().setItem(index, tempStack);
+                    total += amount;
+                    return total;
+                }
             }
             index++;
         }
