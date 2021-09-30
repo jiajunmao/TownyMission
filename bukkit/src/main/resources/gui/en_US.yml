@@ -102,6 +102,6 @@ mission_info:
     participant:
       title: "&5--Participant Section--"
       lores:
-        - "&eTotal Points: %f%total_points%"
+        - "&eTotal Points: &f%total_points%"
         - "&eBaseline: &f%baseline_points%"
         - "&eRanking Points: &f%ranking_points%"

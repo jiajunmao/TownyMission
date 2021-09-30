@@ -104,7 +104,7 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
                         int currentSprint = instance.getStatsConfig().getInt("sprint.current");
                         for (String s : instance.getGuiLangEntries("mission_info.sections.basic_info.lores")) {
                             s = s.replace("%season%", String.valueOf(currentSeason))
-                                    .replace("%sprint", String.valueOf(currentSprint))
+                                    .replace("%sprint%", String.valueOf(currentSprint))
                                     .replace("%town_name%", town.getName());
                             builder.add(s);
                         }
