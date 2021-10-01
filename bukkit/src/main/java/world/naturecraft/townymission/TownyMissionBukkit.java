@@ -17,6 +17,7 @@ import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.naturelib.utils.BukkitUtil;
 import world.naturecraft.naturelib.utils.UpdateChecker;
 import world.naturecraft.townymission.commands.*;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminDump;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminInfo;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
@@ -385,6 +386,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             this.getCommand("townymissionadmin").setExecutor(rootAdminCmd);
             rootAdminCmd.registerCommand("reload", new TownyMissionAdminReload(this));
             rootAdminCmd.registerCommand("info", new TownyMissionAdminInfo(this));
+            rootAdminCmd.registerCommand("dump", new TownyMissionAdminDump(this));
             rootAdminCmd.registerCommand("season", seasonRoot);
             rootAdminCmd.registerCommand("sprint", sprintRoot);
             rootAdminCmd.registerCommand("mission", missionRoot);
