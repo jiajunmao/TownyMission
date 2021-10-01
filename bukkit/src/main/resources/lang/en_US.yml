@@ -51,6 +51,9 @@ commands:
     notInTown: "&cYou are not a member of a town. You need to be in a town to work on Towny Mission"
 
 adminCommands:
+  dump:
+    onSuccess: "&fThe generated diagnostic report can be accessed here: &e%link%"
+    onFailure: "&cSomething went wrong during generating a diagnostic report!"
   season_point:
     onSuccess: "&fYou have successfully %action% %amount% season points to %town%"
   sprint_point:
