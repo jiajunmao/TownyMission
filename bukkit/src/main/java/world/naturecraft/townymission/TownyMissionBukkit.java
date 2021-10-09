@@ -44,6 +44,7 @@ import world.naturecraft.townymission.listeners.mission.mob.MobListener;
 import world.naturecraft.townymission.listeners.mission.mob.MythicMobListener;
 import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
 import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
+import world.naturecraft.townymission.listeners.mission.vote.NuVotifierVoteListener;
 import world.naturecraft.townymission.listeners.mission.vote.UltimateVoteListener;
 import world.naturecraft.townymission.services.PlaceholderBukkitService;
 import world.naturecraft.townymission.services.core.StorageService;
@@ -460,8 +461,14 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         }
 
         if (isMissionEnabled(MissionType.VOTE)) {
-            getServer().getConsoleSender().sendMessage("Hooked into UltimateVotes Vote Events");
-            getServer().getPluginManager().registerEvents(new UltimateVoteListener(this), this);
+            if (missionAndHooks.get(MissionType.VOTE).contains("UltimateVotes")) {
+                getServer().getConsoleSender().sendMessage("Hooked into UltimateVotes Vote Events");
+                getServer().getPluginManager().registerEvents(new UltimateVoteListener(this), this);
+            }
+            if (missionAndHooks.get(MissionType.VOTE).contains("NuVotifier")) {
+                getServer().getConsoleSender().sendMessage("Hooked into NuVotifier Vote Events");
+                getServer().getPluginManager().registerEvents(new NuVotifierVoteListener(this), this);
+            }
         }
     }
 

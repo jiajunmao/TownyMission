@@ -5,6 +5,7 @@
 package world.naturecraft.townymission.listeners.mission;
 
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.townymission.TownyMissionBukkit;
@@ -46,7 +47,7 @@ public abstract class MissionListener extends TownyMissionListener {
      * @param player        the player
      * @param amount        the amount
      */
-    public void doLogic(BukkitChecker bukkitChecker, MissionType missionType, Player player, int amount) {
+    public void doLogic(BukkitChecker bukkitChecker, MissionType missionType, OfflinePlayer player, int amount) {
         // This is where main server and non-main server differs
         // If it is main server, directly interact with the DAOs
         // If it is not the main server, send the event to the main server through PMC
