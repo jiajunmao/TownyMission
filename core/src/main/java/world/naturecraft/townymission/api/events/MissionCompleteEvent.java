@@ -22,7 +22,6 @@ public class MissionCompleteEvent extends Event {
         this.playerCompleted = playerCompleted;
         this.completedTime = completedTime;
         this.missionEntry = missionEntry;
-        this.cancelled = false;
     }
 
     public OfflinePlayer getPlayerCompleted() {
