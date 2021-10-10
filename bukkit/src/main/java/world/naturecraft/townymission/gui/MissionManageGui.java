@@ -287,7 +287,7 @@ public class MissionManageGui extends TownyMissionGui {
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MissionService.getInstance().completeMission(entry);
+                        MissionService.getInstance().completeMission(player, entry);
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess", true).replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
                     }
                 };
