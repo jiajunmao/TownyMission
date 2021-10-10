@@ -7,6 +7,7 @@ prefix: "&6[TownyMission]"
 commands:
   abort:
     onSuccess: "&fThe mission has been aborted"
+    onSuccessBroadcast: "&fYour town member %player% just aborted the mission %mission%. Go and start a new one!"
     onNotMayorOrStarter: "&cYou either need to be the mayor or started the mission yourself to abort!"
   claim:
     onNotFound: "&cYour town does not have unclaimed missions!"
@@ -33,6 +34,7 @@ commands:
     onNoPermission: "&cYou do not have the '%permission%' permission!"
   complete:
     onSuccess: "&fYou have successfully completed the mission!"
+    onSuccessBroadcast: "&f%player% has just completed %mission% for your town! Congrats!"
   reload:
     onSuccess: "&fYou have successfully reloaded config!"
     onFailure: "&cSomething went wrong during reload. Some config might not be valid. Please check console!"
