@@ -2,6 +2,7 @@ package world.naturecraft.townymission.services.core;
 
 import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.components.entity.Rankable;
+import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SeasonDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
@@ -38,7 +39,8 @@ public class RankingService {
         int realBaseline = baseline + (TownyService.getInstance().getNumResidents(townUUID) - 1) * memberScale + (currentSprint - 1) * baselineIncrement;
         realBaseline = realBaseline > baselineCap ? baseline : realBaseline;
 
-        int naturepoints = SprintDao.getInstance().get(townUUID).getNaturepoints();
+        SprintEntry thisSprint = SprintDao.getInstance().get(townUUID); //check if current sprint is null
+        int naturepoints = thisSprint == null ? 0 : thisSprint.getNaturepoints();
         int rankingPoints = TownyService.getInstance().getNumResidents(townUUID) == 0 ? naturepoints - realBaseline : (naturepoints - realBaseline) / TownyService.getInstance().getNumResidents(townUUID);
         rankingPoints = Math.max(rankingPoints, 0);
         return rankingPoints;
