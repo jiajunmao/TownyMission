@@ -7,6 +7,7 @@ prefix: "&6[城镇任务]"
 commands:
   abort:
     onSuccess: "&f任务已被终止"
+    onSuccessBroadcast: "玩家%player$"
     onNotMayorOrStarter: "&c只有镇长或者任务发起人才能终止任务!"
   claim:
     onNotFound: "&c你没有可以领取的内容!"

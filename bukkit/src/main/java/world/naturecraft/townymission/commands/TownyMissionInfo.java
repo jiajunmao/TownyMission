@@ -16,15 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import world.naturecraft.naturelib.utils.MultilineBuilder;
 import world.naturecraft.townymission.TownyMissionBukkit;
-import world.naturecraft.townymission.api.exceptions.NoStartedException;
 import world.naturecraft.townymission.commands.templates.TownyMissionCommand;
 import world.naturecraft.townymission.components.entity.MissionEntry;
 import world.naturecraft.townymission.components.entity.SprintEntry;
 import world.naturecraft.townymission.data.dao.MissionDao;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.ChatService;
-import world.naturecraft.townymission.services.MissionService;
 import world.naturecraft.townymission.services.core.RankingService;
+import world.naturecraft.townymission.services.core.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
@@ -145,15 +144,20 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
                         // Participant info section
                         builder.add(instance.getGuiLangEntry("mission_info.sections.participant.title"));
 
-                        SprintEntry sprintEntry = SprintDao.getInstance().get(town.getUUID());
-                        int naturepoints = sprintEntry == null ? 0 : sprintEntry.getNaturepoints();
+                        System.out.println("Season CANN start: " + TimerService.getInstance().canStartMission());
+                        if (!TimerService.getInstance().canStartMission()) {
+                            builder.add("&eSeason currently paused");
+                        } else {
+                            SprintEntry sprintEntry = SprintDao.getInstance().get(town.getUUID());
+                            int naturepoints = sprintEntry == null ? 0 : sprintEntry.getNaturepoints();
 
-                        for(String s : instance.getGuiLangEntries("mission_info.sections.participant.lores")) {
-                            s = s.replace("%total_points%", String.valueOf(naturepoints))
-                                    .replace("%baseline_points%", String.valueOf(RankingService.getInstance().getTownBaseline(town.getUUID())))
-                                    .replace("%ranking_points%", String.valueOf(RankingService.getInstance().getRankingPoints(town.getUUID())));
+                            for (String s : instance.getGuiLangEntries("mission_info.sections.participant.lores")) {
+                                s = s.replace("%total_points%", String.valueOf(naturepoints))
+                                        .replace("%baseline_points%", String.valueOf(RankingService.getInstance().getTownBaseline(town.getUUID())))
+                                        .replace("%ranking_points%", String.valueOf(RankingService.getInstance().getRankingPoints(town.getUUID())));
 
-                            builder.add(s);
+                                builder.add(s);
+                            }
                         }
 
 
