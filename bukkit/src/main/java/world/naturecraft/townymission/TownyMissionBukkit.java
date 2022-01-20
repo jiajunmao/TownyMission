@@ -30,6 +30,7 @@ import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSpr
 import world.naturecraft.townymission.commands.admin.sprint.TownyMissionAdminSprintRoot;
 import world.naturecraft.townymission.components.entity.CooldownEntry;
 import world.naturecraft.townymission.components.enums.DbType;
+import world.naturecraft.townymission.components.enums.LogLevel;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.config.MissionConfig;
 import world.naturecraft.townymission.config.RewardConfigValidator;
@@ -608,5 +609,32 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
     public List<String> getGuiLangEntries(String path) {
         return new ArrayList<>(guiConfig.getStringList(path));
+    }
+
+    public int debugLevel() {
+        return getInstanceConfig().getInt("verbose");
+    }
+
+    @Override
+    public void log(String trace) {
+        log(trace, LogLevel.INFO);
+    }
+
+    @Override
+    public void log(String trace, LogLevel level) {
+        switch (level) {
+            case INFO:
+                if (debugLevel() == 2)
+                    logger.info(trace);
+                break;
+            case WARNING:
+                if (debugLevel() >= 1)
+                    logger.warning(trace);
+                break;
+            case ERROR:
+                if (debugLevel() >= 1)
+                    logger.severe(trace);
+                break;
+        }
     }
 }
