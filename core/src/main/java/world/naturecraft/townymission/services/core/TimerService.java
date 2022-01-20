@@ -141,15 +141,13 @@ public class TimerService extends TownyMissionService {
 
                 Date date = new Date();
                 long timeNow = date.getTime();
-                //System.out.printf("Curr season: %d, sprint: %d\n", instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
-                //System.out.printf("Season interval: %b, sprint interval %b\n", isInInterval(RankType.SEASON), isInInterval(RankType.SPRINT));
-                //System.out.printf("Season within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SEASON), timeNow < getActiveEndTime(RankType.SEASON));
+                System.out.printf("Curr season: %d, sprint: %d\n", instance.getStatsConfig().getInt("season.current"), instance.getStatsConfig().getInt("sprint.current"));
+                System.out.printf("Season interval: %b, sprint interval %b\n", isInInterval(RankType.SEASON), isInInterval(RankType.SPRINT));
+                System.out.printf("Season within TotalEndTime: %b, within ActiveEndTime: %b\n", timeNow < getTotalEndTime(RankType.SEASON), timeNow < getActiveEndTime(RankType.SEASON));
 
                 // This means that season is not started
                 if (instance.getStatsConfig().getLong("season.startedTime") == -1) return;
 
-                System.out.println("test");
-                System.out.println("Timenow: " + String.valueOf(timeNow) + " totalEndTime: " + String.valueOf(getTotalEndTime(RankType.SEASON)));
                 if (timeNow > getTotalEndTime(RankType.SEASON)) {
                     instance.getInstanceLogger().warning("Season interval ended. Proceed to the next season: " + (instance.getStatsConfig().getInt("season.current") + 1));
                     // This means we are entering next season
