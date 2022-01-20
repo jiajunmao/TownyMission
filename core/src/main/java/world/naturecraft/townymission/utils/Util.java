@@ -7,6 +7,7 @@ import world.naturecraft.townymission.components.enums.DbType;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,5 +53,9 @@ public class Util extends world.naturecraft.naturelib.utils.Util {
 
     public static List<Integer> currBukkitVer() {
         return Util.versionParser(Bukkit.getVersion().substring(Bukkit.getVersion().indexOf("MC: ") + 4, Bukkit.getVersion().length() - 1));
+    }
+
+    public static long now() {
+        return new Date().getTime();
     }
 }

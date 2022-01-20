@@ -8,6 +8,7 @@ import world.naturecraft.naturelib.components.enums.ServerType;
 import world.naturecraft.naturelib.components.enums.StorageType;
 import world.naturecraft.naturelib.config.BungeeConfig;
 import world.naturecraft.naturelib.config.NatureConfig;
+import world.naturecraft.townymission.components.enums.LogLevel;
 import world.naturecraft.townymission.listener.PMCListener;
 
 import java.io.File;
@@ -156,5 +157,33 @@ public class TownyMissionBungee extends Plugin implements TownyMissionInstance {
 
     @Override
     public void reloadConfigs() {
+    }
+
+    @Override
+    public int debugLevel() {
+        return getInstanceConfig().getInt("verbose");
+    }
+
+    @Override
+    public void log(String trace) {
+        log(trace, LogLevel.INFO);
+    }
+
+    @Override
+    public void log(String trace, LogLevel level) {
+        switch (level) {
+            case INFO:
+                if (debugLevel() == 2)
+                    logger.info(trace);
+                break;
+            case WARNING:
+                if (debugLevel() >= 1)
+                    logger.warning(trace);
+                break;
+            case ERROR:
+                if (debugLevel() >= 1)
+                    logger.severe(trace);
+                break;
+        }
     }
 }

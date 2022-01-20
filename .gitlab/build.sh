@@ -1,1 +1,1 @@
-mvn -s .gitlab/ci_settings.xml -T 16 clean build
+mvn -s .gitlab/ci_settings.xml -T 16 clean install
