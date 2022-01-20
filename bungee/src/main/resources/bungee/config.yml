@@ -1,2 +1,7 @@
 # Main Server setting
 main-server: lobby
+
+# Print all of the debug information of different level
+#   1 - Important debug information only (this currently does not work)
+#   2 - All of the debug information
+verbose: 2
