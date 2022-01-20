@@ -17,6 +17,7 @@ import world.naturecraft.naturelib.exceptions.ConfigParsingException;
 import world.naturecraft.naturelib.utils.BukkitUtil;
 import world.naturecraft.naturelib.utils.UpdateChecker;
 import world.naturecraft.townymission.commands.*;
+import world.naturecraft.townymission.commands.admin.TownyMissionAdminDump;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminInfo;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminReload;
 import world.naturecraft.townymission.commands.admin.TownyMissionAdminRoot;
@@ -43,6 +44,7 @@ import world.naturecraft.townymission.listeners.mission.mob.MobListener;
 import world.naturecraft.townymission.listeners.mission.mob.MythicMobListener;
 import world.naturecraft.townymission.listeners.mission.money.CMIMoneyListener;
 import world.naturecraft.townymission.listeners.mission.money.EssentialMoneyListener;
+import world.naturecraft.townymission.listeners.mission.vote.NuVotifierVoteListener;
 import world.naturecraft.townymission.listeners.mission.vote.UltimateVoteListener;
 import world.naturecraft.townymission.services.PlaceholderBukkitService;
 import world.naturecraft.townymission.services.core.StorageService;
@@ -385,6 +387,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
             this.getCommand("townymissionadmin").setExecutor(rootAdminCmd);
             rootAdminCmd.registerCommand("reload", new TownyMissionAdminReload(this));
             rootAdminCmd.registerCommand("info", new TownyMissionAdminInfo(this));
+            rootAdminCmd.registerCommand("dump", new TownyMissionAdminDump(this));
             rootAdminCmd.registerCommand("season", seasonRoot);
             rootAdminCmd.registerCommand("sprint", sprintRoot);
             rootAdminCmd.registerCommand("mission", missionRoot);
@@ -458,8 +461,14 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
         }
 
         if (isMissionEnabled(MissionType.VOTE)) {
-            getServer().getConsoleSender().sendMessage("Hooked into UltimateVotes Vote Events");
-            getServer().getPluginManager().registerEvents(new UltimateVoteListener(this), this);
+            if (missionAndHooks.get(MissionType.VOTE).contains("UltimateVotes")) {
+                getServer().getConsoleSender().sendMessage("Hooked into UltimateVotes Vote Events");
+                getServer().getPluginManager().registerEvents(new UltimateVoteListener(this), this);
+            }
+            if (missionAndHooks.get(MissionType.VOTE).contains("NuVotifier")) {
+                getServer().getConsoleSender().sendMessage("Hooked into NuVotifier Vote Events");
+                getServer().getPluginManager().registerEvents(new NuVotifierVoteListener(this), this);
+            }
         }
     }
 

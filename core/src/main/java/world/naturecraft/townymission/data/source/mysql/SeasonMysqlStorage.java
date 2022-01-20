@@ -85,26 +85,26 @@ public class SeasonMysqlStorage extends MysqlStorage<SeasonEntry> implements Sea
      * @param season      the season
      */
     public void add(UUID townUUID, int seasonPoint, int season) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
-            SeasonEntry seasonEntry = new SeasonEntry(UUID.randomUUID(), townUUID, seasonPoint, season);
+            SeasonEntry seasonEntry = new SeasonEntry(randomUUID, townUUID, seasonPoint, season);
             memCache.put(seasonEntry.getId(), seasonEntry);
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(townUUID, seasonPoint, season);
+                    addRemote(randomUUID, townUUID, seasonPoint, season);
                 }
             };
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        addRemote(townUUID, seasonPoint, season);
+        addRemote(randomUUID, townUUID, seasonPoint, season);
     }
 
-    private void addRemote(UUID townUUID, int seasonPoint, int season) {
+    private void addRemote(UUID randomUUID, UUID townUUID, int seasonPoint, int season) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID + "', '" +
                     townUUID + "', '" +
                     seasonPoint + "', '" +
                     season + "');";

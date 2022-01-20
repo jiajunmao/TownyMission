@@ -4,8 +4,13 @@
 
 package world.naturecraft.townymission.services;
 
+import com.palmergames.bukkit.towny.object.Resident;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import world.naturecraft.naturelib.InstanceType;
 import world.naturecraft.naturelib.utils.EntryFilter;
+import world.naturecraft.townymission.api.events.MissionCompleteEvent;
 import world.naturecraft.townymission.components.entity.*;
 import world.naturecraft.townymission.components.enums.MissionType;
 import world.naturecraft.townymission.components.enums.RewardType;
@@ -130,6 +135,15 @@ public abstract class MissionService extends TownyMissionService {
                 return;
         }
 
+        // Notify the town on abort mission
+        for (UUID uuid : TownyService.getInstance().getResidents(entry.getTownUUID())) {
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+            if (!uuid.equals(player) && !force && offlinePlayer.isOnline()) {
+                Player p = (Player) offlinePlayer;
+                ChatService.getInstance().sendMsg(uuid, instance.getLangEntry("commands.abort.onSuccessBroadcast").replace("%player%", p.getName()).replace("%mission%", entry.getDisplayLine()));
+            }
+        }
+
         giveBack(entry);
         MissionDao.getInstance().remove(entry);
         CooldownService.getInstance().startCooldown(entry.getTownUUID(), entry.getNumMission(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
@@ -167,11 +181,26 @@ public abstract class MissionService extends TownyMissionService {
      *
      * @param entry the entry
      */
-    public void completeMission(MissionEntry entry) {
+    public void completeMission(OfflinePlayer player, MissionEntry entry) {
         if (entry.isTimedout() && !entry.isCompleted()) return;
 
         giveBack(entry);
 
+        // Send out completion event
+        MissionCompleteEvent completeEvent = new MissionCompleteEvent(player, new Date().getTime(), entry);
+        Bukkit.getPluginManager().callEvent(completeEvent);
+
+        // Send out mission completion notification
+        if (player != null) {
+            List<UUID> residentList = TownyService.getInstance().getResidents(entry.getTownUUID());
+            for (UUID uuid : residentList) {
+                if (uuid != player.getUniqueId() && Bukkit.getOfflinePlayer(uuid).isOnline()) {
+                    ChatService.getInstance().sendMsg(uuid, instance.getLangEntry("commands.complete.onSuccessBroadcast").replace("%player%", player.getName()).replace("%mission%", entry.getDisplayLine()));
+                }
+            }
+        }
+
+        // Database jobs
         MissionDao.getInstance().remove(entry);
         MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(entry, new Date().getTime());
         MissionHistoryDao.getInstance().add(missionHistoryEntry);
@@ -187,6 +216,7 @@ public abstract class MissionService extends TownyMissionService {
                     instance.getStatsConfig().getInt("sprint.current"),
                     instance.getStatsConfig().getInt("season.current")));
         }
+
         CooldownService.getInstance().startCooldown(entry.getTownUUID(), entry.getNumMission(), TimeUnit.MILLISECONDS.convert(instance.getInstanceConfig().getInt("mission.cooldown"), TimeUnit.MINUTES));
     }
 
@@ -240,7 +270,7 @@ public abstract class MissionService extends TownyMissionService {
         for (MissionEntry entry : entryList) {
             if (entry.isStarted() && entry.isCompleted()) {
                 // If it is already completed, but unmoved, move to MissionHistory, and give the reward
-                MissionService.getInstance().completeMission(entry);
+                MissionService.getInstance().completeMission(null, entry);
             }
 
             // Remove the entry from MissionStorage

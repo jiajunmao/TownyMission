@@ -104,27 +104,27 @@ public class MissionMysqlStorage extends MysqlStorage<MissionEntry> implements M
      * @param startedPlayerUUID the started player uuid
      */
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
             MissionEntry missionEntry = new MissionEntry(
-                    UUID.randomUUID(), missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
+                    randomUUID, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
             memCache.put(missionEntry.getId(), missionEntry);
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
+                    addRemote(randomUUID, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
                 }
             };
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        addRemote(missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
+        addRemote(randomUUID, missionType, addedTime, startedTime, allowedTime, missionJson, townUUID, startedPlayerUUID, numMission);
     }
 
-    private void addRemote(String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
+    private void addRemote(UUID randomUUID, String missionType, long addedTime, long startedTime, long allowedTime, String missionJson, UUID townUUID, UUID startedPlayerUUID, int numMission) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID + "', '" +
                     missionType + "', '" +
                     addedTime + "', '" +
                     startedTime + "', '" +

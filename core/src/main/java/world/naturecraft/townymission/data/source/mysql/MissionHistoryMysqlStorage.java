@@ -105,29 +105,29 @@ public class MissionHistoryMysqlStorage extends MysqlStorage<MissionHistoryEntry
      * @param season            the season
      */
     public void add(String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
             MissionHistoryEntry missionHistoryEntry = new MissionHistoryEntry(
-                    UUID.randomUUID(), missionType, addedTime, startedTime, allowedTime,
+                    randomUUID, missionType, addedTime, startedTime, allowedTime,
                     taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
             memCache.put(missionHistoryEntry.getId(), missionHistoryEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+                    addRemote(randomUUID, missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
                 }
             };
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        addRemote(missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
+        addRemote(randomUUID, missionType, addedTime, startedTime, allowedTime, taskJson, townUUID, startedPlayerUUID, completedTime, isClaimed, sprint, season);
     }
 
-    private void addRemote(String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
+    private void addRemote(UUID randomUUID, String missionType, long addedTime, long startedTime, long allowedTime, String taskJson, UUID townUUID, UUID startedPlayerUUID, long completedTime, boolean isClaimed, int sprint, int season) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID.toString() + "', '" +
                     missionType + "', '" +
                     addedTime + "', '" +
                     startedTime + "', '" +

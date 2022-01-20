@@ -89,14 +89,15 @@ public class SprintMysqlStorage extends MysqlStorage<SprintEntry> implements Spr
      * @param season       the season
      */
     public void add(UUID townUUID, int naturePoints, int sprint, int season) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
-            SprintEntry sprintEntry = new SprintEntry(UUID.randomUUID(), townUUID, naturePoints, sprint, season);
+            SprintEntry sprintEntry = new SprintEntry(randomUUID, townUUID, naturePoints, sprint, season);
             memCache.put(sprintEntry.getId(), sprintEntry);
 
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(townUUID, naturePoints, sprint, season);
+                    addRemote(randomUUID, townUUID, naturePoints, sprint, season);
                 }
             };
 
@@ -104,13 +105,12 @@ public class SprintMysqlStorage extends MysqlStorage<SprintEntry> implements Spr
             return;
         }
 
-        addRemote(townUUID, naturePoints, sprint, season);
+        addRemote(randomUUID, townUUID, naturePoints, sprint, season);
     }
 
-    private void addRemote(UUID townUUID, int naturePoints, int sprint, int season) {
+    private void addRemote(UUID randomUUID, UUID townUUID, int naturePoints, int sprint, int season) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID + "', '" +
                     townUUID + "', '" +
                     naturePoints + "', '" +
                     sprint + "', '" +

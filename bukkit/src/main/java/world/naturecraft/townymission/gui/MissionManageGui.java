@@ -72,7 +72,7 @@ public class MissionManageGui extends TownyMissionGui {
         Town town = TownyUtil.residentOf(player);
 
         // If not in recess or not has not started, proceed. Otherwise place fillers;
-        if (!TimerService.getInstance().canStart()) {
+        if (!TimerService.getInstance().canStartMission()) {
             placeRecessFiller();
             return;
         }
@@ -208,7 +208,7 @@ public class MissionManageGui extends TownyMissionGui {
         int row = slot / 9;
 
         // This means that if its recess time, nothing will happen if you click
-        if (!TimerService.getInstance().canStart()) {
+        if (!TimerService.getInstance().canStartMission()) {
             ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("universal.onClickDuringRecess", true));
             return;
         }
@@ -287,7 +287,7 @@ public class MissionManageGui extends TownyMissionGui {
                 BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MissionService.getInstance().completeMission(entry);
+                        MissionService.getInstance().completeMission(player, entry);
                         ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.claim.onSuccess", true).replace("%points%", String.valueOf(entry.getMissionJson().getReward())));
                     }
                 };

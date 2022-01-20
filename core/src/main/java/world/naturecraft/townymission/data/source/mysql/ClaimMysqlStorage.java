@@ -94,28 +94,28 @@ public class ClaimMysqlStorage extends MysqlStorage<ClaimEntry> implements Claim
      * @param sprint     the sprint
      */
     public void add(UUID playerUUID, String rewardType, String rewardJson, int season, int sprint) {
+        UUID randomUUID = UUID.randomUUID();
         if (cached) {
             ClaimEntry claimEntry = new ClaimEntry(
-                    UUID.randomUUID(), playerUUID, rewardType, rewardJson, season, sprint
+                    randomUUID, playerUUID, rewardType, rewardJson, season, sprint
             );
             memCache.put(claimEntry.getId(), claimEntry);
             BukkitRunnable r = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    addRemote(playerUUID, rewardType, rewardJson, season, sprint);
+                    addRemote(randomUUID, playerUUID, rewardType, rewardJson, season, sprint);
                 }
             };
             r.runTaskAsynchronously(TownyMissionInstance.getInstance());
             return;
         }
 
-        addRemote(playerUUID, rewardType, rewardJson, season, sprint);
+        addRemote(randomUUID, playerUUID, rewardType, rewardJson, season, sprint);
     }
 
-    private void addRemote(UUID playerUUID, String rewardType, String rewardJson, int season, int sprint) {
+    private void addRemote(UUID randomUUID, UUID playerUUID, String rewardType, String rewardJson, int season, int sprint) {
         execute(conn -> {
-            UUID uuid = UUID.randomUUID();
-            String sql = "INSERT INTO " + tableName + " VALUES('" + uuid + "', '" +
+            String sql = "INSERT INTO " + tableName + " VALUES('" + randomUUID + "', '" +
                     playerUUID + "', '" +
                     rewardType + "', '" +
                     rewardJson + "', '" +

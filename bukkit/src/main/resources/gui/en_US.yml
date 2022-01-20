@@ -82,3 +82,26 @@ mission_manage:
     lores:
       - "&fThis slot is currently in cooldown"
       - "&fCooldown remaining: %time%"
+mission_info:
+  title: "&7------&eTowny Mission: Overview&7------"
+  sections:
+    basic_info:
+      title: "&5--Basic Info Section--"
+      lores:
+        - "&eCurrent Season: &f%season%"
+        - "&eCurrent Sprint: &f%sprint%"
+        - "Town: &f%town_name%"
+    mission:
+      title: "&5--Mission Section--"
+      lores:
+        - "&eCurrent Mission: &f%display_line%"
+        - "&eStarted By: &f%player_name%"
+        - "&eStarted Time: &f%started_time%"
+        - "&eAllowed Time: &f%allowed_time%"
+        - "Remaining Time: &f%remaining_time%"
+    participant:
+      title: "&5--Participant Section--"
+      lores:
+        - "&eTotal Points: &f%total_points%"
+        - "&eBaseline: &f%baseline_points%"
+        - "&eRanking Points: &f%ranking_points%"
