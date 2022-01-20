@@ -310,9 +310,12 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
                 Collection<String> hooks = mainConfig.getKeys("mission.types." + key + ".hooks");
                 for (String hook : hooks) {
+                    log("Parsing hook - " + hook, LogLevel.INFO);
+                    log("Plugin loaded: " + Bukkit.getPluginManager().isPluginEnabled(hook), LogLevel.INFO);
                     if (Bukkit.getPluginManager().isPluginEnabled(hook)
                             && mainConfig.getBoolean("mission.types." + key + ".hooks." + hook)
                             && mainConfig.getBoolean("mission.types." + key + ".enable")) {
+                        log("Enabling hook - " + hook, LogLevel.INFO);
                         if (missionAndHooks.containsKey(missionType)) {
                             List<String> hookList = missionAndHooks.get(missionType);
                             hookList.add(hook);
@@ -455,7 +458,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
                 getServer().getConsoleSender().sendMessage("Hooked into CMI Moeny Events");
                 getServer().getPluginManager().registerEvents(new CMIMoneyListener(this), this);
             }
-            if (missionAndHooks.get(MissionType.MONEY).contains("EssentialsX")) {
+            if (missionAndHooks.get(MissionType.MONEY).contains("Essentials")) {
                 getServer().getConsoleSender().sendMessage("Hooked into EssentialsX Money Events");
                 getServer().getPluginManager().registerEvents(new EssentialMoneyListener(this), this);
             }

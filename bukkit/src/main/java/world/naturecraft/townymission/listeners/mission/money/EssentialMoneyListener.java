@@ -26,15 +26,17 @@ public class EssentialMoneyListener extends MissionListener {
         Player player = event.getPlayer();
         BukkitChecker checker = null;
 
+        instance.log("Essential money event fired balance: " + (event.getNewBalance().subtract(event.getOldBalance()).intValue()));
+
         if (instance.isMainServer()) {
             checker = new BukkitChecker(instance).target(player).silent(true)
                     .hasTown()
                     .hasStarted()
                     .isMissionType(MissionType.MONEY)
                     .customCheck(() -> {
-                        return !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_ECO)
-                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_PAY)
-                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL);
+                        return event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_ECO)
+                                || event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_PAY)
+                                || event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL);
                     })
                     .customCheck(() -> {
                         return (event.getNewBalance().subtract(event.getOldBalance()).compareTo(BigDecimal.ZERO) > 0);
@@ -54,17 +56,20 @@ public class EssentialMoneyListener extends MissionListener {
         } else {
             BukkitChecker localCheck = new BukkitChecker(instance).target(player).silent(true)
                     .customCheck(() -> {
-                        return !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_ECO)
-                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_PAY)
-                                && !event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL);
+                        return event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_ECO)
+                                || event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_PAY)
+                                || event.getCause().equals(UserBalanceUpdateEvent.Cause.COMMAND_SELL);
                     })
                     .customCheck(() -> {
                         return (event.getNewBalance().subtract(event.getOldBalance()).compareTo(BigDecimal.ZERO) > 0);
                     });
 
-            if (!localCheck.check()) return;
+            if (!localCheck.check()) {
+                instance.log("Failing local check");
+            }
         }
 
+        instance.log("Doing mission logic");
         doLogic(checker, MissionType.MONEY, player, (event.getNewBalance().subtract(event.getOldBalance())).intValue());
     }
 }
