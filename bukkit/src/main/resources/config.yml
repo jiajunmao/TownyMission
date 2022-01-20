@@ -4,6 +4,12 @@ storage: yaml
 # Please make sure that this matches EXACTLY with the file name for the language file without the .yml
 language: en_US
 
+# Print all of the debug information of different level
+#   0 - None of the debug information will get printed
+#   1 - Important debug information only (this currently does not work)
+#   2 - All of the debug information
+verbose: 2
+
 # **I would sincerely suggest reading the wiki for what this section means**
 # Whether your towny server is spanned across multiple servers
 bungeecord:
