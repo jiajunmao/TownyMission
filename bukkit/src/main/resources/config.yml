@@ -81,7 +81,7 @@ mission:
       enable: true
       hooks:
         CMI: true
-        EssentialsX: false
+        Essentials: false
     vote:
       enable: true
       hooks:

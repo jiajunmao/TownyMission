@@ -9,7 +9,7 @@ depend:
 
 softdepend:
   - CMI
-  - EssentialsX
+  - Essentials
   - UltimateVotes
   - MMOItems
   - PlaceholderAPI
