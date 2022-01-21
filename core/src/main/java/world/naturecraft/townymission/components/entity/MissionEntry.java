@@ -313,8 +313,8 @@ public class MissionEntry extends DataEntity {
      * @return the boolean
      */
     public boolean isTimedout() {
-        Date date = new Date();
-        return startedTime + allowedTime < date.getTime();
+        //TownyMissionInstance.getInstance().log("<MissionEntry:isTimedOut> called, started: " + startedTime + " allowed: " + allowedTime +" now: " + Util.now());
+        return startedTime + allowedTime < Util.now();
     }
 
     /**
