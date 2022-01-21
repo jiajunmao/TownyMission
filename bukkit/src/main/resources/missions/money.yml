@@ -7,8 +7,20 @@
   timeAllowed: 2
   # Whether the 20000 will be returned back to the contributors after the mission is aborted or completed
   returnable: false
+  # Whether the scaling feature is enabled
+  scale: true
+  # Multipliers for each town size (and above)
+  scaleMultipliers:
+    1:
+      size: 1
+      multiplier: 1.5
+    2:
+      size: 2
+      multiplier: 5
+
 2:
   amount: 50000
   reward: 2000
   timeAllowed: 4
   returnable: true
+  scale: false

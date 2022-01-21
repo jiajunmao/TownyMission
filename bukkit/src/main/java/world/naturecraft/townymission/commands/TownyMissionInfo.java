@@ -6,6 +6,7 @@ package world.naturecraft.townymission.commands;
 
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -112,7 +113,7 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
                         builder.add(instance.getGuiLangEntry("mission_info.sections.mission.title"));
                         if (!MissionDao.getInstance().getStartedMissions(town.getUUID()).isEmpty()) {
                             taskEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
-                            Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
+                            OfflinePlayer startedPlayer = Bukkit.getOfflinePlayer(taskEntry.getStartedPlayerUUID());
 
                             long allowedTime = taskEntry.getAllowedTime();
 

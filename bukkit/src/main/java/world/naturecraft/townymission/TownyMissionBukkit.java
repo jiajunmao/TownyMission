@@ -80,7 +80,7 @@ public class TownyMissionBukkit extends JavaPlugin implements TownyMissionInstan
 
     @Override
     public void onEnable() {
-
+        //missionConfig.getMissionConfig(MissionType.MONEY).getInt("1.timeAllowed");
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "  _______                        __  __ _         _             "));
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + " |__   __|                      |  \\/  (_)       (_)            "));
         getServer().getConsoleSender().sendMessage(BukkitUtil.translateColor("&3" + "    | | _____      ___ __  _   _| \\  / |_ ___ ___ _  ___  _ __  "));

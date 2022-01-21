@@ -78,7 +78,7 @@ public class MissionManageGui extends TownyMissionGui {
         }
 
         // Check if there is loaded missions
-        List<MissionJson> missions = MissionConfigParser.parseAll(instance);
+        List<MissionJson> missions = MissionConfigParser.parseAll(instance, town);
         if (missions.size() == 0) {
             placeFiller();
             ChatService.getInstance().sendMsg(player.getUniqueId(), instance.getLangEntry("commands.list.onNoConfiguredMission"));

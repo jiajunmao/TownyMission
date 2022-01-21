@@ -7,8 +7,19 @@
   reward: 1000
   # The time allowed in hours before this mission time out
   timeAllowed: 2
+  # Whether the scaling feature is enabled
+  scale: true
+  # Multipliers for each town size (and above)
+  scaleMultipliers:
+    1:
+      size: 1
+      multiplier: 1.0
+    2:
+      size: 5
+      multiplier: 2.0
 2:
   world: nc-terra-earth
   amount: 10
   reward: 2000
   timeAllowed: 4
+  scale: false
