@@ -18,6 +18,16 @@
   timeAllowed: 2
   # Whether the 100000 bamboo will be returned to the contributors when the mission is completed
   returnable: false
+  # Whether the scaling feature is enabled
+  scale: true
+  # Multipliers for each town size (and above)
+  scaleMultipliers:
+    1:
+      size: 1
+      multiplier: 1.0
+    2:
+      size: 5
+      multiplier: 2.0
 2:
   isMi: true
   type: CONSUMABLE
@@ -26,3 +36,4 @@
   reward: 1000
   timeAllowed: 4
   returnable: false
+  scale: false

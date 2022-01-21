@@ -6,6 +6,7 @@ package world.naturecraft.townymission.commands;
 
 import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -92,8 +93,9 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
                 @Override
                 public void run() {
                     Player player = (Player) sender;
+                    MultilineBuilder builder = null;
                     if (sanityCheck(player, args)) {
-                        MultilineBuilder builder = new MultilineBuilder(instance.getGuiLangEntry("mission_info.title"));
+                        builder = new MultilineBuilder(instance.getGuiLangEntry("mission_info.title"));
                         Town town = TownyUtil.residentOf(player);
                         MissionEntry taskEntry;
 
@@ -113,7 +115,7 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
                         if (!MissionDao.getInstance().getStartedMissions(town.getUUID()).isEmpty()) {
                             taskEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
                             if (!taskEntry.isTimedout()) {
-                                Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
+                                OfflinePlayer startedPlayer = Bukkit.getOfflinePlayer(taskEntry.getStartedPlayerUUID());
 
                                 long allowedTime = taskEntry.getAllowedTime();
 
@@ -191,7 +193,8 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
      */
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String
+            alias, @NotNull String[] args) {
         return null;
     }
 }
