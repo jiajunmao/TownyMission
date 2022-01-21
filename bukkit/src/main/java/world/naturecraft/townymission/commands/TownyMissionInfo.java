@@ -112,30 +112,34 @@ public class TownyMissionInfo extends TownyMissionCommand implements TabExecutor
                         builder.add(instance.getGuiLangEntry("mission_info.sections.mission.title"));
                         if (!MissionDao.getInstance().getStartedMissions(town.getUUID()).isEmpty()) {
                             taskEntry = MissionDao.getInstance().getStartedMissions(town.getUUID()).get(0);
-                            Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
+                            if (!taskEntry.isTimedout()) {
+                                Player startedPlayer = Bukkit.getPlayer(taskEntry.getStartedPlayerUUID());
 
-                            long allowedTime = taskEntry.getAllowedTime();
+                                long allowedTime = taskEntry.getAllowedTime();
 
-                            DateFormat timeFormat = new SimpleDateFormat("dd/MM HH:mm");
+                                DateFormat timeFormat = new SimpleDateFormat("dd/MM HH:mm");
 
-                            String allowedTimeDisplay = String.format("%02d:%02d",
-                                    TimeUnit.MILLISECONDS.toHours(allowedTime),
-                                    TimeUnit.MILLISECONDS.toMinutes(allowedTime) -
-                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(allowedTime)));
+                                String allowedTimeDisplay = String.format("%02d:%02d",
+                                        TimeUnit.MILLISECONDS.toHours(allowedTime),
+                                        TimeUnit.MILLISECONDS.toMinutes(allowedTime) -
+                                                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(allowedTime)));
 
-                            long remainingTime = (taskEntry.getStartedTime() + allowedTime) - new Date().getTime();
-                            String remainingTimeDisplay = String.format("%02d:%02d",
-                                    TimeUnit.MILLISECONDS.toHours(remainingTime),
-                                    TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
-                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
+                                long remainingTime = (taskEntry.getStartedTime() + allowedTime) - new Date().getTime();
+                                String remainingTimeDisplay = String.format("%02d:%02d",
+                                        TimeUnit.MILLISECONDS.toHours(remainingTime),
+                                        TimeUnit.MILLISECONDS.toMinutes(remainingTime) -
+                                                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(remainingTime)));
 
-                            for (String s : instance.getGuiLangEntries("mission_info.sections.mission.lores")) {
-                                s = s.replace("%display_line%", taskEntry.getMissionJson().getDisplayLine())
-                                        .replace("%player_name%", startedPlayer.getName())
-                                        .replace("%started_time%", timeFormat.format(new Date(taskEntry.getStartedTime())))
-                                        .replace("%allowed_time%", allowedTimeDisplay)
-                                        .replace("%remaining_time%", remainingTimeDisplay);
-                                builder.add(s);
+                                for (String s : instance.getGuiLangEntries("mission_info.sections.mission.lores")) {
+                                    s = s.replace("%display_line%", taskEntry.getMissionJson().getDisplayLine())
+                                            .replace("%player_name%", startedPlayer.getName())
+                                            .replace("%started_time%", timeFormat.format(new Date(taskEntry.getStartedTime())))
+                                            .replace("%allowed_time%", allowedTimeDisplay)
+                                            .replace("%remaining_time%", remainingTimeDisplay);
+                                    builder.add(s);
+                                }
+                            } else {
+                                builder.add(instance.getGuiLangEntries("mission_info.sections.mission.lores").get(0).replace("%display_line%", "&cTimed Out"));
                             }
                         } else {
                             builder.add(instance.getGuiLangEntries("mission_info.sections.mission.lores").get(0).replace("%display_line%", "&cNone"));
