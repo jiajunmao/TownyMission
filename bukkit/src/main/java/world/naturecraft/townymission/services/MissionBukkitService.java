@@ -82,12 +82,16 @@ public class MissionBukkitService extends MissionService {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         MissionEntry taskEntry = MissionDao.getInstance().getTownMissions(townUUID, missionEntry -> missionEntry.getMissionType().equals(missionType)).get(0);
 
+        instance.log("<MissionBukkitService:doMission> called, timedout: " + taskEntry.isTimedout() + " completed: " + taskEntry.isCompleted());
+
         if (taskEntry.isCompleted() || taskEntry.isTimedout()) return;
 
         MissionJson json = taskEntry.getMissionJson();
         json.setCompleted(json.getCompleted() + amount);
         json.addContribution(player.getUniqueId().toString(), amount);
         taskEntry.setMissionJson(json);
+
+        instance.log("<MissionBukkitService:doMission> MissionJson in memory updated");
 
         BukkitRunnable r = new BukkitRunnable() {
             @Override
@@ -96,6 +100,7 @@ public class MissionBukkitService extends MissionService {
                 Bukkit.getPluginManager().callEvent(missionEvent);
                 if (!missionEvent.isCanceled()) {
                     TaskService.getInstance().runTaskAsync(() -> MissionDao.getInstance().update(taskEntry));
+                    instance.log("<MissionBukkitService:doMission> MissionJson persisted to disk");
                 }
             }
         };

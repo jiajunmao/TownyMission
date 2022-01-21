@@ -144,23 +144,23 @@ public class TimerService extends TownyMissionService {
                 Date date = new Date();
                 long timeNow = date.getTime();
 
-                instance.log(
-                        String.format("Curr season: %d, sprint: %d",
-                                instance.getStatsConfig().getInt("season.current"),
-                                instance.getStatsConfig().getInt("sprint.current")),
-                        LogLevel.INFO);
-
-                instance.log(
-                        String.format("Season interval: %b, sprint interval %b",
-                                isInInterval(RankType.SEASON),
-                                isInInterval(RankType.SPRINT)),
-                        LogLevel.INFO);
-
-                instance.log(
-                        String.format("Season within TotalEndTime: %b, within ActiveEndTime: %b",
-                                timeNow < getTotalEndTime(RankType.SEASON),
-                                timeNow < getActiveEndTime(RankType.SEASON)),
-                        LogLevel.INFO);
+//                instance.log(
+//                        String.format("Curr season: %d, sprint: %d",
+//                                instance.getStatsConfig().getInt("season.current"),
+//                                instance.getStatsConfig().getInt("sprint.current")),
+//                        LogLevel.INFO);
+//
+//                instance.log(
+//                        String.format("Season interval: %b, sprint interval %b",
+//                                isInInterval(RankType.SEASON),
+//                                isInInterval(RankType.SPRINT)),
+//                        LogLevel.INFO);
+//
+//                instance.log(
+//                        String.format("Season within TotalEndTime: %b, within ActiveEndTime: %b",
+//                                timeNow < getTotalEndTime(RankType.SEASON),
+//                                timeNow < getActiveEndTime(RankType.SEASON)),
+//                        LogLevel.INFO);
 
                 // This means that season is not started
                 if (instance.getStatsConfig().getLong("season.startedTime") == -1) return;

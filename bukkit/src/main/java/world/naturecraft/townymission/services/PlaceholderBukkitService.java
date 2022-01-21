@@ -1,5 +1,6 @@
 package world.naturecraft.townymission.services;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Town;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
@@ -7,12 +8,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import world.naturecraft.townymission.TownyMissionInstance;
+import world.naturecraft.townymission.components.entity.Rankable;
 import world.naturecraft.townymission.components.enums.RankType;
 import world.naturecraft.townymission.data.dao.SprintDao;
 import world.naturecraft.townymission.services.core.RankingService;
 import world.naturecraft.townymission.services.core.TimerService;
 import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
+
+import java.util.List;
 
 public class PlaceholderBukkitService extends PlaceholderExpansion {
     @Override
@@ -35,22 +39,22 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
-        switch (params) {
-            case "town_rank_sprint":
-                return town_rank_sprint(player);
-            case "town_rank_season":
-                return town_rank_season(player);
-            case "town_rankPoint_sprint":
-                return town_rankPoint_sprint(player);
-            case "town_point_sprint":
-                return town_point_sprint(player);
-            case "town_missionOngoing":
-                return town_missionOngoing(player);
-            case "currSprint":
-                return TownyMissionInstance.getInstance().getStatsConfig().getString("sprint.current");
-            case "currSeason":
-                return TownyMissionInstance.getInstance().getStatsConfig().getString("season.current");
-        }
+        if (params.equalsIgnoreCase("town_rank_sprint"))
+            return town_rank_sprint(player);
+        else if (params.equalsIgnoreCase("town_rank_season"))
+            return town_rank_season(player);
+        else if (params.equalsIgnoreCase("town_rankPoint_sprint"))
+            return town_rankPoint_sprint(player);
+        else if (params.equalsIgnoreCase("town_point_sprint"))
+            return town_point_sprint(player);
+        else if (params.equalsIgnoreCase("town_missionOngoing"))
+            return town_missionOngoing(player);
+        else if (params.startsWith("sprint_topTown_"))
+            return sprint_topTown(params);
+        else if (params.equalsIgnoreCase("currSprint"))
+            return TownyMissionInstance.getInstance().getStatsConfig().getString("sprint.current");
+        else if (params.equalsIgnoreCase("currSeason"))
+            return TownyMissionInstance.getInstance().getStatsConfig().getString("season.current");
 
         return null; // Placeholder is unknown by the Expansion
     }
@@ -106,6 +110,21 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
         if (rank == null) return "N/A";
 
         return String.valueOf(rank);
+    }
+
+    public String sprint_topTown(String placeholder) {
+        List<Rankable> rankableList = RankingService.getInstance().getRanks(RankType.SPRINT);
+
+        int index = 0;
+        while (placeholder.indexOf("_", index) != -1) {
+            index = placeholder.indexOf("_", index) + 1;
+        }
+
+        int topIdx = Integer.parseInt(placeholder.substring(index));
+        if (topIdx > rankableList.size() || topIdx <= 0)
+            return "N/A";
+
+        return TownyUtil.getTown(rankableList.get(topIdx - 1).getRankingId()).getName();
     }
 
     private Town getTown(OfflinePlayer player) {

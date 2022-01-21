@@ -8,8 +8,10 @@ import com.palmergames.bukkit.towny.object.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import world.naturecraft.naturelib.InstanceType;
 import world.naturecraft.naturelib.utils.EntryFilter;
+import world.naturecraft.townymission.TownyMissionInstance;
 import world.naturecraft.townymission.api.events.MissionCompleteEvent;
 import world.naturecraft.townymission.components.entity.*;
 import world.naturecraft.townymission.components.enums.MissionType;
@@ -188,7 +190,14 @@ public abstract class MissionService extends TownyMissionService {
 
         // Send out completion event
         MissionCompleteEvent completeEvent = new MissionCompleteEvent(player, new Date().getTime(), entry);
-        Bukkit.getPluginManager().callEvent(completeEvent);
+        BukkitRunnable runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                Bukkit.getPluginManager().callEvent(completeEvent);
+            }
+        };
+        runnable.runTask(TownyMissionInstance.getInstance());
+
 
         // Send out mission completion notification
         if (player != null) {
