@@ -281,7 +281,7 @@ public class MissionManageGui extends TownyMissionGui {
 
                 player.setItemOnCursor(null);
                 player.getOpenInventory().getTopInventory().setItem(slot, null);
-                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID()));
+                player.getOpenInventory().getTopInventory().setItem(numMissionToSlot(entry.getNumMission()), cooldownFiller(entry.getNumMission(), entry.getTownUUID(), true));
                 player.updateInventory();
 
                 BukkitRunnable runnable = new BukkitRunnable() {
