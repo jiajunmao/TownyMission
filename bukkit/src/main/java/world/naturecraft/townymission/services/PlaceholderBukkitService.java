@@ -17,6 +17,7 @@ import world.naturecraft.townymission.utils.BukkitChecker;
 import world.naturecraft.townymission.utils.TownyUtil;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PlaceholderBukkitService extends PlaceholderExpansion {
     @Override
@@ -51,6 +52,8 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
             return town_missionOngoing(player);
         else if (params.startsWith("sprint_topTown_"))
             return sprint_topTown(params);
+        else if (params.startsWith("season_topTown_"))
+            return season_topTown(params);
         else if (params.equalsIgnoreCase("currSprint"))
             return TownyMissionInstance.getInstance().getStatsConfig().getString("sprint.current");
         else if (params.equalsIgnoreCase("currSeason"))
@@ -115,6 +118,16 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
     public String sprint_topTown(String placeholder) {
         List<Rankable> rankableList = RankingService.getInstance().getRanks(RankType.SPRINT);
 
+        return topTown(placeholder, rankableList);
+    }
+
+    public String season_topTown(String placeholder) {
+        List<Rankable> rankableList = RankingService.getInstance().getRanks(RankType.SEASON);
+
+        return topTown(placeholder, rankableList);
+    }
+
+    private String topTown(String placeholder, List<Rankable> rankableList) {
         int index = 0;
         while (placeholder.indexOf("_", index) != -1) {
             index = placeholder.indexOf("_", index) + 1;
@@ -124,7 +137,8 @@ public class PlaceholderBukkitService extends PlaceholderExpansion {
         if (topIdx > rankableList.size() || topIdx <= 0)
             return "N/A";
 
-        return TownyUtil.getTown(rankableList.get(topIdx - 1).getRankingId()).getName();
+        TownyMissionInstance.getInstance().log("Ranking id: " + rankableList.get(topIdx - 1).getRankingId());
+        return TownyUtil.getTown(UUID.fromString(rankableList.get(topIdx - 1).getRankingId())).getName();
     }
 
     private Town getTown(OfflinePlayer player) {
